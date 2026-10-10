@@ -1,0 +1,139 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  extraSchemaGraph?: any[];
+}
+
+const { title, description, canonicalPath = '/', extraSchemaGraph = [] } = Astro.props;
+const siteUrl = 'https://zeroleak-tools.pages.dev';
+const fullCanonical = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
+
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ZeroLeak Tools (ゼロリーク・ツールズ)",
+      "description": "サーバー送信0バイト・完全ブラウザ完結のセキュア業務ツール群。給与明細PDFパスワード解除、個人情報CSV伏字化など。",
+      "inLanguage": "ja"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": fullCanonical,
+      "url": fullCanonical,
+      "name": title,
+      "description": description,
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "JPY"
+      }
+    },
+    ...extraSchemaGraph
+  ]
+};
+---
+
+<!doctype html>
+<html lang="ja" class="h-full bg-slate-900 text-slate-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | ZeroLeak Tools (完全ローカル完結)</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={fullCanonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- CSP: 外部サーバー送信をブラウザレベルで厳格に遮断 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:; connect-src 'self' blob: data:; img-src 'self' data: blob:; worker-src 'self' blob:;" />
+
+    <!-- OGP -->
+    <meta property="og:title" content={`${title} | ZeroLeak Tools`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={fullCanonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZeroLeak Tools" />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
+  </head>
+  <body class="flex flex-col min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+    <!-- 常設: F12検証・サーバー送信0バイト保証バナー -->
+    <aside aria-label="サーバー送信0バイト保証案内" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/30 text-emerald-300 text-xs sm:text-sm py-2 px-4 shadow-sm">
+      <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+        <div class="flex items-center gap-2 font-medium">
+          <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40 text-xs">🛡️</span>
+          <span><strong>サーバー送信0バイト保証：</strong>ファイルや入力内容は一切外部へ送信されません。</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-emerald-400/90 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-500/20">
+          <svg class="w-3.5 h-3.5 animate-pulse text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>F12 開発者ツールの <strong>Networkタブ</strong> で通信0件をご確認いただけます</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ヘッダーナビゲーション -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center group-hover:border-emerald-400 transition-colors">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-bold text-lg text-slate-100 tracking-tight flex items-center gap-1.5">
+              ZeroLeak <span class="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">WASM</span>
+            </span>
+            <span class="text-[10px] text-slate-400 -mt-0.5">完全ローカル・機密漏洩リスク0%</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center gap-1 sm:gap-4 text-xs sm:text-sm font-medium">
+          <a href="/csv-masking/" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+            CSVマスキング
+          </a>
+          <a href="/pdf-unlock/" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+            PDFパスワード解除
+          </a>
+          <a href="/legal/" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition">
+            免責・法務
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
+      <slot />
+    </main>
+
+    <!-- フッター -->
+    <footer class="border-t border-slate-800 bg-slate-900/50 py-8 text-xs text-slate-400 mt-auto">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex flex-col gap-1 text-center sm:text-left">
+          <p class="font-semibold text-slate-300">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
+          <p class="text-[11px] text-slate-500">
+            すべての処理はお使いのブラウザ内部（メモリ上）でのみ実行されます。サーバーログへの保存、外部転送は技術的に一切行われません。
+          </p>
+        </div>
+        <div class="flex items-center gap-6 text-slate-400">
+          <a href="/csv-masking/" class="hover:text-emerald-400 transition">CSVマスキング</a>
+          <a href="/pdf-unlock/" class="hover:text-emerald-400 transition">PDFパスワード解除</a>
+          <a href="/legal/" class="hover:text-emerald-400 transition">免責事項・プライバシー規約</a>
+        </div>
+      </div>
+      <div class="max-w-6xl mx-auto px-4 mt-6 pt-4 border-t border-slate-800/60 text-center text-[10px] text-slate-500">
+        &copy; 2026 ZeroLeak Tools. All rights reserved. Powered by Astro &amp; Client-side WASM.
+      </div>
+    </footer>
+  </body>
+</html>

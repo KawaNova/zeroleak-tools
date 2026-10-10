@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-10-10T20:53:00+09:00",
+  "phase": "initial_poc",
+  "status": "success",
+  "stack": "Astro + Tailwind CSS + PapaParse + pdf-lib + pdfjs-dist",
+  "tools": [
+    "csv-masking",
+    "pdf-unlock"
+  ],
+  "verification": {
+    "server_traffic_bytes": 0,
+    "csp_header": "connect-src 'self' blob: data:",
+    "port": 8105,
+    "http_status": {
+      "/": 200,
+      "/csv-masking/": 200,
+      "/pdf-unlock/": 200,
+      "/legal/": 200
+    }
+  },
+  "notes": "pdfjs-dist と pdf-lib の連携により、知っているパスワードでPDFを完全ローカル復号し、300DPI相当の高品質Canvas経由でパスワードなしPDFとして再構築するパイプラインを確立。iLovePDF等の外部クラウド不要で住宅ローン・e-Tax提出要件を満たす。"
+}

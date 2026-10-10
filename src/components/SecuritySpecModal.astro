@@ -1,0 +1,135 @@
+---
+// src/components/SecuritySpecModal.astro
+---
+
+<div id="securityModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center">
+  <div class="bg-slate-900 border border-emerald-500/40 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    
+    <!-- モーダルヘッダー -->
+    <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🛡️</span>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-white">セキュリティ仕様確認書（社内稟議・情シス提出用）</h2>
+          <p class="text-xs text-slate-400">ZeroLeak Tools 技術アーキテクチャ ＆ データ非保持証明</p>
+        </div>
+      </div>
+      <button id="closeSecurityModalBtn" type="button" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 text-xl cursor-pointer">
+        ✕
+      </button>
+    </div>
+
+    <!-- モーダル本文（印刷・閲覧用） -->
+    <div id="securitySpecContent" class="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+      
+      <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 text-emerald-300 text-xs space-y-1">
+        <p class="font-bold">【判定サマリー】業務利用における情報漏洩リスク：極小（0%）</p>
+        <p class="text-slate-300">本ツールは外部サーバーへのデータ送信処理を持たず、ブラウザ内のメモリ上（RAM）のみで完結して動作します。社外サーバーへの機密漏洩・ログ蓄積は技術的に発生しません。</p>
+      </div>
+
+      <section class="space-y-2">
+        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-1 flex items-center gap-2">
+          <span>1. システム構成 ＆ 実行環境</span>
+        </h3>
+        <table class="w-full text-xs text-left border-collapse border border-slate-800">
+          <tbody class="divide-y divide-slate-800">
+            <tr>
+              <th class="p-2.5 bg-slate-950 text-slate-400 font-medium w-1/3 border-r border-slate-800">アーキテクチャ</th>
+              <td class="p-2.5 text-slate-200">完全静的JAMstack（Astro 静的HTML生成）</td>
+            </tr>
+            <tr>
+              <th class="p-2.5 bg-slate-950 text-slate-400 font-medium border-r border-slate-800">バックエンドAPI</th>
+              <td class="p-2.5 text-slate-200"><strong>なし（サーバーサイド処理・APIエンドポイントゼロ）</strong></td>
+            </tr>
+            <tr>
+              <th class="p-2.5 bg-slate-950 text-slate-400 font-medium border-r border-slate-800">データベース</th>
+              <td class="p-2.5 text-slate-200"><strong>なし（サーバー側ストレージなし）</strong></td>
+            </tr>
+            <tr>
+              <th class="p-2.5 bg-slate-950 text-slate-400 font-medium border-r border-slate-800">ファイル処理基盤</th>
+              <td class="p-2.5 text-slate-200">クライアント端末のWebブラウザ（WebAssembly / JavaScript / Canvas）</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="space-y-2">
+        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-1 flex items-center gap-2">
+          <span>2. データの取り扱い ＆ 通信制御 (Zero-Network Policy)</span>
+        </h3>
+        <ul class="list-disc list-inside space-y-1.5 text-slate-300 pl-1 text-xs">
+          <li><strong>外部送信0バイト保証:</strong> ユーザーがドラッグ＆ドロップしたファイル（CSV、PDF等）や入力テキストは、一切外部ネットワークへ送信されません。</li>
+          <li><strong>CSP（Content Security Policy）による技術遮断:</strong> <code>connect-src 'self' blob: data:;</code> を適用し、ブラウザ機能として第三者サーバーへの不正通信を遮断しています。</li>
+          <li><strong>揮発性メモリ処理:</strong> データはブラウザのタブを閉じた時点で端末のRAMから完全に破棄されます。</li>
+          <li><strong>オフライン検証可能:</strong> ネットワーク接続を切断した状態（機内モード）でも全ツールがそのまま動作します。</li>
+        </ul>
+      </section>
+
+      <section class="space-y-2">
+        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-1 flex items-center gap-2">
+          <span>3. F12開発者ツールでの監査手順</span>
+        </h3>
+        <ol class="list-decimal list-inside space-y-1 text-slate-300 pl-1 text-xs">
+          <li>ブラウザでツールを開き、<code>F12</code> キー（開発者ツール）を起動。</li>
+          <li>「Network」タブを選択し、フィルターを「Fetch/XHR」または「All」に指定。</li>
+          <li>ファイルをドロップしてマスキングまたはパスワード解除を実行。</li>
+          <li>処理実行中、外部HTTPリクエストが1件も発生しないこと（送信0バイト）を確認可能。</li>
+        </ol>
+      </section>
+
+    </div>
+
+    <!-- モーダルフッター -->
+    <div class="px-6 py-3.5 border-t border-slate-800 bg-slate-950/70 flex flex-wrap items-center justify-between gap-3">
+      <span class="text-[11px] text-slate-400">作成元: ZeroLeak Tools セキュリティ監査チーム</span>
+      <div class="flex items-center gap-2">
+        <button id="copySpecMdBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition cursor-pointer">
+          📋 テキストをコピー
+        </button>
+        <button id="printSpecBtn" type="button" class="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition cursor-pointer">
+          🖨️ 仕様書を印刷 / PDF保存
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('securityModal');
+  const closeBtn = document.getElementById('closeSecurityModalBtn');
+  const copyBtn = document.getElementById('copySpecMdBtn');
+  const printBtn = document.getElementById('printSpecBtn');
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  }
+
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const text = document.getElementById('securitySpecContent')?.innerText || '';
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = '✔ コピーしました！';
+        setTimeout(() => copyBtn.textContent = '📋 テキストをコピー', 2000);
+      });
+    });
+  }
+
+  // グローバルに開く関数を提供
+  (window as any).openSecurityModal = () => {
+    modal?.classList.remove('hidden');
+  };
+</script>

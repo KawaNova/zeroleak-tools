@@ -1,0 +1,29 @@
+# ZeroLeak Tools 開発・運用絶対教義 (Playbook)
+doctrine:
+  - id: DOC-01
+    title: 外部通信0バイトの絶対保証 (Zero-Network Policy)
+    rules:
+      - ユーザーのファイル（CSV, テキスト, PDF等）および入力データは1バイトたりとも外部サーバーへ送信してはならない。
+      - Google Analytics、外部CDN、外部トラッキングスクリプト等の配置は厳禁（完全プライバシー保護）。
+      - Content Security Policy (CSP) は厳格に設定し、connect-src 'none' または外部通信完全遮断を適用する。
+      - 「F12 Networkタブ検証バナー」を全ツール画面に常設し、ユーザー自身が通信ゼロであることを即座に確認可能にする。
+      - 自動テストにおいて、ツール実行中のNetworkリクエスト数が0件（外部通信ゼロ）であることを保証する。
+
+  - id: DOC-02
+    title: Lighthouse 100点・5秒処理完了UX (Speed & UX)
+    rules:
+      - Performance, Accessibility, Best Practices, SEO 全項目でLighthouse 100点（最低95点以上）を維持する。
+      - ドラッグ＆ドロップ対応。ファイル選択から処理完了・ダウンロードまで5秒以内で完了する高速UXを徹底する。
+      - クラウドサーバー費用・外部API費用は恒久的に完全0円を維持する（Cloudflare Pages無料枠＋クライアントTypeScript/WASM）。
+
+  - id: DOC-03
+    title: 法務・免責・信用の完全防衛 (Legal & Compliance)
+    rules:
+      - 統合法務ページ（/legal/）を全サイトで共通配備し、完全免責事項、利用規約、AdSense審査準拠プライバシーポリシーを明記する。
+      - 「知っているパスワードの解除」「マスキング」等、ツールの正当な権利者による利用を前提とした免責条項を必須配置する。
+
+  - id: DOC-04
+    title: 完了タスクの即時削除 (Task Governance)
+    rules:
+      - TODO.md に完了済みタスク（[x]）を残さない。完了した行は即座に削除する。
+      - 完了実績の正本は Git コミットログ（git log）に一任する。

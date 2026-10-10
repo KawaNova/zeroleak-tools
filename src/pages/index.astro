@@ -1,0 +1,201 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="ZeroLeak Tools | サーバー送信0バイト・完全ローカル業務ツール工場"
+  description="サーバー送信0バイト・情報漏洩リスク0%・維持費完全0円。給与明細PDFパスワード解除、個人情報・マイナンバーCSV伏字化など、ブラウザ完結のセキュア業務ツール群。"
+  canonicalPath="/"
+>
+  <div class="space-y-20 py-4">
+
+    <!-- ヒーローセクション -->
+    <section class="text-center space-y-6 max-w-3xl mx-auto pt-2">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>サーバー送信0バイト保証 ＆ 完全ローカル実行</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+        機密データを1バイトも<br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+          クラウドへ送信しない
+        </span>
+        安心ツール
+      </h1>
+
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        給与明細、源泉徴収票、マイナンバー、顧客名簿CSVなど、<br class="hidden sm:inline" />
+        「社外サーバーにアップロードすると懲戒・漏洩事故になる機密情報」を<br class="hidden sm:inline" />
+        お使いのPCブラウザ内（WASM/JS）だけで高速処理・安全変換します。
+      </p>
+
+      <!-- F12検証案内（非クリッカブル・フラットインフォ） -->
+      <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 max-w-xl mx-auto text-xs text-slate-300 flex items-center gap-3 text-left shadow-inner">
+        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 text-lg flex-shrink-0">
+          🛡️
+        </div>
+        <div>
+          <strong class="text-emerald-300">完全ローカル動作を自ら検証可能：</strong>
+          <span class="text-slate-400">キーボードの <code>F12</code> を押し、開発者ツールの「Network」タブを開いた状態で本ツールをご利用ください。リクエスト通信が0件であることをご確認いただけます。</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【最重要】クリッカブルなツール一覧セクション（アクションカード） -->
+    <section class="space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-block px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-bold tracking-wider uppercase border border-emerald-500/20">
+          AVAILABLE TOOLS
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">利用可能なツールを選択（クリックして開始）</h2>
+        <p class="text-xs sm:text-sm text-slate-400">
+          以下のカードをクリックすると、インストール・ログイン不要ですぐにブラウザ上でツールをご利用いただけます。
+        </p>
+      </div>
+
+      <!-- クリッカブル・ツールカード グリッド（明確な立体感とCTAボタン付き） -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        
+        <!-- ツール1: CSVマスキング（クリッカブルカード） -->
+        <a
+          href="/csv-masking/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-emerald-500/40 hover:border-emerald-400 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                公開中・完全無料
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">0.1秒高速処理</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                📄
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors leading-snug">
+                  CSV/テキスト 個人情報＆マイナンバー 自動マスキング
+                </h3>
+                <p class="text-xs text-emerald-400 font-medium mt-1">社内テスト環境・社外ベンダー提出用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              テストデータや外部提出用CSVから、マイナンバー（12桁）、電話番号、メール、氏名列を一括伏字化。ドラッグ＆ドロップでメモリ上のみで高速変換します。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン（ここを押せば動くことが一目でわかる） -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">登録不要・サンプルデータ付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 group-hover:from-emerald-400 group-hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ツール2: PDFパスワード解除（クリッカブルカード） -->
+        <a
+          href="/pdf-unlock/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-teal-500/40 hover:border-teal-400 shadow-xl hover:shadow-2xl hover:shadow-teal-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-40 h-40 bg-teal-500/10 rounded-full blur-2xl group-hover:bg-teal-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+                公開中・完全無料
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">300DPI高精細再構成</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                🔓
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-teal-300 transition-colors leading-snug">
+                  給与明細・源泉徴収票 PDF パスワード安全解除
+                </h3>
+                <p class="text-xs text-teal-400 font-medium mt-1">住宅ローン事前審査・確定申告(e-Tax)提出用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              銀行や税務署で拒否される「パスワード付きPDF」を安全に除去。年収・個人情報が詰まった書類を海外クラウドに預けることなく、ブラウザ内だけでパスワードフリーPDFを再生成。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">登録不要・サンプルPDF付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-cyan-400 group-hover:from-teal-300 group-hover:to-cyan-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- 【非クリッカブル】説明・特徴セクション（フラットなリスト型にし、リンクと誤認させない） -->
+    <section class="border-t border-slate-800/80 pt-14 max-w-4xl mx-auto space-y-8">
+      <div class="text-center space-y-1">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-200">
+          なぜ「サーバー送信0バイト」が必要なのか？
+        </h2>
+        <p class="text-xs text-slate-400">大手の便利サイトが抱える「ファイルアップロード前提」の脆弱性を克服した仕組み</p>
+      </div>
+
+      <!-- フラットな解説ブロック（非カード型） -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        
+        <div class="p-5 rounded-2xl bg-slate-950/40 border-l-4 border-l-emerald-500 border-y border-r border-slate-800/60 space-y-2">
+          <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider">REASON 01</div>
+          <h3 class="font-bold text-slate-200 text-sm">外部送信 0バイトの技術証明</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            「プライバシー保護」を言葉だけでなく技術（厳格なCSP遮断＆クライアント処理）で保証。F12開発者ツールのNetworkタブで通信0件をいつでも確認できます。WiFi切断時も動作します。
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-950/40 border-l-4 border-l-teal-500 border-y border-r border-slate-800/60 space-y-2">
+          <div class="text-xs font-bold text-teal-400 uppercase tracking-wider">REASON 02</div>
+          <h3 class="font-bold text-slate-200 text-sm">超高速 5秒処理完了UX</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            重いPDFや大容量CSVをクラウドへ往復転送するアップロード待ち時間が完全ゼロ。ブラウザのローカルメモリ上で直ちに計算するため、数千行のCSVも一瞬で完了します。
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-950/40 border-l-4 border-l-cyan-500 border-y border-r border-slate-800/60 space-y-2">
+          <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider">REASON 03</div>
+          <h3 class="font-bold text-slate-200 text-sm">永久完全無料・維持費0円</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            サーバー側で計算リソースを一切消費しない静的エッジ配信（Cloudflare Pages）を採用。サーバー維持費0円のため、有料会員制や強制課金化のリスクが恒久的にありません。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</Layout>

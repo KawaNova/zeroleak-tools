@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="利用規約・免責事項・プライバシーポリシー"
+  description="ZeroLeak Toolsの利用規約、完全免責事項、およびプライバシーポリシー。完全ローカル処理に関するセキュリティ指針。"
+  canonicalPath="/legal/"
+>
+  <div class="max-w-4xl mx-auto py-6 space-y-10">
+    <!-- ヘッダー -->
+    <div class="border-b border-slate-800 pb-6">
+      <h1 class="text-3xl font-extrabold text-slate-100 tracking-tight">利用規約 ＆ 法務ポリシー</h1>
+      <p class="text-slate-400 text-sm mt-2">
+        制定日: 2026年10月10日 | 最終改定日: 2026年10月10日
+      </p>
+    </div>
+
+    <!-- 0バイト保証・セキュリティ原則 -->
+    <section class="bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-lg">🛡️</span>
+        <h2 class="text-xl font-bold text-emerald-300">完全ローカル・外部送信0バイトの技術原則</h2>
+      </div>
+      <p class="text-slate-300 text-sm leading-relaxed mb-4">
+        ZeroLeak Tools（以下「当サイト」）で提供されるすべてのツール（CSVマスキング、PDFパスワード解除等）は、
+        <strong>ご利用者の端末（ブラウザ内部のJavaScript / WebAssembly / メモリ上）のみで完結して実行</strong>されます。
+      </p>
+      <ul class="list-disc list-inside text-xs text-slate-400 space-y-1.5 pl-2">
+        <li>アップロードされたファイルや入力テキストデータが、当サイトのサーバーや第三者のサーバーへ送信されることは一切ありません。</li>
+        <li>サーバーログやアクセスログに入力データが記録されることは技術的に不可能です。</li>
+        <li>ブラウザのF12開発者ツール（Networkタブ）を開いていただくことで、ツールの操作中に外部通信が0件であることをいつでもご自身でご確認いただけます。</li>
+      </ul>
+    </section>
+
+    <!-- 完全免責事項 -->
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+        1. 免責事項（完全免責の合意）
+      </h2>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 text-sm text-slate-300 space-y-3 leading-relaxed">
+        <p>
+          当サイトのツールは、可能な限りの精度・整合性を保つよう設計されていますが、プログラムの正確性、完全性、特定目的への適合性についてはいかなる保証も行いません。
+        </p>
+        <p>
+          当ツールの利用により生じた、直接的・間接的・派生的損害（ファイルの破損・消失、マスキング漏れによる損害、業務の中断、利益の損失等）について、当サイト運営者は一切の法的責任を負いかねます。
+        </p>
+        <p class="text-amber-300/90 text-xs font-semibold">
+          ※ 重要な業務データや提出書類を取り扱う際は、必ず事前に元ファイルのバックアップを取得した上でご利用ください。またマスキング結果は提出前に必ず目視で再確認してください。
+        </p>
+      </div>
+    </section>
+
+    <!-- パスワード解除ツールの適法利用規約 -->
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+        2. PDFパスワード解除ツールの利用規律（適法利用の誓約）
+      </h2>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 text-sm text-slate-300 space-y-3 leading-relaxed">
+        <p>
+          当サイトの「PDFパスワード安全解除ツール」は、<strong>ご利用者ご自身が正規にパスワードを知っており、かつ閲覧・編集・保存の正当な権限を有しているファイル（ご自身の給与明細、源泉徴収票、自身宛ての請求書等）</strong>から、提出便宜（住宅ローン審査や確定申告提出等）のために既知のパスワードを除去することを目的としています。
+        </p>
+        <p class="text-rose-300/90 text-xs font-semibold">
+          【禁止事項】<br />
+          第三者の不正なファイル、不正アクセス行為、クラッキング、著作権侵害、その他法令に反する目的での利用を固く禁じます。本ツールは総当たり攻撃（ブルートフォース）等を行うツールではありません。
+        </p>
+      </div>
+    </section>
+
+    <!-- AdSense対応プライバシーポリシー -->
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+        3. プライバシーポリシー（個人情報保護方針）
+      </h2>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 text-sm text-slate-300 space-y-4 leading-relaxed">
+        <div>
+          <h3 class="font-semibold text-slate-200 mb-1">個人情報の取り扱い</h3>
+          <p>
+            当サイトは、ツールに入力された氏名、電話番号、マイナンバー、給与情報等の個人情報を一切収集・蓄積・外部送信いたしません。
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-slate-200 mb-1">Cookie（クッキー）および広告配信について</h3>
+          <p>
+            当サイトでは、サービスの改善および今後の適切な広告配信（Google AdSense等を含む第三者配信事業者）のために、Cookieを使用する場合があります。
+            Googleなどの第三者配信事業者は、Cookieを使用して、ユーザーが当サイトや他のウェブサイトに過去にアクセスした際の情報に基づいて広告を配信します。
+          </p>
+          <p class="text-xs text-slate-400 mt-1">
+            ユーザーは、Googleの広告設定（<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline">https://adssettings.google.com/</a>）でパーソナライズ広告を無効にできます。また、ブラウザの設定によりCookieの受け入れを拒否することも可能です。
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-slate-200 mb-1">アクセス解析について</h3>
+          <p>
+            当サイトは利用者のプライバシー保護を最優先とし、個人を特定できる外部トラッキングは行いません。将来的にサイトパフォーマンス測定を行う場合でも、匿名化された集計データのみを取り扱います。
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-slate-200 mb-1">お問い合わせ</h3>
+          <p>
+            本規約に関するお問い合わせやご要望は、GitHubリポジトリのIssueまたは公式サポート窓口までご連絡ください。
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

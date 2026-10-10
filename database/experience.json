@@ -1,0 +1,66 @@
+[
+  {
+    "id": "exp-zl-001",
+    "date": "2026-10-10",
+    "category": "security_architecture",
+    "tags": [
+      "ゼロリーク",
+      "CSP",
+      "外部通信遮断",
+      "プライバシー"
+    ],
+    "keyword": "外部通信0バイト",
+    "lesson": "プライバシー重視ツールでは、サーバーサイドAPIを持たずブラウザ（WASM/JS）内で完結させることでインフラコスト0円・個人情報漏洩リスク0%を両立できる。Content-Security-Policyでconnect-src 'none' を指定することで、ブラウザレベルで通信を遮断し安全性を技術的に証明可能。",
+    "avoid": "安易にバックエンド処理（Python/Node等）にオフロードしてサーバー側で機密情報を受け取ること。",
+    "source": "PoC初期設計（ADR-015）"
+  },
+  {
+    "id": "exp-zl-002",
+    "date": "2026-10-10",
+    "category": "performance",
+    "tags": [
+      "Astro",
+      "Tailwind",
+      "Lighthouse",
+      "静的配信"
+    ],
+    "keyword": "爆速レスポンス",
+    "lesson": "Cloudflare Pages + Astro静的ビルドを採用し、クライアントJSは処理実行時のみ最小限にロードすることで、初回ロードのLighthouse 100点とFCP < 0.5sを達成できる。",
+    "avoid": "重厚なフルスタックSPAフレームワークをそのまま持ち込み、初期バンドルサイズを肥大化させること。",
+    "source": "技術選定（Astro + Tailwind）"
+  },
+  {
+    "id": "exp-zl-003",
+    "date": "2026-10-10",
+    "category": "pdf_security",
+    "tags": [
+      "PDF",
+      "pdf-lib",
+      "pdfjs-dist",
+      "パスワード解除",
+      "ローカル完結"
+    ],
+    "keyword": "PDFパスワード安全解除",
+    "lesson": "pdfjs-distとpdf-libを組み合わせることで、知っているパスワードでPDFを完全ローカル復号し、300DPI相当の高品質Canvas経由でパスワードなしPDFとして再構築するパイプラインを確立。外部サーバー通信0バイトで住宅ローン・e-Tax提出の要件を満たす。",
+    "avoid": "",
+    "source": "manual_reflection"
+  },
+  {
+    "id": "exp-zl-004",
+    "date": "2026-10-11",
+    "category": "seo_strategy",
+    "tags": [
+      "SEO",
+      "SGO",
+      "構造化データ",
+      "FAQPage",
+      "HowTo",
+      "被リンク",
+      "セキュリティ仕様書"
+    ],
+    "keyword": "構造化データとセキュリティ仕様書",
+    "lesson": "HowToとFAQPageの構造化データ（JSON-LD）を静的ツールページに注入することで、Google検索結果での画面占有率（アコーディオン表示）とAI検索（Perplexity/SGO）での1次情報源引用を最大化できる。さらにBtoB向け『セキュリティ仕様書（通信0バイト証明）』のワンクリック出力を配備することで、企業の社内Wikiや技術ブログからの高オーソリティ自然被リンク獲得を狙える。",
+    "avoid": "",
+    "source": "manual_reflection"
+  }
+]
