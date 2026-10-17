@@ -24,38 +24,19 @@ import Layout from '../layouts/Layout.astro';
         安心ツール
       </h1>
 
-      <!-- スマホ：1行凝縮 / PC：丁寧な説明 -->
-      <p class="text-slate-600 text-xs sm:text-base leading-relaxed">
-        <span class="sm:hidden">給与明細・マイナンバー・社外秘ファイルを端末内だけで高速・安全処理。</span>
-        <span class="hidden sm:inline">給与明細、源泉徴収票、マイナンバー、顧客名簿CSVなど、<br class="hidden sm:inline" />
-        「社外サーバーにアップロードすると懲戒・漏洩事故になる機密情報」を<br class="hidden sm:inline" />
-        お使いの端末ブラウザ内だけで高速処理・安全変換します。</span>
+      <!-- スマホ・PC共通：シンプルに価値を伝える説明文 -->
+      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-2xl mx-auto">
+        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部サーバーへ一切送信せずにお使いの端末内だけで高速処理・安全変換します。
       </p>
 
-      <!-- スマホ：1行ピルバッジ / PC：安心確認ガイド（カードではなくフラットな案内ブロック） -->
-      <div class="sm:hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-[11px] text-slate-700 font-medium">
-        <span>✈️</span>
-        <span>Wi-Fi切断（機内モード）でも全ツール動作</span>
-      </div>
-
-      <div class="hidden sm:block p-4 sm:p-5 rounded-2xl bg-slate-100/80 max-w-xl mx-auto text-xs text-slate-700 space-y-2 text-left">
-        <div class="flex items-start gap-3">
-          <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm flex-shrink-0 font-bold">
-            ✈️
-          </div>
-          <div>
-            <div class="font-bold text-slate-900 text-xs sm:text-sm">
-              安心の確認方法：Wi-Fiを切断しても動作します
-            </div>
-            <p class="text-slate-600 text-xs mt-0.5 leading-relaxed">
-              この画面を開いた後、<strong>PCのWi-FiをOFF（または機内モード）</strong>にしてみてください。外部との通信を物理的に遮断した状態でも、<strong>すべてのツールがそのまま動作します</strong>。
-            </p>
-          </div>
-        </div>
-        <div class="pt-2 border-t border-slate-200/80 text-[11px] text-slate-500 flex items-center gap-1.5">
-          <span>🛡️</span>
-          <span><strong>情シス・IT部門の方へ：</strong> キーボードの <code>F12</code> ➔「Network」タブで外部リクエストが0件であることを目視確認いただけます。</span>
-        </div>
+      <!-- スマホ・PC共通：1行に凝縮した安心バッジ -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/70 text-[11px] sm:text-xs text-slate-600">
+        <span class="font-medium text-slate-800 flex items-center gap-1">
+          <span>✈️</span>
+          <span>Wi-Fi切断（オフライン）でも動作</span>
+        </span>
+        <span class="text-slate-300 hidden sm:inline">•</span>
+        <span class="text-slate-500 hidden sm:inline">F12で外部通信0件を確認可能</span>
       </div>
     </section>
 
