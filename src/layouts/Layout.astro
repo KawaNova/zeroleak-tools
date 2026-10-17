@@ -67,16 +67,17 @@ const schemaOrg = {
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
   </head>
   <body class="flex flex-col min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
-    <!-- 常設: F12検証・サーバー送信0バイト保証バナー -->
-    <aside aria-label="サーバー送信0バイト保証案内" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/30 text-emerald-300 text-xs sm:text-sm py-2 px-4 shadow-sm">
-      <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-        <div class="flex items-center gap-2 font-medium">
-          <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40 text-xs">🛡️</span>
-          <span><strong>サーバー送信0バイト保証：</strong>ファイルや入力内容は一切外部へ送信されません。</span>
+    <!-- 常設: F12検証・サーバー送信0バイト保証バナー（スマホ超スリム化対応） -->
+    <aside aria-label="サーバー送信0バイト保証案内" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/30 text-emerald-300 text-[11px] sm:text-xs py-1.5 px-3 sm:px-4 shadow-sm">
+      <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 font-medium truncate">
+          <span class="text-xs">🛡️</span>
+          <span class="truncate"><strong>サーバー送信0バイト保証</strong><span class="hidden sm:inline">：ファイルは一切外部へ送信されません</span></span>
         </div>
-        <div class="flex items-center gap-1.5 text-xs text-emerald-400/90 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-500/20">
-          <span class="text-xs">✈️</span>
-          <span><strong>Wi-Fiを切断（機内モード）にしてもそのまま動作します</strong> <span class="text-[11px] text-slate-400 hidden md:inline">（技術者の方はF12 Networkタブで通信0件を検証可）</span></span>
+        <div class="flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-300 bg-emerald-950/70 px-2 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
+          <span>✈️</span>
+          <span>Wi-Fi切断でも動作</span>
+          <span class="text-[10px] text-slate-400 hidden md:inline">(F12で通信0件検証可)</span>
         </div>
       </div>
     </aside>
