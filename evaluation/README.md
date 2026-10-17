@@ -1,6 +1,20 @@
-# ZeroLeak Tools 評価用データ ＆ 動作確認ガイド
+# ZeroLeak Tools 評価用データ ＆ 動作確認ガイド（全6ツール・7スイート対応）
 
-本フォルダ（`evaluation/`）は、**「CSV個人情報マスキング」** および **「給与明細・源泉徴収票 PDFパスワード安全解除」** の動作確認・受け入れテスト用コンテンツ置き場です。
+本フォルダ（`evaluation/`）および `scripts/verify_operations.mjs` は、ZeroLeak Tools 全6ツールの動作確認・回帰テスト用スイートです。
+
+---
+
+## 0. 実装済み全6ツールと自動検証スイート対応表
+
+| Suite | ルート | ツール名称 | コアロジック | ワンクリック検証機能 |
+| :---: | :--- | :--- | :--- | :--- |
+| **Suite 1** | `/csv-masking/` | CSV/テキスト 個人情報＆マイナンバー自動マスキング | `src/utils/masking.ts` | サンプル社員名簿CSV読込＋自由文テスト |
+| **Suite 2** | `/pdf-unlock/` | 給与明細・源泉徴収票PDF パスワード解除＆メタデータ削除 | `src/pages/pdf-unlock.astro` | 暗号化済み給与明細PDF（PW: `test2026`）自動生成 |
+| **Suite 3** | `/exif-remover/` | 写真 位置情報（EXIF・GPS）100枚一括ロスレス削除＆ZIP出力 | `src/utils/exif.ts` | 模擬GPS座標・機種名入りJPEGサンプル生成 |
+| **Suite 4** | `/local-whisper/` | 社外秘音声のブラウザ内VAD分割・文字起こし＆PII自動伏字化 | `src/utils/audio-transcribe.ts` | 模擬経営会議WAV音声＋個人情報入り議事録生成 |
+| **Suite 5** | `/local-mosaic/` | 画像 顔・ナンバー・管理画面 不可逆モザイク＆完全黒塗り | `src/utils/mosaic.ts` | 機密管理画面ダミースクショ生成＋一括マスク適用 |
+| **Suite 6** | `/ai-prompt-sanitizer/` | ChatGPT・AIプロンプト 機密サニタイザー＆ワンクリック実名復元 | `src/utils/prompt-sanitizer.ts` | 商談議事録プロンプト仮名化＋AI返信の実名復元デモ |
+| **Suite 7** | 全8ルート (`dist/`) | ビルド成果物 HTML / CSP遮断 / 相互回遊リンク / SEO複合KW監査 | `scripts/verify_operations.mjs` | コマンド1発で全ページのCSP・SEO構造を自動検査 |
 
 ---
 
@@ -23,6 +37,14 @@
 | **`01_payslip_protected.pdf`** | **`test2026`** | **給与明細書（機密書類）**<br>社員情報、マイナンバー、基本給、時間外手当、社会保険料、所得税、差引支給額 |
 | **`02_withholding_slip_protected.pdf`** | **`gensen2026`** | **源泉徴収票（国税庁様式）**<br>支払金額（年収625万円）、所得控除額、源泉徴収税額 |
 | **`00_plain_reference.pdf`** | なし（平文） | 暗号化前の原本ファイル（解除後PDFとのレイアウト・画質比較用） |
+
+---
+
+### 📁 `evaluation/audio/`（社外秘音声文字起こし・PIIマスキング 評価用）
+
+| ファイル名 | 長さ・仕様 | 想定シーン・含まれる機密内容 |
+| :--- | :---: | :--- |
+| **`01_sample_confidential_meeting.wav`** | **27.01秒 / 22050Hz / 16bit Mono** | **社外秘経営会議の日本語肉声音声（完全ローカルSAPI生成）**<br>新製品単価（月額4万9800円）、目標社数、法務窓口電話（090-1234-5678）、メール（legal@example.com）、マイナンバー（1234-5678-9012） |
 
 ---
 
@@ -74,12 +96,13 @@
 
 ---
 
-## 4. 自動化テストのワンライナー実行手順
+## 4. 自動化テストのワンライナー実行手順（引き継ぎAI必読）
 
-コマンドラインから一括で復号＆マスキングの回帰テストを実行する場合は、以下のコマンドを実行します：
+コードを修正・追加した後は、以下のコマンドで静的ビルドと全7スイートの自動検証を実行してください：
 
 ```powershell
+npm run build
 node --experimental-strip-types scripts/verify_operations.mjs
 ```
 
-全アサーション（CSV個人情報列抽出・マイナンバー伏字化・PDF認証解除・パスワードフリー再生成）が自動検証され、すべて `PASSED` になることを確認できます。
+全アサーション（Suite 1〜6のコアロジック検証 ＋ Suite 7の全8ルートHTML/CSP/RelatedTools/SEOキーワード監査）が自動実行され、末尾に `ALL 7 MODULE & ROUTE SUITES PASSED SUCCESSFULLY!` と出力されれば合格です。

@@ -131,15 +131,15 @@ import Layout from '../layouts/Layout.astro';
               </div>
               <div>
                 <h3 class="text-xl font-bold text-white group-hover:text-teal-300 transition-colors leading-snug">
-                  給与明細・源泉徴収票 PDF パスワード安全解除
+                  給与明細・機密PDF パスワード解除＆メタデータ削除
                 </h3>
-                <p class="text-xs text-teal-400 font-medium mt-1">住宅ローン事前審査・確定申告(e-Tax)提出用</p>
+                <p class="text-xs text-teal-400 font-medium mt-1">住宅ローン審査・確定申告(e-Tax)・社外提出用</p>
               </div>
             </div>
 
             <!-- 説明文 -->
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              銀行や税務署で拒否される「パスワード付きPDF」を安全に除去。年収・個人情報が詰まった書類を海外クラウドに預けることなく、ブラウザ内だけでパスワードフリーPDFを再生成。
+              銀行や税務署で拒否される「パスワード付きPDF」の解除と、社外提出時に漏洩リスクとなる「作成者名・元ファイル名などのPDF内部メタデータ削除」をブラウザ内で一括完結。
             </p>
           </div>
 
@@ -147,6 +147,202 @@ import Layout from '../layouts/Layout.astro';
           <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
             <span class="text-xs text-slate-400 font-medium">登録不要・サンプルPDF付属</span>
             <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-cyan-400 group-hover:from-teal-300 group-hover:to-cyan-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ツール3: 写真EXIF・GPS位置情報一括削除（クリッカブルカード） -->
+        <a
+          href="/exif-remover/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 hover:border-cyan-400 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                公開中・100枚一括
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">画質劣化0%・ZIP出力</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                📍
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug">
+                  写真 位置情報（EXIF・GPS）一括削除
+                </h3>
+                <p class="text-xs text-cyan-400 font-medium mt-1">現場写真共有・ブログ掲載・自宅特定防止用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              スマホやデジカメ写真に潜むGPS座標（自宅・現場の住所）、撮影日時、端末機種名をブラウザ内で一括抹消。100枚規模のJPEG/PNG/WebPを画質劣化ゼロでZIP保存。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">登録不要・サンプル写真付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 group-hover:from-cyan-300 group-hover:to-emerald-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ツール4: 画像 顔・ナンバー・機密箇所ブラウザ内モザイク＆黒塗り（クリッカブルカード） -->
+        <a
+          href="/local-mosaic/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-indigo-500/40 hover:border-indigo-400 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                公開中・一括マスク対応
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">不可逆ピクセル処理</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                🕶️
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors leading-snug">
+                  画像 顔・ナンバー・機密箇所 モザイク＆黒塗り
+                </h3>
+                <p class="text-xs text-indigo-400 font-medium mt-1">社内管理画面スクショ・手順書・現場写真用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              社外秘キャプチャのURL・顧客名・APIキーや、写真の顔・車両ナンバーをドラッグで即座にモザイク・ぼかし・完全黒塗り。複数画像への同一位置一括適用＆ZIP出力に対応。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">Ctrl+V貼付・サンプル付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-400 to-cyan-400 group-hover:from-indigo-300 group-hover:to-cyan-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ツール5: 社外秘音声のブラウザ内文字起こし＆個人情報マスク（クリッカブルカード） -->
+        <a
+          href="/local-whisper/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-purple-500/40 hover:border-purple-400 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-48 h-48 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                公開中・VAD分割＆自動伏字
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">TXT / SRT / VTT 出力</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                🎙️
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors leading-snug">
+                  社外秘音声のブラウザ内文字起こし ＆ 個人情報マスク
+                </h3>
+                <p class="text-xs text-purple-400 font-medium mt-1">経営会議・人事1on1・NDA商談議事録・SRT字幕用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              外部AIクラウドへ音声を送信せず、Web Audioエンジンで発話区間（VAD）を自動分割＆テキスト化。電話番号・メール・マイナンバーを自動伏字化し議事録や字幕を出力。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">登録不要・模擬会議WAV付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-400 to-emerald-400 group-hover:from-purple-300 group-hover:to-emerald-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
+              <span>ツールを開く</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ツール6: ChatGPT・AIプロンプト 機密・固有名詞サニタイザー＆実名復元（クリッカブルカード） -->
+        <a
+          href="/ai-prompt-sanitizer/"
+          class="group relative flex flex-col justify-between p-7 rounded-3xl bg-slate-900 border-2 border-amber-500/40 hover:border-amber-400 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden ring-1 ring-white/5"
+        >
+          <!-- 背景アクセントグラデーション -->
+          <div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all pointer-events-none"></div>
+
+          <div>
+            <!-- 上部バッジ & ステータス -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                NEW・AI回答を1クリック実名復元
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">シャドーAI対策</span>
+            </div>
+
+            <!-- アイコン & タイトル -->
+            <div class="flex items-start gap-4 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0 shadow-inner">
+                🤖
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
+                  ChatGPT・AIプロンプト 機密サニタイザー（実名復元付き）
+                </h3>
+                <p class="text-xs text-amber-400 font-medium mt-1">取引先メール下書き・契約書レビュー・コードデバッグ用</p>
+              </div>
+            </div>
+
+            <!-- 説明文 -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
+              ChatGPTやClaudeへ送る前に、社名・人名・APIキー・予算を『{`{{COMPANY_A}}`}』等の記号に一括置換。AIが返した回答を貼り付ければ1クリックで元の実名へ自動復元します。
+            </p>
+          </div>
+
+          <!-- 明確なCTAアクションボタン -->
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-medium">登録不要・往復デモ付属</span>
+            <div class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-emerald-400 group-hover:from-amber-300 group-hover:to-emerald-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all group-hover:gap-3">
               <span>ツールを開く</span>
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />

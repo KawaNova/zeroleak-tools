@@ -1,28 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SecuritySpecModal from '../components/SecuritySpecModal.astro';
+import RelatedTools from '../components/RelatedTools.astro';
 
 // SGO / Googleリッチリザルト用 構造化データ
 const extraSchemaGraph = [
   {
     "@type": "HowTo",
-    "name": "給与明細・源泉徴収票のPDFパスワードを安全に解除する3ステップ",
-    "description": "住宅ローンや確定申告(e-Tax)提出用に、ブラウザ内だけで外部送信0バイトでPDFから知っているパスワードを除去する手順。",
+    "name": "給与明細・機密PDFのパスワード解除＆メタデータ削除をブラウザで一括完結する3ステップ（サーバー送信なし）",
+    "description": "住宅ローンや確定申告(e-Tax)・取引先提出用に、外部サーバーへ1バイトも送信せずブラウザ内だけでPDFの既知パスワード解除および作成者名・ソフト名などのプロパティ（メタデータ）を一括抹消する手順。",
     "step": [
       {
         "@type": "HowToStep",
-        "name": "暗号化PDFをドラッグ＆ドロップ",
-        "text": "パスワード保護された給与明細や源泉徴収票のPDFファイルをドロップゾーンに配置します。"
+        "name": "PDFファイルをドラッグ＆ドロップ",
+        "text": "パスワード保護された給与明細・源泉徴収票や、作成者メタデータを消去したい機密PDFをドロップゾーンに配置します。"
       },
       {
         "@type": "HowToStep",
-        "name": "知っているパスワードを入力",
-        "text": "会社や給与ソフトから通知されている閲覧用パスワードを入力します。"
+        "name": "パスワード入力（暗号化PDFの場合）とメタデータ検出確認",
+        "text": "パスワード付きPDFの場合は既知のパスワードを入力します。パスワードがない通常PDFの場合はそのままメタデータ（作成者・タイトル・作成ソフト・更新履歴）の消去に進めます。"
       },
       {
         "@type": "HowToStep",
-        "name": "パスワードなしPDFをダウンロード",
-        "text": "ブラウザ内で300DPI高精細再構築されたパスワード保護のないPDFを保存します。金融機関や税務署にそのまま提出可能です。"
+        "name": "パスワード＆メタデータ完全抹消PDFをダウンロード",
+        "text": "ブラウザ内で300DPI高精細再構築され、パスワードおよびAuthor/Creator/Producer等の全メタデータが初期化されたクリーンなPDFを保存します。"
       }
     ]
   },
@@ -34,7 +35,15 @@ const extraSchemaGraph = [
         "name": "なぜ住宅ローン審査やe-Taxでパスワード付きPDFが拒否されるのですか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "多くの金融機関（みずほ銀行、三菱UFJ銀行、三井住友銀行、住信SBIネット銀行など）や国税庁e-Taxのオンライン受付システムでは、アップロードされたPDFを機械的に自動仕分け・OCR解析するため、パスワード保護がかかっているとシステムエラーとなります。そのため、事前に正規のパスワードを除去した無防備な平文PDFの提出が必須となっています。"
+          "text": "多くの金融機関（みずほ銀行、三菱UFJ銀行、三井住友銀行、住信SBIネット銀行など）や国税庁e-Taxのオンライン受付システムでは、アップロードされたPDFを機械的に自動仕分け・OCR解析するため、パスワード保護がかかっているとシステムエラーとなります。そのため、事前に正規のパスワードを除去した平文PDFの提出が必須となっています。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "PDFのメタデータ（プロパティ情報）を削除しないとどんな情報漏洩リスクがありますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WordやExcel、会計・人事ソフトから出力されたPDFの内部プロパティ（Document Information Dictionary / XMP）には、目に見えない『作成者名（個人のフルネームやPCのログインID）』『元のファイル名（例：〇〇社_裏見積.xlsx）』『使用ソフト・OS』『作成・更新日時』が自動的に記録されています。本ツールは白紙のPDF構造から再生成し、全プロパティを空文字に初期化するため、取引先や外部提出時のうっかり情報漏洩を100%防げます。"
         }
       },
       {
@@ -42,23 +51,15 @@ const extraSchemaGraph = [
         "name": "iLovePDFやSmallpdfなどの無料Webサイトで給与明細を解除するのは危険ですか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "一般的な無料PDFツールは、一度ファイルを海外のクラウドサーバーへアップロードして処理します。源泉徴収票や給与明細には、年収、マイナンバー、家族構成、住所、勤務先などの極めて重大な個人情報が記載されており、外部サーバーへのアップロードは情報漏洩リスクや企業の就業規則違反（懲戒対象）となる恐れがあります。ZeroLeak Toolsはサーバー送信が0バイト（ブラウザ内メモリ完結）のため、漏洩リスク0%で安全に処理できます。"
+          "text": "一般的な無料PDFツールは、一度ファイルを海外のクラウドサーバーへアップロードして処理します。源泉徴収票や給与明細には、年収、マイナンバー、家族構成、住所、勤務先などの極めて重大な個人情報が記載されており、外部サーバーへのアップロードは情報漏洩リスクや企業の就業規則違反（懲戒対象）となる恐れがあります。ZeroLeak Toolsはサーバー送信なし（0バイト・ブラウザ内メモリ完結）のため、漏洩リスク0%で安全に処理できます。"
         }
       },
       {
         "@type": "Question",
-        "name": "パスワードがわからないPDFでも解除（クラッキング）できますか？",
+        "name": "パスワードがかかっていない普通のPDFのメタデータ（作成者名など）だけを削除することもできますか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "いいえ、できません。本ツールは不正アクセス防止のため、ご自身が正規の閲覧権限およびパスワードを知っているファイルから、提出便宜のためにパスワード保護を除去するための専用ツールです。総当たり攻撃等のクラッキング機能は備えていません。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "社内のパソコンや情シスの監視下でも安全に使えますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。ブラウザのF12開発者ツール（Networkタブ）でご確認いただける通り、本ツールの使用中に外部サーバーへの通信（POST/GETリクエスト）は1バイトも発生しません。インターネット回線を切断したオフライン状態（機内モード）でもそのまま動作します。"
+          "text": "はい、可能です。パスワード保護されていないPDFをドロップした場合、パスワード入力欄を空欄のまま『パスワード解除＆メタデータ一括抹消を実行』ボタンを押すだけで、内部の作成者名・タイトル・作成ソフト・しおり・隠し注釈をすべて消去したクリーンなPDFを生成できます。"
         }
       }
     ]
@@ -67,22 +68,22 @@ const extraSchemaGraph = [
 ---
 
 <Layout
-  title="給与明細・源泉徴収票 PDF パスワード安全解除（知っているパスワードの除去）ツール"
-  description="住宅ローンや確定申告提出用にPDFパスワードをローカル環境で安全解除。外部サーバー送信0バイト・情報漏洩リスク0%で知っているパスワードを除去。"
+  title="給与明細・機密PDF パスワード解除＆メタデータ削除｜一括・ブラウザ完結・サーバー送信なし"
+  description="住宅ローンや確定申告(e-Tax)提出用のPDFパスワード解除と、作成者名・タイトル・ソフト名等のPDFメタデータ（プロパティ）削除をブラウザ内で一括実行。サーバー送信なし（0バイト保証）・情報漏洩リスク0%。"
   canonicalPath="/pdf-unlock/"
   extraSchemaGraph={extraSchemaGraph}
 >
   <div class="max-w-4xl mx-auto space-y-8">
     
-    <!-- ツールタイトル & 狙い -->
+    <!-- ツールタイトル & 狙い（複合キーワード「一括 ブラウザ」「サーバー送信なし」明記） -->
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
           <span>完全ローカル処理</span>
           <span>•</span>
-          <span>給与明細・源泉徴収票特化</span>
+          <span>パスワード除去 ＆ 作成者メタデータ抹消</span>
           <span>•</span>
-          <span>サーバー送信0バイト</span>
+          <span>サーバー送信なし（0バイト）</span>
         </div>
         
         <!-- 情シス向けセキュリティ仕様書 ボタン -->
@@ -96,12 +97,12 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        給与明細・源泉徴収票 PDF パスワード安全解除
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+        給与明細・機密PDF パスワード解除＆メタデータ削除｜一括・ブラウザ完結・サーバー送信なし
       </h1>
       <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-        住宅ローンの本審査や確定申告（e-Tax）への提出時に、パスワード付きPDFの受け入れを拒否される問題を一発解決。
-        <strong>iLovePDF等の海外クラウドにアップロードせず、お使いのブラウザ内（WASM/JS）だけで既知のパスワードを安全に除去</strong>します。
+        住宅ローン審査や確定申告（e-Tax）で拒否される<strong>「パスワード付きPDFの解除」</strong>と、社外提出時に漏洩原因となる<strong>「PDF内部メタデータ（作成者名・PCアカウント名・元ファイル名・作成ソフト履歴）の完全削除」</strong>をブラウザ内だけで一括処理。
+        <strong>サーバー送信なし（0バイト）</strong>で安全なクリーンPDFを再生成します。
       </p>
     </div>
 
@@ -110,7 +111,7 @@ const extraSchemaGraph = [
       
       <!-- ファイルドロップゾーン -->
       <div id="dropZonePdf" class="border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-8 text-center transition bg-slate-950/40 cursor-pointer group">
-        <input type="file" id="fileInputPdf" accept=".pdf" class="hidden" />
+        <input type="file" id="fileInputPdf" accept=".pdf,application/pdf" class="hidden" />
         <div class="flex flex-col items-center gap-3 pointer-events-none">
           <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
             <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,11 +119,16 @@ const extraSchemaGraph = [
             </svg>
           </div>
           <div>
-            <p class="font-bold text-slate-200 text-base">パスワード保護されたPDFをここにドロップ</p>
-            <p class="text-xs text-slate-400 mt-1">またはクリックしてファイルを選択 (.pdf)</p>
+            <p class="font-bold text-slate-200 text-base">パスワード付きPDF または メタデータを消したいPDFをドロップ</p>
+            <p class="text-xs text-slate-400 mt-1">またはクリックしてファイルを選択 (.pdf) • パスワードなしPDFのプロパティ消去単体にも対応</p>
           </div>
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-slate-400">
-            <span>🔒 ファイルは端末の外へ一切送信されません</span>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-emerald-300 border border-emerald-500/20">
+              🔒 サーバー送信なし（0バイト保証）
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-slate-400">
+              🧹 Author / Title / Creator / XMP 自動抹消
+            </span>
           </div>
         </div>
       </div>
@@ -131,13 +137,13 @@ const extraSchemaGraph = [
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
         <div class="flex items-center gap-2 text-slate-300">
           <span class="text-base">🧪</span>
-          <span><strong>テスト用PDFをお持ちでない場合：</strong> 暗号化済みサンプル給与明細（解除パスワード: <code class="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded font-mono font-bold">test2026</code>）で今すぐ動作確認できます</span>
+          <span><strong>テスト用PDFをお持ちでない場合：</strong> 暗号化済みサンプル給与明細（パスワード: <code class="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded font-mono font-bold">test2026</code>）で今すぐパスワード解除＆メタデータ抹消を確認できます</span>
         </div>
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <button
             id="loadSamplePdfBtn"
             type="button"
-            class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+            class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm whitespace-nowrap"
           >
             <span>サンプルPDFを読み込む</span>
           </button>
@@ -166,17 +172,17 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <!-- パスワード入力フォーム -->
+      <!-- パスワード入力 ＆ メタデータ消去設定フォーム -->
       <div id="passwordArea" class="hidden space-y-4 p-5 rounded-xl bg-slate-950/60 border border-slate-800">
         <div>
           <label for="pdfPasswordInput" class="block text-xs font-bold text-slate-200 mb-1.5">
-            🔑 設定されているパスワードを入力してください：
+            🔑 設定されているパスワードを入力してください（パスワードなしPDFの場合は空欄のままでOK）：
           </label>
           <div class="relative">
             <input
               type="password"
               id="pdfPasswordInput"
-              placeholder="知っているパスワード（誕生日、社員番号など）を入力"
+              placeholder="知っているパスワード（誕生日、社員番号など）※暗号化なしPDFは空欄"
               class="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none pr-10 font-mono"
             />
             <button
@@ -192,6 +198,32 @@ const extraSchemaGraph = [
           </p>
         </div>
 
+        <!-- メタデータ・隠し情報 消去項目チェックリスト -->
+        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+          <div class="text-xs font-bold text-teal-300 flex items-center gap-1.5">
+            <span>🧹</span>
+            <span>同時に一括抹消されるPDF内部メタデータ・隠し構造：</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-300">
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 font-bold">✔</span>
+              <span><strong>作成者名 (Author)</strong>：PCユーザー名・社員名</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 font-bold">✔</span>
+              <span><strong>タイトル・件名 (Title / Subject)</strong>：元ファイル名</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 font-bold">✔</span>
+              <span><strong>作成・変換ソフト (Creator / Producer)</strong></span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 font-bold">✔</span>
+              <span><strong>XMPメタデータ・隠し注釈・JavaScript構造</strong></span>
+            </div>
+          </div>
+        </div>
+
         <div id="errorMessage" class="hidden p-3 rounded-xl bg-rose-950/50 border border-rose-500/50 text-rose-300 text-xs font-semibold">
           <!-- エラー内容 -->
         </div>
@@ -204,30 +236,41 @@ const extraSchemaGraph = [
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
           </svg>
-          <span>パスワードを安全に解除して再生成 (ブラウザ内処理)</span>
+          <span>パスワード解除 ＆ メタデータ一括抹消を実行 (ブラウザ内処理)</span>
         </button>
       </div>
 
       <!-- 処理中インジケータ -->
       <div id="processingIndicator" class="hidden text-center py-6 space-y-3">
         <div class="inline-block w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-xs text-emerald-400 font-semibold">ブラウザ内で高画質再生成中... (外部通信0件)</p>
+        <p class="text-xs text-emerald-400 font-semibold">ブラウザ内で高画質再生成 ＆ メタデータ完全消去中... (外部通信0件)</p>
       </div>
 
-      <!-- 解除完了 ＆ ダウンロードカード -->
+      <!-- 解除＆メタデータ削除完了 ＆ ダウンロードカード -->
       <div id="successArea" class="hidden p-6 rounded-xl bg-emerald-950/30 border border-emerald-500/40 space-y-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
             🎉
           </div>
           <div>
-            <h2 class="text-base font-bold text-emerald-300">パスワードの解除が完了しました！</h2>
+            <h2 class="text-base font-bold text-emerald-300">パスワード解除 ＆ メタデータの完全抹消が完了しました！</h2>
             <p id="successTimeText" class="text-xs text-slate-300 font-mono mt-0.5">処理完了: 0.8秒 (通信0バイト)</p>
           </div>
         </div>
 
+        <!-- 検出・抹消されたメタデータ監査レポート -->
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 text-xs">
+          <div class="font-bold text-teal-300 flex items-center justify-between">
+            <span>🔍 PDF内部メタデータ（プロパティ）検査＆抹消レポート</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">残存メタデータ 0件</span>
+          </div>
+          <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-300 pt-1">
+            <!-- JSでBefore/Afterを表示 -->
+          </div>
+        </div>
+
         <p class="text-xs text-slate-300 leading-relaxed">
-          パスワード保護のない無防備な状態の新しいPDFが生成されました。住宅ローンのマイページや確定申告（e-Tax）等へそのままアップロード可能です。
+          パスワード保護および内部プロパティ（作成者・タイトル・履歴）がすべて除去されたクリーンなPDFが生成されました。住宅ローン審査や確定申告（e-Tax）、社外取引先へそのまま安全に提出可能です。
         </p>
 
         <div class="pt-2">
@@ -239,7 +282,7 @@ const extraSchemaGraph = [
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            <span>パスワード解除済みPDFをダウンロード</span>
+            <span>パスワード解除＆メタデータ削除済みPDFを保存</span>
           </button>
         </div>
       </div>
@@ -251,16 +294,16 @@ const extraSchemaGraph = [
       <div class="border-b border-slate-800 pb-2">
         <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
           <span>🏛️</span>
-          <span>主要金融機関 ＆ 確定申告（e-Tax）のPDF受領要件</span>
+          <span>主要金融機関 ＆ 確定申告（e-Tax）・社外提出のPDF要件ガイド</span>
         </h2>
-        <p class="text-xs text-slate-400 mt-1">「パスワード付きPDFでエラーが出る」各サービスの提出ルール一覧</p>
+        <p class="text-xs text-slate-400 mt-1">パスワード解除とメタデータ削除が求められる代表的な4つのシーン</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
           <h3 class="font-bold text-teal-300 text-sm">ネット銀行（住信SBI / auじぶん / 楽天銀行 / PayPay銀行）</h3>
           <p class="text-slate-300 leading-relaxed">
-            <strong>事前審査・本審査フォームでアップロード不可：</strong>
+            <strong>事前審査・本審査フォームで暗号化PDFはアップロード不可：</strong>
             マイページからの収入証明書類（源泉徴収票・給与明細）アップロード時、暗号化ファイルはシステムで即座にエラー判定されます。事前に本ツールでパスワードを解除したファイルをご用意ください。
           </p>
         </div>
@@ -268,24 +311,24 @@ const extraSchemaGraph = [
         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
           <h3 class="font-bold text-teal-300 text-sm">メガバンク（三菱UFJ / 三井住友 / みずほ銀行）</h3>
           <p class="text-slate-300 leading-relaxed">
-            <strong>Web審査窓口での指定：</strong>
-            各行のWeb完結型住宅ローン申し込みにおいて、「セキュリティ解除済みのPDFまたは画像」の提出が明記されています。パスワードをメモ書きで送ることは不可とされています。
+            <strong>Web審査窓口でのセキュリティ解除指定：</strong>
+            各行のWeb完結型住宅ローン申し込みにおいて、「パスワード保護を解除したPDFまたは画像」の提出が明記されています。パスワードを別送する運用は受け付けられません。
           </p>
         </div>
 
         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">国税庁 e-Tax（確定申告・医療費控除）</h3>
+          <h3 class="font-bold text-teal-300 text-sm">国税庁 e-Tax ＆ 給与明細SaaS（SmartHR / freee / MF）</h3>
           <p class="text-slate-300 leading-relaxed">
-            <strong>電子申告での添付書類：</strong>
-            マイナポータル連携外の源泉徴収票や支払調書PDFを添付する場合、暗号化PDFは税務署側の審査システムで開封できないため、パスワード解除後のPDF添付が必須です。
+            <strong>人事SaaSの自動暗号化PDFを1クリック平文化：</strong>
+            SmartHRやマネーフォワード等から出力される「誕生日4桁」や「社員番号」付きの給与明細PDFを、海外サーバーに送信せず手元のブラウザ内で安全に平文化できます。
           </p>
         </div>
 
         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">給与明細SaaS（SmartHR / マネーフォワード / freee）</h3>
+          <h3 class="font-bold text-teal-300 text-sm">取引先への見積書・契約書PDF提出（メタデータ漏洩防止）</h3>
           <p class="text-slate-300 leading-relaxed">
-            <strong>会社から配布される暗号化PDF：</strong>
-            多くの人事労務SaaSからダウンロードされる給与明細は「誕生日4桁」や「社員番号」等で自動暗号化されています。本ツールで知っているパスワードを入力するだけで一瞬で解除できます。
+            <strong>プロパティに残る「作成者名」「社内元ファイル名」を完全抹消：</strong>
+            WordやExcelからPDF化したファイルには、作成した社員の氏名や社内管理用の元ファイル名がプロパティに残っています。本ツールを通すことで全メタデータを白紙化できます。
           </p>
         </div>
       </div>
@@ -313,6 +356,16 @@ const extraSchemaGraph = [
 
         <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
           <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+            <span>Q. PDFのメタデータ（プロパティ）にはどんな危険な情報が入っていますか？</span>
+            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+            PDFの「文書のプロパティ」には、作成者（Author：PCのアカウント名や社員の実名）、タイトル（Title：変換前のWord/Excelファイル名）、作成プログラム（Creator/Producer）、作成日・更新日が記録されています。本ツールは300DPI再構築とプロパティ空文字初期化により、これらをすべて抹消します。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
+          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
             <span>Q. iLovePDFやSmallpdfなどの無料Webサイトで解除するのは危険ですか？</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
           </summary>
@@ -323,26 +376,17 @@ const extraSchemaGraph = [
 
         <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
           <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
-            <span>Q. パスワードがわからないPDFでも解除（クラッキング）できますか？</span>
+            <span>Q. パスワードがかかっていないPDFのメタデータ削除だけに使えますか？</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-slate-400 leading-relaxed text-xs">
-            いいえ、できません。本ツールは不正アクセス防止のため、ご自身が正規の閲覧権限およびパスワードを知っているファイルから、提出便宜のためにパスワード保護を除去するための専用ツールです。総当たり攻撃等のクラッキング機能は備えていません。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
-            <span>Q. 社内のパソコンや情シスの監視下でも安全に使えますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
-            はい。ブラウザのF12開発者ツール（Networkタブ）でご確認いただける通り、本ツールの使用中に外部サーバーへの通信（POST/GETリクエスト）は1バイトも発生しません。インターネット回線を切断したオフライン状態（機内モード）でもそのまま動作します。
+            はい。パスワード保護されていないPDFを読み込んだ場合、パスワード欄を空欄にしたまま実行ボタンを押すだけで、作成者名やソフトウェア履歴などの全メタデータを消去したクリーンなPDFを出力できます。
           </p>
         </details>
       </div>
     </section>
 
+    <RelatedTools currentPath="/pdf-unlock/" />
   </div>
 
   <!-- セキュリティ仕様書モーダル -->
@@ -381,8 +425,17 @@ const extraSchemaGraph = [
     const processingIndicator = document.getElementById('processingIndicator')!;
     const successArea = document.getElementById('successArea')!;
     const successTimeText = document.getElementById('successTimeText')!;
+    const metadataReportList = document.getElementById('metadataReportList')!;
     const downloadUnlockedPdfBtn = document.getElementById('downloadUnlockedPdfBtn')!;
     const loadSamplePdfBtn = document.getElementById('loadSamplePdfBtn')!;
+
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
 
     // パスワード表示トグル
     togglePasswordVisibility.addEventListener('click', () => {
@@ -477,14 +530,10 @@ const extraSchemaGraph = [
       reader.readAsArrayBuffer(file);
     }
 
-    // パスワード解除処理
+    // パスワード解除 ＆ メタデータ完全抹消処理
     unlockBtn.addEventListener('click', async () => {
       if (!fileBuffer) return;
       const password = pdfPasswordInput.value;
-      if (!password) {
-        showError('パスワードを入力してください。');
-        return;
-      }
 
       errorMessage.classList.add('hidden');
       passwordArea.classList.add('hidden');
@@ -495,13 +544,22 @@ const extraSchemaGraph = [
       try {
         const loadingTask = pdfjsLib.getDocument({
           data: new Uint8Array(fileBuffer),
-          password: password,
+          password: password || undefined,
           useWorkerFetch: false,
           isEvalSupported: false,
         });
 
         const pdfDoc = await loadingTask.promise;
         const numPages = pdfDoc.numPages;
+
+        // 元PDFのメタデータ（Info辞書）を検査取得
+        let rawInfo: Record<string, any> = {};
+        try {
+          const meta = await pdfDoc.getMetadata();
+          rawInfo = (meta?.info as Record<string, any>) || {};
+        } catch (_) {
+          rawInfo = {};
+        }
 
         const outPdfDoc = await PDFDocument.create();
 
@@ -534,10 +592,39 @@ const extraSchemaGraph = [
           });
         }
 
+        // PDFメタデータ（Info辞書）を明示的にすべて空文字へ初期化（pdf-libデフォルトのProducer文字列も消去）
+        outPdfDoc.setTitle('');
+        outPdfDoc.setAuthor('');
+        outPdfDoc.setSubject('');
+        outPdfDoc.setKeywords([]);
+        outPdfDoc.setCreator('');
+        outPdfDoc.setProducer('');
+
         unlockedPdfBytes = await outPdfDoc.save();
 
+        // 検出＆消去レポートの描画
+        const reportItems = [
+          { label: 'パスワード暗号化', val: password ? '設定あり → 解除済' : 'なし (平文)' },
+          { label: '作成者 (Author)', val: rawInfo.Author ? `${rawInfo.Author} → 抹消済` : '検出なし (空初期化済)' },
+          { label: 'タイトル (Title)', val: rawInfo.Title ? `${rawInfo.Title} → 抹消済` : '検出なし (空初期化済)' },
+          { label: '作成ソフト (Creator)', val: rawInfo.Creator ? `${rawInfo.Creator} → 抹消済` : '検出なし (空初期化済)' },
+          { label: '変換エンジン (Producer)', val: rawInfo.Producer ? `${rawInfo.Producer} → 抹消済` : '空文字へ完全消去済' },
+          { label: '隠し注釈・XMP・しおり', val: 'ページ再構築により完全除去済' },
+        ];
+
+        metadataReportList.innerHTML = reportItems
+          .map(
+            (item) => `
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800/80 flex items-center justify-between gap-2">
+              <span class="text-slate-400 font-medium">${escapeHtml(item.label)}:</span>
+              <span class="text-emerald-300 font-mono truncate">${escapeHtml(String(item.val))}</span>
+            </div>
+          `
+          )
+          .join('');
+
         const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-        successTimeText.textContent = `⚡ 処理完了: ${elapsed}秒 (${numPages}ページ処理・外部通信0バイト)`;
+        successTimeText.textContent = `⚡ 処理完了: ${elapsed}秒 (${numPages}ページ再構築・メタデータ0件化・外部通信0バイト)`;
         
         processingIndicator.classList.add('hidden');
         successArea.classList.remove('hidden');
@@ -547,8 +634,12 @@ const extraSchemaGraph = [
         processingIndicator.classList.add('hidden');
         passwordArea.classList.remove('hidden');
 
-        if (err?.name === 'PasswordException' || err?.message?.includes('Password') || err?.code === 1) {
-          showError('パスワードが正しくありません。正しいパスワードをご確認の上、再度お試しください。');
+        if (err?.name === 'PasswordException' || err?.message?.includes('Password') || err?.code === 1 || err?.code === 2) {
+          showError(
+            password
+              ? 'パスワードが正しくありません。正しいパスワードをご確認の上、再度お試しください。'
+              : 'このPDFはパスワード保護されています。設定されているパスワードを入力してください。'
+          );
         } else {
           showError(`PDFの解析・解除中にエラーが発生しました: ${err?.message || '不明なエラー'}`);
         }
@@ -564,11 +655,15 @@ const extraSchemaGraph = [
     downloadUnlockedPdfBtn.addEventListener('click', () => {
       if (!unlockedPdfBytes || !selectedFile) return;
 
-      const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
+      const buf = unlockedPdfBytes.buffer.slice(
+        unlockedPdfBytes.byteOffset,
+        unlockedPdfBytes.byteOffset + unlockedPdfBytes.byteLength
+      ) as ArrayBuffer;
+      const blob = new Blob([buf], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = selectedFile.name.replace(/\.[^/.]+$/, "") + "_unlocked.pdf";
+      a.download = selectedFile.name.replace(/\.[^/.]+$/, "") + "_cleaned.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

@@ -55,3 +55,42 @@
 
 1. **統合法務ページ（`/legal/`）の必置**:
    - 「本ツールはクライアントサイドでの処理のみ行いますが、ファイルの破損やデータの取り扱いに関する責任は負いかねます」「パスワード解除ツールは、ご自身が閲覧権限およびパスワードを保有している正規ファイルのみご利用ください」等の完全免責条項、利用規約、AdSense審査準拠プライバシーポリシーを明記する。
+
+---
+
+## 6. 現在の実装済みツール構成 ＆ 共通レイアウト仕様（AI引き継ぎ用）
+
+別のAIエージェントが作業を引き継ぐ際は、以下のコンポーネント・検証構成を必ず維持すること。
+
+### 6.1 実装済み6ツール一覧（すべて外部通信0バイト実証済み）
+1. **`/csv-masking/`** (`src/utils/masking.ts`): CSV/テキスト 個人情報・マイナンバー・カード番号 自動検出＆一括伏字化
+2. **`/pdf-unlock/`** (`src/pages/pdf-unlock.astro`): 給与明細・源泉徴収票PDF パスワード解除（300DPI再構成）＆内部メタデータ（Author/Title等）完全抹消
+3. **`/exif-remover/`** (`src/utils/exif.ts`): 写真 位置情報（EXIF・GPS）100枚一括ロスレス削除＆純粋TS製ZIP出力
+4. **`/local-mosaic/`** (`src/utils/mosaic.ts`): 画像 顔・ナンバー・管理画面スクショ 不可逆モザイク＆完全黒塗り（正規化座標による複数画像一括適用＆ZIP出力）
+5. **`/local-whisper/`** (`src/utils/audio-transcribe.ts`): 社外秘音声のWeb Audio VAD発話区間分割・文字起こし＆`masking.ts`連携によるPII自動伏字化（TXT/SRT/VTT出力）
+6. **`/ai-prompt-sanitizer/`** (`src/utils/prompt-sanitizer.ts`): ChatGPT・生成AI送信前の固有名詞・機密トークン仮名化（`{{COMPANY_A}}`等）＆AI回答のワンクリック実名復元
+
+### 6.2 新規ツール追加時の必須チェックリスト（共通UI・SEO・回遊）
+新しいツールページ（`src/pages/<tool-slug>.astro`）を追加する際は、必ず以下の6点を実装すること：
+1. **タイトル＆H1への複合キーワード注入**: `〜 一括 ブラウザ` / `〜 サーバー送信なし` を必ず含める。
+2. **構造化データ（`extraSchemaGraph`）**: `HowTo` と `FAQPage` のJSON-LDを `Layout.astro` に渡す。
+3. **ワンクリック検証サンプルボタン**: ユーザーがファイルを用意しなくても3秒で機能を体験できる合成サンプル（またはデモデータ）ボタンをファーストビュー直下に置く。
+4. **情シス申請用仕様書モーダル**: `<SecuritySpecModal />` を配置し、ヘッダー右上のボタンから呼び出せるようにする。
+5. **相互回遊デッキの統合**:
+   - ページ最下部に `<RelatedTools currentPath="/<tool-slug>/" />` を配置する。
+   - `src/components/RelatedTools.astro` の `ALL_TOOLS` 配列、`src/layouts/Layout.astro` のヘッダー/フッター、`src/pages/index.astro` のカードグリッド、`public/sitemap.xml` に新ルートを追加する。
+6. **自動検証スクリプトへの登録**:
+   - `scripts/verify_operations.mjs` にロジック単体テストとビルド後HTML/CSP監査を追加し、`npm run build` 後に `node --experimental-strip-types scripts/verify_operations.mjs` で全スイート `PASSED` を確認する。
+
+---
+
+## 7. 次期拡張ロードマップ（Phase 3 高収益・BtoB被リンク獲得ネタ）
+
+Suite 1〜6 に続く収益化・自然被リンク獲得の有望テーマ（`TODO.md` 連動）：
+
+1. **障害調査用 HARファイル / JSONログ / `.env` 機密トークン除去（`/log-masking/`）**:
+   - **狙い**: ベンダーやサポートへ `.har` ファイルやエラーログを送る際、中に含まれる `Cookie`、`Authorization` ヘッダー、`sec_key_...` 等のシークレット、メールアドレスを構造を維持したまま一括マスクする。エンジニア・情シスからの被リンク獲得力が極めて高い。
+2. **機密PDF 完全黒塗り・不可逆墨消し（`/pdf-redaction/`）**:
+   - **狙い**: PDF上に黒い矩形を乗せただけの「コピペで剥がせる黒塗り事故」を防止するため、`pdf-unlock` のCanvasラスタライズ機構と `local-mosaic` の黒塗りUIを結合し、テキスト選択・復元が物理的に不可能な墨消しPDFを生成する。
+3. **契約書・NDA条文のローカル差分比較（`/contract-diff/`）**:
+   - **狙い**: 外部の無料Diffサイトに貼れない未締結契約書や法務条文の新旧比較をブラウザ内だけで完結させ、リーガルテック系の高単価CPC領域を獲得する。
