@@ -62,14 +62,14 @@ const allTools = [
 const otherTools = allTools.filter((t) => t.href !== currentPath);
 ---
 
-<section aria-label="関連する完全ローカルセキュリティツール" class="pt-8 sm:pt-10 mt-10 border-t border-slate-200 space-y-4">
+<section aria-label="関連ツール" class="pt-8 sm:pt-10 mt-10 border-t border-slate-200 space-y-4">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
     <div>
-      <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">ZERO-NETWORK TOOL SUITE</span>
-      <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+      <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
         <span>🧰</span>
-        <span>あわせて使える「サーバー送信0バイト」業務ツール</span>
+        <span>あわせて使える関連ツール</span>
       </h2>
+      <p class="text-xs text-slate-500">すべてブラウザ内完結・サーバー送信なしでご利用いただけます</p>
     </div>
     <a href="/" class="text-xs text-emerald-700 hover:text-emerald-800 font-semibold hover:underline">
       全ツール一覧を見る →
@@ -87,7 +87,7 @@ const otherTools = allTools.filter((t) => t.href !== currentPath);
             <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">
               {tool.badge}
             </span>
-            <span class="text-slate-400 group-hover:text-emerald-700 transition font-mono font-medium">0 Byte 通信 →</span>
+            <span class="text-xs font-semibold text-slate-400 group-hover:text-slate-900 group-hover:translate-x-0.5 transition-all">開く ➔</span>
           </div>
           <div class="flex items-center gap-2.5 pt-0.5">
             <span class="text-2xl">{tool.icon}</span>
