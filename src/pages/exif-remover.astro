@@ -78,7 +78,7 @@ const extraSchemaGraph = [
     <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-800 text-xs font-semibold shadow-xs">
           <span>完全ローカル処理</span>
           <span>•</span>
           <span>JPEG / PNG / WebP 100枚一括対応</span>
@@ -90,54 +90,54 @@ const extraSchemaGraph = [
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs border border-slate-700 transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
         >
           <span>🏢</span>
           <span>社内利用・情シス申請用仕様書</span>
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
         写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし
       </h1>
-      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
         スマホやデジカメで撮影した写真に潜む<strong>GPS座標（自宅・現場の住所）、撮影日時、端末機種名、編集ソフト情報</strong>を検出して一括抹消。
         <strong>外部サーバー送信なし（0バイト）</strong>でお使いのブラウザ内だけで高速処理し、そのままZIPで一括ダウンロードできます。
       </p>
     </div>
 
     <!-- メイン操作パネル -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
 
       <!-- 消去モード選択バー -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-xl bg-slate-950/70 border border-slate-800">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
         <div class="space-y-0.5">
-          <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+          <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
             <span>⚙️</span>
             <span>メタデータ消去方式の選択：</span>
           </span>
-          <p class="text-[11px] text-slate-400">
+          <p class="text-[11px] text-slate-500">
             通常は画質が一切劣化せず超高速な「高速ロスレス消去」を推奨します。
           </p>
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-xs">
-          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-900 border border-emerald-500/40 text-slate-200 cursor-pointer hover:border-emerald-400 transition">
+          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
             <input
               type="radio"
               name="stripMode"
               value="lossless"
               checked
-              class="accent-emerald-500"
+              class="accent-cyan-600"
             />
             <span>⚡ <strong>高速ロスレス消去</strong>（画質劣化0%・バイナリ直接除去）</span>
           </label>
-          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 cursor-pointer hover:border-slate-500 transition">
+          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
             <input
               type="radio"
               name="stripMode"
               value="canvas"
-              class="accent-emerald-500"
+              class="accent-cyan-600"
             />
             <span>🛡️ <strong>ピクセル完全再描画</strong>（Canvas再エンコード）</span>
           </label>
@@ -147,7 +147,7 @@ const extraSchemaGraph = [
       <!-- 複数ファイル対応ドラッグ＆ドロップゾーン -->
       <div
         id="dropZoneExif"
-        class="border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-950/40 cursor-pointer group"
+        class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group"
       >
         <input
           type="file"
@@ -157,22 +157,22 @@ const extraSchemaGraph = [
           class="hidden"
         />
         <div class="flex flex-col items-center gap-3 pointer-events-none">
-          <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">
+          <div class="w-16 h-16 rounded-2xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
             📍
           </div>
           <div>
-            <p class="font-bold text-slate-100 text-base sm:text-lg">
+            <p class="font-bold text-slate-800 text-base sm:text-lg">
               写真・画像ファイルをここにまとめてドロップ（複数・100枚一括対応）
             </p>
-            <p class="text-xs text-slate-400 mt-1">
+            <p class="text-xs text-slate-500 mt-1">
               またはクリックしてファイルを選択（対応形式: JPEG / PNG / WebP）
             </p>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-emerald-300 border border-emerald-500/20">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-cyan-800 shadow-xs font-medium">
               🔒 サーバー送信0バイト（ドロップと同時にブラウザ内でEXIF削除）
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-slate-400">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
               📦 ZIP一括保存対応
             </span>
           </div>
@@ -180,8 +180,8 @@ const extraSchemaGraph = [
       </div>
 
       <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
-        <div class="flex items-center gap-2 text-slate-300">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        <div class="flex items-center gap-2 text-slate-700">
           <span class="text-base">🧪</span>
           <span>
             <strong>手元に位置情報付き写真がない場合：</strong>
@@ -191,20 +191,20 @@ const extraSchemaGraph = [
         <button
           id="loadSampleExifBtn"
           type="button"
-          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
+          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
         >
           <span>サンプル写真3枚で一括テスト</span>
         </button>
       </div>
 
       <!-- 処理中プログレス表示 -->
-      <div id="exifProgressArea" class="hidden space-y-2 p-5 rounded-xl bg-slate-950 border border-slate-800">
-        <div class="flex items-center justify-between text-xs font-semibold text-emerald-400">
+      <div id="exifProgressArea" class="hidden space-y-2 p-5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="flex items-center justify-between text-xs font-semibold text-cyan-800">
           <span id="exifProgressLabel">ブラウザ内でEXIF・GPS解析＆消去中...</span>
           <span id="exifProgressCount" class="font-mono">0 / 0</span>
         </div>
-        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
-          <div id="exifProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 transition-all duration-150" style="width: 0%"></div>
+        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+          <div id="exifProgressBar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-600 transition-all duration-150" style="width: 0%"></div>
         </div>
       </div>
 
@@ -212,25 +212,25 @@ const extraSchemaGraph = [
       <div id="exifResultArea" class="hidden space-y-5 pt-2">
         
         <!-- サマリー＆一括アクションバー -->
-        <div class="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div class="space-y-1.5">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
                 ✔ 一括クリーンアップ完了
               </span>
-              <span id="exifStatTime" class="text-xs font-mono text-slate-300">
+              <span id="exifStatTime" class="text-xs font-mono text-slate-600">
                 ⚡ 処理時間: 0.05秒 (通信0バイト)
               </span>
             </div>
-            <p id="exifSummaryText" class="text-sm font-bold text-white">
+            <p id="exifSummaryText" class="text-sm font-bold text-slate-900">
               3枚の画像から計 1.2 KB のEXIF・GPS位置情報を完全抹消しました
             </p>
-            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300">
-              <span id="exifGpsCountBadge" class="inline-flex items-center gap-1 text-amber-300 font-semibold">
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
+              <span id="exifGpsCountBadge" class="inline-flex items-center gap-1 text-rose-800 font-bold">
                 📍 GPS座標検出・抹消: 0枚
               </span>
               <span>•</span>
-              <span id="exifMetaCountBadge" class="text-emerald-300">
+              <span id="exifMetaCountBadge" class="text-cyan-800 font-bold">
                 🏷️ カメラ/EXIF検出・抹消: 0枚
               </span>
             </div>
@@ -240,7 +240,7 @@ const extraSchemaGraph = [
             <button
               id="downloadAllZipBtn"
               type="button"
-              class="flex-1 lg:flex-none px-6 py-3 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+              class="flex-1 lg:flex-none px-6 py-3 rounded-xl font-bold text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -250,7 +250,7 @@ const extraSchemaGraph = [
             <button
               id="clearExifListBtn"
               type="button"
-              class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition cursor-pointer"
+              class="px-4 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold shadow-xs transition cursor-pointer"
             >
               クリア
             </button>
@@ -259,8 +259,8 @@ const extraSchemaGraph = [
 
         <!-- ファイル別 検出＆消去レポート一覧 -->
         <div class="space-y-2.5">
-          <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-            <span class="font-bold text-slate-300">📋 ファイル別 検出メタデータ＆消去ステータス</span>
+          <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+            <span class="font-bold text-slate-700">📋 ファイル別 検出メタデータ＆消去ステータス</span>
             <span>すべて除去後の検証（再スキャンで残存0件を確認済）</span>
           </div>
 
@@ -275,42 +275,42 @@ const extraSchemaGraph = [
 
     <!-- 【pSEO & 用途別ガイド】なぜEXIF・GPS位置情報の一括削除が必要なのか -->
     <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>🛡️</span>
           <span>写真の位置情報（EXIF・GPS）が引き起こす情報漏洩リスクと対策</span>
         </h2>
-        <p class="text-xs text-slate-400 mt-1">スマホ写真をそのまま共有する前に確認すべき4つのユースケース</p>
+        <p class="text-xs text-slate-500 mt-1">スマホ写真をそのまま共有する前に確認すべき4つのユースケース</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-cyan-300 text-sm">1. 社内資料・取引先への現場写真共有</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">1. 社内資料・取引先への現場写真共有</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>未公開拠点や工場・顧客宅の座標漏洩を防止：</strong>
             現場調査や店舗巡回で撮影したJPEG写真には、緯度・経度がメートル単位で記録されています。社外へメール添付やチャット共有する前に一括消去することで、機密拠点の特定を防ぎます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-cyan-300 text-sm">2. ブログ（WordPress等）・自社Webサイトへの画像掲載</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">2. ブログ（WordPress等）・自社Webサイトへの画像掲載</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>SNSと異なりブログはEXIFがそのまま残る：</strong>
             大手SNSでは自動削除される場合がありますが、自社CMSやWordPress、note記事、ECサイトの商品画像ではEXIFがそのまま配信されるケースが多発しています。アップロード前の一括除去が鉄則です。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-cyan-300 text-sm">3. 在宅ワーク・副業・フリマ出品での自宅特定防止</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">3. 在宅ワーク・副業・フリマ出品での自宅特定防止</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>室内で撮った写真からマンション名まで判明：</strong>
             自宅で撮影したガジェットや書類の写真をネット上にアップした際、GPSタグから自宅の住所や階層・部屋の方角まで特定される被害を防ぐことができます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-cyan-300 text-sm">4. 画質劣化ゼロ（ロスレス）＆ ファイル軽量化</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">4. 画質劣化ゼロ（ロスレス）＆ ファイル軽量化</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>バイナリチャンク直接除去で画質そのまま：</strong>
             画像を再圧縮せずメタデータ領域（APP1〜APP15、eXIf、XMP、サムネイル等）だけを切り離すため、写真本来の美しさを100%保ったままファイルサイズも削減できます。
           </p>
@@ -320,50 +320,50 @@ const extraSchemaGraph = [
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>❓</span>
           <span>よくある質問（FAQ）</span>
         </h2>
       </div>
 
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300">
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 写真をそのままWebや取引先に送るとどんな情報がバレますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             EXIFメタデータには、GPSによる正確な緯度・経度・高度だけでなく、撮影日時（秒単位）、使用したスマートフォンやカメラの機種名、レンズ情報、OSバージョン、編集に使用したソフトウェア名などが記録されています。本ツールではこれらをまとめて検出し、一括削除します。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 他の無料EXIF削除サイトと何が違うのですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             一般的なオンラインEXIF削除ツールは、写真を一度外部サーバーにアップロードして処理します。しかし「位置情報を消したいプライベート写真や社外秘写真」を外部サーバーに送信すること自体が情報漏洩リスクとなります。当ツールはサーバー送信なし（0バイト）で、ブラウザ内部のメモリだけで完結するため安全です。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 100枚以上の写真を一括で処理してZIPで落とせますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             はい。複数枚のドラッグ＆ドロップに対応しており、100枚規模の写真でも数秒で一括クリーンアップし、ブラウザ内で生成した1つのZIPファイルとしてまとめてダウンロードできます。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 「高速ロスレス消去」と「ピクセル完全再描画」の違いは何ですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             「高速ロスレス消去」は画像データ本体には一切触れず、EXIF/GPS/XMP等のメタデータ領域のみをバイナリ単位で切り離すため、画質劣化が0%で超高速です。一方「ピクセル完全再描画」はHTML5 Canvas上に画素だけを描画して一から画像ファイルを再生成するため、未知の独自チャンクも含めて100%初期化したい場合に適しています。
           </p>
         </details>
@@ -590,26 +590,26 @@ const extraSchemaGraph = [
                 .map((t) => {
                   const isGps = t.includes('GPS');
                   const badgeClass = isGps
-                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-                    : 'bg-amber-500/15 text-amber-300 border-amber-500/30';
-                  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-medium ${badgeClass}">🗑️ ${escapeHtml(
+                    ? 'bg-rose-50 text-rose-800 border-rose-200'
+                    : 'bg-amber-50 text-amber-800 border-amber-200';
+                  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-semibold ${badgeClass}">🗑️ ${escapeHtml(
                     t
                   )} → 消去済</span>`;
                 })
                 .join(' ')
-            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[11px]">メタデータなし（クリーン確認済）</span>`;
+            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-medium">メタデータなし（クリーン確認済）</span>`;
 
           return `
-            <div class="p-4 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="p-4 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
               <div class="space-y-1.5 min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
-                  <span class="px-2 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono text-[10px] uppercase font-bold">
+                  <span class="px-2 py-0.5 rounded bg-slate-100 text-cyan-900 font-mono text-[10px] uppercase font-bold border border-slate-200">
                     ${item.beforeReport.format}
                   </span>
-                  <span class="font-bold text-slate-200 text-xs sm:text-sm truncate">
+                  <span class="font-bold text-slate-900 text-xs sm:text-sm truncate">
                     ${escapeHtml(item.originalName)}
                   </span>
-                  <span class="text-[11px] text-slate-400 font-mono">
+                  <span class="text-[11px] text-slate-500 font-mono">
                     (${formatBytes(item.originalSize)} → ${formatBytes(item.cleanedSize)})
                   </span>
                 </div>
@@ -618,11 +618,11 @@ const extraSchemaGraph = [
                 </div>
               </div>
               <div class="flex items-center gap-2 self-end sm:self-center flex-shrink-0">
-                <span class="text-[11px] text-emerald-400 font-semibold">✔ 残存EXIF 0件</span>
+                <span class="text-[11px] text-emerald-700 font-bold">✔ 残存EXIF 0件</span>
                 <button
                   type="button"
                   data-download-idx="${idx}"
-                  class="single-download-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition cursor-pointer"
+                  class="single-download-btn px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-cyan-800 border border-slate-300 text-xs font-bold transition cursor-pointer shadow-2xs"
                 >
                   📥 個別保存
                 </button>

@@ -78,7 +78,7 @@ const extraSchemaGraph = [
     <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-200 text-purple-700 text-xs font-semibold">
           <span>完全ローカル音声処理</span>
           <span>•</span>
           <span>VAD発話分割 ＆ 個人情報マスク連携</span>
@@ -90,24 +90,24 @@ const extraSchemaGraph = [
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs border border-slate-700 transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-medium border border-slate-300 shadow-xs transition cursor-pointer"
         >
           <span>🏢</span>
           <span>社内利用・情シス申請用仕様書</span>
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
         社外秘音声のブラウザ内文字起こし＆字幕生成｜一括・ブラウザ完結・サーバー送信なし
       </h1>
-      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-        経営会議・人事面談・NDA商談など「クラウド文字起こしサービスや外部AIへ絶対にアップロードできない音声データ」を、<strong>サーバー送信なし（0バイト）</strong>でお使いのブラウザ内だけで解析。
-        無音区間（VAD）の自動分割、リアルタイム音声入力、<strong>発言内の個人情報（電話・メール・マイナンバー）の一括伏字化</strong>、および <strong>TXT / SRT / VTT 出力</strong>までワンストップで完結します。
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+        経営会議・人事面談・NDA商談など「クラウド文字起こしサービスや外部AIへ絶対にアップロードできない音声データ」を、<strong class="text-slate-800">サーバー送信なし（0バイト）</strong>でお使いのブラウザ内だけで解析。
+        無音区間（VAD）の自動分割、リアルタイム音声入力、<strong class="text-slate-800">発言内の個人情報（電話・メール・マイナンバー）の一括伏字化</strong>、および <strong class="text-slate-800">TXT / SRT / VTT 出力</strong>までワンストップで完結します。
       </p>
     </div>
 
     <!-- メイン操作パネル -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
 
       <!-- 音声ファイルドロップ ＆ リアルタイムマイク録音 2Way入力エリア -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -115,7 +115,7 @@ const extraSchemaGraph = [
         <!-- 左2カラム：音声ファイルD&D（WAV/MP3/M4A/WebM） -->
         <div
           id="dropZoneAudio"
-          class="md:col-span-2 border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-6 text-center transition bg-slate-950/40 cursor-pointer group flex flex-col items-center justify-center gap-2.5"
+          class="md:col-span-2 border-2 border-dashed border-slate-300 hover:border-purple-500 rounded-2xl p-6 text-center transition bg-slate-50/70 hover:bg-purple-50/20 cursor-pointer group flex flex-col items-center justify-center gap-2.5"
         >
           <input
             type="file"
@@ -123,32 +123,32 @@ const extraSchemaGraph = [
             accept=".wav,.mp3,.m4a,.ogg,.webm,audio/*"
             class="hidden"
           />
-          <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 border border-purple-200 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform text-purple-700">
             🎙️
           </div>
           <div>
-            <p class="font-bold text-slate-100 text-sm sm:text-base">
+            <p class="font-bold text-slate-800 text-sm sm:text-base">
               社外秘の会議音声ファイルをここにドロップ（WAV / MP3 / M4A / WebM）
             </p>
-            <p class="text-xs text-slate-400 mt-0.5">
+            <p class="text-xs text-slate-500 mt-0.5">
               ブラウザ内のWeb Audioエンジンで波形と発話区間（タイムスタンプ）を自動検出します
             </p>
           </div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-emerald-300 border border-emerald-500/20">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[11px] font-semibold text-emerald-800 border border-emerald-200">
             🔒 音声データの外部サーバー送信 0 バイト
           </span>
         </div>
 
-        <!-- 右1カラム：ブラウザ内蔵マイク 실시간音声認識 -->
-        <div class="p-5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between gap-3">
+        <!-- 右1カラム：ブラウザ内蔵マイク リアルタイム音声認識 -->
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-3">
           <div class="space-y-1.5">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-purple-300">🎤 マイク直接文字起こし</span>
-              <span id="micStatusBadge" class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px] font-bold">
+              <span class="text-xs font-bold text-purple-700">🎤 マイク直接文字起こし</span>
+              <span id="micStatusBadge" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-600 text-[10px] font-bold">
                 待機中
               </span>
             </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">
+            <p class="text-[11px] text-slate-500 leading-relaxed">
               ブラウザのネイティブ音声認識（SpeechRecognition）またはローカル再生連動で発話をテキスト化します。
             </p>
           </div>
@@ -156,13 +156,13 @@ const extraSchemaGraph = [
           <button
             type="button"
             id="toggleMicDictationBtn"
-            class="w-full py-2.5 px-4 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-200 border border-purple-500/40 font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
           >
             <span id="micBtnIcon">⏺️</span>
             <span id="micBtnLabel">リアルタイム音声入力を開始</span>
           </button>
 
-          <p class="text-[10px] text-amber-300/80 leading-tight">
+          <p class="text-[10px] text-amber-700 leading-tight">
             ⚠️ <strong>オフライン確認時の注意：</strong>マイク音声認識（Web Speech API）のみ、ブラウザ（Chrome等）の仕様により通信を必要とする場合があります。音声ファイル（WAV/MP3）のドラッグ＆ドロップによる波形解析・発話検出・伏字化は、Wi-Fi切断状態でも100%完全ローカルで動作します。
           </p>
         </div>
@@ -170,18 +170,18 @@ const extraSchemaGraph = [
       </div>
 
       <!-- ワンクリック検証用：社外秘経営会議サンプル音声（WAV）＆文字起こしデータ投入バー -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
-        <div class="flex items-center gap-2 text-slate-300">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 text-xs">
+        <div class="flex items-center gap-2 text-slate-700">
           <span class="text-base">🧪</span>
           <span>
-            <strong>今すぐ試す（日本語サンプル会議音声付属）：</strong>
+            <strong class="text-slate-900">今すぐ試す（日本語サンプル会議音声付属）：</strong>
             社外秘の価格戦略・電話番号・マイナンバーを含んだ模擬会議音声（27秒WAV・肉声）をワンクリックで読み込み、波形解析・発話区間分割・個人情報マスク・字幕出力を体験できます
           </span>
         </div>
         <button
           id="loadSampleAudioBtn"
           type="button"
-          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
+          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-white hover:bg-purple-50 text-purple-700 border border-purple-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
         >
           <span>サンプル会議音声を読み込む</span>
         </button>
@@ -191,22 +191,22 @@ const extraSchemaGraph = [
       <div id="audioWorkspace" class="hidden space-y-5">
 
         <!-- 音声プレーヤー ＆ 波形Canvas -->
-        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono font-bold text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-mono font-bold text-[11px] border border-purple-200">
                 LOCAL AUDIO
               </span>
-              <span id="audioFileNameLabel" class="font-bold text-slate-200">sample_meeting.wav</span>
-              <span id="audioMetaLabel" class="text-slate-400 font-mono">(12.0秒 / 16000Hz)</span>
+              <span id="audioFileNameLabel" class="font-bold text-slate-800">sample_meeting.wav</span>
+              <span id="audioMetaLabel" class="text-slate-500 font-mono">(12.0秒 / 16000Hz)</span>
             </div>
-            <span id="audioAnalyzeStat" class="text-emerald-400 font-mono text-[11px]">
+            <span id="audioAnalyzeStat" class="text-emerald-700 font-mono text-[11px] font-semibold">
               ⚡ VAD発話検出完了 (外部通信0バイト)
             </span>
           </div>
 
           <!-- 波形表示キャンバス（クリックで該当秒数へシーク） -->
-          <div class="relative bg-slate-900 rounded-xl border border-slate-800 p-2">
+          <div class="relative bg-white rounded-xl border border-slate-200 p-2">
             <canvas
               id="waveformCanvas"
               width="900"
@@ -220,14 +220,14 @@ const extraSchemaGraph = [
         </div>
 
         <!-- セグメント編集 ＆ 個人情報自動マスキング切替バー -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
           <div class="flex flex-wrap items-center gap-3">
-            <label class="flex items-center gap-2 text-xs font-bold text-emerald-300 cursor-pointer select-none">
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
               <input
                 type="checkbox"
                 id="enablePiiMaskCheckbox"
                 checked
-                class="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+                class="w-4 h-4 accent-emerald-600 rounded cursor-pointer"
               />
               <span>🛡️ 議事録内の個人情報（電話番号・メール・マイナンバー）を自動で伏字化する</span>
             </label>
@@ -237,7 +237,7 @@ const extraSchemaGraph = [
             <button
               type="button"
               id="addSegmentBtn"
-              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer"
+              class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold shadow-xs transition cursor-pointer"
             >
               + 発話行を追加
             </button>
@@ -249,8 +249,8 @@ const extraSchemaGraph = [
           
           <!-- 左：タイムスタンプ別発話セグメントエディタ -->
           <div class="space-y-2">
-            <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-              <span class="font-bold text-slate-200">📝 発話タイムスタンプ一覧（クリックで区間再生・直接編集可）</span>
+            <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+              <span class="font-bold text-slate-700">📝 発話タイムスタンプ一覧（クリックで区間再生・直接編集可）</span>
               <span id="segmentCountLabel" class="font-mono">0 区間</span>
             </div>
             <div
@@ -265,30 +265,30 @@ const extraSchemaGraph = [
           <div class="space-y-2 flex flex-col">
             <div class="flex items-center justify-between text-xs px-1">
               <div class="flex items-center gap-1.5">
-                <span class="font-bold text-slate-200">📤 出力プレビュー：</span>
+                <span class="font-bold text-slate-700">📤 出力プレビュー：</span>
                 <button
                   type="button"
                   data-fmt="txt"
-                  class="fmt-tab-btn px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold text-[11px] cursor-pointer"
+                  class="fmt-tab-btn px-2.5 py-1 rounded bg-purple-600 text-white font-bold text-[11px] shadow-xs cursor-pointer"
                 >
                   議事録 (.txt)
                 </button>
                 <button
                   type="button"
                   data-fmt="srt"
-                  class="fmt-tab-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700 font-bold text-[11px] cursor-pointer"
+                  class="fmt-tab-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 font-bold text-[11px] cursor-pointer"
                 >
                   SRT字幕 (.srt)
                 </button>
                 <button
                   type="button"
                   data-fmt="vtt"
-                  class="fmt-tab-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700 font-bold text-[11px] cursor-pointer"
+                  class="fmt-tab-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 font-bold text-[11px] cursor-pointer"
                 >
                   WebVTT (.vtt)
                 </button>
               </div>
-              <span id="maskedCountStatBadge" class="text-[11px] text-emerald-400 font-semibold">
+              <span id="maskedCountStatBadge" class="text-[11px] text-emerald-700 font-bold">
                 自動伏字化: 0箇所
               </span>
             </div>
@@ -297,19 +297,19 @@ const extraSchemaGraph = [
               id="transcriptOutputPreview"
               readonly
               rows="14"
-              class="w-full flex-1 bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-emerald-300 font-mono focus:outline-none leading-relaxed"
+              class="w-full flex-1 bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
             ></textarea>
           </div>
 
         </div>
 
         <!-- 一括ダウンロード＆コピー フッターバー -->
-        <div class="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="space-y-1 text-center sm:text-left">
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold">
               🔒 音声・テキストともにサーバー送信 0 バイト
             </span>
-            <p class="text-xs text-slate-300 pt-1">
+            <p class="text-xs text-slate-600 pt-1">
               個人情報マスキング済みのテキストを、そのまま社内ChatGPT・要約AIや動画編集ソフトへ安全に投入できます。
             </p>
           </div>
@@ -318,21 +318,21 @@ const extraSchemaGraph = [
             <button
               type="button"
               id="copyTranscriptBtn"
-              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition cursor-pointer"
+              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition cursor-pointer"
             >
               📋 テキストをコピー
             </button>
             <button
               type="button"
               id="downloadTxtBtn"
-              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition shadow cursor-pointer"
+              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-xs cursor-pointer"
             >
               📥 議事録 (.txt) 保存
             </button>
             <button
               type="button"
               id="downloadSrtBtn"
-              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition shadow cursor-pointer"
+              class="flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold text-xs text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-xs cursor-pointer"
             >
               🎬 字幕 (.srt) 保存
             </button>
@@ -345,43 +345,43 @@ const extraSchemaGraph = [
 
     <!-- 【pSEO & 用途別ガイド】なぜ社外秘音声はローカル処理が必須なのか -->
     <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>🛡️</span>
           <span>クラウド文字起こしサービスに社外秘音声をアップロードしてはいけない理由</span>
         </h2>
-        <p class="text-xs text-slate-400 mt-1">企業の法務・情シスが警戒する音声データ漏洩リスクとローカル処理の優位性</p>
+        <p class="text-xs text-slate-500 mt-1">企業の法務・情シスが警戒する音声データ漏洩リスクとローカル処理の優位性</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-purple-300 text-sm">1. 経営会議・M&A・未発表プロジェクトの音声保護</h3>
-          <p class="text-slate-300 leading-relaxed">
-            <strong>外部AIの学習データ化・クラウド保存リスクをゼロに：</strong>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <h3 class="font-bold text-purple-700 text-sm">1. 経営会議・M&A・未発表プロジェクトの音声保護</h3>
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">外部AIの学習データ化・クラウド保存リスクをゼロに：</strong>
             一般的なAI文字起こしSaaSは、数十分〜数時間の音声ファイル丸ごとをクラウドサーバーへ転送します。本ツールはブラウザ内のメモリ上でのみ音声波形をデコードするため、社外流出が物理的に起こりません。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-purple-300 text-sm">2. 人事評価面談・1on1・産業医面談のプライバシー遵守</h3>
-          <p class="text-slate-300 leading-relaxed">
-            <strong>要配慮個人情報を含む対話録音の安全な書き起こし：</strong>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <h3 class="font-bold text-purple-700 text-sm">2. 人事評価面談・1on1・産業医面談のプライバシー遵守</h3>
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">要配慮個人情報を含む対話録音の安全な書き起こし：</strong>
             社員の健康状態や評価・給与に関する面談記録は最も厳格な管理が求められます。発言中の電話番号や個人IDもその場で自動伏字化できます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-purple-300 text-sm">3. 社内研修動画・マニュアル動画のSRT/VTT字幕作成</h3>
-          <p class="text-slate-300 leading-relaxed">
-            <strong>無音区間（VAD）自動検出でタイムスタンプ打ちを自動化：</strong>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <h3 class="font-bold text-purple-700 text-sm">3. 社内研修動画・マニュアル動画のSRT/VTT字幕作成</h3>
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">無音区間（VAD）自動検出でタイムスタンプ打ちを自動化：</strong>
             音声のエネルギー波形から発話の開始・終了秒数を自動検出してセグメント分割するため、社内限定動画の字幕（.srt / .vtt）作成工数を大幅に削減します。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-purple-300 text-sm">4. 要約AI（ChatGPT等）へ投げる前の「事前サニタイズ」</h3>
-          <p class="text-slate-300 leading-relaxed">
-            <strong>機密番号をマスクしてからAI要約へ：</strong>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <h3 class="font-bold text-purple-700 text-sm">4. 要約AI（ChatGPT等）へ投げる前の「事前サニタイズ」</h3>
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">機密番号をマスクしてからAI要約へ：</strong>
             書き起こしたテキストから電話番号・メールアドレス・マイナンバーを自動伏字化した状態でコピーできるため、その後のAI議事録要約も安全に行えます。
           </p>
         </div>
@@ -390,50 +390,50 @@ const extraSchemaGraph = [
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>❓</span>
           <span>よくある質問（FAQ）</span>
         </h2>
       </div>
 
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300">
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+      <div class="space-y-3 text-xs sm:text-sm">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
+          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
             <span>Q. 読み込んだ音声ファイルが外部サーバーへ送信されることは本当にありませんか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             はい、1バイトも送信されません。ブラウザ標準のWeb Audio APIを用いて端末のRAM上でデコードおよびVAD（発話区間検出）を行っており、Content-Security-Policyによって外部通信自体を遮断しています。F12キーの開発者ツール（Networkタブ）でいつでも通信0件をご確認いただけます。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
+          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
             <span>Q. どんな音声ファイル形式に対応していますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             ブラウザのWeb Audioデコーダがサポートする主要な音声フォーマット（WAV、MP3、M4A/AAC、OGG、WebM）にすべて対応しています。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
+          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
             <span>Q. 字幕ファイル（SRT / VTT）と通常のテキスト議事録の違いは何ですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             議事録（.txt）はチャット共有やドキュメント貼り付けに適した形式です。一方、SRT（.srt）およびWebVTT（.vtt）はミリ秒単位の開始・終了タイムコードを含んでおり、動画編集ソフトや社内ポータルの動画プレーヤーに字幕トラックとしてそのままインポートできます。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
+          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
             <span>Q. 実行時に巨大なAI音声認識モデルのダウンロードや外部通信は発生しますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             いいえ。バックグラウンドで数百MBのWhisper等のAIモデルをダウンロードする処理は一切ありません。音声ファイルの波形解析、発話区間（VAD）検出、個人情報伏字化、字幕出力はすべてブラウザ標準のWeb Audio APIとローカルJavaScriptで行われるため、ページ読み込み後にWi-Fiを切断したオフライン状態でも動作します（※マイクによるリアルタイム音声入力のみ、ブラウザ仕様により通信を必要とする場合があります）。
           </p>
         </details>
@@ -507,10 +507,10 @@ const extraSchemaGraph = [
 
         document.querySelectorAll('.fmt-tab-btn').forEach((b) => {
           b.className =
-            'fmt-tab-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700 font-bold text-[11px] cursor-pointer';
+            'fmt-tab-btn px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 font-bold text-[11px] cursor-pointer';
         });
         target.className =
-          'fmt-tab-btn px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold text-[11px] cursor-pointer';
+          'fmt-tab-btn px-2.5 py-1 rounded bg-purple-600 text-white font-bold text-[11px] shadow-xs cursor-pointer';
 
         updateOutputPreview();
       });
@@ -673,7 +673,7 @@ const extraSchemaGraph = [
         const x = i * (barWidth + gap);
         const y = (h - barH) / 2;
 
-        waveCtx.fillStyle = ratio <= progressRatio ? '#10b981' : '#334155';
+        waveCtx.fillStyle = ratio <= progressRatio ? '#9333ea' : '#cbd5e1';
         waveCtx.fillRect(x, y, barWidth, barH);
       }
     }
@@ -706,12 +706,12 @@ const extraSchemaGraph = [
       segmentListContainer.innerHTML = segments
         .map(
           (seg, idx) => `
-          <div class="p-3 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+          <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-xs space-y-2">
             <div class="flex items-center justify-between gap-2 text-[11px]">
               <button
                 type="button"
                 data-seek-sec="${seg.startSec}"
-                class="seek-seg-btn px-2.5 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 font-mono font-bold transition cursor-pointer"
+                class="seek-seg-btn px-2.5 py-0.5 rounded bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-mono font-bold transition cursor-pointer"
                 title="この発話区間を再生"
               >
                 ▶ ${formatTimestamp(seg.startSec)} - ${formatTimestamp(seg.endSec)}
@@ -719,7 +719,7 @@ const extraSchemaGraph = [
               <button
                 type="button"
                 data-del-idx="${idx}"
-                class="del-seg-btn text-slate-500 hover:text-rose-400 transition cursor-pointer"
+                class="del-seg-btn text-slate-400 hover:text-rose-600 transition cursor-pointer"
                 title="この行を削除"
               >
                 ✕ 削除
@@ -728,7 +728,7 @@ const extraSchemaGraph = [
             <textarea
               data-seg-idx="${idx}"
               rows="2"
-              class="seg-text-input w-full bg-slate-900 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs text-slate-100 focus:outline-none leading-relaxed"
+              class="seg-text-input w-full bg-slate-50 border border-slate-200 focus:border-purple-500 focus:bg-white rounded-lg p-2 text-xs text-slate-800 focus:outline-none leading-relaxed"
             >${escapeHtml(seg.text)}</textarea>
           </div>
         `

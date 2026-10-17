@@ -78,7 +78,7 @@ const extraSchemaGraph = [
     <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-semibold shadow-xs">
           <span>完全ローカル処理</span>
           <span>•</span>
           <span>モザイク / ぼかし / 黒塗り</span>
@@ -90,29 +90,29 @@ const extraSchemaGraph = [
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs border border-slate-700 transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
         >
           <span>🏢</span>
           <span>社内利用・情シス申請用仕様書</span>
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
         画像 顔・ナンバー・機密箇所モザイク＆黒塗り｜一括・ブラウザ完結・サーバー送信なし
       </h1>
-      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
         マニュアル作成用の<strong>社内システム画面キャプチャ（URL・顧客名・APIキー）</strong>や、現場写真の<strong>顔・車のナンバープレート</strong>をドラッグ操作だけで即座に秘匿化。
         <strong>サーバー送信なし（0バイト）</strong>でブラウザ内Canvasのみで処理し、複数画像への同一レイアウト一括モザイク＆ZIP出力にも対応しています。
       </p>
     </div>
 
     <!-- メイン操作パネル -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
 
       <!-- ファイルドロップゾーン -->
       <div
         id="dropZoneMosaic"
-        class="border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-7 text-center transition bg-slate-950/40 cursor-pointer group"
+        class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-7 text-center transition bg-slate-50/70 hover:bg-indigo-50/20 cursor-pointer group"
       >
         <input
           type="file"
@@ -122,22 +122,22 @@ const extraSchemaGraph = [
           class="hidden"
         />
         <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
             🕶️
           </div>
           <div>
-            <p class="font-bold text-slate-100 text-base sm:text-lg">
+            <p class="font-bold text-slate-800 text-base sm:text-lg">
               モザイク・黒塗りしたい画像・スクショをドロップ（複数枚の一括読込に対応）
             </p>
-            <p class="text-xs text-slate-400 mt-1">
+            <p class="text-xs text-slate-500 mt-1">
               またはクリックしてファイルを選択（JPEG / PNG / WebP） • Ctrl+V でクリップボードのスクショ貼り付けも可能
             </p>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-emerald-300 border border-emerald-500/20">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-indigo-800 shadow-xs font-medium">
               🔒 サーバー送信0バイト（無加工の機密画像を外部へ一切出しません）
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-slate-400">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
               📐 全画像への同一位置一括マスク対応
             </span>
           </div>
@@ -145,8 +145,8 @@ const extraSchemaGraph = [
       </div>
 
       <!-- ワンクリック検証用：社外秘管理画面サンプル2枚投入バー -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
-        <div class="flex items-center gap-2 text-slate-300">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        <div class="flex items-center gap-2 text-slate-700">
           <span class="text-base">🧪</span>
           <span>
             <strong>今すぐ試す（サンプル付属）：</strong>
@@ -156,7 +156,7 @@ const extraSchemaGraph = [
         <button
           id="loadSampleMosaicBtn"
           type="button"
-          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
+          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
         >
           <span>サンプル画像2枚を読み込む</span>
         </button>
@@ -166,40 +166,40 @@ const extraSchemaGraph = [
       <div id="mosaicWorkspace" class="hidden space-y-5">
 
         <!-- ツールバー（エフェクト種類・強度・Undo/クリア・全画像一括コピー） -->
-        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
           <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             
             <!-- エフェクト種別選択 -->
             <div class="space-y-1.5">
-              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
                 1. マスク種類を選択（画像上をドラッグして範囲指定）
               </span>
               <div class="flex flex-wrap items-center gap-2 text-xs">
                 <button
                   type="button"
                   data-effect="pixelate"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
+                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-indigo-600 text-white border-indigo-600 shadow-xs"
                 >
                   🟦 ピクセルモザイク
                 </button>
                 <button
                   type="button"
                   data-effect="blur"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
                 >
                   🌫️ すりガラスぼかし
                 </button>
                 <button
                   type="button"
                   data-effect="blackout"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
                 >
                   ⬛ 完全黒塗り（海苔）
                 </button>
                 <button
                   type="button"
                   data-effect="whiteout"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
                 >
                   ⬜ 白塗り消去
                 </button>
@@ -208,9 +208,9 @@ const extraSchemaGraph = [
 
             <!-- 粗さ・強度スライダー -->
             <div class="space-y-1.5 min-w-[200px]">
-              <div class="flex items-center justify-between text-[11px] text-slate-400">
+              <div class="flex items-center justify-between text-[11px] text-slate-600">
                 <span class="font-bold">2. モザイク・ぼかし強度</span>
-                <span id="strengthValLabel" class="font-mono text-emerald-400 font-bold">18</span>
+                <span id="strengthValLabel" class="font-mono text-indigo-700 font-bold">18</span>
               </div>
               <input
                 type="range"
@@ -218,7 +218,7 @@ const extraSchemaGraph = [
                 min="6"
                 max="48"
                 value="18"
-                class="w-full accent-emerald-500 cursor-pointer"
+                class="w-full accent-indigo-600 cursor-pointer"
               />
             </div>
 
@@ -227,14 +227,14 @@ const extraSchemaGraph = [
               <button
                 type="button"
                 id="undoRegionBtn"
-                class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer"
+                class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold shadow-xs transition cursor-pointer"
               >
                 ↩ 1つ戻す
               </button>
               <button
                 type="button"
                 id="clearRegionsBtn"
-                class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-rose-950/60 text-slate-300 hover:text-rose-300 text-xs font-semibold transition cursor-pointer"
+                class="px-3 py-2 rounded-lg bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-300 text-xs font-semibold shadow-xs transition cursor-pointer"
               >
                 🗑️ この画像の枠を全消去
               </button>
@@ -242,12 +242,12 @@ const extraSchemaGraph = [
           </div>
 
           <!-- 複数枚の一括同期バー -->
-          <div class="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2 text-slate-300">
-              <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[11px]">
+          <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2 text-slate-700">
+              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold text-[11px]">
                 一括機能
               </span>
-              <span id="activeRegionCountText" class="text-slate-300">
+              <span id="activeRegionCountText" class="text-slate-600">
                 現在の画像に 0 箇所のマスク領域が設定されています
               </span>
             </div>
@@ -255,7 +255,7 @@ const extraSchemaGraph = [
             <button
               type="button"
               id="applyRegionsToAllBtn"
-              class="px-4 py-2 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 border border-indigo-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+              class="px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
             >
               <span>📐 現在のマスク位置を全画像に一括コピー適用</span>
             </button>
@@ -267,12 +267,12 @@ const extraSchemaGraph = [
           
           <!-- 左：読み込み済み画像リスト -->
           <div class="lg:col-span-1 space-y-2">
-            <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-              <span class="font-bold text-slate-200">📂 画像一覧 (<span id="imageTotalCount">0</span>枚)</span>
+            <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+              <span class="font-bold text-slate-800">📂 画像一覧 (<span id="imageTotalCount">0</span>枚)</span>
               <button
                 type="button"
                 id="addMoreFilesBtn"
-                class="text-emerald-400 hover:underline font-semibold cursor-pointer"
+                class="text-indigo-700 hover:underline font-bold cursor-pointer"
               >
                 + 画像追加
               </button>
@@ -287,17 +287,17 @@ const extraSchemaGraph = [
 
           <!-- 右：インタラクティブCanvasエディタ -->
           <div class="lg:col-span-3 space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 bg-slate-950/60 px-3.5 py-2 rounded-lg border border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200">
               <span>
                 💡 <strong>操作方法：</strong> キャンバス上をマウス（または指）でドラッグすると、その矩形範囲に即座にモザイク・黒塗りが適用されます。
               </span>
-              <span id="canvasDimensionLabel" class="font-mono text-slate-400">800 × 500 px</span>
+              <span id="canvasDimensionLabel" class="font-mono text-slate-500">800 × 500 px</span>
             </div>
 
-            <div class="relative rounded-2xl bg-slate-950 border border-slate-800 p-3 flex items-center justify-center overflow-auto min-h-[340px] max-h-[600px]">
+            <div class="relative rounded-2xl bg-slate-100 border border-slate-200 p-3 flex items-center justify-center overflow-auto min-h-[340px] max-h-[600px]">
               <canvas
                 id="mosaicEditorCanvas"
-                class="max-w-full h-auto rounded-lg shadow-lg cursor-crosshair select-none touch-none border border-slate-800"
+                class="max-w-full h-auto rounded-lg shadow-md cursor-crosshair select-none touch-none border border-slate-300 bg-white"
               ></canvas>
             </div>
           </div>
@@ -305,17 +305,17 @@ const extraSchemaGraph = [
         </div>
 
         <!-- 保存＆一括ZIP出力フッターバー -->
-        <div class="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="space-y-1 text-center sm:text-left">
             <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
                 🛡️ 不可逆ピクセル書き換え ＆ EXIF自動消去済
               </span>
-              <span id="mosaicProcessStatus" class="text-xs font-mono text-slate-300">
+              <span id="mosaicProcessStatus" class="text-xs font-mono text-slate-600">
                 外部通信 0 バイト
               </span>
             </div>
-            <p class="text-xs text-slate-300">
+            <p class="text-xs text-slate-600">
               出力画像はレイヤーを持たない1枚の画像として再生成されるため、後からモザイクを剥がすことは不可能です。
             </p>
           </div>
@@ -324,14 +324,14 @@ const extraSchemaGraph = [
             <button
               type="button"
               id="downloadCurrentMaskedBtn"
-              class="flex-1 sm:flex-none px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-emerald-200 bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 transition cursor-pointer whitespace-nowrap"
+              class="flex-1 sm:flex-none px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-indigo-900 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition cursor-pointer whitespace-nowrap"
             >
               📥 表示中の1枚を保存
             </button>
             <button
               type="button"
               id="downloadAllMaskedZipBtn"
-              class="flex-1 sm:flex-none px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+              class="flex-1 sm:flex-none px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
             >
               <span>📦 全画像をZIPで一括保存</span>
             </button>
@@ -344,42 +344,42 @@ const extraSchemaGraph = [
 
     <!-- 【pSEO & 用途別ガイド】ブラウザ内モザイク・黒塗りが選ばれる理由 -->
     <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>🔒</span>
           <span>社内手順書・バグ報告・現場写真の「うっかり情報漏洩」を防ぐ4つの鉄則</span>
         </h2>
-        <p class="text-xs text-slate-400 mt-1">機密キャプチャを外部クラウドへアップロードせずに処理すべき理由</p>
+        <p class="text-xs text-slate-500 mt-1">機密キャプチャを外部クラウドへアップロードせずに処理すべき理由</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-indigo-300 text-sm">1. 社内管理画面・SaaS手順書のスクリーンショット</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">1. 社内管理画面・SaaS手順書のスクリーンショット</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>URLバーのテナントIDや顧客実名を即座に秘匿：</strong>
             操作マニュアルやSlack/Teamsへのバグ報告で画面キャプチャを貼る際、ブラウザのURLバーや画面端のログイン名・APIキーから重大なインシデントが発生します。Ctrl+Vで貼り付けて3秒で黒塗りできます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-indigo-300 text-sm">2. 現場写真・物件写真・車両ナンバープレートの保護</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">2. 現場写真・物件写真・車両ナンバープレートの保護</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>通行人の顔や社用車ナンバー・表札をまとめてモザイク：</strong>
             不動産・建設・フィールドワークの現場報告書やWeb掲載写真で、映り込んだ第三者の顔やナンバープレートをサーバー送信なしで安全にモザイク処理できます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-indigo-300 text-sm">3. 定型画面キャプチャの「同じ位置への一括モザイク」</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">3. 定型画面キャプチャの「同じ位置への一括モザイク」</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>何十枚もの連番スクショの同じヘッダ・個人情報欄を一発処理：</strong>
             1枚目で指定したモザイク枠をボタン1つで全画像へ一括コピーできるため、大量のテストエビデンス画像や定型帳票キャプチャのマスキング作業を90%短縮します。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-indigo-300 text-sm">4. AI復元・逆フィルタリングを防ぐ「完全黒塗り」モード</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">4. AI復元・逆フィルタリングを防ぐ「完全黒塗り」モード</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>マイナンバー・口座番号・シークレットキーには黒塗りを推奨：</strong>
             薄いモザイクは超解像AI等で推測されるリスクがありますが、画素値を完全にゼロ（#000000）へ書き換える「完全黒塗り（海苔）」なら100%復元不可能です。
           </p>
@@ -389,40 +389,40 @@ const extraSchemaGraph = [
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>❓</span>
           <span>よくある質問（FAQ）</span>
         </h2>
       </div>
 
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300">
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 社外秘のキャプチャを無料モザイクサイトにアップロードするのはなぜ危険なのですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             一般的なオンライン画像加工サイトは、モザイクをかける前の「生画像」を一度サーバーへ送信して処理します。つまり隠したい顧客名やAPIキーがそのまま外部サーバーに渡ってしまいます。ZeroLeak Toolsはサーバー送信なし（0バイト）でブラウザ内のメモリだけで完結するため安全です。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 保存した画像からモザイクや黒塗りが外されることはありませんか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             ありません。画像の上に図形を重ねただけのデータではなく、対象領域のピクセル（RGB値）自体を破壊的に書き換えて1枚のフラットな画像として出力するため、後からモザイクを剥がすことは不可能です。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. 複数枚のスクリーンショットの同じ位置に一括でモザイクをかけられますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             はい。複数枚の画像をドロップし、1枚目でモザイクや黒塗りの枠を設定したあと「現在のマスク位置を全画像に一括コピー適用」をクリックすると、全画像の同じ位置に一括適用され、ZIPでまとめてダウンロードできます。
           </p>
         </details>
@@ -639,8 +639,8 @@ const extraSchemaGraph = [
         .map((entry, idx) => {
           const isActive = idx === activeIndex;
           const borderClass = isActive
-            ? 'border-emerald-500 bg-emerald-950/30 text-white'
-            : 'border-slate-800 bg-slate-950/60 text-slate-300 hover:border-slate-700';
+            ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold ring-1 ring-emerald-500/30'
+            : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50';
           return `
             <div
               data-entry-idx="${idx}"
@@ -648,14 +648,14 @@ const extraSchemaGraph = [
             >
               <div class="min-w-0">
                 <p class="text-xs font-bold truncate">${escapeHtml(entry.name)}</p>
-                <p class="text-[11px] text-slate-400 font-mono">
+                <p class="text-[11px] text-slate-500 font-mono">
                   ${entry.width}×${entry.height} • マスク ${entry.regions.length}箇所
                 </p>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
                 entry.regions.length > 0
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                  : 'bg-slate-100 text-slate-500'
               }">
                 ${entry.regions.length}枠
               </span>

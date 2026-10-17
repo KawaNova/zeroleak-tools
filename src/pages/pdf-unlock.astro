@@ -78,7 +78,7 @@ const extraSchemaGraph = [
     <!-- ツールタイトル & 狙い（複合キーワード「一括 ブラウザ」「サーバー送信なし」明記） -->
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold shadow-xs">
           <span>完全ローカル処理</span>
           <span>•</span>
           <span>パスワード除去 ＆ 作成者メタデータ抹消</span>
@@ -90,43 +90,43 @@ const extraSchemaGraph = [
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs border border-slate-700 transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
         >
           <span>🏢</span>
           <span>社内利用・情シス申請用仕様書</span>
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
         給与明細・機密PDF パスワード解除＆メタデータ削除｜一括・ブラウザ完結・サーバー送信なし
       </h1>
-      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
         住宅ローン審査や確定申告（e-Tax）で拒否される<strong>「パスワード付きPDFの解除」</strong>と、社外提出時に漏洩原因となる<strong>「PDF内部メタデータ（作成者名・PCアカウント名・元ファイル名・作成ソフト履歴）の完全削除」</strong>をブラウザ内だけで一括処理。
         <strong>サーバー送信なし（0バイト）</strong>で安全なクリーンPDFを再生成します。
       </p>
     </div>
 
     <!-- メイン操作カード -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
       
       <!-- ファイルドロップゾーン -->
-      <div id="dropZonePdf" class="border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-8 text-center transition bg-slate-950/40 cursor-pointer group">
+      <div id="dropZonePdf" class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-2xl p-8 text-center transition bg-slate-50/70 hover:bg-teal-50/20 cursor-pointer group">
         <input type="file" id="fileInputPdf" accept=".pdf,application/pdf" class="hidden" />
         <div class="flex flex-col items-center gap-3 pointer-events-none">
-          <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+          <div class="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 group-hover:scale-105 transition-transform shadow-xs">
             <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
           <div>
-            <p class="font-bold text-slate-200 text-base">パスワード付きPDF または メタデータを消したいPDFをドロップ</p>
-            <p class="text-xs text-slate-400 mt-1">またはクリックしてファイルを選択 (.pdf) • パスワードなしPDFのプロパティ消去単体にも対応</p>
+            <p class="font-bold text-slate-800 text-base">パスワード付きPDF または メタデータを消したいPDFをドロップ</p>
+            <p class="text-xs text-slate-500 mt-1">またはクリックしてファイルを選択 (.pdf) • パスワードなしPDFのプロパティ消去単体にも対応</p>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-emerald-300 border border-emerald-500/20">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-teal-800 shadow-xs font-medium">
               🔒 サーバー送信なし（0バイト保証）
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-[11px] text-slate-400">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
               🧹 Author / Title / Creator / XMP 自動抹消
             </span>
           </div>
@@ -134,23 +134,23 @@ const extraSchemaGraph = [
       </div>
 
       <!-- テスト用サンプルPDF クイック投入ボタン（手元にファイルがない人向け） -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
-        <div class="flex items-center gap-2 text-slate-300">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+        <div class="flex items-center gap-2 text-slate-700">
           <span class="text-base">🧪</span>
-          <span><strong>テスト用PDFをお持ちでない場合：</strong> 暗号化済みサンプル給与明細（パスワード: <code class="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded font-mono font-bold">test2026</code>）で今すぐパスワード解除＆メタデータ抹消を確認できます</span>
+          <span><strong>テスト用PDFをお持ちでない場合：</strong> 暗号化済みサンプル給与明細（パスワード: <code class="text-teal-800 bg-white border border-slate-200 px-1 py-0.5 rounded font-mono font-bold">test2026</code>）で今すぐパスワード解除＆メタデータ抹消を確認できます</span>
         </div>
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <button
             id="loadSamplePdfBtn"
             type="button"
-            class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm whitespace-nowrap"
+            class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
           >
             <span>サンプルPDFを読み込む</span>
           </button>
           <a
             href="/sample_payslip_protected.pdf"
             download="sample_payslip_protected.pdf"
-            class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-center whitespace-nowrap"
+            class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-xs transition text-center whitespace-nowrap font-medium"
             title="暗号化サンプルPDFをPCに保存"
           >
             📥 PDF保存
@@ -159,23 +159,23 @@ const extraSchemaGraph = [
       </div>
 
       <!-- 選択されたファイル表示 -->
-      <div id="fileInfoPdf" class="hidden p-4 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div id="fileInfoPdf" class="hidden p-4 rounded-xl bg-teal-50/60 border border-teal-200 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">PDF</div>
+          <div class="w-9 h-9 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">PDF</div>
           <div>
-            <p id="fileNamePdf" class="text-sm font-semibold text-slate-200">pay_slip.pdf</p>
-            <p id="fileMetaPdf" class="text-xs text-slate-400">サイズ: 0 KB</p>
+            <p id="fileNamePdf" class="text-sm font-semibold text-slate-900">pay_slip.pdf</p>
+            <p id="fileMetaPdf" class="text-xs text-slate-500">サイズ: 0 KB</p>
           </div>
         </div>
-        <button id="resetPdfBtn" type="button" class="text-xs text-slate-400 hover:text-rose-400 underline transition cursor-pointer">
+        <button id="resetPdfBtn" type="button" class="text-xs text-slate-500 hover:text-rose-600 underline transition cursor-pointer font-medium">
           ファイルを変更
         </button>
       </div>
 
       <!-- パスワード入力 ＆ メタデータ消去設定フォーム -->
-      <div id="passwordArea" class="hidden space-y-4 p-5 rounded-xl bg-slate-950/60 border border-slate-800">
+      <div id="passwordArea" class="hidden space-y-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
         <div>
-          <label for="pdfPasswordInput" class="block text-xs font-bold text-slate-200 mb-1.5">
+          <label for="pdfPasswordInput" class="block text-xs font-bold text-slate-800 mb-1.5">
             🔑 設定されているパスワードを入力してください（パスワードなしPDFの場合は空欄のままでOK）：
           </label>
           <div class="relative">
@@ -183,55 +183,55 @@ const extraSchemaGraph = [
               type="password"
               id="pdfPasswordInput"
               placeholder="知っているパスワード（誕生日、社員番号など）※暗号化なしPDFは空欄"
-              class="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none pr-10 font-mono"
+              class="w-full bg-white border border-slate-300 focus:border-teal-500 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none pr-10 font-mono"
             />
             <button
               type="button"
               id="togglePasswordVisibility"
-              class="absolute right-3 top-3 text-slate-400 hover:text-slate-200 text-xs cursor-pointer"
+              class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 text-xs cursor-pointer"
             >
               👁️
             </button>
           </div>
-          <p id="passwordHint" class="text-[11px] text-slate-400 mt-1.5">
+          <p id="passwordHint" class="text-[11px] text-slate-500 mt-1.5">
             ※ 本ツールはパスワードクラッキング（総当たり攻撃）ツールではありません。ご自身が閲覧権限を持つパスワードを入力してください。
           </p>
         </div>
 
         <!-- メタデータ・隠し情報 消去項目チェックリスト -->
-        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <div class="text-xs font-bold text-teal-300 flex items-center gap-1.5">
+        <div class="p-3.5 rounded-xl bg-white border border-teal-200 space-y-2">
+          <div class="text-xs font-bold text-teal-800 flex items-center gap-1.5">
             <span>🧹</span>
             <span>同時に一括抹消されるPDF内部メタデータ・隠し構造：</span>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-300">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-700">
             <div class="flex items-center gap-1.5">
-              <span class="text-emerald-400 font-bold">✔</span>
+              <span class="text-emerald-600 font-bold">✔</span>
               <span><strong>作成者名 (Author)</strong>：PCユーザー名・社員名</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="text-emerald-400 font-bold">✔</span>
+              <span class="text-emerald-600 font-bold">✔</span>
               <span><strong>タイトル・件名 (Title / Subject)</strong>：元ファイル名</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="text-emerald-400 font-bold">✔</span>
+              <span class="text-emerald-600 font-bold">✔</span>
               <span><strong>作成・変換ソフト (Creator / Producer)</strong></span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="text-emerald-400 font-bold">✔</span>
+              <span class="text-emerald-600 font-bold">✔</span>
               <span><strong>XMPメタデータ・隠し注釈・JavaScript構造</strong></span>
             </div>
           </div>
         </div>
 
-        <div id="errorMessage" class="hidden p-3 rounded-xl bg-rose-950/50 border border-rose-500/50 text-rose-300 text-xs font-semibold">
+        <div id="errorMessage" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
           <!-- エラー内容 -->
         </div>
 
         <button
           id="unlockBtn"
           type="button"
-          class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 transition shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-teal-600 hover:bg-teal-700 transition shadow-sm flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
@@ -242,34 +242,34 @@ const extraSchemaGraph = [
 
       <!-- 処理中インジケータ -->
       <div id="processingIndicator" class="hidden text-center py-6 space-y-3">
-        <div class="inline-block w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-xs text-emerald-400 font-semibold">ブラウザ内で高画質再生成 ＆ メタデータ完全消去中... (外部通信0件)</p>
+        <div class="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-xs text-teal-800 font-semibold">ブラウザ内で高画質再生成 ＆ メタデータ完全消去中... (外部通信0件)</p>
       </div>
 
       <!-- 解除＆メタデータ削除完了 ＆ ダウンロードカード -->
-      <div id="successArea" class="hidden p-6 rounded-xl bg-emerald-950/30 border border-emerald-500/40 space-y-4">
+      <div id="successArea" class="hidden p-6 rounded-xl bg-teal-50/70 border border-teal-200 space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+          <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xl">
             🎉
           </div>
           <div>
-            <h2 class="text-base font-bold text-emerald-300">パスワード解除 ＆ メタデータの完全抹消が完了しました！</h2>
-            <p id="successTimeText" class="text-xs text-slate-300 font-mono mt-0.5">処理完了: 0.8秒 (通信0バイト)</p>
+            <h2 class="text-base font-bold text-teal-950">パスワード解除 ＆ メタデータの完全抹消が完了しました！</h2>
+            <p id="successTimeText" class="text-xs text-slate-600 font-mono mt-0.5">処理完了: 0.8秒 (通信0バイト)</p>
           </div>
         </div>
 
         <!-- 検出・抹消されたメタデータ監査レポート -->
-        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 text-xs">
-          <div class="font-bold text-teal-300 flex items-center justify-between">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-xs">
+          <div class="font-bold text-teal-900 flex items-center justify-between">
             <span>🔍 PDF内部メタデータ（プロパティ）検査＆抹消レポート</span>
-            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">残存メタデータ 0件</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">残存メタデータ 0件</span>
           </div>
-          <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-300 pt-1">
+          <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-700 pt-1">
             <!-- JSでBefore/Afterを表示 -->
           </div>
         </div>
 
-        <p class="text-xs text-slate-300 leading-relaxed">
+        <p class="text-xs text-slate-600 leading-relaxed">
           パスワード保護および内部プロパティ（作成者・タイトル・履歴）がすべて除去されたクリーンなPDFが生成されました。住宅ローン審査や確定申告（e-Tax）、社外取引先へそのまま安全に提出可能です。
         </p>
 
@@ -277,7 +277,7 @@ const extraSchemaGraph = [
           <button
             id="downloadUnlockedPdfBtn"
             type="button"
-            class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition shadow flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -291,42 +291,42 @@ const extraSchemaGraph = [
 
     <!-- 【pSEO & SEO】主要提出先別（金融機関・e-Tax）の受領要件ガイド -->
     <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>🏛️</span>
           <span>主要金融機関 ＆ 確定申告（e-Tax）・社外提出のPDF要件ガイド</span>
         </h2>
-        <p class="text-xs text-slate-400 mt-1">パスワード解除とメタデータ削除が求められる代表的な4つのシーン</p>
+        <p class="text-xs text-slate-500 mt-1">パスワード解除とメタデータ削除が求められる代表的な4つのシーン</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">ネット銀行（住信SBI / auじぶん / 楽天銀行 / PayPay銀行）</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">ネット銀行（住信SBI / auじぶん / 楽天銀行 / PayPay銀行）</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>事前審査・本審査フォームで暗号化PDFはアップロード不可：</strong>
             マイページからの収入証明書類（源泉徴収票・給与明細）アップロード時、暗号化ファイルはシステムで即座にエラー判定されます。事前に本ツールでパスワードを解除したファイルをご用意ください。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">メガバンク（三菱UFJ / 三井住友 / みずほ銀行）</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">メガバンク（三菱UFJ / 三井住友 / みずほ銀行）</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>Web審査窓口でのセキュリティ解除指定：</strong>
             各行のWeb完結型住宅ローン申し込みにおいて、「パスワード保護を解除したPDFまたは画像」の提出が明記されています。パスワードを別送する運用は受け付けられません。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">国税庁 e-Tax ＆ 給与明細SaaS（SmartHR / freee / MF）</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">国税庁 e-Tax ＆ 給与明細SaaS（SmartHR / freee / MF）</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>人事SaaSの自動暗号化PDFを1クリック平文化：</strong>
             SmartHRやマネーフォワード等から出力される「誕生日4桁」や「社員番号」付きの給与明細PDFを、海外サーバーに送信せず手元のブラウザ内で安全に平文化できます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-          <h3 class="font-bold text-teal-300 text-sm">取引先への見積書・契約書PDF提出（メタデータ漏洩防止）</h3>
-          <p class="text-slate-300 leading-relaxed">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
+          <h3 class="font-bold text-slate-900 text-sm">取引先への見積書・契約書PDF提出（メタデータ漏洩防止）</h3>
+          <p class="text-slate-600 leading-relaxed">
             <strong>プロパティに残る「作成者名」「社内元ファイル名」を完全抹消：</strong>
             WordやExcelからPDF化したファイルには、作成した社員の氏名や社内管理用の元ファイル名がプロパティに残っています。本ツールを通すことで全メタデータを白紙化できます。
           </p>
@@ -336,50 +336,50 @@ const extraSchemaGraph = [
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-800 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>❓</span>
           <span>よくある質問（FAQ）</span>
         </h2>
       </div>
 
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300">
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. なぜ住宅ローン審査でパスワード付きPDFが拒否されるのですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             多くの金融機関のオンライン事前審査システムでは、アップロードされたPDFを機械的にOCR処理・自動仕分けするため、パスワード保護がかかっているとシステムがエラーを吐き出して受け入れを拒否します。そのため事前にパスワードを解除した平文PDFの提出が求められます。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. PDFのメタデータ（プロパティ）にはどんな危険な情報が入っていますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             PDFの「文書のプロパティ」には、作成者（Author：PCのアカウント名や社員の実名）、タイトル（Title：変換前のWord/Excelファイル名）、作成プログラム（Creator/Producer）、作成日・更新日が記録されています。本ツールは300DPI再構築とプロパティ空文字初期化により、これらをすべて抹消します。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. iLovePDFやSmallpdfなどの無料Webサイトで解除するのは危険ですか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             一般的な無料PDFツールは、一度ファイルを運営企業の海外クラウドサーバーへアップロードして処理します。源泉徴収票や給与明細には、年収、マイナンバー、家族構成、住所、勤務先などの極めて重大な個人情報が記載されており、外部サーバーへのアップロードは情報漏洩リスクや社内規定違反（懲戒対象）となる恐れがあります。ZeroLeak Toolsはサーバー送信が0バイト（ブラウザ内メモリ完結）のため、安全に処理できます。
           </p>
         </details>
 
-        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
-          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
             <span>Q. パスワードがかかっていないPDFのメタデータ削除だけに使えますか？</span>
-            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             はい。パスワード保護されていないPDFを読み込んだ場合、パスワード欄を空欄にしたまま実行ボタンを押すだけで、作成者名やソフトウェア履歴などの全メタデータを消去したクリーンなPDFを出力できます。
           </p>
         </details>
@@ -615,9 +615,9 @@ const extraSchemaGraph = [
         metadataReportList.innerHTML = reportItems
           .map(
             (item) => `
-            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800/80 flex items-center justify-between gap-2">
-              <span class="text-slate-400 font-medium">${escapeHtml(item.label)}:</span>
-              <span class="text-emerald-300 font-mono truncate">${escapeHtml(String(item.val))}</span>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
+              <span class="text-slate-600 font-medium">${escapeHtml(item.label)}:</span>
+              <span class="text-teal-900 font-mono font-bold truncate">${escapeHtml(String(item.val))}</span>
             </div>
           `
           )

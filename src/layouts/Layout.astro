@@ -66,40 +66,40 @@ const schemaOrg = {
     <!-- JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
   </head>
-  <body class="flex flex-col min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
-    <!-- 常設: F12検証・サーバー送信0バイト保証バナー（スマホ超スリム化対応） -->
-    <aside aria-label="サーバー送信0バイト保証案内" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/30 text-emerald-300 text-[11px] sm:text-xs py-1.5 px-3 sm:px-4 shadow-sm">
+  <body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+    <!-- 常設: F12検証・サーバー送信0バイト保証バナー（スマホ超スリム化対応・クリーンライト配色） -->
+    <aside aria-label="サーバー送信0バイト保証案内" class="bg-emerald-50/90 border-b border-emerald-200/80 text-emerald-900 text-[11px] sm:text-xs py-1.5 px-3 sm:px-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
       <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
         <div class="flex items-center gap-1.5 font-medium truncate">
           <span class="text-xs">🛡️</span>
           <span class="truncate"><strong>サーバー送信0バイト保証</strong><span class="hidden sm:inline">：ファイルは一切外部へ送信されません</span></span>
         </div>
-        <div class="flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-300 bg-emerald-950/70 px-2 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
+        <div class="flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-800 bg-white/90 px-2 py-0.5 rounded-full border border-emerald-300 shadow-xs shrink-0 font-medium">
           <span>✈️</span>
           <span>Wi-Fi切断でも動作</span>
-          <span class="text-[10px] text-slate-400 hidden md:inline">(F12で通信0件検証可)</span>
+          <span class="text-[10px] text-emerald-600 hidden md:inline">(F12で通信0件検証可)</span>
         </div>
       </div>
     </aside>
 
-    <!-- ヘッダーナビゲーション（スマホ横スクロール＆現在地ハイライト対応） -->
-    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
+    <!-- ヘッダーナビゲーション（スマホ横スクロール＆現在地ハイライト対応・白基調） -->
+    <header class="border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
       <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
         <div class="flex items-center justify-between">
           <a href="/" class="flex items-center gap-2.5 group shrink-0">
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center group-hover:border-emerald-400 transition-colors">
-              <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-100 transition-colors shadow-xs">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
             <div class="flex flex-col">
-              <span class="font-bold text-base sm:text-lg text-slate-100 tracking-tight flex items-center gap-1.5">
-                ZeroLeak <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">WASM</span>
+              <span class="font-bold text-base sm:text-lg text-slate-900 tracking-tight flex items-center gap-1.5">
+                ZeroLeak <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">WASM</span>
               </span>
-              <span class="text-[10px] text-slate-400 -mt-0.5">完全ローカル・機密漏洩リスク0%</span>
+              <span class="text-[10px] text-slate-500 -mt-0.5 font-medium">完全ローカル・機密漏洩リスク0%</span>
             </div>
           </a>
-          <a href="/legal/" class="lg:hidden px-2.5 py-1 rounded-lg text-[11px] text-slate-400 hover:text-slate-200 border border-slate-800">
+          <a href="/legal/" class="lg:hidden px-2.5 py-1 rounded-lg text-[11px] text-slate-600 hover:text-slate-900 border border-slate-200 bg-slate-50 font-medium">
             免責・法務
           </a>
         </div>
@@ -107,41 +107,41 @@ const schemaOrg = {
         <nav aria-label="ツールナビゲーション" class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:pb-0 text-xs font-medium">
           <a
             href="/csv-masking/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/csv-masking/' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/csv-masking/' ? 'bg-emerald-100/80 text-emerald-900 border border-emerald-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
             📄 CSVマスク
           </a>
           <a
             href="/pdf-unlock/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/pdf-unlock/' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 font-bold' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/pdf-unlock/' ? 'bg-teal-100/80 text-teal-900 border border-teal-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
             🔓 PDF解除
           </a>
           <a
             href="/exif-remover/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/exif-remover/' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/exif-remover/' ? 'bg-cyan-100/80 text-cyan-900 border border-cyan-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
             📍 EXIF削除
           </a>
           <a
             href="/local-mosaic/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/local-mosaic/' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/local-mosaic/' ? 'bg-indigo-100/80 text-indigo-900 border border-indigo-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
             🕶️ 画像モザイク
           </a>
           <a
             href="/local-whisper/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/local-whisper/' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/local-whisper/' ? 'bg-purple-100/80 text-purple-900 border border-purple-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
             🎙️ 音声文字起こし
           </a>
           <a
             href="/ai-prompt-sanitizer/"
-            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/ai-prompt-sanitizer/' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'text-amber-300/90 hover:text-amber-200 hover:bg-amber-500/10 border border-amber-500/20'}`}
+            class={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition ${canonicalPath === '/ai-prompt-sanitizer/' ? 'bg-amber-100/80 text-amber-900 border border-amber-300 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
           >
-            🤖 AIプロンプト匿名化
+            🤖 AI匿名化
           </a>
-          <a href="/legal/" class="hidden lg:inline-block px-2 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+          <a href="/legal/" class="hidden lg:inline-block px-2 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 transition whitespace-nowrap">
             免責・法務
           </a>
         </nav>
@@ -153,26 +153,26 @@ const schemaOrg = {
       <slot />
     </main>
 
-    <!-- フッター -->
-    <footer class="border-t border-slate-800 bg-slate-900/50 py-8 text-xs text-slate-400 mt-auto">
+    <!-- フッター（白基調・信頼感デザイン） -->
+    <footer class="border-t border-slate-200 bg-white py-8 text-xs text-slate-500 mt-auto">
       <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex flex-col gap-1 text-center sm:text-left">
-          <p class="font-semibold text-slate-300">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
+          <p class="font-bold text-slate-800">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
           <p class="text-[11px] text-slate-500">
             すべての処理はお使いのブラウザ内部（メモリ上）でのみ実行されます。サーバーログへの保存、外部転送は技術的に一切行われません。
           </p>
         </div>
-        <div class="flex flex-wrap items-center gap-4 text-slate-400">
-          <a href="/csv-masking/" class="hover:text-emerald-400 transition">CSVマスキング</a>
-          <a href="/pdf-unlock/" class="hover:text-emerald-400 transition">PDFパスワード解除</a>
-          <a href="/exif-remover/" class="hover:text-emerald-400 transition">写真EXIF・GPS一括削除</a>
-          <a href="/local-mosaic/" class="hover:text-emerald-400 transition">画像モザイク・黒塗り</a>
-          <a href="/local-whisper/" class="hover:text-emerald-400 transition">社外秘音声文字起こし</a>
-          <a href="/ai-prompt-sanitizer/" class="hover:text-amber-400 transition">AIプロンプト匿名化＆復元</a>
-          <a href="/legal/" class="hover:text-emerald-400 transition">免責事項・プライバシー規約</a>
+        <div class="flex flex-wrap items-center gap-4 text-slate-600 font-medium">
+          <a href="/csv-masking/" class="hover:text-emerald-700 transition">CSVマスキング</a>
+          <a href="/pdf-unlock/" class="hover:text-emerald-700 transition">PDFパスワード解除</a>
+          <a href="/exif-remover/" class="hover:text-emerald-700 transition">写真EXIF・GPS一括削除</a>
+          <a href="/local-mosaic/" class="hover:text-emerald-700 transition">画像モザイク・黒塗り</a>
+          <a href="/local-whisper/" class="hover:text-emerald-700 transition">社外秘音声文字起こし</a>
+          <a href="/ai-prompt-sanitizer/" class="hover:text-amber-700 transition">AIプロンプト匿名化＆復元</a>
+          <a href="/legal/" class="hover:text-emerald-700 transition">免責事項・プライバシー規約</a>
         </div>
       </div>
-      <div class="max-w-6xl mx-auto px-4 mt-6 pt-4 border-t border-slate-800/60 text-center text-[10px] text-slate-500">
+      <div class="max-w-6xl mx-auto px-4 mt-6 pt-4 border-t border-slate-100 text-center text-[10px] text-slate-400">
         &copy; 2026 ZeroLeak Tools. All rights reserved. Powered by Astro &amp; Client-side WASM.
       </div>
     </footer>

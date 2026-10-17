@@ -15,7 +15,7 @@ const allTools = [
     badge: '生成AI・業務効率',
     title: 'AIプロンプト 機密・固有名詞サニタイザー',
     desc: 'ChatGPT等へ送る前に社名・人名・APIキーを仮名トークン化し、AI回答をワンクリックで実名復元。',
-    accent: 'border-amber-500/30 hover:border-amber-400 text-amber-300',
+    accent: 'hover:border-amber-500',
   },
   {
     href: '/csv-masking/',
@@ -23,7 +23,7 @@ const allTools = [
     badge: 'データ・名簿',
     title: 'CSV/テキスト 個人情報＆マイナンバー伏字化',
     desc: '顧客リストやテスト用CSVのマイナンバー・電話・メール・氏名をブラウザ内で0.1秒一括マスク。',
-    accent: 'border-emerald-500/30 hover:border-emerald-400 text-emerald-300',
+    accent: 'hover:border-emerald-500',
   },
   {
     href: '/pdf-unlock/',
@@ -31,7 +31,7 @@ const allTools = [
     badge: '書類・提出',
     title: '給与明細・機密PDF パスワード解除＆メタデータ削除',
     desc: '住宅ローン審査・e-Tax提出用に既知パスワードと作成者プロパティ(Author等)を完全抹消。',
-    accent: 'border-teal-500/30 hover:border-teal-400 text-teal-300',
+    accent: 'hover:border-teal-500',
   },
   {
     href: '/exif-remover/',
@@ -39,7 +39,7 @@ const allTools = [
     badge: '写真・一括ZIP',
     title: '写真 位置情報（EXIF・GPS）100枚一括削除',
     desc: 'スマホ写真のGPS座標・機種名・撮影日時を画質劣化ゼロ（ロスレス）で一括消去してZIP出力。',
-    accent: 'border-cyan-500/30 hover:border-cyan-400 text-cyan-300',
+    accent: 'hover:border-cyan-600',
   },
   {
     href: '/local-mosaic/',
@@ -47,7 +47,7 @@ const allTools = [
     badge: '画像・手順書',
     title: '画像 顔・ナンバー・機密箇所 モザイク＆黒塗り',
     desc: '管理画面スクショのURLや顧客名を不可逆マスク。複数画像の同じ位置への一括コピーに対応。',
-    accent: 'border-indigo-500/30 hover:border-indigo-400 text-indigo-300',
+    accent: 'hover:border-indigo-500',
   },
   {
     href: '/local-whisper/',
@@ -55,23 +55,23 @@ const allTools = [
     badge: '音声・議事録',
     title: '社外秘音声のブラウザ内文字起こし＆自動伏字化',
     desc: '会議録音を外部送信せず発話区間（VAD）分割＆個人情報を自動マスクしてTXT/SRT字幕出力。',
-    accent: 'border-purple-500/30 hover:border-purple-400 text-purple-300',
+    accent: 'hover:border-purple-500',
   },
 ];
 
 const otherTools = allTools.filter((t) => t.href !== currentPath);
 ---
 
-<section aria-label="関連する完全ローカルセキュリティツール" class="pt-10 mt-10 border-t border-slate-800/80 space-y-4">
+<section aria-label="関連する完全ローカルセキュリティツール" class="pt-8 sm:pt-10 mt-10 border-t border-slate-200 space-y-4">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
     <div>
-      <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">ZERO-NETWORK TOOL SUITE</span>
-      <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+      <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">ZERO-NETWORK TOOL SUITE</span>
+      <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-2">
         <span>🧰</span>
         <span>あわせて使える「サーバー送信0バイト」業務ツール</span>
       </h2>
     </div>
-    <a href="/" class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold hover:underline">
+    <a href="/" class="text-xs text-emerald-700 hover:text-emerald-800 font-semibold hover:underline">
       全ツール一覧を見る →
     </a>
   </div>
@@ -80,22 +80,22 @@ const otherTools = allTools.filter((t) => t.href !== currentPath);
     {otherTools.map((tool) => (
       <a
         href={tool.href}
-        class={`group p-4 rounded-2xl bg-slate-900/80 border transition-all hover:-translate-y-0.5 hover:bg-slate-900 flex flex-col justify-between gap-2 ${tool.accent}`}
+        class={`group p-4 rounded-2xl bg-white border border-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-sm flex flex-col justify-between gap-2 ${tool.accent}`}
       >
         <div class="space-y-1.5">
           <div class="flex items-center justify-between text-[11px]">
-            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold">
+            <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">
               {tool.badge}
             </span>
-            <span class="text-slate-500 group-hover:text-emerald-400 transition font-mono">0 Byte 通信 →</span>
+            <span class="text-slate-400 group-hover:text-emerald-700 transition font-mono font-medium">0 Byte 通信 →</span>
           </div>
           <div class="flex items-center gap-2.5 pt-0.5">
             <span class="text-2xl">{tool.icon}</span>
-            <h3 class="text-xs sm:text-sm font-bold text-slate-100 group-hover:text-white leading-snug">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition leading-snug">
               {tool.title}
             </h3>
           </div>
-          <p class="text-[11px] text-slate-400 leading-relaxed">
+          <p class="text-[11px] text-slate-600 leading-relaxed">
             {tool.desc}
           </p>
         </div>
