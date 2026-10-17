@@ -30,14 +30,24 @@ import Layout from '../layouts/Layout.astro';
         お使いのPCブラウザ内（WASM/JS）だけで高速処理・安全変換します。
       </p>
 
-      <!-- F12検証案内（非クリッカブル・フラットインフォ） -->
-      <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 max-w-xl mx-auto text-xs text-slate-300 flex items-center gap-3 text-left shadow-inner">
-        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 text-lg flex-shrink-0">
-          🛡️
+      <!-- 一般人向け＆技術者向け：完全ローカル動作の証明案内 -->
+      <div class="p-4 rounded-2xl bg-slate-900/90 border-2 border-emerald-500/30 max-w-xl mx-auto text-xs text-slate-300 space-y-2.5 text-left shadow-xl shadow-emerald-500/5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0">
+            ✈️
+          </div>
+          <div>
+            <div class="font-bold text-emerald-300 text-sm">
+              誰でも3秒でできる「外部通信0バイト」の確認方法
+            </div>
+            <p class="text-slate-300 text-xs mt-1 leading-relaxed">
+              この画面を開いた後、<strong>PCの「Wi-FiをOFF（または機内モード）」にしてみてください</strong>。インターネット通信を物理的に遮断した状態でも、<strong>すべてのツールがそのまま何事もなく動作します</strong>。
+            </p>
+          </div>
         </div>
-        <div>
-          <strong class="text-emerald-300">完全ローカル動作を自ら検証可能：</strong>
-          <span class="text-slate-400">キーボードの <code>F12</code> を押し、開発者ツールの「Network」タブを開いた状態で本ツールをご利用ください。リクエスト通信が0件であることをご確認いただけます。</span>
+        <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex items-center gap-1.5">
+          <span>🛡️</span>
+          <span><strong>情シス・IT技術者の方へ：</strong> キーボードの <code>F12</code> ➔「Network」タブで外部リクエスト通信が0件（0バイト）であることをいつでも目視確認いただけます。</span>
         </div>
       </div>
     </section>
@@ -88,9 +98,28 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
-            <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              テストデータや外部提出用CSVから、マイナンバー（12桁）、電話番号、メール、氏名列を一括伏字化。ドラッグ＆ドロップでメモリ上のみで高速変換します。
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-sans font-bold">原本 (社外送信NG)</span>
+                <span class="text-emerald-400 font-bold flex items-center gap-1">⚡ 0秒変換</span>
+                <span class="text-emerald-300 font-sans font-bold">変換後 (安全提出OK)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="text-rose-300 bg-rose-950/30 p-2 rounded border border-rose-900/30 truncate space-y-0.5">
+                  <div>佐藤 健一 (090-1234-5678)</div>
+                  <div class="text-[10px] text-slate-400">1234-5678-9012</div>
+                </div>
+                <div class="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-500/30 truncate space-y-0.5 font-bold">
+                  <div>佐*** (090-****-5678)</div>
+                  <div class="text-[10px] text-emerald-400">****-****-****</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 説明文（簡潔化） -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              テストデータや外部提出用CSVから、マイナンバー（12桁）、電話番号、メール、氏名を一括伏字化。ブラウザメモリ上のみで高速変換します。
             </p>
           </div>
 
@@ -137,9 +166,34 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px]">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-bold">原本 (提出・印刷不可)</span>
+                <span class="text-teal-400 font-bold flex items-center gap-1">⚡ 0秒解除</span>
+                <span class="text-teal-300 font-bold">解除後 (即提出OK)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-rose-950/30 text-rose-300 p-2 rounded border border-rose-900/30 flex items-center gap-1.5 truncate">
+                  <span class="text-base">🔒</span>
+                  <div class="truncate">
+                    <div class="font-bold truncate">給与明細_社外秘.pdf</div>
+                    <div class="text-[10px] text-slate-400">暗号化＆メタデータ残存</div>
+                  </div>
+                </div>
+                <div class="bg-teal-950/40 text-teal-300 p-2 rounded border border-teal-500/30 flex items-center gap-1.5 truncate font-bold">
+                  <span class="text-base">🔓</span>
+                  <div class="truncate">
+                    <div class="font-bold truncate text-teal-200">給与明細_解除済.pdf</div>
+                    <div class="text-[10px] text-emerald-400">PW解除＆メタデータ完全抹消</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              銀行や税務署で拒否される「パスワード付きPDF」の解除と、社外提出時に漏洩リスクとなる「作成者名・元ファイル名などのPDF内部メタデータ削除」をブラウザ内で一括完結。
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              銀行や税務署で拒否される「パスワード付きPDF」の解除と、作成者名などの内部メタデータ消去をブラウザ内で一括完結。
             </p>
           </div>
 
@@ -186,9 +240,28 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px]">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-bold">原本 (自宅・現場特定リスク)</span>
+                <span class="text-cyan-400 font-bold flex items-center gap-1">⚡ 100枚一括</span>
+                <span class="text-cyan-300 font-bold">消去後 (安全共有OK)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-rose-950/30 text-rose-300 p-2 rounded border border-rose-900/30 truncate space-y-0.5">
+                  <div class="font-bold truncate">📍 GPS: 35.6585, 139.7454</div>
+                  <div class="text-[10px] text-slate-400 truncate">撮影日時・iPhone 15 Pro</div>
+                </div>
+                <div class="bg-cyan-950/40 text-cyan-300 p-2 rounded border border-cyan-500/30 truncate space-y-0.5 font-bold">
+                  <div class="truncate text-cyan-200">🛡️ 位置情報・機種名を完全抹消</div>
+                  <div class="text-[10px] text-emerald-400">画質劣化0%・ZIP一括保存</div>
+                </div>
+              </div>
+            </div>
+
             <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              スマホやデジカメ写真に潜むGPS座標（自宅・現場の住所）、撮影日時、端末機種名をブラウザ内で一括抹消。100枚規模のJPEG/PNG/WebPを画質劣化ゼロでZIP保存。
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              スマホやデジカメ写真のGPS座標（自宅・現場住所）、撮影日時、機種名を一括抹消。画質劣化ゼロでZIP保存します。
             </p>
           </div>
 
@@ -235,9 +308,28 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px]">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-bold">原本 (流出事故リスク)</span>
+                <span class="text-indigo-400 font-bold flex items-center gap-1">⚡ 不可逆</span>
+                <span class="text-indigo-300 font-bold">黒塗り後 (復元不能)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-rose-950/30 text-rose-300 p-2 rounded border border-rose-900/30 truncate space-y-0.5">
+                  <div class="font-bold truncate">👤 顔写真・車のナンバー</div>
+                  <div class="text-[10px] text-slate-400 truncate">管理画面APIキー・顧客情報</div>
+                </div>
+                <div class="bg-indigo-950/40 text-indigo-300 p-2 rounded border border-indigo-500/30 truncate space-y-0.5 font-bold">
+                  <div class="truncate text-indigo-200">⬛ 完全黒塗り / 不可逆モザイク</div>
+                  <div class="text-[10px] text-emerald-400">コピペ・透過復元が物理的に不可能</div>
+                </div>
+              </div>
+            </div>
+
             <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              社外秘キャプチャのURL・顧客名・APIキーや、写真の顔・車両ナンバーをドラッグで即座にモザイク・ぼかし・完全黒塗り。複数画像への同一位置一括適用＆ZIP出力に対応。
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              社外秘キャプチャのURL・顧客名・APIキーや、写真の顔・車両ナンバーを即座にモザイク・完全黒塗り。複数画像一括処理＆ZIP保存。
             </p>
           </div>
 
@@ -284,9 +376,28 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px]">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-bold">音声入力 (クラウド送信NG)</span>
+                <span class="text-purple-400 font-bold flex items-center gap-1">⚡ VAD解析</span>
+                <span class="text-purple-300 font-bold">伏字議事録 (安全保存)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-rose-950/30 text-rose-300 p-2 rounded border border-rose-900/30 truncate space-y-0.5">
+                  <div class="font-bold truncate">🎙️ 役員会議の録音ファイル</div>
+                  <div class="text-[10px] text-slate-400 truncate">電話・メール・マイナンバー含む</div>
+                </div>
+                <div class="bg-purple-950/40 text-purple-300 p-2 rounded border border-purple-500/30 truncate space-y-0.5 font-bold">
+                  <div class="truncate text-purple-200">📝 [電話番号伏字] [マイナンバー伏字]</div>
+                  <div class="text-[10px] text-emerald-400">タイムスタンプ付き字幕(SRT)出力</div>
+                </div>
+              </div>
+            </div>
+
             <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              外部AIクラウドへ音声を送信せず、Web Audioエンジンで発話区間（VAD）を自動分割＆テキスト化。電話番号・メール・マイナンバーを自動伏字化し議事録や字幕を出力。
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              音声を外部に送信せず、ブラウザ内で発話区間（VAD）を自動分割。個人情報を自動伏字化して議事録や動画字幕を出力。
             </p>
           </div>
 
@@ -333,9 +444,28 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
 
+            <!-- 視覚的 Before / After ミニUIチップ -->
+            <div class="my-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px]">
+              <div class="flex items-center justify-between text-slate-400 mb-2 pb-1.5 border-b border-slate-800/80">
+                <span class="text-slate-400 font-bold">ChatGPT入力 (社外秘隠蔽)</span>
+                <span class="text-amber-400 font-bold flex items-center gap-1">⚡ 往復変換</span>
+                <span class="text-amber-300 font-bold">AI返信 (1クリック実名復元)</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-rose-950/30 text-rose-300 p-2 rounded border border-rose-900/30 truncate space-y-0.5">
+                  <div class="font-bold truncate">A社様 予算5,000万円</div>
+                  <div class="text-[10px] text-slate-400 truncate">本番APIキー: sec_live_...</div>
+                </div>
+                <div class="bg-amber-950/40 text-amber-300 p-2 rounded border border-amber-500/30 truncate space-y-0.5 font-bold">
+                  <div class="truncate text-amber-200">{`{{COMPANY_A}}`} 予算{`{{AMOUNT_A}}`}</div>
+                  <div class="text-[10px] text-emerald-400">AI回答を元の実名へ即座に復元</div>
+                </div>
+              </div>
+            </div>
+
             <!-- 説明文 -->
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mt-3 mb-6">
-              ChatGPTやClaudeへ送る前に、社名・人名・APIキー・予算を『{`{{COMPANY_A}}`}』等の記号に一括置換。AIが返した回答を貼り付ければ1クリックで元の実名へ自動復元します。
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+              ChatGPTへ送る前に社名・人名・APIキーを仮名化。AIが返した回答を貼り付ければ1クリックで元の実名へ自動復元。
             </p>
           </div>
 
