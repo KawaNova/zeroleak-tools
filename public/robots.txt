@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zeroleak-tools.pages.dev/sitemap.xml
+Sitemap: https://zeroleaktools.com/sitemap.xml

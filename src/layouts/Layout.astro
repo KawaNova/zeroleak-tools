@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { title, description, canonicalPath = '/', extraSchemaGraph = [] } = Astro.props;
-const siteUrl = 'https://zeroleak-tools.pages.dev';
+const siteUrl = 'https://zeroleaktools.com';
 const fullCanonical = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
 
 const schemaOrg = {
