@@ -48,6 +48,14 @@ const extraSchemaGraph = [
       },
       {
         "@type": "Question",
+        "name": "ChatGPT等の外部AIに送信するなら、なぜZeroLeak（漏洩ゼロ）なのですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "OpenAIやAnthropic等の外部AIサービスへ『本物の機密データ』を1文字も渡さないためのツールだからです。本物の社名や金額を架空のダミー記号に置き換えてからAIに渡すため、AIサーバー側には機密が残りません。また、この仮名化・復元処理自体もお客様のブラウザ内（端末内）だけで実行され、当サイトのサーバー等へ送信されることは一切ありません。"
+        }
+      },
+      {
+        "@type": "Question",
         "name": "会社の生成AI利用ガイドライン（個人情報・取引先名の入力禁止）に準拠できますか？",
         "acceptedAnswer": {
           "@type": "Answer",
@@ -71,7 +79,7 @@ const extraSchemaGraph = [
     <div class="space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold">
-          <span>生成AI情報漏洩対策</span>
+          <span>外部AIへの機密漏洩防止</span>
           <span>•</span>
           <span>文脈維持トークン化</span>
           <span>•</span>
@@ -96,6 +104,15 @@ const extraSchemaGraph = [
         「取引先名や担当者名、APIキーが入ったメールや議事録をそのままChatGPTに貼れない」問題を3秒で解決。
         固有名詞を文脈が崩れない記号（<code class="text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-mono text-xs">{`{{COMPANY_A}}`}</code> 等）へ<strong class="text-slate-800">一括仮名化</strong>し、さらに<strong class="text-slate-800">AIが返した回答をワンクリックで元の実名へ自動復元</strong>します。
       </p>
+
+      <!-- ゼロリークの仕組み注記ボックス -->
+      <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
+        <span class="text-base shrink-0">💡</span>
+        <div class="space-y-0.5 leading-relaxed">
+          <strong class="font-bold text-amber-900">外部AI（ChatGPT・Claude等）へ本物の機密を渡さないための前処理ツールです：</strong>
+          <span class="text-slate-600">本ツールで社名や金額を架空の記号（{`{{COMPANY_A}}`}等）に置き換えてからAIに渡すことで、外部AIベンダーへの実データ漏洩をゼロにします。もちろん、この仮名化・復元処理自体もお客様の端末内（ブラウザ）だけで完結し、外部通信は一切発生しません。</span>
+        </div>
+      </div>
     </div>
 
     <!-- ワンクリック検証バー -->
@@ -367,6 +384,16 @@ const extraSchemaGraph = [
           </summary>
           <p class="mt-3 text-slate-600 leading-relaxed text-xs">
             一切ありません。すべての処理はお使いのPC・スマホのブラウザ内メモリ上のみで実行され、外部サーバーへの通信は0バイトです。タブを閉じれば変換辞書もメモリから即座に消去されます。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
+          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
+            <span>Q. ChatGPT等の外部AIに送信するなら、なぜ「ZeroLeak（漏洩ゼロ）」なのですか？</span>
+            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+            OpenAIやAnthropic等の外部AIサービスへ「本物の機密データ」を1文字も渡さないためのツールだからです。本物の社名や金額を架空のダミー記号に置き換えてからAIに渡すため、AIサーバー側には機密が残りません。また、この仮名化・復元処理自体もお客様の端末内（ブラウザ）だけで完結し、当サイトのサーバー等へ送信されることは一切ありません。
           </p>
         </details>
       </div>
