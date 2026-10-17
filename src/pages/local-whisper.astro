@@ -53,6 +53,14 @@ const extraSchemaGraph = [
           "@type": "Answer",
           "text": "はい。発話区間（開始秒〜終了秒）のタイムスタンプを維持したまま、Premiere ProやDaVinci Resolve、YouTube等でそのまま読み込める『.srt』および『.vtt』字幕ファイル、またはタイムスタンプ付き『.txt』議事録として即座にダウンロード可能です。"
         }
+      },
+      {
+        "@type": "Question",
+        "name": "実行時に巨大なAIモデルのダウンロードや外部通信は発生しますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "いいえ。バックグラウンドで数百MBのWhisper等のAIモデルをダウンロードする処理は一切ありません。音声ファイルの波形解析、発話区間（VAD）検出、個人情報伏字化、字幕出力はすべてブラウザ標準のWeb Audio APIとローカルJavaScriptで行われるため、ページ読み込み後にWi-Fiを切断したオフライン状態でも動作します（※マイクによるリアルタイム音声入力のみ、ブラウザ仕様により通信を必要とする場合があります）。"
+        }
       }
     ]
   }
@@ -153,6 +161,10 @@ const extraSchemaGraph = [
             <span id="micBtnIcon">⏺️</span>
             <span id="micBtnLabel">リアルタイム音声入力を開始</span>
           </button>
+
+          <p class="text-[10px] text-amber-300/80 leading-tight">
+            ⚠️ <strong>オフライン確認時の注意：</strong>マイク音声認識（Web Speech API）のみ、ブラウザ（Chrome等）の仕様により通信を必要とする場合があります。音声ファイル（WAV/MP3）のドラッグ＆ドロップによる波形解析・発話検出・伏字化は、Wi-Fi切断状態でも100%完全ローカルで動作します。
+          </p>
         </div>
 
       </div>
@@ -413,6 +425,16 @@ const extraSchemaGraph = [
           </summary>
           <p class="mt-3 text-slate-400 leading-relaxed text-xs">
             議事録（.txt）はチャット共有やドキュメント貼り付けに適した形式です。一方、SRT（.srt）およびWebVTT（.vtt）はミリ秒単位の開始・終了タイムコードを含んでおり、動画編集ソフトや社内ポータルの動画プレーヤーに字幕トラックとしてそのままインポートできます。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700">
+          <summary class="font-bold text-slate-200 cursor-pointer flex items-center justify-between">
+            <span>Q. 実行時に巨大なAI音声認識モデルのダウンロードや外部通信は発生しますか？</span>
+            <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+            いいえ。バックグラウンドで数百MBのWhisper等のAIモデルをダウンロードする処理は一切ありません。音声ファイルの波形解析、発話区間（VAD）検出、個人情報伏字化、字幕出力はすべてブラウザ標準のWeb Audio APIとローカルJavaScriptで行われるため、ページ読み込み後にWi-Fiを切断したオフライン状態でも動作します（※マイクによるリアルタイム音声入力のみ、ブラウザ仕様により通信を必要とする場合があります）。
           </p>
         </details>
       </div>
