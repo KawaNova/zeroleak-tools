@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スマホ品位プレビューシミュレーター | ZeroLeak Tools</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* 上部コントロールバー */
+    header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .controls-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      background: #334155;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #475569;
+      color: #fff;
+    }
+    .btn.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+
+    select {
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* メインワークスペース */
+    main {
+      flex: 1;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 32px;
+      overflow-y: auto;
+    }
+
+    /* スマホ外枠（モックアップ） */
+    .device-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    .device-meta {
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+
+    .phone-bezel {
+      background: #020617;
+      border: 10px solid #1e293b;
+      border-radius: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 2px #334155;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.25s ease, height 0.25s ease;
+    }
+
+    /* ノッチ / Dynamic Island */
+    .phone-island {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 20px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    iframe {
+      border: none;
+      background: #fff;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+    }
+
+    /* 2画面並列比較用 */
+    .split-view {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      max-width: 100%;
+    }
+
+    .desktop-bezel {
+      background: #1e293b;
+      border: 6px solid #334155;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      width: 800px;
+      height: 750px;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+    }
+    .desktop-bezel.visible {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- コントロールバー -->
+  <header>
+    <div class="brand-title">
+      <span>📱</span>
+      <span>ZeroLeak スマホ品位プレビューシミュレーター</span>
+    </div>
+
+    <!-- 端末選択 -->
+    <div class="controls-group">
+      <span style="font-size: 11px; color: #94a3b8;">端末サイズ:</span>
+      <button class="btn active" onclick="setDevice(393, 800, 'iPhone 15 / 16 (標準スマホ 393px)', this)">
+        iPhone 15 (393px)
+      </button>
+      <button class="btn" onclick="setDevice(375, 667, 'iPhone SE (小型スマホ 375px)', this)">
+        iPhone SE (375px)
+      </button>
+      <button class="btn" onclick="setDevice(360, 780, 'Android (最小幅 360px)', this)">
+        Android (360px・見切れ検証)
+      </button>
+      <button class="btn" id="toggleSplitBtn" onclick="toggleSplitView(this)">
+        ↔️ スマホ ＆ PC 2画面並列比較
+      </button>
+    </div>
+
+    <!-- ページ移動セレクター ＆ ズーム -->
+    <div class="controls-group">
+      <span style="font-size: 11px; color: #94a3b8;">確認ページ:</span>
+      <select id="pageSelect" onchange="navigatePage(this.value)">
+        <option value="/">🏠 トップページ（ツール一覧）</option>
+        <option value="/csv-masking/">📄 CSV・テキスト伏字</option>
+        <option value="/pdf-unlock/">🔓 給与明細・PDF解除</option>
+        <option value="/exif-remover/">📍 写真位置情報(EXIF)削除</option>
+        <option value="/local-mosaic/">🕶️ 画像モザイク・黒塗り</option>
+        <option value="/local-whisper/">🎙️ 社外秘音声文字起こし</option>
+        <option value="/ai-prompt-sanitizer/">🤖 AIプロンプト仮名化</option>
+        <option value="/legal/">⚖️ 利用規約・法務免責</option>
+      </select>
+
+      <span style="font-size: 11px; color: #94a3b8; margin-left: 6px;">ズーム:</span>
+      <select id="zoomSelect" onchange="setZoom(this.value)">
+        <option value="1">100%</option>
+        <option value="0.9">90%</option>
+        <option value="0.8" selected>80%</option>
+        <option value="0.75">75%</option>
+      </select>
+
+      <button class="btn" onclick="reloadFrames()">
+        🔄 更新
+      </button>
+    </div>
+  </header>
+
+  <!-- プレビューメインエリア -->
+  <main>
+    <div class="split-view">
+      <!-- スマホビュー -->
+      <div class="device-container" id="mobileContainer">
+        <div class="device-meta" id="deviceMeta">iPhone 15 (393 × 800)</div>
+        <div class="phone-bezel" id="phoneBezel" style="width: 393px; height: 800px;">
+          <div class="phone-island"></div>
+          <iframe id="mobileFrame" src="/"></iframe>
+        </div>
+      </div>
+
+      <!-- PCビュー（並列モード時に表示） -->
+      <div class="device-container" id="desktopContainer" style="display: none;">
+        <div class="device-meta">💻 PCフルブラウザビュー (幅 850px)</div>
+        <div class="desktop-bezel visible">
+          <iframe id="desktopFrame" src="/"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentPath = '/';
+    let isSplit = false;
+
+    function setDevice(w, h, name, btn) {
+      const bezel = document.getElementById('phoneBezel');
+      const meta = document.getElementById('deviceMeta');
+      bezel.style.width = w + 'px';
+      bezel.style.height = h + 'px';
+      meta.textContent = `${name} - ${w} × ${h}px`;
+
+      document.querySelectorAll('.controls-group .btn').forEach(b => {
+        if (b.id !== 'toggleSplitBtn') b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+    }
+
+    function toggleSplitView(btn) {
+      isSplit = !isSplit;
+      const desktop = document.getElementById('desktopContainer');
+      if (isSplit) {
+        desktop.style.display = 'flex';
+        btn.classList.add('active');
+        setZoom(0.75);
+        document.getElementById('zoomSelect').value = '0.75';
+      } else {
+        desktop.style.display = 'none';
+        btn.classList.remove('active');
+        setZoom(0.8);
+        document.getElementById('zoomSelect').value = '0.8';
+      }
+    }
+
+    function navigatePage(path) {
+      currentPath = path;
+      document.getElementById('mobileFrame').src = path;
+      document.getElementById('desktopFrame').src = path;
+    }
+
+    function setZoom(val) {
+      const container = document.querySelector('.split-view');
+      container.style.transform = `scale(${val})`;
+      container.style.transformOrigin = 'top center';
+    }
+
+    function reloadFrames() {
+      document.getElementById('mobileFrame').contentWindow.location.reload();
+      document.getElementById('desktopFrame').contentWindow.location.reload();
+    }
+
+    // 初期化：80%ズームを適用
+    setZoom(0.8);
+  </script>
+</body>
+</html>

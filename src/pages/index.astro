@@ -9,35 +9,22 @@ import Layout from '../layouts/Layout.astro';
 >
   <div class="space-y-8 sm:space-y-16 py-2 sm:py-4">
 
-    <!-- ヒーローセクション（清潔感ある白基調） -->
-    <section class="text-center space-y-3 sm:space-y-5 max-w-3xl mx-auto pt-1 sm:pt-2">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] sm:text-xs font-semibold shadow-xs">
+    <!-- ヒーローセクション（清潔感ある白基調・重複表現を完全排除） -->
+    <section class="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto pt-1 sm:pt-2">
+      <!-- 統合された唯一のピルバッジ -->
+      <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-[11px] sm:text-xs font-semibold shadow-xs">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-        <span>完全無料・インストール不要・端末内完結</span>
+        <span>完全無料 • インストール不要 • オフライン動作対応</span>
       </div>
 
-      <h1 class="text-2xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-snug">
-        機密データを1バイトも<br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700">
-          クラウドへ送信しない
-        </span>
-        安心ツール
+      <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        機密ファイルを1バイトも送信しない、<br />
+        安心のローカル業務ツール
       </h1>
 
-      <!-- スマホ・PC共通：シンプルに価値を伝える説明文 -->
-      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-2xl mx-auto">
-        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部サーバーへ一切送信せずにお使いの端末内だけで高速処理・安全変換します。
+      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-xl mx-auto">
+        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部へ一切アップロードせずお使いのブラウザ内だけで安全に高速処理します。
       </p>
-
-      <!-- スマホ・PC共通：1行に凝縮した安心バッジ -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/70 text-[11px] sm:text-xs text-slate-600">
-        <span class="font-medium text-slate-800 flex items-center gap-1">
-          <span>✈️</span>
-          <span>Wi-Fi切断（オフライン）でも動作</span>
-        </span>
-        <span class="text-slate-300 hidden sm:inline">•</span>
-        <span class="text-slate-500 hidden sm:inline">F12で外部通信0件を確認可能</span>
-      </div>
     </section>
 
     <!-- ツール一覧セクション（クリッカブルなカード群） -->
