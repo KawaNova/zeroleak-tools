@@ -71,21 +71,6 @@ const schemaOrg = {
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
   </head>
   <body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
-    <!-- 常設: F12検証・サーバー送信0バイト保証バナー（スマホ超スリム化対応・クリーンライト配色） -->
-    <aside aria-label="サーバー送信0バイト保証案内" class="bg-emerald-50/90 border-b border-emerald-200/80 text-emerald-900 text-[11px] sm:text-xs py-1.5 px-3 sm:px-4 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-      <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
-        <div class="flex items-center gap-1.5 font-medium truncate">
-          <span class="text-xs">🛡️</span>
-          <span class="truncate"><strong>サーバー送信0バイト保証</strong><span class="hidden sm:inline">：ファイルは一切外部へ送信されません</span></span>
-        </div>
-        <div class="flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-800 bg-white/90 px-2 py-0.5 rounded-full border border-emerald-300 shadow-xs shrink-0 font-medium">
-          <span>✈️</span>
-          <span>Wi-Fi切断でも動作</span>
-          <span class="text-[10px] text-emerald-600 hidden md:inline">(F12で通信0件検証可)</span>
-        </div>
-      </div>
-    </aside>
-
     <!-- ヘッダーナビゲーション（スマホ横スクロール＆現在地ハイライト対応・白基調） -->
     <header class="border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
       <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
@@ -163,7 +148,7 @@ const schemaOrg = {
         <div class="flex flex-col gap-1 text-center sm:text-left">
           <p class="font-bold text-slate-800">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
           <p class="text-[11px] text-slate-500">
-            すべての処理はお使いのブラウザ内部（メモリ上）でのみ実行されます。サーバーログへの保存、外部転送は技術的に一切行われません。
+            すべての処理はお使いのブラウザ内部（メモリ上）でのみ実行されます。サーバーログへの保存、外部転送は技術的に一切行われません（サーバー送信0バイト保証）。
           </p>
         </div>
         <div class="flex flex-wrap items-center gap-4 text-slate-600 font-medium">
