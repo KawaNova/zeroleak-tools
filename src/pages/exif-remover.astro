@@ -109,42 +109,7 @@ const extraSchemaGraph = [
     <!-- メイン操作パネル -->
     <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
 
-      <!-- 消去モード選択バー -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
-        <div class="space-y-0.5">
-          <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span>
-            <span>メタデータ消去方式の選択：</span>
-          </span>
-          <p class="text-[11px] text-slate-500">
-            通常は画質が一切劣化せず超高速な「高速ロスレス消去」を推奨します。
-          </p>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
-            <input
-              type="radio"
-              name="stripMode"
-              value="lossless"
-              checked
-              class="accent-cyan-600"
-            />
-            <span>⚡ <strong>高速ロスレス消去</strong>（画質劣化0%・バイナリ直接除去）</span>
-          </label>
-          <label class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
-            <input
-              type="radio"
-              name="stripMode"
-              value="canvas"
-              class="accent-cyan-600"
-            />
-            <span>🛡️ <strong>ピクセル完全再描画</strong>（Canvas再エンコード）</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 複数ファイル対応ドラッグ＆ドロップゾーン -->
+      <!-- 複数ファイル対応ドラッグ＆ドロップゾーン（最優先ワークベンチ） -->
       <div
         id="dropZoneExif"
         class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group"
@@ -179,22 +144,61 @@ const extraSchemaGraph = [
         </div>
       </div>
 
-      <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-        <div class="flex items-center gap-2 text-slate-700">
-          <span class="text-base">🧪</span>
-          <span>
-            <strong>手元に位置情報付き写真がない場合：</strong>
-            GPS座標（東京・渋谷・大阪）とスマホ機種名を埋め込んだサンプル写真3枚で今すぐ一括消去を試せます
-          </span>
+      <!-- 操作サブバー：ワンクリックテスト ＆ 消去モード選択 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
+        <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="space-y-0.5">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <span>🧪</span>
+              <span>手元に位置情報付き写真がない場合：</span>
+            </span>
+            <p class="text-[11px] text-slate-500">
+              東京・渋谷・大阪のGPS座標と端末名を含むテスト画像3枚を自動生成
+            </p>
+          </div>
+          <button
+            id="loadSampleExifBtn"
+            type="button"
+            class="px-3.5 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
+          >
+            <span>サンプル3枚投入</span>
+          </button>
         </div>
-        <button
-          id="loadSampleExifBtn"
-          type="button"
-          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
-        >
-          <span>サンプル写真3枚で一括テスト</span>
-        </button>
+
+        <!-- 消去モード選択バー -->
+        <div class="flex items-center justify-between gap-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="space-y-0.5">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <span>⚙️</span>
+              <span>消去モード：</span>
+            </span>
+            <p class="text-[11px] text-slate-500">
+              画質劣化0%の高速ロスレスを推奨
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
+              <input
+                type="radio"
+                name="stripMode"
+                value="lossless"
+                checked
+                class="accent-cyan-600 text-xs"
+              />
+              <span class="font-bold">⚡ 高速ロスレス</span>
+            </label>
+            <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
+              <input
+                type="radio"
+                name="stripMode"
+                value="canvas"
+                class="accent-cyan-600 text-xs"
+              />
+              <span>🛡️ Canvas再描画</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- 処理中プログレス表示 -->
@@ -273,47 +277,97 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【pSEO & 用途別ガイド】なぜEXIF・GPS位置情報の一括削除が必要なのか -->
-    <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>🛡️</span>
-          <span>写真の位置情報（EXIF・GPS）が引き起こす情報漏洩リスクと対策</span>
+    <!-- 【ツール直下・キラー納得解説】なぜ写真の位置情報（Exif・GPS）一括削除が必要なのか -->
+    <section class="space-y-6 pt-4">
+      <div class="border-b border-slate-200 pb-3">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold mb-2">
+          <span>⚠️</span>
+          <span>知っておくべき重大セキュリティリスク</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          「SNSが自動で消してくれるから大丈夫」という最大の落とし穴
         </h2>
-        <p class="text-xs text-slate-500 mt-1">スマホ写真をそのまま共有する前に確認すべき4つのユースケース</p>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+          なぜブログ、社外チャット、メール添付、フリマ出品では位置情報が全世界へ漏洩してしまうのか？
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">1. 社内資料・取引先への現場写真共有</h3>
+      <!-- 3つの致命的な盲点 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-base font-bold text-rose-700">
+            1
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            ブログ・自社サイト・メールは「生Exifのまま」配信される
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong>未公開拠点や工場・顧客宅の座標漏洩を防止：</strong>
-            現場調査や店舗巡回で撮影したJPEG写真には、緯度・経度がメートル単位で記録されています。社外へメール添付やチャット共有する前に一括消去することで、機密拠点の特定を防ぎます。
+            X（旧Twitter）やInstagramは投稿時にExifを消去しますが、<strong>WordPressブログ、note、自社HP、ECサイト、SlackやTeamsのファイル共有、メール添付</strong>では、スマホで撮った生JPEGがそのまま相手や世界中にダウンロード可能な状態で渡されます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">2. ブログ（WordPress等）・自社Webサイトへの画像掲載</h3>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-base font-bold text-amber-700">
+            2
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            数メートル精度のGPS座標から「自宅マンションの部屋」まで特定
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong>SNSと異なりブログはEXIFがそのまま残る：</strong>
-            大手SNSでは自動削除される場合がありますが、自社CMSやWordPress、note記事、ECサイトの商品画像ではEXIFがそのまま配信されるケースが多発しています。アップロード前の一括除去が鉄則です。
+            写真のExif（APP1メタデータ領域）には、目に見えない形で<strong>正確な緯度・経度（WGS84座標）・高度・撮影日時（秒単位）・端末型番</strong>が刻まれています。写真を開いて「右クリック→プロパティ」するだけで、誰でも地図上に撮影位置を1秒でピンポイント表示できます。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">3. 在宅ワーク・副業・フリマ出品での自宅特定防止</h3>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-cyan-50 border border-cyan-200 flex items-center justify-center text-base font-bold text-cyan-800">
+            3
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            無料Exif削除サイトに「消したいプライベート写真」を預ける恐怖
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong>室内で撮った写真からマンション名まで判明：</strong>
-            自宅で撮影したガジェットや書類の写真をネット上にアップした際、GPSタグから自宅の住所や階層・部屋の方角まで特定される被害を防ぐことができます。
+            ネット上の一般的な無料Exif削除ツールは、画像を一度サーバーへアップロードして処理します。<strong>「位置情報を消したい自宅写真や社外秘の現場写真」を第三者のサーバーへ自ら差し出すことになり</strong>、サーバー側のログや一時キャッシュに残る重大な流出リスクがあります。
           </p>
         </div>
+      </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">4. 画質劣化ゼロ（ロスレス）＆ ファイル軽量化</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong>バイナリチャンク直接除去で画質そのまま：</strong>
-            画像を再圧縮せずメタデータ領域（APP1〜APP15、eXIf、XMP、サムネイル等）だけを切り離すため、写真本来の美しさを100%保ったままファイルサイズも削減できます。
-          </p>
+      <!-- 3大実務シチュエーション -->
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <span>🎯</span>
+          <span>ZeroLeak Tools が選ばれる3大実務シチュエーション</span>
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>🛍️</span>
+              <span>メルカリ・ヤフオク等のフリマ出品</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              自宅リビングや自室で撮った商品写真から、住所や最寄り駅、住居階数が特定されるプライバシー侵害・空き巣リスクを完全に遮断。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>🏗️</span>
+              <span>建築・不動産・点検の現場写真報告</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              顧客宅や未発表工場・インフラ設備の施工写真を施主や元請けに提出する際、機密拠点の座標漏洩を防ぐため100枚一括でクリーンアップ。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>📰</span>
+              <span>広報・オウンドメディア・ブログ掲載</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              WordPressや自社サイトへ写真をアップする前に、バイナリ直接除去（高速ロスレス）で画質を1ミリも落とさずにメタデータのみ完全消去。
+            </p>
+          </div>
         </div>
       </div>
     </section>
