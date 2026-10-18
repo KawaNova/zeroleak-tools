@@ -9,21 +9,21 @@ import Layout from '../layouts/Layout.astro';
 >
   <div class="space-y-8 sm:space-y-16 py-2 sm:py-4">
 
-    <!-- ヒーローセクション（清潔感ある白基調・重複表現を完全排除） -->
-    <section class="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto pt-1 sm:pt-2">
+    <!-- ヒーローセクション（清潔感ある白基調・重複表現を完全排除・スマホ見切れ防止） -->
+    <section class="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto pt-1 sm:pt-2 px-2 sm:px-4">
       <!-- 統合された唯一のピルバッジ -->
-      <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-[11px] sm:text-xs font-semibold shadow-xs">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-[10px] sm:text-xs font-semibold shadow-xs">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
         <span>完全無料 • インストール不要 • オフライン動作対応</span>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        機密ファイルを1バイトも送信しない、<br />
-        安心のローカル業務ツール
+      <h1 class="text-xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight px-2 sm:px-0">
+        <span class="sm:hidden">機密ファイルを1バイトも<br />送信しない 安心ツール</span>
+        <span class="hidden sm:inline">機密ファイルを1バイトも送信しない、<br />安心のローカル業務ツール</span>
       </h1>
 
-      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-xl mx-auto">
-        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部へ一切アップロードせずお使いのブラウザ内だけで安全に高速処理します。
+      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-xl mx-auto px-4 sm:px-0">
+        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部へ一切アップロードせずブラウザ内だけで安全に高速処理します。
       </p>
     </section>
 
