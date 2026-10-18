@@ -343,47 +343,97 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【pSEO & 用途別ガイド】なぜ社外秘音声はローカル処理が必須なのか -->
-    <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>🛡️</span>
-          <span>クラウド文字起こしサービスに社外秘音声をアップロードしてはいけない理由</span>
+    <!-- 【ツール直下・キラー納得解説】なぜ社外秘音声はローカル処理が必須なのか -->
+    <section class="space-y-6 pt-4">
+      <div class="border-b border-slate-200 pb-3">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-50 border border-purple-200 text-purple-700 text-[11px] font-bold mb-2">
+          <span>⚠️</span>
+          <span>法務・情報セキュリティ規律</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          「CopilotやZoom文字起こしがあるのに、なぜこれが必要なのか？」
         </h2>
-        <p class="text-xs text-slate-500 mt-1">企業の法務・情シスが警戒する音声データ漏洩リスクとローカル処理の優位性</p>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+          クラウドAI文字起こしサービスに社外秘の会議音声や人事録音を預けてはいけない3大理由
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-purple-700 text-sm">1. 経営会議・M&A・未発表プロジェクトの音声保護</h3>
+      <!-- 3つの致命的な盲点 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-base font-bold text-rose-700">
+            1
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            音声はテキスト以上の「超高密度データ」であり物理送信される
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">外部AIの学習データ化・クラウド保存リスクをゼロに：</strong>
-            一般的なAI文字起こしSaaSは、数十分〜数時間の音声ファイル丸ごとをクラウドサーバーへ転送します。本ツールはブラウザ内のメモリ上でのみ音声波形をデコードするため、社外流出が物理的に起こりません。
+            一般的なAI文字起こしSaaSは、数十分〜数時間の音声ファイルを生データのまま外部サーバーへ転送・保存します。音声には発言内容だけでなく<strong>役員の声紋、感情、同席者の私語、背景で鳴った電話の会話</strong>まで記録されており、クラウド保存された時点であらゆるNDA（秘密保持契約）に抵触します。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-purple-700 text-sm">2. 人事評価面談・1on1・産業医面談のプライバシー遵守</h3>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-base font-bold text-amber-700">
+            2
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            社内Copilotで要約する前に「個人情報（PII）の除名」が必須
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">要配慮個人情報を含む対話録音の安全な書き起こし：</strong>
-            社員の健康状態や評価・給与に関する面談記録は最も厳格な管理が求められます。発言中の電話番号や個人IDもその場で自動伏字化できます。
+            「社内Enterprise契約のChatGPTやCopilotで議事録を要約したい」場合でも、<strong>生の発言テキストに含まれる顧客電話番号、メールアドレス、社員のマイナンバー、給与額</strong>をそのまま流し込むと、社内監査ログに平文保存されコンプライアンス違反になります。事前にブラウザ内で伏字化しておく必要があります。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-purple-700 text-sm">3. 社内研修動画・マニュアル動画のSRT/VTT字幕作成</h3>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+          <div class="w-8 h-8 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center text-base font-bold text-purple-700">
+            3
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">
+            重いAIモデルのDL待ちなし・Web Audio APIで0秒起動
+          </h3>
           <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">無音区間（VAD）自動検出でタイムスタンプ打ちを自動化：</strong>
-            音声のエネルギー波形から発話の開始・終了秒数を自動検出してセグメント分割するため、社内限定動画の字幕（.srt / .vtt）作成工数を大幅に削減します。
+            WASM版Whisper等のツールは初回ロードで数百MBのモデルダウンロードが発生し、現場のネットワークを圧迫します。当ツールはブラウザ標準のWeb Audio APIと軽量VAD（発話検出）アルゴリズムを採用しているため、<strong>待ち時間0秒・回線不要・完全オフライン</strong>で即座に波形解析と文字起こしが可能です。
           </p>
         </div>
+      </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-purple-700 text-sm">4. 要約AI（ChatGPT等）へ投げる前の「事前サニタイズ」</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">機密番号をマスクしてからAI要約へ：</strong>
-            書き起こしたテキストから電話番号・メールアドレス・マイナンバーを自動伏字化した状態でコピーできるため、その後のAI議事録要約も安全に行えます。
-          </p>
+      <!-- 3大実務シチュエーション -->
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <span>🎯</span>
+          <span>ZeroLeak Tools が選ばれる3大実務シチュエーション</span>
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>🏛️</span>
+              <span>役員会議・経営戦略・M&A協議</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              社外のいかなるクラウドサービスにもアップロードできないトップシークレット会議の録音を、完全オフライン端末で安全にテキスト化。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>👥</span>
+              <span>人事評価面談・1on1・内部通報ヒアリング</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              社員の健康状態、退職相談、人事考課など、要配慮個人情報を含むデリケートな対話録音を外部サーバーを通さず文字起こし＆PII自動伏字化。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <span>🎬</span>
+              <span>社内研修・マニュアル動画のSRT/VTT字幕作成</span>
+            </span>
+            <p class="text-slate-600 leading-relaxed">
+              VAD発話検出によりミリ秒単位のタイムスタンプを自動算出。Premiere Proや社内ポータルの動画プレーヤーに即座にインポート可能な字幕を生成。
+            </p>
+          </div>
         </div>
       </div>
     </section>
