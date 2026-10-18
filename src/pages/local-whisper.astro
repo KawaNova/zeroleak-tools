@@ -343,24 +343,23 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【ツール直下・キラー納得解説】なぜ社外秘音声はローカル処理が必須なのか -->
-    <section class="space-y-6 pt-4">
-      <div class="border-b border-slate-200 pb-3">
-        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-50 border border-purple-200 text-purple-700 text-[11px] font-bold mb-2">
-          <span>⚠️</span>
-          <span>法務・情報セキュリティ規律</span>
+    <!-- 【トピック1：ツール直下・キラー納得解説】なぜ社外秘音声はローカル処理が必須なのか -->
+    <section class="bg-slate-100/90 border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-6">
+      <div class="space-y-2 text-left">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100/90 border border-purple-200 text-purple-900 text-xs font-bold shadow-2xs">
+          <span>💡 なぜこのツールが必要なのか？</span>
         </div>
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
           「CopilotやZoom文字起こしがあるのに、なぜこれが必要なのか？」
         </h2>
-        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
           クラウドAI文字起こしサービスに社外秘の会議音声や人事録音を預けてはいけない3大理由
         </p>
       </div>
 
-      <!-- 3つの致命的な盲点 -->
+      <!-- 3つの致命的な盲点（白背景カードで浮き立たせ境界を明確化） -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
           <div class="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-base font-bold text-rose-700">
             1
           </div>
@@ -372,7 +371,7 @@ const extraSchemaGraph = [
           </p>
         </div>
 
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
           <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-base font-bold text-amber-700">
             2
           </div>
@@ -384,7 +383,7 @@ const extraSchemaGraph = [
           </p>
         </div>
 
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-2.5 shadow-xs">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
           <div class="w-8 h-8 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center text-base font-bold text-purple-700">
             3
           </div>
@@ -397,44 +396,64 @@ const extraSchemaGraph = [
         </div>
       </div>
 
-      <!-- 3大実務シチュエーション -->
-      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-        <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-          <span>🎯</span>
-          <span>ZeroLeak Tools が選ばれる3大実務シチュエーション</span>
-        </h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
-            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-              <span>🏛️</span>
-              <span>役員会議・経営戦略・M&A協議</span>
-            </span>
-            <p class="text-slate-600 leading-relaxed">
-              社外のいかなるクラウドサービスにもアップロードできないトップシークレット会議の録音を、完全オフライン端末で安全にテキスト化。
-            </p>
-          </div>
-
-          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
-            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-              <span>👥</span>
-              <span>人事評価面談・1on1・内部通報ヒアリング</span>
-            </span>
-            <p class="text-slate-600 leading-relaxed">
-              社員の健康状態、退職相談、人事考課など、要配慮個人情報を含むデリケートな対話録音を外部サーバーを通さず文字起こし＆PII自動伏字化。
-            </p>
-          </div>
-
-          <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
-            <span class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-              <span>🎬</span>
-              <span>社内研修・マニュアル動画のSRT/VTT字幕作成</span>
-            </span>
-            <p class="text-slate-600 leading-relaxed">
-              VAD発話検出によりミリ秒単位のタイムスタンプを自動算出。Premiere Proや社内ポータルの動画プレーヤーに即座にインポート可能な字幕を生成。
-            </p>
-          </div>
+      <!-- 解決策カード -->
+      <div class="p-4 sm:p-5 rounded-2xl bg-purple-50 border border-purple-200/90 text-xs text-purple-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs text-left">
+        <div class="space-y-1">
+          <strong class="font-bold text-purple-900 text-sm flex items-center gap-1.5">
+            <span>✓</span>
+            <span>ZeroLeak 音声処理の完全ローカル保証：</span>
+          </strong>
+          <p class="text-slate-600 leading-relaxed">
+            音声波形を外部サーバーへ1バイトも送信せず、ブラウザ内RAMのみでVAD解析・セグメント分割。さらに個人情報の自動マスキングとTXT/SRT/VTT字幕出力をワンクリックで完結します。
+          </p>
         </div>
+      </div>
+    </section>
+
+    <!-- 【トピック2：実務シチュエーション】よくある3つの活用シーン -->
+    <section class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-5 shadow-xs">
+      <div class="space-y-1 text-left border-b border-slate-100 pb-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
+          <span>🏢 実務シチュエーション</span>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+          こんなシチュエーションで威力を発揮します
+        </h3>
+        <p class="text-xs text-slate-500">役員会議・人事1on1・社内研修動画で選ばれる3つの代表的ユースケース</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center text-xs font-mono font-bold">01</span>
+            <span class="text-xs sm:text-sm">役員会議・経営戦略・M&A</span>
+          </div>
+          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
+            社外のいかなるクラウドサービスにもアップロードできないトップシークレット会議の録音を、完全オフライン端末で安全にテキスト化。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-mono font-bold">02</span>
+            <span class="text-xs sm:text-sm">人事評価面談・1on1</span>
+          </div>
+          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
+            社員の健康状態、退職相談、人事考課など、要配慮個人情報を含むデリケートな対話録音を外部サーバーを通さず文字起こし＆PII自動伏字化。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-800 flex items-center justify-center text-xs font-mono font-bold">03</span>
+            <span class="text-xs sm:text-sm">社内研修動画の字幕作成</span>
+          </div>
+          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
+            VAD発話検出によりミリ秒単位のタイムスタンプを自動算出。Premiere Proや社内ポータルの動画プレーヤーに即座にインポート可能な字幕を生成。
+          </p>
+        </div>
+
       </div>
     </section>
 
