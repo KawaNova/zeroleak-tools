@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import SecuritySpecModal from '../components/SecuritySpecModal.astro';
 import RelatedTools from '../components/RelatedTools.astro';
+import WhySection from '../components/WhySection.astro';
+import Mascot from '../components/Mascot.astro';
 
 // SGO / Googleリッチリザルト用 構造化データ
 const extraSchemaGraph = [
@@ -77,14 +79,8 @@ const extraSchemaGraph = [
 
     <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
     <div class="space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-800 text-xs font-semibold shadow-xs">
-          <span>完全ローカル処理</span>
-          <span>•</span>
-          <span>画質劣化ゼロ</span>
-          <span>•</span>
-          <span>100枚一括ZIP保存</span>
-        </div>
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        
 
         <!-- 情シス向けセキュリティ仕様書 ボタン -->
         <button
@@ -97,13 +93,18 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+      <div class="flex items-center gap-4 sm:gap-6">
+<div class="min-w-0 flex-1 space-y-1.5">
+<h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
         写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし
       </h1>
       <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
         スマホやデジカメで撮影した写真に潜む<strong>GPS座標（自宅・現場の住所）、撮影日時、端末機種名、編集ソフト情報</strong>を検出して一括抹消。
         <strong>外部サーバー送信なし（0バイト）</strong>でお使いのブラウザ内だけで高速処理し、そのままZIPで一括ダウンロードできます。
       </p>
+</div>
+<Mascot name="tool-exif" fallback="📍" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+</div>
     </div>
 
     <!-- メイン操作パネル -->
@@ -277,119 +278,7 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【トピック1：ツール直下・キラー納得解説】なぜ写真の位置情報（Exif・GPS）一括削除が必要なのか -->
-    <section class="bg-slate-100/90 border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-6">
-      <div class="space-y-2 text-left">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100/90 border border-cyan-200 text-cyan-900 text-xs font-bold shadow-2xs">
-          <span>💡 なぜこのツールが必要なのか？</span>
-        </div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-          「SNSが自動で消してくれるから大丈夫」という最大の落とし穴
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          なぜブログ、社外チャット、メール添付、フリマ出品では位置情報が全世界へ漏洩してしまうのか？
-        </p>
-      </div>
-
-      <!-- 3つの致命的な盲点（白背景カードで浮き立たせ境界を明確化） -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
-          <div class="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-base font-bold text-rose-700">
-            1
-          </div>
-          <h3 class="font-bold text-slate-900 text-sm">
-            ブログ・自社サイト・メールは「生Exifのまま」配信される
-          </h3>
-          <p class="text-slate-600 leading-relaxed">
-            X（旧Twitter）やInstagramは投稿時にExifを消去しますが、<strong>WordPressブログ、note、自社HP、ECサイト、SlackやTeamsのファイル共有、メール添付</strong>では、スマホで撮った生JPEGがそのまま相手や世界中にダウンロード可能な状態で渡されます。
-          </p>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-base font-bold text-amber-700">
-            2
-          </div>
-          <h3 class="font-bold text-slate-900 text-sm">
-            数メートル精度のGPS座標から「自宅マンションの部屋」まで特定
-          </h3>
-          <p class="text-slate-600 leading-relaxed">
-            写真のExif（APP1メタデータ領域）には、目に見えない形で<strong>正確な緯度・経度（WGS84座標）・高度・撮影日時（秒単位）・端末型番</strong>が刻まれています。写真を開いて「右クリック→プロパティ」するだけで、誰でも地図上に撮影位置を1秒でピンポイント表示できます。
-          </p>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
-          <div class="w-8 h-8 rounded-lg bg-cyan-50 border border-cyan-200 flex items-center justify-center text-base font-bold text-cyan-800">
-            3
-          </div>
-          <h3 class="font-bold text-slate-900 text-sm">
-            無料Exif削除サイトに「消したいプライベート写真」を預ける恐怖
-          </h3>
-          <p class="text-slate-600 leading-relaxed">
-            ネット上の一般的な無料Exif削除ツールは、画像を一度サーバーへアップロードして処理します。<strong>「位置情報を消したい自宅写真や社外秘の現場写真」を第三者のサーバーへ自ら差し出すことになり</strong>、サーバー側のログや一時キャッシュに残る重大な流出リスクがあります。
-          </p>
-        </div>
-      </div>
-
-      <!-- 解決策カード -->
-      <div class="p-4 sm:p-5 rounded-2xl bg-cyan-50 border border-cyan-200/90 text-xs text-cyan-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs text-left">
-        <div class="space-y-1">
-          <strong class="font-bold text-cyan-900 text-sm flex items-center gap-1.5">
-            <span>✓</span>
-            <span>ZeroLeak Exif削除の完全ローカル保証：</span>
-          </strong>
-          <p class="text-slate-600 leading-relaxed">
-            ファイルを外部サーバーへ1バイトも送信せず、ブラウザ内メモリだけでAPP1バイナリチャンクを直接切り離し。画質劣化0%の高速ロスレス消去で、100枚規模の写真も即座にZIP保存できます。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 【トピック2：実務シチュエーション】よくある3つの活用シーン -->
-    <section class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-5 shadow-xs">
-      <div class="space-y-1 text-left border-b border-slate-100 pb-3">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-          <span>🏢 実務シチュエーション</span>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-          こんなシチュエーションで威力を発揮します
-        </h3>
-        <p class="text-xs text-slate-500">フリマ出品・現場写真報告・Web広報で選ばれる3つの代表的ユースケース</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-800 flex items-center justify-center text-xs font-mono font-bold">01</span>
-            <span class="text-xs sm:text-sm">メルカリ・ヤフオク等のフリマ出品</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            自宅リビングや自室で撮った商品写真から、住所や最寄り駅、住居階数が特定されるプライバシー侵害・空き巣リスクを完全に遮断。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-mono font-bold">02</span>
-            <span class="text-xs sm:text-sm">建築・不動産・点検の現場報告</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            顧客宅や未発表工場・インフラ設備の施工写真を施主や元請けに提出する際、機密拠点の座標漏洩を防ぐため100枚一括でクリーンアップ。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center text-xs font-mono font-bold">03</span>
-            <span class="text-xs sm:text-sm">広報・オウンドメディア・ブログ</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            WordPressや自社サイトへ写真をアップする前に、バイナリ直接除去（高速ロスレス）で画質を1ミリも落とさずにメタデータのみ完全消去。
-          </p>
-        </div>
-
-      </div>
-    </section>
+    <WhySection slug="exif-remover" title="「SNSが消してくれるから大丈夫」という落とし穴" />
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">

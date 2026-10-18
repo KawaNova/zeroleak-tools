@@ -1,5 +1,7 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
+import Mascot from '../components/Mascot.astro';
+import { tools } from '../data/tools';
 ---
 
 <Layout
@@ -7,303 +9,107 @@ import Layout from '../layouts/Layout.astro';
   description="登録不要・完全無料。給与明細PDFパスワード解除、個人情報CSV伏字化、写真EXIF削除など、ファイルを外部サーバーへ一切送信せずにお使いの端末内だけで高速安全に処理します。"
   canonicalPath="/"
 >
-  <div class="space-y-8 sm:space-y-16 py-2 sm:py-4">
+  <div class="space-y-10 sm:space-y-14 py-2 sm:py-4">
 
-    <!-- ヒーローセクション（清潔感ある白基調・重複表現を完全排除・スマホ見切れ防止） -->
-    <section class="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto pt-1 sm:pt-2 px-2 sm:px-4">
-      <!-- 統合された唯一のピルバッジ -->
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-[10px] sm:text-xs font-semibold shadow-xs">
-        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-        <span>完全無料 • インストール不要 • オフライン動作対応</span>
+    <!-- ヒーロー：キャラクターが「ファイルは外へ出ない」を1枚で伝える -->
+    <section class="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 max-w-5xl mx-auto px-2 sm:px-4">
+      <div class="space-y-3 sm:space-y-4 text-left">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+          機密ファイルを<br />1バイトも送信しない、<br />
+          <span class="text-emerald-600">安心のローカル業務ツール</span>
+        </h1>
+        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+          給与明細・顧客データ・社外秘ファイルを、アップロードせずブラウザ内だけで処理。登録不要・無料です。
+        </p>
+        <a
+          href="#tools"
+          class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition"
+        >
+          ツールを選ぶ ▼
+        </a>
       </div>
-
-      <h1 class="text-xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight px-2 sm:px-0">
-        <span class="sm:hidden">機密ファイルを1バイトも<br />送信しない 安心ツール</span>
-        <span class="hidden sm:inline">機密ファイルを1バイトも送信しない、<br />安心のローカル業務ツール</span>
-      </h1>
-
-      <p class="text-slate-600 text-xs sm:text-base leading-relaxed max-w-xl mx-auto px-4 sm:px-0">
-        給与明細・マイナンバー・顧客データ・社外秘ファイルを、外部へ一切アップロードせずブラウザ内だけで安全に高速処理します。
-      </p>
-    </section>
-
-    <!-- ツール一覧セクション（徹底的HUB化・高密度3カラムグリッド） -->
-    <section class="space-y-4 sm:space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-1 border-b border-slate-200/80 pb-3">
-        <div>
-          <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-            <span>🛠️ 業務ツール一覧</span>
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">全6種・即時利用</span>
-          </h2>
-          <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">
-            全ツール登録・ログイン不要。クリックして即座に作業を開始できます。
-          </p>
-        </div>
-        <div class="text-[11px] text-slate-400 sm:text-right">
-          外部送信0バイト・完全ローカル処理
-        </div>
-      </div>
-
-      <!-- クリッカブル・ツールカード 高密度3カラムグリッド -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-6xl mx-auto w-full">
-        
-        <!-- ツール1: CSVマスキング -->
-        <a
-          href="/csv-masking/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                📄
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug truncate">
-                  CSV・テキスト 個人情報伏字化
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">氏名・マイナンバー・クレカ自動検出</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-slate-400 line-through truncate min-w-0">佐藤 健一</span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 shrink-0">佐*** (伏字)</span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">大容量CSV一括対応</span>
-            <span class="font-bold text-emerald-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
-        <!-- ツール2: PDFパスワード解除 -->
-        <a
-          href="/pdf-unlock/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-teal-500 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-teal-50 border border-teal-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                🔓
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-teal-700 transition-colors leading-snug truncate">
-                  給与明細PDF パスワード解除
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">300DPI再構成＆メタデータ抹消</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-rose-600 truncate flex items-center gap-0.5 font-sans min-w-0"><span>🔒</span> <span class="truncate">保護PDF</span></span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-teal-800 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200 shrink-0 font-sans flex items-center gap-0.5">
-                <span>🔓</span> 提出OK (300DPI)
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">住宅ローン・e-Tax用</span>
-            <span class="font-bold text-teal-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
-        <!-- ツール3: 写真EXIF・GPS位置情報一括削除 -->
-        <a
-          href="/exif-remover/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-cyan-600 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-cyan-50 border border-cyan-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                📍
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-cyan-700 transition-colors leading-snug truncate">
-                  写真 位置情報（EXIF）一括削除
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">自宅・場所特定防止＆画質無劣化</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-amber-700 truncate font-sans min-w-0">📍 緯度経度・日時</span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-cyan-800 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 shrink-0 font-sans">
-                🛡️ 位置情報0件・ZIP
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">100枚一括ドラッグ</span>
-            <span class="font-bold text-cyan-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
-        <!-- ツール4: 画像 顔・ナンバー・機密箇所ブラウザ内モザイク＆黒塗り -->
-        <a
-          href="/local-mosaic/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-indigo-500 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                🕶️
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-700 transition-colors leading-snug truncate">
-                  画像 モザイク＆黒塗り加工
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">管理画面スクショ・顔不可逆加工</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-slate-500 truncate font-sans min-w-0">顧客情報・社外秘</span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-indigo-900 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200 shrink-0 font-sans">
-                ⬛ 黒塗り / 網掛け
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">Ctrl+V貼付・複数一括</span>
-            <span class="font-bold text-indigo-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
-        <!-- ツール5: 社外秘音声の文字起こし＆個人情報マスク -->
-        <a
-          href="/local-whisper/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-purple-500 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-purple-50 border border-purple-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                🎙️
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-purple-700 transition-colors leading-snug truncate">
-                  音声 文字起こし＆PIIマスク
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">1on1・会議録音をブラウザ内テキスト化</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-purple-700 truncate font-sans flex items-center gap-0.5 min-w-0"><span>🎙️</span> <span class="truncate">録音ファイル</span></span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-purple-900 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 shrink-0 font-sans">
-                📝 TXT / SRT
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">Web Audio発話分割</span>
-            <span class="font-bold text-purple-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
-        <!-- ツール6: AIプロンプト 機密サニタイザー -->
-        <a
-          href="/ai-prompt-sanitizer/"
-          class="group flex flex-col justify-between p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-amber-500 hover:shadow-md transition-all duration-150 cursor-pointer min-w-0"
-        >
-          <div class="space-y-2 min-w-0">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
-                🤖
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-700 transition-colors leading-snug truncate">
-                  AIプロンプト 機密サニタイザー
-                </h3>
-                <p class="text-[11px] text-slate-500 truncate">ChatGPT送信前に仮名化・実名復元</p>
-              </div>
-            </div>
-
-            <!-- 超コンパクト 1行 Before ➔ After ピル -->
-            <div class="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-[10px] min-w-0">
-              <span class="text-slate-500 truncate font-sans min-w-0">社名・個人名</span>
-              <span class="text-slate-300 shrink-0">➔</span>
-              <span class="font-bold text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shrink-0 font-mono text-[9px]">
-                {`{{TOKEN}}`} ➔ 復元
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2.5 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span class="text-slate-400 truncate">AIへの機密漏洩防止</span>
-            <span class="font-bold text-amber-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 shrink-0">
-              開く ➔
-            </span>
-          </div>
-        </a>
-
+      <div>
+        <Mascot
+          name="hero-home"
+          fallback="🛡️"
+          alt="ゼロくんがパソコンを守り、ファイルがクラウドへ送られないことを示すイラスト"
+          width={720}
+          eager
+          class="w-full max-w-[16rem] sm:max-w-sm md:max-w-none mx-auto rounded-3xl"
+        />
       </div>
     </section>
 
-    <!-- 【折りたたみ式】詳細な説明・信頼性セクション（デフォルト折りたたみで縦長化を防止） -->
-    <section class="border-t border-slate-200/80 pt-6 max-w-5xl mx-auto">
-      <details class="group bg-slate-50/70 border border-slate-200 rounded-xl p-4 transition-all">
+    <!-- 目的から探す：ツール名を知らなくても迷わない入り口 -->
+    <section class="max-w-5xl mx-auto px-2 sm:px-4 space-y-3 text-left">
+      <h2 class="text-base sm:text-lg font-bold text-slate-900">何をしたいですか？</h2>
+      <ul class="flex flex-wrap gap-2">
+        {
+          tools.map((t) => (
+            <li>
+              <a
+                href={t.href}
+                class={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 shadow-xs transition ${t.accent.border} hover:text-slate-900`}
+              >
+                <span aria-hidden="true">{t.icon}</span>
+                <span>{t.intent}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ツール一覧：イラスト付きカード（説明は1行のみ） -->
+    <section id="tools" class="max-w-6xl mx-auto w-full space-y-4 scroll-mt-20">
+      <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 text-left px-2 sm:px-0">ツール一覧</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        {
+          tools.map((t) => (
+            <li>
+              <a
+                href={t.href}
+                class={`group flex flex-row sm:flex-col h-full rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-150 ${t.accent.border}`}
+              >
+                <Mascot
+                  name={t.image}
+                  fallback={t.icon}
+                  alt=""
+                  width={560}
+                  class={`w-28 sm:w-full shrink-0 aspect-[4/3] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
+                />
+                <div class="p-3 sm:p-4 space-y-1 text-left min-w-0 self-center">
+                  <h3 class={`text-sm sm:text-base font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug`}>
+                    {t.name}
+                  </h3>
+                  <p class="text-xs text-slate-500 leading-relaxed">{t.tagline}</p>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- 【折りたたみ】安全性の根拠（詳細はここに集約。本文では繰り返さない） -->
+    <section class="max-w-5xl mx-auto w-full">
+      <details class="group bg-slate-50/70 border border-slate-200 rounded-2xl p-4">
         <summary class="flex items-center justify-between cursor-pointer list-none select-none text-slate-800 font-bold text-sm sm:text-base">
-          <span class="flex items-center gap-2">
-            <span>🛡️ なぜ「ブラウザ内完結（0バイト送信）」が安全なのか？</span>
-            <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">クリックして解説を展開</span>
-          </span>
+          <span>🛡️ なぜ「ブラウザ内で完結」すると安全なのですか？</span>
           <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
         </summary>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 mt-3 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed">
-          <div class="p-3 bg-white rounded-lg border border-slate-200/60 space-y-1.5">
-            <div class="font-bold text-slate-900 flex items-center gap-1.5">
-              <span class="w-5 h-5 rounded bg-emerald-100 text-emerald-800 flex items-center justify-center text-[10px]">1</span>
-              <span>外部通信ゼロの技術証明</span>
-            </div>
-            <p class="text-slate-500">
-              「プライバシー保護」を言葉だけでなくブラウザの厳格なCSP遮断とローカル処理で実現。F12のNetworkタブで外部通信0件を目視確認できます。
-            </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 mt-3 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed text-left">
+          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+            <div class="font-bold text-slate-900">① 外部通信ゼロを自分で確認できる</div>
+            <p>ブラウザのCSPで通信を遮断。F12のNetworkタブで、処理中に外部通信が0件であることを目視確認できます。</p>
           </div>
-
-          <div class="p-3 bg-white rounded-lg border border-slate-200/60 space-y-1.5">
-            <div class="font-bold text-slate-900 flex items-center gap-1.5">
-              <span class="w-5 h-5 rounded bg-teal-100 text-teal-800 flex items-center justify-center text-[10px]">2</span>
-              <span>待ち時間ゼロ・瞬時に完了</span>
-            </div>
-            <p class="text-slate-500">
-              大容量PDFやCSVをクラウドへ往復転送するアップロード待ち時間が一切ありません。お使いの端末メモリ上でダイレクトに計算します。
-            </p>
+          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+            <div class="font-bold text-slate-900">② アップロード待ちがない</div>
+            <p>大容量のPDFやCSVでも、クラウドへの往復転送がありません。端末のメモリ上で直接処理します。</p>
           </div>
-
-          <div class="p-3 bg-white rounded-lg border border-slate-200/60 space-y-1.5">
-            <div class="font-bold text-slate-900 flex items-center gap-1.5">
-              <span class="w-5 h-5 rounded bg-cyan-100 text-cyan-800 flex items-center justify-center text-[10px]">3</span>
-              <span>完全無料・維持費0円</span>
-            </div>
-            <p class="text-slate-500">
-              サーバー側で高価なGPUやCPU計算を行わない静的配信のため、サーバー維持費が発生しません。有料化や強制課金のリスクなく恒久的に無料です。
-            </p>
+          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+            <div class="font-bold text-slate-900">③ 無料のまま続けられる</div>
+            <p>サーバー側で計算しない静的配信のため、維持費がかからず、有料化の心配もありません。</p>
           </div>
         </div>
       </details>

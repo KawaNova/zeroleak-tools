@@ -1,7 +1,9 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import SecuritySpecModal from '../components/SecuritySpecModal.astro';
 import RelatedTools from '../components/RelatedTools.astro';
+import WhySection from '../components/WhySection.astro';
+import Mascot from '../components/Mascot.astro';
 
 // SGO / Googleリッチリザルト用 構造化データ
 const extraSchemaGraph = [
@@ -77,14 +79,8 @@ const extraSchemaGraph = [
     
     <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
     <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold shadow-xs">
-          <span>完全ローカル処理</span>
-          <span>•</span>
-          <span>300DPI高精細再構成</span>
-          <span>•</span>
-          <span>メタデータ完全消去</span>
-        </div>
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        
         
         <!-- 情シス向けセキュリティ仕様書 ボタン -->
         <button
@@ -97,14 +93,19 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+      <div class="flex flex-col items-start gap-3">
         <div>
-          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <div class="flex w-full items-center gap-4 sm:gap-6">
+<div class="min-w-0 flex-1 space-y-1.5">
+<h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
             給与明細・機密PDF パスワード解除＆メタデータ削除
           </h1>
           <p class="text-slate-600 text-xs sm:text-sm mt-1">
             住宅ローン審査やe-Tax提出用にパスワードを平文化。作成者名や履歴メタデータもブラウザ内で完全抹消します。
           </p>
+</div>
+<Mascot name="tool-pdf" fallback="🔓" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+</div>
         </div>
 
         <!-- テスト用暗号化サンプル投入ボタン -->
@@ -277,109 +278,7 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【トピック1：ツール直下・キラー納得解説】なぜ住宅ローンやe-TaxでPDF解除が必要なのか？ -->
-    <section class="bg-slate-100/90 border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-6">
-      <div class="space-y-2 text-left">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100/90 border border-teal-200 text-teal-900 text-xs font-bold shadow-2xs">
-          <span>💡 なぜこのツールが必要なのか？</span>
-        </div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-          「給与明細を銀行や税務署に提出できない」問題と、無料サイトの危険な落とし穴
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          暗号化PDFが公的申請で弾かれる理由と、年収・家族構成・口座情報を海外サーバーに渡してはいけない理由
-        </p>
-      </div>
-
-      <!-- 2大盲点の解説カード（白背景カードで浮き立たせ境界を明確化） -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <!-- 盲点1: 住宅ローンやe-Taxでの門前払い -->
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
-          <div class="flex items-center gap-2 text-rose-700 font-bold text-sm">
-            <span>🏛️</span>
-            <h3>盲点1: 銀行の事前審査やe-Taxは「暗号化PDF」をシステムで拒否する</h3>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            ネット銀行（住信SBI、auじぶん、楽天等）や国税庁e-Taxのオンライン受付フォームは、提出されたPDFを機械的にOCR解析・自動仕分けします。<br />
-            会社から配布された給与明細に「誕生日4桁」などのパスワードがかかっていると、<strong>アップロード時に「暗号化PDFは受領できません」とエラーになり審査がストップ</strong>します。「パスワードをメールで伝える」運用は一切受け付けられません。
-          </p>
-        </div>
-
-        <!-- 盲点2: 無料PDFサイトに給与明細を渡す恐怖 -->
-        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2.5 text-left">
-          <div class="flex items-center gap-2 text-amber-700 font-bold text-sm">
-            <span>🚨</span>
-            <h3>盲点2: 無料PDF解除サイトはファイルを海外クラウドへアップロードしている</h3>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Google検索で出てくる一般的な無料PDFツールは、一度ファイルを運営企業のクラウドサーバーへ転送して解除しています。<br />
-            源泉徴収票や給与明細には、<strong>年収・勤務先・マイナンバー・自宅住所・銀行口座番号・扶養家族</strong>という人生最大の個人情報が記載されています。これを見知らぬ海外サーバーへアップロードすることは極めて危険です。
-          </p>
-        </div>
-
-      </div>
-
-      <!-- 解決策カード -->
-      <div class="p-4 sm:p-5 rounded-2xl bg-teal-50 border border-teal-200/90 text-xs text-teal-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs text-left">
-        <div class="space-y-1">
-          <strong class="font-bold text-teal-900 text-sm flex items-center gap-1.5">
-            <span>✓</span>
-            <span>ZeroLeak PDF解除の完全ローカル保証：</span>
-          </strong>
-          <p class="text-slate-600 leading-relaxed">
-            ファイルを外部サーバーへ1バイトも送信せず、ブラウザ内のメモリ（Canvas/pdf-lib）上でのみ300DPI高精細再構成。パスワード解除と同時に、PCアカウント名などのメタデータも完全消去したクリーンPDFを即座に生成します。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 【トピック2：実務シチュエーション】よくある3つの活用シーン -->
-    <section class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-5 shadow-xs">
-      <div class="space-y-1 text-left border-b border-slate-100 pb-3">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-          <span>🏢 実務シチュエーション</span>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-          こんなシチュエーションで威力を発揮します
-        </h3>
-        <p class="text-xs text-slate-500">公的書類・機密文書の取り扱いで選ばれる3つの代表的ユースケース</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-mono font-bold">01</span>
-            <span class="text-xs sm:text-sm">住宅ローンの事前・本審査</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            ネット銀行やメガバンクの収入証明書類フォームにアップロードするため、会社の暗号化給与明細を安全に平文化。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-800 flex items-center justify-center text-xs font-mono font-bold">02</span>
-            <span class="text-xs sm:text-sm">確定申告（e-Tax）・マイナ</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            SmartHRやマネーフォワード等の人事SaaSから出力された誕生日付き源泉徴収票を、公的機関へ提出できる状態に。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 shadow-2xs space-y-2 text-left">
-          <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center text-xs font-mono font-bold">03</span>
-            <span class="text-xs sm:text-sm">見積書・請求書のメタデータ消去</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">
-            PDFプロパティに残っている作成者のPCユーザー名（社員名）や元ファイル名を完全抹消して取引先へ提出。
-          </p>
-        </div>
-
-      </div>
-    </section>
+    <WhySection slug="pdf-unlock" title="「パスワード付きの給与明細」は、そのままでは提出できない" />
 
     <!-- 【FAQPage】よくある質問アコーディオン -->
     <section class="space-y-4 pt-2">

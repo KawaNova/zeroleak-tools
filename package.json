@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev --port 8105 --host",
     "build": "astro build",
-    "preview": "astro preview --port 8105 --host"
+    "preview": "astro preview --port 8105 --host",
+    "serve:dev": "node scripts/dev_serve.mjs"
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.1.0",

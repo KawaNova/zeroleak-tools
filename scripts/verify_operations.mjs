@@ -1,4 +1,4 @@
-import fs from 'fs';
+﻿import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Papa from 'papaparse';
@@ -345,12 +345,12 @@ async function testBuiltHtmlAndCspAudit() {
 
   const routes = [
     { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/'] },
-    { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使える'] },
-    { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使える'] },
-    { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使える'] },
-    { path: 'local-mosaic/index.html', mustInclude: ['モザイク＆黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使える'] },
-    { path: 'local-whisper/index.html', mustInclude: ['文字起こし', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使える'] },
-    { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使える'] },
+    { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'local-mosaic/index.html', mustInclude: ['モザイク＆黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'local-whisper/index.html', mustInclude: ['文字起こし', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 

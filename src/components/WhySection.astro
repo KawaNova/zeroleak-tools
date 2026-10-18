@@ -1,0 +1,96 @@
+---
+// 各ツール共通：「なぜ必要か」3コマ図解 ＋ 詳細（折りたたみ） ＋ 実務シチュエーション
+// 文章ではなく図で伝え、詳しい根拠は <details> に保持する（HTMLには残るためSEO・審査用の情報量は維持）。
+import { toolBySlug } from '../data/tools';
+
+interface Props {
+  slug: string;
+  title: string; // 「なぜ必要か」の見出し（ツールごとに固有の切り口）
+}
+
+const { slug, title } = Astro.props;
+const tool = toolBySlug(slug);
+const panelTone = [
+  'bg-white border-slate-200',
+  'bg-rose-50/70 border-rose-200',
+  `${tool.accent.soft} ${tool.accent.ring}`,
+];
+const labelTone = ['text-slate-500', 'text-rose-700', tool.accent.text];
+---
+
+<!-- 【トピック1】なぜ必要か：3コマ図解 -->
+<section class="bg-slate-100/90 border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-5 text-left">
+  <div class="space-y-1.5">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-bold">
+      <span>💡 なぜこのツールが必要？</span>
+    </div>
+    <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">{title}</h2>
+  </div>
+
+  <ol class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-0 items-stretch">
+    {
+      tool.panels.map((p, i) => (
+        <li class="relative md:flex md:items-stretch">
+          <div class={`flex-1 rounded-2xl border p-4 sm:p-5 space-y-2 shadow-xs ${panelTone[i]}`}>
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-slate-900 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                {i + 1}
+              </span>
+              <span class={`text-xs font-bold ${labelTone[i]}`}>{p.label}</span>
+            </div>
+            <div class="text-3xl" aria-hidden="true">{p.icon}</div>
+            <p class="text-sm text-slate-800 leading-relaxed font-medium">{p.text}</p>
+          </div>
+          {i < 2 && (
+            <span
+              aria-hidden="true"
+              class="hidden md:flex items-center justify-center w-6 text-slate-400 text-lg shrink-0"
+            >
+              ▶
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <details class="group rounded-2xl bg-white border border-slate-200 p-4">
+    <summary class="flex items-center justify-between cursor-pointer list-none select-none text-sm font-bold text-slate-800">
+      <span>📖 くわしい理由を見る</span>
+      <span class="text-slate-400 text-xs group-open:rotate-180 transition-transform">▼</span>
+    </summary>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+      {
+        tool.blindSpots.map((b) => (
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-1.5">
+            <h3 class="text-sm font-bold text-slate-900 flex items-start gap-2">
+              <span aria-hidden="true">{b.icon}</span>
+              <span>{b.title}</span>
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed" set:html={b.html} />
+          </div>
+        ))
+      }
+    </div>
+  </details>
+</section>
+
+<!-- 【トピック2】実務シチュエーション：アイコンタイル -->
+<section class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-4 shadow-xs text-left">
+  <h2 class="text-base sm:text-xl font-bold text-slate-900 tracking-tight">こんな場面で使われています</h2>
+  <ul class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    {
+      tool.situations.map((s) => (
+        <li class="flex items-start gap-3 rounded-2xl bg-slate-50/80 border border-slate-200 p-4">
+          <span class={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 border ${tool.accent.soft} ${tool.accent.ring}`} aria-hidden="true">
+            {s.icon}
+          </span>
+          <div class="min-w-0">
+            <div class="text-sm font-bold text-slate-900">{s.who}</div>
+            <p class="text-xs text-slate-600 leading-relaxed mt-0.5">{s.text}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>

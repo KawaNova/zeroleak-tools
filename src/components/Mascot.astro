@@ -1,0 +1,39 @@
+---
+// マスコット「ゼロくん」のイラスト表示。画像が未配置の間は絵文字のプレースホルダーを表示する。
+import { Image } from 'astro:assets';
+import { illustration } from '../data/tools';
+
+interface Props {
+  name: string; // illustrations 内のファイル名（拡張子なし）
+  alt?: string;
+  width?: number;
+  eager?: boolean;
+  fallback?: string; // 画像が無い間の絵文字
+  class?: string;
+}
+
+const { name, alt = '', width = 480, eager = false, fallback = '🛡️', class: className = '' } = Astro.props;
+const img = illustration(name);
+---
+
+{
+  img ? (
+    <Image
+      src={img}
+      alt={alt}
+      width={width}
+      format="webp"
+      quality={82}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+      class={className}
+    />
+  ) : (
+    <div
+      aria-hidden="true"
+      class={`flex items-center justify-center rounded-2xl bg-slate-100 text-5xl aspect-[4/3] ${className}`}
+    >
+      {fallback}
+    </div>
+  )
+}
