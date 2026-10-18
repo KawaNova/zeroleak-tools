@@ -75,10 +75,10 @@ const extraSchemaGraph = [
 >
   <div class="max-w-5xl mx-auto space-y-8">
 
-    <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」明記） -->
-    <div class="space-y-3">
+    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
+    <div class="space-y-2.5">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold shadow-xs">
           <span>外部AIへの機密漏洩防止</span>
           <span>•</span>
           <span>文脈維持トークン化</span>
@@ -90,128 +90,115 @@ const extraSchemaGraph = [
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-medium border border-slate-300 shadow-xs transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
         >
           <span>🏢</span>
           <span>社内利用・情シス申請用仕様書</span>
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        ChatGPT・AIプロンプト 機密・固有名詞サニタイザー（実名復元付き）｜一括・ブラウザ完結・サーバー送信なし
-      </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-        「取引先名や担当者名、APIキーが入ったメールや議事録をそのままChatGPTに貼れない」問題を3秒で解決。
-        固有名詞を文脈が崩れない記号（<code class="text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-mono text-xs">{`{{COMPANY_A}}`}</code> 等）へ<strong class="text-slate-800">一括仮名化</strong>し、さらに<strong class="text-slate-800">AIが返した回答をワンクリックで元の実名へ自動復元</strong>します。
-      </p>
-
-      <!-- ゼロリークの仕組み注記ボックス -->
-      <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
-        <span class="text-base shrink-0">💡</span>
-        <div class="space-y-0.5 leading-relaxed">
-          <strong class="font-bold text-amber-900">外部AI（ChatGPT・Claude等）へ本物の機密を渡さないための前処理ツールです：</strong>
-          <span class="text-slate-600">本ツールで社名や金額を架空の記号（{`{{COMPANY_A}}`}等）に置き換えてからAIに渡すことで、外部AIベンダーへの実データ漏洩をゼロにします。もちろん、この仮名化・復元処理自体もお客様の端末内（ブラウザ）だけで完結し、外部通信は一切発生しません。</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ワンクリック検証バー -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs shadow-xs">
-      <div class="flex items-center gap-2.5 text-slate-700">
-        <span class="text-xl">🧪</span>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
-          <strong class="text-amber-900">今すぐ3秒で往復デモを体験：</strong>
-          <span class="text-slate-600">取引先社名・担当者名・予算・本番APIキー・社内URLを含んだ「社外秘の商談議事録プロンプト」と「AI返信下書きの自動実名復元」をワンクリックで試せます</span>
+          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            AIプロンプト 機密サニタイザー（実名復元付き）
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">
+            固有名詞を文脈が壊れない記号（{`{{COMPANY_A}}`}等）に仮名化し、AIの回答をワンクリックで実名復元します。
+          </p>
         </div>
+
+        <!-- ワンクリック検証ボタン（手元に文章がない人向け） -->
+        <button
+          id="loadSamplePromptBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+        >
+          <span>🧪</span>
+          <span>3秒往復デモ（サンプル投入）</span>
+        </button>
       </div>
-      <button
-        id="loadSamplePromptBtn"
-        type="button"
-        class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-amber-50 text-amber-800 border border-amber-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
-      >
-        <span>サンプル議事録＆AI回答で試す</span>
-      </button>
     </div>
 
-    <!-- メインワークベンチ -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+    <!-- メインワークベンチ（ファーストビュー最優先） -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
 
-      <!-- 自動検出カテゴリ設定 ＆ カスタム固有名詞登録 -->
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+      <!-- 設定バー（コンパクトに1行に集約・折りたたみ可能） -->
+      <details class="group bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 text-xs" open>
+        <summary class="flex items-center justify-between cursor-pointer select-none font-bold text-slate-700 list-none">
+          <span class="flex items-center gap-1.5">
             <span>⚙️</span>
-            <span>自動検出して仮名トークン化する項目：</span>
+            <span>自動検出カテゴリ ＆ 隠したい固有名詞</span>
+            <span class="text-[10px] text-emerald-700 font-normal font-mono ml-2">※ブラウザメモリ内完結（外部送信0バイト）</span>
           </span>
-          <span class="text-[11px] text-emerald-700 font-mono font-semibold">
-            🔒 変換辞書はブラウザのRAM上のみに保持（外部送信0バイト）
-          </span>
-        </div>
+          <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+        </summary>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optCompany" checked class="accent-amber-600 rounded" />
-            <span>🏢 法人・銀行名</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optEmail" checked class="accent-amber-600 rounded" />
-            <span>✉️ メールアドレス</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optPhone" checked class="accent-amber-600 rounded" />
-            <span>📞 電話番号</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optSecret" checked class="accent-amber-600 rounded" />
-            <span>🔑 APIキー/Token</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optUrlIp" checked class="accent-amber-600 rounded" />
-            <span>🌐 社内URL / IP</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-xs">
-            <input type="checkbox" id="optAmount" checked class="accent-amber-600 rounded" />
-            <span>💴 金額・予算</span>
-          </label>
-        </div>
+        <div class="pt-3 mt-2 border-t border-slate-200/60 space-y-3">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optCompany" checked class="accent-amber-600 rounded" />
+              <span>🏢 法人・銀行名</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optEmail" checked class="accent-amber-600 rounded" />
+              <span>✉️ メール</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optPhone" checked class="accent-amber-600 rounded" />
+              <span>📞 電話番号</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optSecret" checked class="accent-amber-600 rounded" />
+              <span>🔑 APIキー</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optUrlIp" checked class="accent-amber-600 rounded" />
+              <span>🌐 URL / IP</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
+              <input type="checkbox" id="optAmount" checked class="accent-amber-600 rounded" />
+              <span>💴 金額・予算</span>
+            </label>
+          </div>
 
-        <!-- 任意の固有名詞（人名・プロジェクト名・製品名）追加入力 -->
-        <div class="pt-2 border-t border-slate-200 space-y-1.5">
-          <label for="customWordsInput" class="block text-xs font-bold text-amber-900">
-            👤 追加で隠したい固有名詞（担当者名・未公開プロジェクト名・コードネームなど、カンマまたは改行区切り）：
-          </label>
-          <input
-            type="text"
-            id="customWordsInput"
-            placeholder="例: 佐藤 健太郎, 鈴木 一郎, Project-Chronos, 極秘新製品X"
-            class="w-full bg-white border border-slate-300 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none"
-          />
+          <!-- 任意の固有名詞追加入力 -->
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <label for="customWordsInput" class="text-xs font-bold text-amber-900 shrink-0">
+              👤 追加固有名詞（担当者名・案件名など）：
+            </label>
+            <input
+              type="text"
+              id="customWordsInput"
+              placeholder="例: 佐藤 健太郎, Project-Chronos, 極秘新製品X（カンマ区切り）"
+              class="w-full bg-white border border-slate-300 focus:border-amber-500 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:outline-none"
+            />
+          </div>
         </div>
-      </div>
+      </details>
 
       <!-- STEP 1 & STEP 2: 2カラム比較（生プロンプト入力 ➔ 安全化プロンプト出力） -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
         <!-- STEP 1: 元テキスト入力 -->
         <div class="space-y-2 flex flex-col">
           <div class="flex items-center justify-between text-xs px-1">
-            <span class="font-bold text-slate-700 flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] border border-slate-200">STEP 1</span>
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] border border-slate-200 font-bold">STEP 1</span>
               <span>元の社外秘テキスト・プロンプトを入力</span>
             </span>
             <button
               type="button"
               id="clearPromptBtn"
-              class="text-slate-500 hover:text-rose-600 underline text-[11px] cursor-pointer"
+              class="text-slate-400 hover:text-rose-600 text-[11px] cursor-pointer"
             >
               クリア
             </button>
           </div>
           <textarea
             id="rawPromptTextarea"
-            rows="12"
-            placeholder="ChatGPTやClaudeに要約・翻訳・コードレビューさせたい社内メール、議事録、エラーログをここに貼り付けてください..."
-            class="w-full flex-1 bg-slate-50 border border-slate-200 focus:border-amber-500 focus:bg-white rounded-xl p-4 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none leading-relaxed"
+            rows="10"
+            placeholder="ChatGPTやClaudeに要約・推敲・レビューさせたい社内メール、議事録、エラーログを貼り付けてください..."
+            class="w-full flex-1 bg-slate-50/70 border border-slate-200 focus:border-amber-500 focus:bg-white rounded-xl p-3.5 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none leading-relaxed transition"
           ></textarea>
         </div>
 
@@ -219,7 +206,7 @@ const extraSchemaGraph = [
         <div class="space-y-2 flex flex-col">
           <div class="flex items-center justify-between text-xs px-1">
             <span class="font-bold text-emerald-800 flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono text-[10px]">STEP 2</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono text-[10px] font-bold">STEP 2</span>
               <span>AI送信用の安全化プロンプト（固有名詞ゼロ）</span>
             </span>
             <span id="replacedStatBadge" class="text-[11px] font-mono text-amber-800 font-bold">
@@ -229,14 +216,14 @@ const extraSchemaGraph = [
           <textarea
             id="sanitizedPromptTextarea"
             readonly
-            rows="12"
-            placeholder="ここに {{COMPANY_A}} や {{CUSTOM_A}} 等へ変換された安全なプロンプトがリアルタイム出力されます..."
-            class="w-full flex-1 bg-emerald-50/40 border border-emerald-300 rounded-xl p-4 text-xs sm:text-sm text-emerald-950 font-mono focus:outline-none leading-relaxed"
+            rows="10"
+            placeholder="ここに {{COMPANY_A}} 等へ置換された安全なプロンプトがリアルタイム出力されます..."
+            class="w-full flex-1 bg-emerald-50/30 border border-emerald-300 rounded-xl p-3.5 text-xs sm:text-sm text-emerald-950 font-mono focus:outline-none leading-relaxed"
           ></textarea>
           <button
             type="button"
             id="copySanitizedBtn"
-            class="w-full py-3 px-5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る</span>
           </button>
@@ -245,32 +232,32 @@ const extraSchemaGraph = [
       </div>
 
       <!-- 変換対照表（メモリ内トークンマップ）の可視化 -->
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
         <div class="flex items-center justify-between text-xs">
           <span class="font-bold text-slate-700 flex items-center gap-1.5">
             <span>🔑</span>
             <span>ブラウザ内メモリに保持中の変換辞書（対照表）</span>
           </span>
-          <span class="text-[11px] text-slate-500">※タブを閉じると完全消去されます</span>
+          <span class="text-[10px] text-slate-400">※タブを閉じると完全消去されます</span>
         </div>
         <div id="tokenMapContainer" class="flex flex-wrap gap-2 text-xs">
-          <span class="text-slate-500 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>
+          <span class="text-slate-400 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>
         </div>
       </div>
 
       <!-- STEP 3: AIからの回答を貼り付けてワンクリック実名復元 -->
-      <div class="p-5 rounded-2xl bg-indigo-50/50 border border-indigo-200 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div class="p-4 sm:p-5 rounded-2xl bg-indigo-50/40 border border-indigo-200 space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <div class="space-y-0.5">
             <span class="font-bold text-indigo-900 text-sm flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono text-xs">STEP 3</span>
-              <span>🔄 AI（ChatGPT / Claude）の回答を元の実名へ一括復元</span>
+              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono text-xs font-bold">STEP 3</span>
+              <span>🔄 AI（ChatGPT / Claude）の回答をワンクリックで実名へ復元</span>
             </span>
             <p class="text-xs text-slate-600">
-              AIが <code class="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded font-mono">{`{{COMPANY_A}}`}</code> 等の記号を使って返してきた文章を左側に貼ると、右側に元の社名・人名へ戻した完成文が出力されます。
+              AIが <code class="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded font-mono">{`{{COMPANY_A}}`}</code> 入りで返してきた文章を左に貼ると、右側に実名へ戻した完成文が出力されます。
             </p>
           </div>
-          <span id="restoredStatBadge" class="text-xs font-mono text-indigo-800 font-bold">
+          <span id="restoredStatBadge" class="text-xs font-mono text-indigo-800 font-bold shrink-0">
             復元済み: 0 箇所
           </span>
         </div>
@@ -282,9 +269,9 @@ const extraSchemaGraph = [
             </label>
             <textarea
               id="aiResponseInput"
-              rows="7"
+              rows="6"
               placeholder="例: {{COMPANY_A}} の {{CUSTOM_A}} 様、いつも大変お世話になっております。{{CUSTOM_C}} のお見積り（{{AMOUNT_A}}）について..."
-              class="w-full bg-white border border-slate-300 focus:border-indigo-500 rounded-xl p-3.5 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
+              class="w-full bg-white border border-slate-300 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
             ></textarea>
           </div>
 
@@ -295,9 +282,9 @@ const extraSchemaGraph = [
             <textarea
               id="restoredOutputTextarea"
               readonly
-              rows="7"
+              rows="6"
               placeholder="ここに実名（株式会社〇〇、佐藤様 等）へ復元された最終文章が出力されます..."
-              class="w-full flex-1 bg-white border border-emerald-300 rounded-xl p-3.5 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
+              class="w-full flex-1 bg-white border border-emerald-300 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
             ></textarea>
             <button
               type="button"
@@ -312,47 +299,98 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【pSEO & 用途別ガイド】なぜ生成AI利用時に「トークン仮名化」が最強なのか -->
-    <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>🛡️</span>
-          <span>社内コンプライアンスを守りながらChatGPT・Claudeを100%活用する4つの場面</span>
+    <!-- 【ツール直下・最重要】なぜCopilotやEnterprise契約があっても必要なのか？（納得キラー解説） -->
+    <section class="mt-8 space-y-6 border-t border-slate-200/90 pt-8">
+      <div class="text-center space-y-2 max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold shadow-2xs">
+          <span>💡 なぜこのツールが必要なのか？</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          「CopilotやChatGPT Enterpriseを契約しているから安心」という最大の盲点
         </h2>
-        <p class="text-xs text-slate-500 mt-1">「シャドーAI禁止」の職場でも安全にAIを使えるローカル匿名化ワークフロー</p>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          有料の法人契約AIを導入している企業でも、このローカル前処理が絶対に欠かせない2つの理由
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-amber-800 text-sm">1. 取引先への重要メール・お詫び状・交渉文の下書き</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">実名や契約金額を隠してAIに推敲させ、1秒で実名に戻す：</strong>
-            「〇〇株式会社の△△部長宛に納期遅延のお詫びと代替案を送りたい」という場合でも、社名・人名・金額をトークン化してAIに書かせ、回答をワンクリックで実名復元すれば誤字リスクもゼロになります。
+      <!-- 2大盲点の解説カード -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+        
+        <!-- 盲点1: 社内監査ログに残る -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-rose-600 font-bold text-sm">
+            <span>⚠️ 盲点1: 「AI学習なし」でも、管理者の監査ログには平文で永久保存される</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Enterprise契約やCopilotは「外部のAIモデル学習に使われない」ことを保証するものであり、<strong>社内コンプライアンス管理者や情シスの監査ログ（プロンプト履歴）には全員の入力が平文のまま永久保存</strong>されます。<br />
+            「役員の健康診断結果」「未発表の人事異動・早期退職者リスト」「顧客のクレカ情報」などをCopilotに入力した場合、社内監査で引っかかり懲戒・インシデント対象になるリスクは依然として残ります。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-amber-800 text-sm">2. 契約書（NDA・業務委託）・法務レビューの条文相談</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">甲・乙の正式法人名や所在地・損害賠償額を秘匿化：</strong>
-            契約書ドラフトのリーガルチェックを生成AIに手伝わせる際、当事者名や固有のプロジェクト名をすべて記号化することで、未公表の提携・M&A情報の漏洩を完全に防ぎます。
+        <!-- 盲点2: プロンプト流出・共有事故 -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-amber-700 font-bold text-sm">
+            <span>🚨 盲点2: 「このプロンプトで良い回答出たよ」という社内共有での誤爆</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            生成AIの活用が進むと、「ChatGPTのプロンプトをSlackで同僚に共有する」「議事録の要約テンプレをチームに展開する」機会が増えます。<br />
+            元のプロンプトに取引先の実名や生々しい売上金額が含まれたままだと、<strong>社内チャットや引き継ぎドキュメントを通じて機密情報が不用意に拡散</strong>してしまう事故が多発しています。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-amber-800 text-sm">3. ソースコード・障害ログ・設定ファイルのデバッグ質問</h3>
+      </div>
+
+      <!-- 解決策カード -->
+      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-4xl mx-auto shadow-2xs">
+        <div class="space-y-0.5">
+          <strong class="font-bold text-emerald-900 text-sm flex items-center gap-1.5">
+            <span>✓</span>
+            <span>ZeroLeakサニタイザーの解決策：</span>
+          </strong>
           <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">本番APIキー（sk-... / AKIA...）や社内URL・IPを自動除去：</strong>
-            エラーログをそのままAIへ貼り付けると、含まれていた認証トークンや社内エンドポイントURLが漏洩します。本ツールならシークレットキーとURLを自動検出して無害化します。
+            AIに送信する手前で{`『{{COMPANY_A}}』`}等の記号に置き換え、AIの回答が返ってきた後にブラウザ内で『ワンクリック実名復元』。外部AIにも社内監査ログにも実機密を1バイトも残しません。
           </p>
         </div>
+      </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <h3 class="font-bold text-amber-800 text-sm">4. 伏字（***）による「AIの文脈理解崩壊」を防止</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong class="text-slate-800">A社とB社の違いをAIが正確に区別できる：</strong>
-            すべて「***」で伏字にするとAIは登場人物を区別できませんが、<code class="text-amber-800 bg-amber-50 px-1 rounded border border-amber-200">{`{{COMPANY_A}}`}</code> と <code class="text-amber-800 bg-amber-50 px-1 rounded border border-amber-200">{`{{COMPANY_B}}`}</code> に分けることで、AIの論理推論力を1ミリも落とさずに要約・構造化が可能です。
-          </p>
+      <!-- よくある3つの実務シチュエーション -->
+      <div class="space-y-3 pt-4 max-w-4xl mx-auto">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>🏢</span>
+          <span>よくある3つの実務シチュエーション（活用シーン）</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-amber-100 text-amber-800 flex items-center justify-center text-[10px]">1</span>
+              <span>重要メール・お詫び状の推敲</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              相手先社名・担当者名・金額を隠してAIに文章を作らせ、完成文をワンクリックで実名復元。誤字やコピペミスもゼロに。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-teal-100 text-teal-800 flex items-center justify-center text-[10px]">2</span>
+              <span>契約書・NDA・法務条文の相談</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              甲・乙の正式社名や未公開プロジェクトのコードネームを記号化し、提携やM&A情報の外部流出を完全防衛。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-cyan-100 text-cyan-800 flex items-center justify-center text-[10px]">3</span>
+              <span>障害ログ・ソースコードのデバッグ</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              ログに含まれる本番APIキー（sk-...）や社内エンドポイントURLを自動検出して無害化してからAIに質問。
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
