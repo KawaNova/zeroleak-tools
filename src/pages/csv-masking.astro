@@ -75,10 +75,10 @@ const extraSchemaGraph = [
 >
   <div class="max-w-5xl mx-auto space-y-8">
     
-    <!-- ツールタイトル & 狙い -->
-    <div class="space-y-3">
+    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
+    <div class="space-y-2.5">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shadow-xs">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shadow-xs">
           <span>完全ローカル処理</span>
           <span>•</span>
           <span>登録不要・完全無料</span>
@@ -97,81 +97,69 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-        CSV・テキスト 個人情報＆マイナンバー 自動マスキング
-      </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-        社内検証用データや社外ベンダー提出用のCSV・テキストから、個人情報（マイナンバー、電話番号、メール、氏名列等）を一括伏字化します。
-        <strong>データは1バイトもサーバーへ送信されず、お使いのPCメモリ内でのみ高速変換されます。</strong>
-      </p>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            CSV・テキスト 個人情報＆マイナンバー 自動マスキング
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">
+            大容量CSVや名簿テキストから、マイナンバー・電話番号・氏名列を一括伏字化。ブラウザ内完結で外部送信は0バイトです。
+          </p>
+        </div>
+
+        <!-- テスト用サンプルデータ投入ボタン -->
+        <button
+          id="loadSampleCsvBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+        >
+          <span>🧪</span>
+          <span>架空の名簿サンプルで試す</span>
+        </button>
+      </div>
     </div>
 
-    <!-- メイン操作カード -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+    <!-- メイン操作カード（ファーストビュー最優先） -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
       
       <!-- 入力モードタブ -->
-      <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-        <button id="tabCsvBtn" type="button" class="px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs">
+      <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+        <button id="tabCsvBtn" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs">
           📄 CSVファイル（ドラッグ＆ドロップ）
         </button>
-        <button id="tabTextBtn" type="button" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+        <button id="tabTextBtn" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
           ✏️ 自由テキスト・貼り付け
         </button>
       </div>
 
       <!-- CSVモードエリア -->
-      <div id="csvModeSection" class="space-y-6">
+      <div id="csvModeSection" class="space-y-4">
         <!-- ドロップゾーン -->
-        <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-8 text-center transition bg-slate-50/70 hover:bg-emerald-50/20 cursor-pointer group">
+        <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-emerald-50/20 cursor-pointer group">
           <input type="file" id="fileInput" accept=".csv,.txt" class="hidden" />
-          <div class="flex flex-col items-center gap-3 pointer-events-none">
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition-transform shadow-xs">
-              <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex flex-col items-center gap-2.5 pointer-events-none">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition-transform shadow-xs">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             </div>
             <div>
-              <p class="font-bold text-slate-800 text-base">CSVファイルをここにドラッグ＆ドロップ</p>
-              <p class="text-xs text-slate-500 mt-1">またはクリックしてファイルを選択 (.csv, .txt)</p>
+              <p class="font-bold text-slate-800 text-sm sm:text-base">CSVファイルをここにドラッグ＆ドロップ</p>
+              <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.csv, .txt)</p>
             </div>
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
-              <span>🔒 ブラウザ内メモリのみで読み込みます</span>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
+              <span>🔒 お使いの端末メモリ内だけで処理（サーバー送信なし）</span>
             </div>
-          </div>
-        </div>
-
-        <!-- テスト用サンプルデータ クイック投入ボタン（手元にファイルがない人向け） -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-          <div class="flex items-center gap-2 text-slate-700">
-            <span class="text-base">🧪</span>
-            <span><strong>テスト用データをお持ちでない場合：</strong> 架空の社員名簿（マイナンバー・電話番号・メール・住所入り）で動作テストできます</span>
-          </div>
-          <div class="flex items-center gap-2 w-full sm:w-auto">
-            <button
-              id="loadSampleCsvBtn"
-              type="button"
-              class="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
-            >
-              <span>サンプルCSVを読み込む</span>
-            </button>
-            <a
-              href="/sample_employees.csv"
-              download="sample_employees.csv"
-              class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-xs transition text-center whitespace-nowrap font-medium"
-              title="テスト用CSVをPCに保存"
-            >
-              📥 CSV保存
-            </a>
           </div>
         </div>
 
         <!-- 読み込み中/ファイル情報 -->
-        <div id="fileInfoArea" class="hidden p-4 rounded-xl bg-emerald-50/60 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">CSV</div>
+        <div id="fileInfoArea" class="hidden p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">CSV</div>
             <div>
-              <p id="fileNameText" class="text-sm font-semibold text-slate-900">sample.csv</p>
-              <p id="fileMetaText" class="text-xs text-slate-500">行数: 0 | サイズ: 0 KB</p>
+              <p id="fileNameText" class="text-xs sm:text-sm font-semibold text-slate-900">sample.csv</p>
+              <p id="fileMetaText" class="text-[11px] text-slate-500">行数: 0 | サイズ: 0 KB</p>
             </div>
           </div>
           <button id="resetFileBtn" type="button" class="text-xs text-slate-500 hover:text-rose-600 underline transition cursor-pointer font-medium">
@@ -180,71 +168,81 @@ const extraSchemaGraph = [
         </div>
 
         <!-- カラム選択設定 -->
-        <div id="columnSettingsArea" class="hidden space-y-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <div id="columnSettingsArea" class="hidden space-y-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
               <span>🎯 マスキング対象列の指定</span>
-              <span class="text-[11px] font-normal text-emerald-700">（個人情報列を自動判別して初期選択）</span>
+              <span class="text-[10px] font-normal text-emerald-700">（個人情報列を自動判別して初期選択）</span>
             </h3>
             <button id="selectAllColsBtn" type="button" class="text-xs text-slate-600 hover:text-emerald-700 underline cursor-pointer font-medium">全選択 / 解除</button>
           </div>
-          <div id="columnCheckboxList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-2">
+          <div id="columnCheckboxList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1 text-xs">
             <!-- JSで動的生成 -->
           </div>
         </div>
       </div>
 
       <!-- テキスト貼り付けモードエリア -->
-      <div id="textModeSection" class="hidden space-y-4">
+      <div id="textModeSection" class="hidden space-y-3">
         <div>
-          <label for="rawTextInput" class="block text-xs font-semibold text-slate-700 mb-2">マスキングしたいテキストまたはCSVテキストをペースト：</label>
+          <label for="rawTextInput" class="block text-xs font-semibold text-slate-700 mb-1.5">マスキングしたいテキストまたはCSVテキストをペースト：</label>
           <textarea id="rawTextInput" rows="6" placeholder="例: 山田太郎, 090-1234-5678, yamada@example.com, 123-4567, 123456789012" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm text-slate-900 font-mono focus:border-emerald-500 focus:bg-white focus:outline-none"></textarea>
         </div>
       </div>
 
-      <!-- マスキング詳細ルール設定 -->
-      <div class="border-t border-slate-100 pt-5 space-y-3">
-        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">自動検出ルール（正規表現伏字化）</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-xs">
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 cursor-pointer">
-            <input type="checkbox" id="optMyNumber" checked class="rounded border-slate-300 text-emerald-600 focus:ring-0" />
-            <span class="text-slate-700 font-medium">マイナンバー (12桁)</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 cursor-pointer">
-            <input type="checkbox" id="optPhone" checked class="rounded border-slate-300 text-emerald-600 focus:ring-0" />
-            <span class="text-slate-700 font-medium">電話番号 (携帯・固定)</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 cursor-pointer">
-            <input type="checkbox" id="optEmail" checked class="rounded border-slate-300 text-emerald-600 focus:ring-0" />
-            <span class="text-slate-700 font-medium">メールアドレス</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 cursor-pointer">
-            <input type="checkbox" id="optPostal" checked class="rounded border-slate-300 text-emerald-600 focus:ring-0" />
-            <span class="text-slate-700 font-medium">郵便番号</span>
-          </label>
-          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 cursor-pointer">
-            <input type="checkbox" id="optCard" checked class="rounded border-slate-300 text-emerald-600 focus:ring-0" />
-            <span class="text-slate-700 font-medium">クレジットカード番号</span>
-          </label>
-        </div>
+      <!-- マスキング詳細ルール設定（折りたたみ可能） -->
+      <details class="group bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 text-xs" open>
+        <summary class="flex items-center justify-between cursor-pointer select-none font-bold text-slate-700 list-none">
+          <span class="flex items-center gap-1.5">
+            <span>⚙️</span>
+            <span>自動検出ルール ＆ 伏字形式</span>
+            <span class="text-[10px] text-emerald-700 font-normal font-mono ml-2">※正規表現で一括置換</span>
+          </span>
+          <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+        </summary>
 
-        <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-700">
-          <span class="text-slate-500 font-medium">伏字スタイル:</span>
-          <label class="inline-flex items-center gap-1.5 cursor-pointer">
-            <input type="radio" name="replaceStyle" value="asterisk" checked class="text-emerald-600" />
-            <span>アスタリスク (例: ****-****-****)</span>
-          </label>
-          <label class="inline-flex items-center gap-1.5 cursor-pointer">
-            <input type="radio" name="replaceStyle" value="tag" class="text-emerald-600" />
-            <span>タグ形式 (例: [マイナンバー伏字])</span>
-          </label>
+        <div class="pt-3 mt-2 border-t border-slate-200/60 space-y-3">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs">
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
+              <input type="checkbox" id="optMyNumber" checked class="accent-emerald-600 rounded" />
+              <span>マイナンバー (12桁)</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
+              <input type="checkbox" id="optPhone" checked class="accent-emerald-600 rounded" />
+              <span>電話番号 (携帯・固定)</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
+              <input type="checkbox" id="optEmail" checked class="accent-emerald-600 rounded" />
+              <span>メールアドレス</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
+              <input type="checkbox" id="optPostal" checked class="accent-emerald-600 rounded" />
+              <span>郵便番号</span>
+            </label>
+            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
+              <input type="checkbox" id="optCard" checked class="accent-emerald-600 rounded" />
+              <span>クレジットカード</span>
+            </label>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1 text-xs text-slate-700">
+            <span class="text-slate-500 font-medium">伏字形式:</span>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="replaceStyle" value="asterisk" checked class="accent-emerald-600" />
+              <span>アスタリスク (例: ****-****-****)</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="replaceStyle" value="tag" class="accent-emerald-600" />
+              <span>タグ形式 (例: [マイナンバー伏字])</span>
+            </label>
+          </div>
         </div>
-      </div>
+      </details>
 
       <!-- 実行ボタン -->
-      <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <button id="processBtn" type="button" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-sm flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <button id="processBtn" type="button" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
           <span>一括マスキングを実行する (ブラウザ内処理)</span>
@@ -255,14 +253,14 @@ const extraSchemaGraph = [
     </div>
 
     <!-- プレビュー＆ダウンロードエリア -->
-    <div id="resultSection" class="hidden bg-white border border-emerald-200 rounded-2xl p-6 shadow-sm space-y-5">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+    <div id="resultSection" class="hidden bg-white border border-emerald-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
         <div>
-          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
             <span>✨ マスキング完了プレビュー</span>
-            <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">完全ローカル出力</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">BOM付きUTF-8対応</span>
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">先頭10行のビフォー/アフターを確認できます</p>
+          <p class="text-xs text-slate-500 mt-0.5">先頭10行のビフォー/アフターを確認できます（Excelでそのまま開けます）</p>
         </div>
         
         <!-- ダウンロードボタン -->
@@ -271,47 +269,109 @@ const extraSchemaGraph = [
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            <span>マスキング済みファイルを保存</span>
+            <span>マスキング済みCSVを保存</span>
           </button>
         </div>
       </div>
 
       <!-- プレビュー表示 -->
-      <div id="previewTableContainer" class="overflow-x-auto max-h-96 border border-slate-200 rounded-xl bg-slate-50">
+      <div id="previewTableContainer" class="overflow-x-auto max-h-80 border border-slate-200 rounded-xl bg-slate-50">
         <!-- テーブル動的レンダリング -->
       </div>
     </div>
 
-    <!-- 【pSEO & SEO】業務シーン別マスキング活用ガイド -->
-    <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>💼</span>
-          <span>業務シーン別 CSVマスキング活用ガイド</span>
+    <!-- 【ツール直下・最重要】なぜ外部委託やテスト環境でCSV伏字化が必須なのか？（納得キラー解説） -->
+    <section class="mt-8 space-y-6 border-t border-slate-200/90 pt-8">
+      <div class="text-center space-y-2 max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-bold shadow-2xs">
+          <span>💡 なぜこのツールが必要なのか？</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          「テストデータだから本番CSVをそのまま渡す」が引き起こす重大インシデント
         </h2>
-        <p class="text-xs text-slate-500 mt-1">個人情報漏洩・規約違反を防ぐ実務現場での伏字化ユースケース</p>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          外部ベンダーへの開発委託や社内ステージング環境構築で、生データを扱ってはいけない2つの決定的な理由
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">社外ベンダー・開発委託</h3>
-          <p class="text-slate-600 leading-relaxed">
-            外部のシステム開発会社や業務委託先に実データを渡して検証させる際、本番DBからエクスポートしたCSVのマイナンバー・顧客氏名・電話番号を一括伏字化。NDA（機密保持契約）下の提出基準をクリアできます。
+      <!-- 2大盲点の解説カード -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+        
+        <!-- 盲点1: マイナンバー法の厳罰リスク -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-rose-600 font-bold text-sm">
+            <span>⚖️ 盲点1: マイナンバー法は「社外ベンダーへの検証提供」を刑事罰で禁止している</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            システム開発会社から「不具合調査のため本番DBのCSVをください」と依頼された際、実マイナンバーが含まれたまま共有することは<strong>番号法違反（懲役4年以下または罰金200万円以下）の重大な犯罪</strong>に該当します。<br />
+            マイナンバーは「社会保障・税・災害」の法定手続き以外での提供・保管が厳禁されており、委託先管理の監督責任も発注元企業が負うため、事前の物理的マスキングが法律上義務付けられています。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">社内ステージング・テスト環境</h3>
-          <p class="text-slate-600 leading-relaxed">
-            テスト環境やQAチームでの動作確認用データを作成する際、本番データを直接インポートすると内部不正・情報漏洩リスクが生じます。事前に伏字化することで、実データ構造を保った安全なテストデータを生成できます。
+        <!-- 盲点2: 無料サイト・Excelマクロの限界 -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-amber-700 font-bold text-sm">
+            <span>🚫 盲点2: 無料のWeb変換サイトに本番名簿をアップロードするコンプラ違反</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            ネット上で見つかる無料CSVエディタや変換サイトは、ファイルを一度サーバーへアップロードして処理しています。顧客名簿や社員データを送信した時点で<strong>全社のセキュリティ規定違反（情報漏洩インシデント）</strong>となります。<br />
+            また、Excelマクロはセキュリティポリシーで実行禁止されている企業が多く、属人化して他メンバーが使えない問題が発生します。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">展示会・アンケートリード共有</h3>
+      </div>
+
+      <!-- 解決策カード -->
+      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-4xl mx-auto shadow-2xs">
+        <div class="space-y-0.5">
+          <strong class="font-bold text-emerald-900 text-sm flex items-center gap-1.5">
+            <span>✓</span>
+            <span>ZeroLeak CSVマスキングの解決策：</span>
+          </strong>
           <p class="text-slate-600 leading-relaxed">
-            展示会やセミナーで収集した名刺・アンケートCSVをグループ会社や提携パートナーに一部共有する際、同意を得ていない個人連絡先やカード情報を伏字化して共有トラブルを未然に防ぎます。
+            ファイルを外部サーバーへ1バイトも送信せず、ブラウザ内メモリだけで数万行を一括処理。自動で個人情報列を判別し、Excelで開いても文字化けしない「BOM付きUTF-8」で即座に安全なCSVを出力します。
           </p>
+        </div>
+      </div>
+
+      <!-- よくある3つの実務シチュエーション -->
+      <div class="space-y-3 pt-4 max-w-4xl mx-auto">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>🏢</span>
+          <span>よくある3つの実務シチュエーション（活用シーン）</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-emerald-100 text-emerald-800 flex items-center justify-center text-[10px]">1</span>
+              <span>外部開発ベンダーへのDB連携</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              障害調査やシステム改修で外部ベンダーにCSVを渡す際、マイナンバー・顧客名・電話番号を一括伏字化してNDA基準をクリア。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-teal-100 text-teal-800 flex items-center justify-center text-[10px]">2</span>
+              <span>テスト・ステージング環境の構築</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              本番データのレコード件数やデータ構造を維持したまま、実データを安全なダミー状態にしてQA・テスト環境へインポート。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-cyan-100 text-cyan-800 flex items-center justify-center text-[10px]">3</span>
+              <span>展示会リード・顧客アンケート共有</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              展示会やセミナーで獲得したリードCSVを他部門や協業先へ共有する際、同意を得ていない個人連絡先を事前マスキング。
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
