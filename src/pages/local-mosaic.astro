@@ -75,10 +75,10 @@ const extraSchemaGraph = [
 >
   <div class="max-w-5xl mx-auto space-y-8">
 
-    <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
-    <div class="space-y-3">
+    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
+    <div class="space-y-2.5">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-semibold shadow-xs">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-semibold shadow-xs">
           <span>完全ローカル処理</span>
           <span>•</span>
           <span>不可逆モザイク＆黒塗り</span>
@@ -97,22 +97,35 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        画像 顔・ナンバー・機密箇所モザイク＆黒塗り｜一括・ブラウザ完結・サーバー送信なし
-      </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-        マニュアル作成用の<strong>社内システム画面キャプチャ（URL・顧客名・APIキー）</strong>や、現場写真の<strong>顔・車のナンバープレート</strong>をドラッグ操作だけで即座に秘匿化。
-        <strong>サーバー送信なし（0バイト）</strong>でブラウザ内Canvasのみで処理し、複数画像への同一レイアウト一括モザイク＆ZIP出力にも対応しています。
-      </p>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            画像 顔・ナンバー・機密箇所モザイク＆黒塗り
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">
+            管理画面スクショや顔・ナンバーをドラッグで不可逆加工。Ctrl+V貼り付け＆複数枚一括適用に対応。
+          </p>
+        </div>
+
+        <!-- ワンクリック検証用サンプルボタン -->
+        <button
+          id="loadSampleMosaicBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+        >
+          <span>🧪</span>
+          <span>模擬キャプチャ2枚で試す</span>
+        </button>
+      </div>
     </div>
 
     <!-- メイン操作パネル -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
 
       <!-- ファイルドロップゾーン -->
       <div
         id="dropZoneMosaic"
-        class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-7 text-center transition bg-slate-50/70 hover:bg-indigo-50/20 cursor-pointer group"
+        class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-6 sm:p-7 text-center transition bg-slate-50/70 hover:bg-indigo-50/20 cursor-pointer group"
       >
         <input
           type="file"
@@ -121,45 +134,27 @@ const extraSchemaGraph = [
           multiple
           class="hidden"
         />
-        <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
+        <div class="flex flex-col items-center gap-2 pointer-events-none">
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform shadow-xs">
             🕶️
           </div>
           <div>
-            <p class="font-bold text-slate-800 text-base sm:text-lg">
-              モザイク・黒塗りしたい画像・スクショをドロップ（複数枚の一括読込に対応）
+            <p class="font-bold text-slate-800 text-sm sm:text-base">
+              モザイク・黒塗りしたい画像をドロップ（複数枚対応・Ctrl+V貼付OK）
             </p>
-            <p class="text-xs text-slate-500 mt-1">
-              またはクリックしてファイルを選択（JPEG / PNG / WebP） • Ctrl+V でクリップボードのスクショ貼り付けも可能
+            <p class="text-xs text-slate-500 mt-0.5">
+              クリックしてファイル選択 (.jpg, .png, .webp) • Win+Shift+S等で撮ったスクショをそのまま貼り付け可能
             </p>
           </div>
-          <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-indigo-800 shadow-xs font-medium">
-              🔒 サーバー送信0バイト（無加工の機密画像を外部へ一切出しません）
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-0.5">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-indigo-800 shadow-xs font-medium">
+              🔒 サーバー送信0バイト（無加工画像は外部に出ません）
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
               📐 全画像への同一位置一括マスク対応
             </span>
           </div>
         </div>
-      </div>
-
-      <!-- ワンクリック検証用：社外秘管理画面サンプル2枚投入バー -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-        <div class="flex items-center gap-2 text-slate-700">
-          <span class="text-base">🧪</span>
-          <span>
-            <strong>今すぐ試す（サンプル付属）：</strong>
-            顔写真・顧客個人情報・本番APIキー・車両ナンバーを含んだ模擬キャプチャ2枚を読み込み、一括モザイク＆黒塗りを体験できます
-          </span>
-        </div>
-        <button
-          id="loadSampleMosaicBtn"
-          type="button"
-          class="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
-        >
-          <span>サンプル画像2枚を読み込む</span>
-        </button>
       </div>
 
       <!-- エディタ＆一括操作ワークスペース（画像読み込み後に表示） -->
@@ -342,47 +337,98 @@ const extraSchemaGraph = [
 
     </div>
 
-    <!-- 【pSEO & 用途別ガイド】ブラウザ内モザイク・黒塗りが選ばれる理由 -->
-    <section class="space-y-4 pt-4">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>🔒</span>
-          <span>社内手順書・バグ報告・現場写真の「うっかり情報漏洩」を防ぐ4つの鉄則</span>
+    <!-- 【ツール直下・最重要】なぜペイントの黒四角ではダメなのか？（納得キラー解説） -->
+    <section class="mt-8 space-y-6 border-t border-slate-200/90 pt-8">
+      <div class="text-center space-y-2 max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 text-xs font-bold shadow-2xs">
+          <span>💡 なぜこのツールが必要なのか？</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          「ペイントで黒く塗ったから安全」が引き起こす、コピペ剥がし事故の恐怖
         </h2>
-        <p class="text-xs text-slate-500 mt-1">機密キャプチャを外部クラウドへアップロードせずに処理すべき理由</p>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          WordやPDFに黒四角を重ねただけのデータが、なぜ社外で文字を盗まれてしまうのか
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">1. 社内管理画面・SaaS手順書のスクリーンショット</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong>URLバーのテナントIDや顧客実名を即座に秘匿：</strong>
-            操作マニュアルやSlack/Teamsへのバグ報告で画面キャプチャを貼る際、ブラウザのURLバーや画面端のログイン名・APIキーから重大なインシデントが発生します。Ctrl+Vで貼り付けて3秒で黒塗りできます。
+      <!-- 2大盲点の解説カード -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+        
+        <!-- 盲点1: 黒四角コピペ剥がし事故 -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-rose-600 font-bold text-sm">
+            <span>🚨 盲点1: 図形を重ねただけの黒塗りは「全選択コピペ」で文字が丸見えになる</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            官公庁や企業で頻発しているのが「黒塗り事故」です。WordやPowerPoint、PDF上で文字の上に黒い四角形オブジェクトを重ねただけの場合、<strong>受け取った相手が「Ctrl+A ➔ コピー」してメモ帳に貼るだけで、黒塗りの下の文字（顧客名や売上）が平文で復元</strong>されてしまいます。<br />
+            本ツールは画像上のピクセルデータ自体を不可逆変換するため、後から剥がすことは物理的に100%不可能です。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">2. 現場写真・物件写真・車両ナンバープレートの保護</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong>通行人の顔や社用車ナンバー・表札をまとめてモザイク：</strong>
-            不動産・建設・フィールドワークの現場報告書やWeb掲載写真で、映り込んだ第三者の顔やナンバープレートをサーバー送信なしで安全にモザイク処理できます。
+        <!-- 盲点2: 無料サイトに管理画面を投げる危険 -->
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+          <div class="flex items-center gap-2 text-amber-700 font-bold text-sm">
+            <span>🚫 盲点2: オンライン画像加工サイトは「無加工の生画像」をクラウドへ送信している</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            一般的なモザイク付与サイトは、加工前のオリジナル画像を一度運営企業のサーバーへ送信して処理しています。<br />
+            社内管理画面のキャプチャには、<strong>顧客の個人情報、本番APIキー、社内専用URL、セッションID</strong>が写り込んでいます。これを外部サーバーへ送信した時点で情報漏洩事故となります。
           </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">3. 定型画面キャプチャの「同じ位置への一括モザイク」</h3>
+      </div>
+
+      <!-- 解決策カード -->
+      <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs text-indigo-950 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-4xl mx-auto shadow-2xs">
+        <div class="space-y-0.5">
+          <strong class="font-bold text-indigo-900 text-sm flex items-center gap-1.5">
+            <span>✓</span>
+            <span>ZeroLeak モザイク＆黒塗りの解決策：</span>
+          </strong>
           <p class="text-slate-600 leading-relaxed">
-            <strong>何十枚もの連番スクショの同じヘッダ・個人情報欄を一発処理：</strong>
-            1枚目で指定したモザイク枠をボタン1つで全画像へ一括コピーできるため、大量のテストエビデンス画像や定型帳票キャプチャのマスキング作業を90%短縮します。
+            画像を外部へ1バイトも送信せず、ブラウザ内Canvasのみでピクセル値を完全破壊。Win+Shift+S等で撮影したスクショをそのまま「Ctrl+V」で貼るだけで、複数枚の画面遷移スクショも同一座標一括マスク＆ZIP保存できます。
           </p>
         </div>
+      </div>
 
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2 shadow-xs">
-          <h3 class="font-bold text-slate-900 text-sm">4. AI復元・逆フィルタリングを防ぐ「完全黒塗り」モード</h3>
-          <p class="text-slate-600 leading-relaxed">
-            <strong>マイナンバー・口座番号・シークレットキーには黒塗りを推奨：</strong>
-            薄いモザイクは超解像AI等で推測されるリスクがありますが、画素値を完全にゼロ（#000000）へ書き換える「完全黒塗り（海苔）」なら100%復元不可能です。
-          </p>
+      <!-- よくある3つの実務シチュエーション -->
+      <div class="space-y-3 pt-4 max-w-4xl mx-auto">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>🏢</span>
+          <span>よくある3つの実務シチュエーション（活用シーン）</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-indigo-100 text-indigo-800 flex items-center justify-center text-[10px]">1</span>
+              <span>社内マニュアル・手順書のスクショ</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              社内ツールの画面キャプチャから、実在の顧客名・売上数値・社内URLをドラッグ操作で不可逆黒塗り。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-teal-100 text-teal-800 flex items-center justify-center text-[10px]">2</span>
+              <span>社外ベンダー・SaaSサポートへの問い合わせ</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              エラー画面を問い合わせフォームやSlackに添付する際、認証トークンや社内IPを隠して安全に送信。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-cyan-100 text-cyan-800 flex items-center justify-center text-[10px]">3</span>
+              <span>現場写真・ブログ写真の顔・ナンバー秘匿</span>
+            </div>
+            <p class="text-slate-500 leading-relaxed">
+              工事現場や店舗写真に映り込んだ一般人の顔や車両ナンバーを一括モザイク化し、プライバシー侵害を防止。
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
