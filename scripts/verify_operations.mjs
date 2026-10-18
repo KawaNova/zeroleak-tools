@@ -1,4 +1,4 @@
-﻿import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Papa from 'papaparse';
@@ -377,6 +377,66 @@ async function testBuiltHtmlAndCspAudit() {
   }
 }
 
+async function testQualityBudgetAndDevIsolation() {
+  console.log('\n========================================');
+  console.log('8. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
+  console.log('========================================');
+
+  // 1. 開発用ファイルの混入チェック (Zero Contamination)
+  const forbiddenFiles = [
+    'mobile-preview.html',
+    'dev/mobile-preview.html',
+    'dev_serve.mjs',
+  ];
+  for (const f of forbiddenFiles) {
+    const full = path.join(root, 'dist', f);
+    if (fs.existsSync(full)) {
+      throw new Error(`Contamination detected! Dev file leaked into production build: dist/${f}`);
+    }
+  }
+  console.log('  ✔ [Dev Isolation] 0 dev simulator files leaked into production dist/: PASSED');
+
+  // 2. 6ツールの品質予算と直感UI要素の監査
+  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer'];
+  for (const slug of toolSlugs) {
+    const fullPath = path.join(root, 'dist', slug, 'index.html');
+    const html = fs.readFileSync(fullPath, 'utf-8');
+
+    // (a) 3コマ図解（WhySection）の存在監査
+    if (!html.includes('ふつうのやり方') || !html.includes('起きる事故') || !html.includes('ZeroLeakなら')) {
+      throw new Error(`Missing 3-panel visual explanation (WhySection) in ${slug}`);
+    }
+
+    // (b) FAQ数とスキーマ同期監査（厳選3〜4問）
+    const schemaFaqMatches = (html.match(/"@type":\s*"Question"/g) || []).length;
+    if (schemaFaqMatches < 3 || schemaFaqMatches > 4) {
+      throw new Error(`FAQ count out of budget in ${slug}: expected 3-4, got ${schemaFaqMatches}`);
+    }
+
+    // (c) 重複語句の品質予算チェック（主張は1箇所で1回。過剰な連呼を検知）
+    const count0byte = (html.match(/0バイト/g) || []).length;
+    const max0byte = 12; // バナー・フッター・モーダル含む全体許容上限
+    if (count0byte > max0byte) {
+      throw new Error(`Quality Budget Exceeded in ${slug}: "0バイト" appeared ${count0byte} times (budget: <= ${max0byte})`);
+    }
+
+    const countLocal = (html.match(/完全ローカル/g) || []).length;
+    const maxLocal = 6;
+    if (countLocal > maxLocal) {
+      throw new Error(`Quality Budget Exceeded in ${slug}: "完全ローカル" appeared ${countLocal} times (budget: <= ${maxLocal})`);
+    }
+
+    console.log(`  ✔ [Quality Budget] ${slug}: 3-Panel Visual OK | FAQ (${schemaFaqMatches} questions) OK | 0-Byte count (${count0byte}/${max0byte}) OK`);
+  }
+
+  // 3. /local-mosaic/ のコピペ剥がし体験デモ（RedactionDemo）監査
+  const mosaicHtml = fs.readFileSync(path.join(root, 'dist', 'local-mosaic', 'index.html'), 'utf-8');
+  if (!mosaicHtml.includes('secureRedactionCanvas') || !mosaicHtml.includes('copyFakeRedactionBtn')) {
+    throw new Error('Interactive RedactionDemo missing in /local-mosaic/');
+  }
+  console.log('  ✔ [Visual Interaction] RedactionDemo (copy-paste leak vs pixel destruction) in /local-mosaic/: PASSED');
+}
+
 async function main() {
   await testAllCsvs();
   await testAllPdfs();
@@ -385,8 +445,9 @@ async function main() {
   await testMosaicPixelEngine();
   await testPromptSanitizerAndRestore();
   await testBuiltHtmlAndCspAudit();
+  await testQualityBudgetAndDevIsolation();
   console.log('\n========================================');
-  console.log('ALL 7 MODULE & ROUTE SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 8 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 
@@ -394,3 +455,4 @@ main().catch((err) => {
   console.error('\n❌ Evaluation test failed:', err);
   process.exit(1);
 });
+

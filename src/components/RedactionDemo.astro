@@ -1,0 +1,124 @@
+---
+// コピペで剥がれる黒塗りと、本ツールの不可逆黒塗りの違いを3秒で体感できるインタラクティブデモ
+---
+
+<div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 sm:p-6 space-y-4 shadow-xs">
+  <div class="flex items-center gap-2">
+    <span class="text-xl">🧪</span>
+    <div>
+      <h3 class="text-sm sm:text-base font-bold text-slate-900">
+        3秒体験：なぜ「図形を重ねただけの黒塗り」は情報漏洩するのか？
+      </h3>
+      <p class="text-xs text-slate-600 mt-0.5">
+        下の2つのボックスをマウスでドラッグして文字選択（または「コピー」ボタンをクリック）してみてください。
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+    
+    <!-- 危険な黒塗り（文字の上に黒図形を乗せただけ） -->
+    <div class="rounded-xl border-2 border-rose-200 bg-white p-4 space-y-3 relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold">
+          🚨 危険：図形を重ねた黒塗り
+        </span>
+        <span class="text-[10px] text-slate-400">PDF注釈 / パワポ黒枠</span>
+      </div>
+
+      <div id="fakeRedactionBox" class="p-3 rounded-lg bg-slate-50 border border-slate-200 font-mono text-xs text-slate-800 space-y-1.5 select-text">
+        <div>氏名: <span class="bg-slate-900 text-slate-900 selection:bg-rose-500 selection:text-white px-1 rounded-xs cursor-text">山田 太郎</span></div>
+        <div>電話: <span class="bg-slate-900 text-slate-900 selection:bg-rose-500 selection:text-white px-1 rounded-xs cursor-text">090-1234-5678</span></div>
+        <div>年収: <span class="bg-slate-900 text-slate-900 selection:bg-rose-500 selection:text-white px-1 rounded-xs cursor-text">8,400,000円</span></div>
+      </div>
+
+      <div class="space-y-1.5">
+        <button
+          type="button"
+          id="copyFakeRedactionBtn"
+          class="w-full py-1.5 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <span>📋</span>
+          <span>この黒塗りをコピーしてみる</span>
+        </button>
+        <p id="fakeCopyResult" class="text-[11px] text-rose-700 font-semibold hidden bg-rose-50/80 p-2 rounded-lg border border-rose-200 leading-tight">
+          💥 事故発生！「山田 太郎 090-1234-5678 8,400,000円」がコピーされました。黒い四角形を上に置いただけのPDFは、テキスト選択で下の文字が丸見えになります。
+        </p>
+      </div>
+    </div>
+
+    <!-- 安全な不可逆黒塗り（ZeroLeak: 画素そのものを破壊） -->
+    <div class="rounded-xl border-2 border-emerald-200 bg-white p-4 space-y-3 relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+          🛡️ 安全：ZeroLeakの不可逆黒塗り
+        </span>
+        <span class="text-[10px] text-emerald-700 font-semibold">画素破壊＋完全フラット化</span>
+      </div>
+
+      <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 font-mono text-xs text-slate-800 space-y-1.5 flex flex-col items-center justify-center min-h-[92px]">
+        <canvas id="secureRedactionCanvas" width="260" height="68" class="rounded border border-slate-300 shadow-2xs max-w-full"></canvas>
+      </div>
+
+      <div class="space-y-1.5">
+        <button
+          type="button"
+          id="copySecureRedactionBtn"
+          class="w-full py-1.5 px-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <span>🛡️</span>
+          <span>この黒塗りをコピーしてみる</span>
+        </button>
+        <p id="secureCopyResult" class="text-[11px] text-emerald-800 font-semibold hidden bg-emerald-50/80 p-2 rounded-lg border border-emerald-200 leading-tight">
+          ✔ 漏洩ゼロ！画像ピクセルそのものが「#000000」で上書きされ、文字データは完全に消滅しています。コピペもレイヤー剥がしも物理的に不可能です。
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Canvas上に不可逆黒塗りのサンプルを描画
+  const canvas = document.getElementById('secureRedactionCanvas') as HTMLCanvasElement | null;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      // 背景
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // テキスト
+      ctx.fillStyle = '#1e293b';
+      ctx.font = '12px ui-monospace, monospace';
+      ctx.fillText('氏名: ', 10, 20);
+      ctx.fillText('電話: ', 10, 40);
+      ctx.fillText('年収: ', 10, 60);
+
+      // 不可逆黒塗り矩形（文字は最初から描画しない or 上から完全な塗り潰し）
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(48, 8, 90, 16);
+      ctx.fillRect(48, 28, 120, 16);
+      ctx.fillRect(48, 48, 100, 16);
+    }
+  }
+
+  // 危険な黒塗りのコピーボタン
+  const copyFakeBtn = document.getElementById('copyFakeRedactionBtn');
+  const fakeCopyResult = document.getElementById('fakeCopyResult');
+  copyFakeBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('山田 太郎 / 090-1234-5678 / 8,400,000円');
+      if (fakeCopyResult) fakeCopyResult.classList.remove('hidden');
+    } catch {
+      if (fakeCopyResult) fakeCopyResult.classList.remove('hidden');
+    }
+  });
+
+  // 安全な黒塗りのコピーボタン
+  const copySecureBtn = document.getElementById('copySecureRedactionBtn');
+  const secureCopyResult = document.getElementById('secureCopyResult');
+  copySecureBtn?.addEventListener('click', () => {
+    if (secureCopyResult) secureCopyResult.classList.remove('hidden');
+  });
+</script>
