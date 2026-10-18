@@ -27,3 +27,19 @@ doctrine:
     rules:
       - TODO.md に完了済みタスク（[x]）を残さない。完了した行は即座に削除する。
       - 完了実績の正本は Git コミットログ（git log）に一任する。
+
+  - id: DOC-05
+    title: 認知負荷最小化と主張の1箇所集約 (Visual-First & Zero-Redundancy)
+    rules:
+      - 同一キーワード（「0バイト」「完全ローカル」等）の過剰な反復を禁止し、主張は1箇所で1回を徹底する。
+      - 各ツール画面では「3コマ図解（①ふつう ②事故 ③ZeroLeakなら）」を優先配置し、直感的に5秒で理解できるUIにする。
+      - SEOおよび納得感のための詳細解説・技術仕様・Enterprise比較は <details> アコーディオン内に格納し、可視テキスト量を抑制する。
+      - ツール定義・メタデータは src/data/tools.ts に一本化し、各ページでの重複ハードコードを排除する（Single Source of Truth）。
+
+  - id: DOC-06
+    title: 開発資産の本番混入ゼロ保証 (Dev/Prod Isolation)
+    rules:
+      - プレビュー用HTML、デバッグスクリプト、検証用シミュレータを public/ 直下に配置してはならない。
+      - 開発用ツールはすべて dev/ 配下に配置し、scripts/dev_serve.mjs（npm run serve:dev）経由でのみ起動・参照する。
+      - 本番成果物（dist/）に開発用ページや不要なリンクが1バイトも含まれないことをビルド検証で担保する。
+
