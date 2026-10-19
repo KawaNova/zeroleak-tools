@@ -1,0 +1,529 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SecuritySpecModal from '../components/SecuritySpecModal.astro';
+import RelatedTools from '../components/RelatedTools.astro';
+import WhySection from '../components/WhySection.astro';
+import Mascot from '../components/Mascot.astro';
+
+// SGO / Googleリッチリザルト用 構造化データ
+const extraSchemaGraph = [
+  {
+    "@type": "HowTo",
+    "name": "未締結の契約書やNDAの新旧条文差分をブラウザで比較・赤入れする3ステップ（サーバー送信なし）",
+    "description": "外部Webツールにアップロードできない未締結契約書や秘密保持契約（NDA）の改定案を、ブラウザ内完結・通信0バイトで文字単位で精密比較し、赤入れレポートを出力する手順。",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "変更前（原文）と変更後（修正案）の条文を入力",
+        "text": "左側に自社提示版（または改定前条文）、右側に先方からの修正版（または改定案）を貼り付けるかテキストファイルをドロップします。"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "文字・単語単位のインライン差分（Diff）を即座に確認",
+        "text": "追加された文言（緑太字）と削除された文言（赤打消し線）が文字単位でハイライトされ、但し書きや条件の改変を一目で見落としなく把握できます。"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "赤入れレポートの確認・印刷/PDF保存",
+        "text": "差分統計を確認し、ブラウザからワンクリックで印刷・PDF保存して社内法務レビューや弁護士確認資料として活用します。"
+      }
+    ]
+  },
+  {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "未締結の契約書やNDAを一般的な無料Diffサイトに貼るとどんなリスクがありますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "一般的な無料Web Diffツールは、入力されたテキストを運営会社のWebサーバーへ送信して差分を算出しています。未公開の事業提携内容、損害賠償上限、違約金、取引金額などが第三者サーバーのログやキャッシュに平文で記録されるため、秘密保持契約（NDA）の義務違反や情報漏洩インシデントに直結します。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "ZeroLeak Toolsの契約書Diff比較はなぜ外部送信されないのですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "本ツールはMyers Diffアルゴリズムを純粋なTypeScript/JavaScriptでブラウザ内に実装しており、すべての差分計算がお使いのPC/スマホのブラウザ内部（メモリ上）だけで完結します。F12の開発者ツール Networkタブをご確認いただければ、通信が1バイトも発生しない（サーバー送信0バイト）ことをいつでも検証可能です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "句読点や短い但し書きの変更も検出できますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。行単位の大まかな比較だけでなく、変更があった行の内部を1文字単位・単語単位で精密にインライン比較（Char/Word Diff）します。「〜を除く」「ただし〜とする」といった契約書の法的効果を左右する微細な加筆・削除も見落としません。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "比較した差分結果をPDFや紙で印刷して法務・弁護士に見せられますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。「🖨️ 赤入れレポートを印刷・PDF保存」ボタンを押すことで、不要な入力フォームやUIを除去し、変更前後の対比と赤入れハイライトのみを綺麗にレイアウトした印刷用スタイルでPDF保存・印刷が可能です。"
+        }
+      }
+    ]
+  }
+];
+---
+
+<Layout
+  title="契約書・NDA 新旧条文Diff差分比較＆赤入れ | ブラウザ完結・サーバー送信なし"
+  description="未締結契約書やNDAの変更点をブラウザ内で文字単位で精密比較。外部サーバー送信0バイトで秘密保持義務を完全防衛。赤入れPDF・印刷対応。"
+  canonicalPath="/contract-diff/"
+  extraSchemaGraph={extraSchemaGraph}
+>
+  <div class="max-w-5xl mx-auto space-y-8">
+    
+    <!-- ツールヘッダー -->
+    <div class="space-y-2.5">
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        <button
+          type="button"
+          onclick="window.openSecurityModal && window.openSecurityModal()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+        >
+          <span>🏢</span>
+          <span>社内利用・情シス申請用仕様書</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-start gap-3">
+        <div>
+          <div class="flex w-full items-center gap-4 sm:gap-6">
+            <div class="min-w-0 flex-1 space-y-1.5">
+              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                契約書・NDA 新旧条文Diff比較 ＆ 赤入れレポート
+              </h1>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                未締結の秘密保持契約・業務委託契約の新旧差分をブラウザ内だけで文字単位で比較。外部サーバー送信0バイトでNDA遵守。
+              </p>
+            </div>
+            <Mascot name="tool-diff" fallback="⚖️" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+          </div>
+        </div>
+
+        <!-- テスト用サンプル投入ボタン -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            id="loadSampleNdaBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-900 border border-violet-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+          >
+            <span>🧪</span>
+            <span>サンプルNDA条文を投入して試す</span>
+          </button>
+          <button
+            id="clearAllBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer shrink-0"
+          >
+            <span>🗑️</span>
+            <span>クリア</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ネットワーク遮断・免責バナー -->
+    <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
+      <span class="text-base shrink-0">🛡️</span>
+      <div class="space-y-0.5">
+        <div class="font-bold">サーバー送信0バイト保証 ＆ 法務確認免責事項</div>
+        <p class="text-amber-800">
+          入力された契約条文はブラウザのメモリ内でのみ解析され、外部サーバーへ送信されることは一切ありません。
+          なお、本ツールは機械的なテキスト差分表示を行うものであり、契約条項の法的有効性や意図しない影響については、<strong>必ず弁護士・自社法務部門による目視確認</strong>を行ってください。
+        </p>
+      </div>
+    </div>
+
+    <!-- メイン作業エリア：左右2ペイン入力 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      
+      <!-- 左ペイン：変更前（原文 / 自社提示版） -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between">
+          <label for="originalText" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+            <span>変更前（原文 / 自社提示版）</span>
+          </label>
+          <label class="text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer inline-flex items-center gap-1 bg-slate-50 hover:bg-slate-100 px-2 py-1 rounded border border-slate-200">
+            <span>📁 ファイル読込</span>
+            <input type="file" id="originalFileInput" accept=".txt,.md,.json" class="hidden" />
+          </label>
+        </div>
+        <textarea
+          id="originalText"
+          rows="10"
+          placeholder="変更前の契約条文を貼り付けるか、テキストファイルを読み込んでください..."
+          class="w-full text-xs sm:text-sm font-mono text-slate-800 bg-slate-50/50 border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white resize-y transition"
+        ></textarea>
+        <div class="flex justify-between items-center text-[11px] text-slate-600">
+          <span id="originalCharCount">0 文字 / 0 行</span>
+          <span class="text-slate-600">ドラッグ＆ドロップ対応</span>
+        </div>
+      </div>
+
+      <!-- 右ペイン：変更後（修正版 / 先方修正版） -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between">
+          <label for="modifiedText" class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+            <span>変更後（修正版 / 先方修正案）</span>
+          </label>
+          <label class="text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer inline-flex items-center gap-1 bg-slate-50 hover:bg-slate-100 px-2 py-1 rounded border border-slate-200">
+            <span>📁 ファイル読込</span>
+            <input type="file" id="modifiedFileInput" accept=".txt,.md,.json" class="hidden" />
+          </label>
+        </div>
+        <textarea
+          id="modifiedText"
+          rows="10"
+          placeholder="先方から戻ってきた修正案や改定条文を貼り付けてください..."
+          class="w-full text-xs sm:text-sm font-mono text-slate-800 bg-slate-50/50 border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white resize-y transition"
+        ></textarea>
+        <div class="flex justify-between items-center text-[11px] text-slate-600">
+          <span id="modifiedCharCount">0 文字 / 0 行</span>
+          <span class="text-slate-600">ドラッグ＆ドロップ対応</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 差分比較結果エリア -->
+    <div id="diffResultSection" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+      
+      <!-- 結果ヘッダー ＆ 統計サマリー -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span>📊 差分解析・赤入れプレビュー</span>
+            <span id="diffStatusBadge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+              未入力
+            </span>
+          </h2>
+          <div id="diffStats" class="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 mt-1">
+            <span>差分をリアルタイム計算中...</span>
+          </div>
+        </div>
+
+        <!-- 印刷・PDF保存 / コピー -->
+        <div class="flex items-center gap-2">
+          <button
+            id="printReportBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+          >
+            <span>🖨️</span>
+            <span>赤入れレポート印刷・PDF保存</span>
+          </button>
+          <button
+            id="copyDiffBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer"
+          >
+            <span>📋</span>
+            <span>差分要約をコピー</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 凡例 -->
+      <div class="flex items-center gap-4 text-xs font-medium text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+        <span class="font-bold text-slate-700">凡例:</span>
+        <span class="inline-flex items-center gap-1 text-rose-700">
+          <span class="w-3 h-3 rounded bg-rose-100 border border-rose-300 inline-block"></span>
+          <span>赤打消し = 削除された条文・文言</span>
+        </span>
+        <span class="inline-flex items-center gap-1 text-emerald-700">
+          <span class="w-3 h-3 rounded bg-emerald-100 border border-emerald-300 inline-block"></span>
+          <span>緑太字 = 追加された条文・文言</span>
+        </span>
+        <span class="inline-flex items-center gap-1 text-slate-500">
+          <span class="w-3 h-3 rounded bg-white border border-slate-200 inline-block"></span>
+          <span>白背景 = 変更なし</span>
+        </span>
+      </div>
+
+      <!-- 差分テーブルコンテナ -->
+      <div id="diffOutputContainer" class="diff-print-target overflow-x-auto rounded-xl border border-slate-200 font-mono text-xs sm:text-sm bg-slate-50/30">
+        <div class="p-8 text-center text-slate-600 space-y-1">
+          <p class="text-sm font-semibold">左右のテキストエリアに契約条文を入力してください</p>
+          <p class="text-xs">上の「🧪 サンプルNDA条文を投入して試す」ボタンで今すぐ動作をご確認いただけます</p>
+        </div>
+      </div>
+
+      <!-- ダウンロード・提出前アラート -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 flex items-start gap-2">
+        <span class="text-sm">⚠️</span>
+        <p>
+          本ツールは文字一致による客観的差分抽出を行います。契約書の重要語句（善管注意義務、違約金条項、準拠法、専属管轄等）の法的ニュアンスについては、専門家への相談または自社法務の承認を経てからご締結ください。
+        </p>
+      </div>
+
+    </div>
+
+    <!-- なぜ無料・なぜ安全なのか（WhySection） -->
+    <WhySection slug="contract-diff" />
+
+    <!-- 相互回遊デッキ -->
+    <RelatedTools currentPath="/contract-diff/" />
+
+    <!-- 情シス申請用仕様書モーダル -->
+    <SecuritySpecModal />
+
+  </div>
+</Layout>
+
+<style>
+  @media print {
+    /* 印刷時はDiff結果だけを綺麗に出力 */
+    body * {
+      visibility: hidden;
+    }
+    .diff-print-target, .diff-print-target * {
+      visibility: visible;
+    }
+    .diff-print-target {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border: none;
+      background: white;
+    }
+  }
+</style>
+
+<script>
+  import { computeDiff, generateSampleContracts, formatDiffSummary } from '../utils/contract-diff';
+
+  const originalTextArea = document.getElementById('originalText') as HTMLTextAreaElement;
+  const modifiedTextArea = document.getElementById('modifiedText') as HTMLTextAreaElement;
+  const originalCharCount = document.getElementById('originalCharCount') as HTMLElement;
+  const modifiedCharCount = document.getElementById('modifiedCharCount') as HTMLElement;
+  const diffOutputContainer = document.getElementById('diffOutputContainer') as HTMLElement;
+  const diffStats = document.getElementById('diffStats') as HTMLElement;
+  const diffStatusBadge = document.getElementById('diffStatusBadge') as HTMLElement;
+  const loadSampleNdaBtn = document.getElementById('loadSampleNdaBtn') as HTMLButtonElement;
+  const clearAllBtn = document.getElementById('clearAllBtn') as HTMLButtonElement;
+  const printReportBtn = document.getElementById('printReportBtn') as HTMLButtonElement;
+  const copyDiffBtn = document.getElementById('copyDiffBtn') as HTMLButtonElement;
+  const originalFileInput = document.getElementById('originalFileInput') as HTMLInputElement;
+  const modifiedFileInput = document.getElementById('modifiedFileInput') as HTMLInputElement;
+
+  let currentDiffResult: ReturnType<typeof computeDiff> | null = null;
+
+  function updateCounts() {
+    const origText = originalTextArea.value;
+    const modText = modifiedTextArea.value;
+
+    const origLines = origText ? origText.split('\n').length : 0;
+    const modLines = modText ? modText.split('\n').length : 0;
+
+    originalCharCount.textContent = `${origText.length.toLocaleString()} 文字 / ${origLines.toLocaleString()} 行`;
+    modifiedCharCount.textContent = `${modText.length.toLocaleString()} 文字 / ${modLines.toLocaleString()} 行`;
+  }
+
+  function renderDiff() {
+    updateCounts();
+    const origText = originalTextArea.value;
+    const modText = modifiedTextArea.value;
+
+    if (!origText && !modText) {
+      diffOutputContainer.innerHTML = `
+        <div class="p-8 text-center text-slate-400 space-y-1">
+          <p class="text-sm font-semibold">左右のテキストエリアに契約条文を入力してください</p>
+          <p class="text-xs">上の「🧪 サンプルNDA条文を投入して試す」ボタンで今すぐ動作をご確認いただけます</p>
+        </div>
+      `;
+      diffStatusBadge.className = 'text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600';
+      diffStatusBadge.textContent = '未入力';
+      diffStats.innerHTML = '<span>テキストを入力すると即座に差分が表示されます</span>';
+      currentDiffResult = null;
+      return;
+    }
+
+    // Myers Diff 計算
+    const diff = computeDiff(origText, modText);
+    currentDiffResult = diff;
+
+    // 統計バッジ更新
+    if (diff.stats.changedLines === 0 && diff.stats.addedLines === 0 && diff.stats.deletedLines === 0) {
+      diffStatusBadge.className = 'text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+      diffStatusBadge.textContent = '完全一致（差分なし）';
+    } else {
+      diffStatusBadge.className = 'text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800';
+      diffStatusBadge.textContent = `差分あり（${diff.stats.changedLines + diff.stats.addedLines + diff.stats.deletedLines}箇所）`;
+    }
+
+    diffStats.innerHTML = `
+      <span class="inline-flex items-center gap-1 text-slate-700 font-bold">全 ${diff.stats.totalLines} 行</span>
+      <span class="text-slate-300">|</span>
+      <span class="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+        ➖ 削除 ${diff.stats.deletedLines} 行 (${diff.stats.deletedChars} 文字)
+      </span>
+      <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+        ➕ 追加 ${diff.stats.addedLines} 行 (${diff.stats.addedChars} 文字)
+      </span>
+      <span class="inline-flex items-center gap-1 text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+        ✏️ 変更 ${diff.stats.changedLines} 行
+      </span>
+    `;
+
+    // 差分テーブル生成
+    let tableHtml = `
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-slate-100/80 text-slate-600 text-left text-[11px] font-bold border-b border-slate-200 select-none">
+            <th class="py-1.5 px-2 w-12 text-center border-r border-slate-200">旧行</th>
+            <th class="py-1.5 px-2 w-12 text-center border-r border-slate-200">新行</th>
+            <th class="py-1.5 px-2 w-8 text-center border-r border-slate-200">区分</th>
+            <th class="py-1.5 px-3">条文内容（インライン赤入れハイライト）</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+    `;
+
+    for (const line of diff.lines) {
+      let rowBg = 'bg-white';
+      let tagBg = 'text-slate-400';
+      let tagSymbol = ' ';
+      let contentHtml = '';
+
+      if (line.type === 'delete') {
+        rowBg = 'bg-rose-50/70 hover:bg-rose-50';
+        tagBg = 'text-rose-700 font-bold';
+        tagSymbol = '-';
+        contentHtml = `<span class="line-through text-rose-900 bg-rose-100/80 px-1 rounded">${escapeHtml(line.text)}</span>`;
+      } else if (line.type === 'add') {
+        rowBg = 'bg-emerald-50/70 hover:bg-emerald-50';
+        tagBg = 'text-emerald-700 font-bold';
+        tagSymbol = '+';
+        contentHtml = `<span class="font-bold text-emerald-950 bg-emerald-100/90 px-1 rounded">${escapeHtml(line.text)}</span>`;
+      } else if (line.type === 'change') {
+        rowBg = 'bg-amber-50/40 hover:bg-amber-50/70';
+        tagBg = 'text-amber-700 font-bold';
+        tagSymbol = '•';
+        
+        // インラインチャンクを組み立て
+        contentHtml = (line.inlineChunks || []).map(chunk => {
+          if (chunk.type === 'delete') {
+            return `<span class="line-through text-rose-800 bg-rose-200/90 font-bold px-0.5 rounded">${escapeHtml(chunk.text)}</span>`;
+          } else if (chunk.type === 'add') {
+            return `<span class="text-emerald-900 bg-emerald-200/90 font-bold px-0.5 rounded underline decoration-emerald-600 decoration-2">${escapeHtml(chunk.text)}</span>`;
+          }
+          return `<span class="text-slate-700">${escapeHtml(chunk.text)}</span>`;
+        }).join('');
+      } else {
+        // unchanged
+        tagSymbol = ' ';
+        contentHtml = `<span class="text-slate-700">${escapeHtml(line.text)}</span>`;
+      }
+
+      tableHtml += `
+        <tr class="${rowBg} transition-colors">
+          <td class="py-1 px-2 text-center text-slate-600 text-[11px] select-none border-r border-slate-200/70">${line.origLineNum ?? ''}</td>
+          <td class="py-1 px-2 text-center text-slate-600 text-[11px] select-none border-r border-slate-200/70">${line.modLineNum ?? ''}</td>
+          <td class="py-1 px-1 text-center ${tagBg} select-none border-r border-slate-200/70">${tagSymbol}</td>
+          <td class="py-1 px-3 whitespace-pre-wrap break-all leading-relaxed">${contentHtml}</td>
+        </tr>
+      `;
+    }
+
+    tableHtml += `</tbody></table>`;
+    diffOutputContainer.innerHTML = tableHtml;
+  }
+
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // イベントリスナー
+  originalTextArea.addEventListener('input', renderDiff);
+  modifiedTextArea.addEventListener('input', renderDiff);
+
+  // サンプルNDA投入
+  loadSampleNdaBtn.addEventListener('click', () => {
+    const sample = generateSampleContracts();
+    originalTextArea.value = sample.original;
+    modifiedTextArea.value = sample.modified;
+    renderDiff();
+  });
+
+  // クリア
+  clearAllBtn.addEventListener('click', () => {
+    originalTextArea.value = '';
+    modifiedTextArea.value = '';
+    renderDiff();
+  });
+
+  // 印刷
+  printReportBtn.addEventListener('click', () => {
+    if (!currentDiffResult) {
+      alert('条文を入力して差分を生成してから印刷してください。');
+      return;
+    }
+    window.print();
+  });
+
+  // コピー
+  copyDiffBtn.addEventListener('click', () => {
+    if (!currentDiffResult) {
+      alert('差分データがありません。');
+      return;
+    }
+    const summary = formatDiffSummary(currentDiffResult);
+    navigator.clipboard.writeText(summary).then(() => {
+      const origText = copyDiffBtn.innerHTML;
+      copyDiffBtn.innerHTML = '<span>✅</span><span>コピー完了!</span>';
+      setTimeout(() => {
+        copyDiffBtn.innerHTML = origText;
+      }, 2000);
+    });
+  });
+
+  // ファイル読込ヘルパー
+  function handleFileRead(file: File, targetTextArea: HTMLTextAreaElement) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      targetTextArea.value = e.target?.result as string;
+      renderDiff();
+    };
+    reader.readAsText(file);
+  }
+
+  originalFileInput.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) handleFileRead(file, originalTextArea);
+  });
+
+  modifiedFileInput.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) handleFileRead(file, modifiedTextArea);
+  });
+
+  // ドラッグ＆ドロップ
+  [originalTextArea, modifiedTextArea].forEach(textarea => {
+    textarea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      textarea.classList.add('border-violet-500', 'bg-violet-50/20');
+    });
+    textarea.addEventListener('dragleave', () => {
+      textarea.classList.remove('border-violet-500', 'bg-violet-50/20');
+    });
+    textarea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      textarea.classList.remove('border-violet-500', 'bg-violet-50/20');
+      const file = e.dataTransfer?.files[0];
+      if (file) handleFileRead(file, textarea);
+    });
+  });
+</script>

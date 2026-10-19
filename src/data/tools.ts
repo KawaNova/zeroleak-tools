@@ -29,6 +29,22 @@ export interface Situation {
   text: string;
 }
 
+export type CategoryId = 'all' | 'id_privacy' | 'document_legal' | 'dev_security';
+
+export interface ToolCategory {
+  id: CategoryId;
+  label: string;
+  icon: string;
+  description: string;
+}
+
+export const toolCategories: ToolCategory[] = [
+  { id: 'all', label: '全ツール', icon: '🌟', description: 'ブラウザ完結・外部送信0バイトのプライバシー保護ツール群' },
+  { id: 'id_privacy', label: '本人確認・個人情報', icon: '🪪', description: '給与明細、マイナンバーCSV、写真の位置情報保護' },
+  { id: 'document_legal', label: 'PDF・契約書・法務', icon: '📑', description: '機密PDFの完全黒塗り、パスワード解除、契約書Diff' },
+  { id: 'dev_security', label: '開発者・ITセキュリティ', icon: '💻', description: 'HAR/エラーログ/.envマスク、AIプロンプト仮名化、画面モザイク' },
+];
+
 export interface Tool {
   slug: string;
   href: string;
@@ -36,6 +52,7 @@ export interface Tool {
   tagline: string;
   icon: string;
   image: string; // illustrations 内のファイル名（拡張子なし）
+  category: 'id_privacy' | 'document_legal' | 'dev_security';
   // Tailwind はソース内の完全なクラス名を走査するため、ここで文字列として保持する
   accent: {
     text: string;
@@ -50,6 +67,7 @@ export interface Tool {
   intent: string; // トップの「何をしたい？」チップ文言
 }
 
+
 export const tools: Tool[] = [
   {
     slug: 'pdf-unlock',
@@ -58,6 +76,7 @@ export const tools: Tool[] = [
     tagline: '住宅ローン・e-Tax用。作成者名も消去',
     icon: '🔓',
     image: 'tool-pdf',
+    category: 'id_privacy',
     accent: { text: 'text-teal-700', border: 'hover:border-teal-500', soft: 'bg-teal-50', ring: 'border-teal-200' },
     intent: '給与明細を銀行・税務署に出したい',
     panels: [
@@ -91,6 +110,7 @@ export const tools: Tool[] = [
     tagline: '氏名・マイナンバー・カード番号を自動検出',
     icon: '📊',
     image: 'tool-csv',
+    category: 'id_privacy',
     accent: { text: 'text-emerald-700', border: 'hover:border-emerald-500', soft: 'bg-emerald-50', ring: 'border-emerald-200' },
     intent: 'CSVをベンダーやテスト環境に渡したい',
     panels: [
@@ -124,6 +144,7 @@ export const tools: Tool[] = [
     tagline: '自宅・場所の特定を防止。画質は劣化なし',
     icon: '📍',
     image: 'tool-exif',
+    category: 'id_privacy',
     accent: { text: 'text-cyan-700', border: 'hover:border-cyan-600', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: '写真を投稿・出品・提出したい',
     panels: [
@@ -162,6 +183,7 @@ export const tools: Tool[] = [
     tagline: '画面スクショ・顔・ナンバーを不可逆に加工',
     icon: '🕶️',
     image: 'tool-mosaic',
+    category: 'dev_security',
     accent: { text: 'text-indigo-700', border: 'hover:border-indigo-500', soft: 'bg-indigo-50', ring: 'border-indigo-200' },
     intent: 'スクショや写真を隠して共有したい',
     panels: [
@@ -195,7 +217,9 @@ export const tools: Tool[] = [
     tagline: '会議・1on1の録音をブラウザ内でテキスト化',
     icon: '🎙️',
     image: 'tool-whisper',
+    category: 'document_legal',
     accent: { text: 'text-purple-700', border: 'hover:border-purple-500', soft: 'bg-purple-50', ring: 'border-purple-200' },
+
     intent: '会議・面談の録音を文字にしたい',
     panels: [
       { icon: '🎙️', label: 'ふつうのやり方', text: '会議や1on1の録音を、クラウドの文字起こしサービスへアップロード' },
@@ -233,6 +257,7 @@ export const tools: Tool[] = [
     tagline: 'ChatGPT送信前に仮名化。回答は実名に復元',
     icon: '🤖',
     image: 'tool-ai',
+    category: 'dev_security',
     accent: { text: 'text-amber-700', border: 'hover:border-amber-500', soft: 'bg-amber-50', ring: 'border-amber-200' },
     intent: 'AIに相談する前に社名・人名を隠したい',
     panels: [
@@ -266,6 +291,7 @@ export const tools: Tool[] = [
     tagline: 'Cookie・Bearer・APIキーを外部提出前に一括無害化',
     icon: '🛡️',
     image: 'tool-log',
+    category: 'dev_security',
     accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'ベンダーにHAR・エラーログを渡したい',
     panels: [
@@ -299,6 +325,7 @@ export const tools: Tool[] = [
     tagline: 'コピペ復元不可。テキスト層を物理消去して再構築',
     icon: '⬛',
     image: 'tool-pdf-redaction',
+    category: 'document_legal',
     accent: { text: 'text-slate-900', border: 'hover:border-slate-800', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: 'PDFの文字・金額を完全に墨消ししたい',
     panels: [
@@ -324,6 +351,40 @@ export const tools: Tool[] = [
       { icon: '👥', who: '採用・人事書類', text: '面接官へ渡す履歴書からマイナンバーや家族情報を完全墨消し' },
     ],
     related: ['pdf-unlock', 'local-mosaic'],
+  },
+  {
+    slug: 'contract-diff',
+    href: '/contract-diff/',
+    name: '契約書・NDA 秘密保持Diff比較',
+    tagline: '未締結契約・NDAの新旧差分をブラウザ内比較。赤入れPDF出力',
+    icon: '⚖️',
+    image: 'tool-diff',
+    category: 'document_legal',
+    accent: { text: 'text-violet-700', border: 'hover:border-violet-500', soft: 'bg-violet-50', ring: 'border-violet-200' },
+    intent: '未締結の契約書やNDAの差分を安全に比べたい',
+    panels: [
+      { icon: '📑', label: 'ふつうのやり方', text: '未締結の契約書やNDAを、無料のWebテキスト差分・Diffサイトに貼り付けて比較する' },
+      { icon: '🚨', label: '起きる事故', text: '未公開の協業内容や損害賠償上限が海外サーバーへ送信・ログ保存され、NDA違反・情報漏洩インシデントに' },
+      { icon: '🛡️', label: 'ZeroLeakなら', text: 'ブラウザ内（WASM/JS）だけで文字・行単位の高速Myers Diff。通信0バイトで赤入れPDFも生成' },
+    ],
+    blindSpots: [
+      {
+        icon: '⚖️',
+        title: '未締結の契約書・NDAの外部サイト送信は即座に「秘密保持義務違反」となる',
+        html: '一般的な無料Web Diffツールは、入力されたテキストをサーバーへ送信して差分計算します。<strong>未公開の事業提携条項、取引金額、損害賠償上限、違約金規定</strong>が第三者サーバーのアクセスログやキャッシュに残るため、厳格なNDA（秘密保持契約）に違反します。',
+      },
+      {
+        icon: '🔍',
+        title: '目視確認の見落としリスク：句読点ひとつ、但し書き1行の追加で法的責任が激変する',
+        html: '契約書の改定では「〜を除く」「ただし〜とする」といった短い文言の追加・削除で法的リスクが180度反転します。本ツールは<strong>単語・文字レベルの精密インラインハイライト</strong>により、微小な改変も一瞬で見落としなく可視化します。',
+      },
+    ],
+    situations: [
+      { icon: '🤝', who: 'NDA・事業提携契約', text: '先方から差し戻された修正版と自社提示版の差分を即座に突合' },
+      { icon: '📜', who: '利用規約・約款の改定', text: '新旧約款の変更箇所を文字単位で洗い出し社内法務チェック' },
+      { icon: '📑', who: '弁護士・役員レビュー', text: '変更箇所が赤入れされたPDFを生成しローカルでそのまま印刷・共有' },
+    ],
+    related: ['pdf-redaction', 'ai-prompt-sanitizer'],
   },
 ];
 

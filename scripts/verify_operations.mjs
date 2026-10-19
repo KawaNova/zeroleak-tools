@@ -33,6 +33,11 @@ import {
   analyzePdfRisks,
   generateSampleConfidentialPdf,
 } from '../src/utils/pdf-redaction.ts';
+import {
+  computeDiff,
+  generateSampleContracts,
+  formatDiffSummary,
+} from '../src/utils/contract-diff.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -431,13 +436,58 @@ async function testPdfRedactionEngine() {
   console.log('  ✔ [Test 8.1] PDF Text Layer Risk Analysis & Coordinate Mapping: PASSED');
 }
 
+async function testContractDiffEngine() {
+  console.log('\n========================================');
+  console.log('9. Contract & NDA Myers Diff Engine (/contract-diff/)');
+  console.log('========================================');
+
+  // Test 9.1: サンプルNDAの生成とMyers Diff比較
+  const samples = generateSampleContracts();
+  if (!samples.original.includes('秘密保持契約書') || !samples.modified.includes('秘密保持契約書')) {
+    throw new Error('Sample contracts generation failed');
+  }
+
+  const diffResult = computeDiff(samples.original, samples.modified);
+  console.log(`  Diff Stats: Total ${diffResult.stats.totalLines} lines | Changed: ${diffResult.stats.changedLines} | Added: ${diffResult.stats.addedLines} | Deleted: ${diffResult.stats.deletedLines}`);
+
+  if (diffResult.stats.changedLines === 0 && diffResult.stats.addedLines === 0 && diffResult.stats.deletedLines === 0) {
+    throw new Error('Myers Diff failed to detect changes in sample contracts');
+  }
+
+  // 損害賠償上限や期間変更などの変更行のインラインハイライト確認
+  const changeLines = diffResult.lines.filter((l) => l.type === 'change');
+  if (changeLines.length === 0) {
+    throw new Error('Expected at least one modified line with inline character diff');
+  }
+
+  const hasInlineDiff = changeLines.some((l) => l.inlineChunks && l.inlineChunks.length > 1);
+  if (!hasInlineDiff) {
+    throw new Error('Character-level inline diff chunks not generated');
+  }
+
+  // 要約フォーマット確認
+  const summary = formatDiffSummary(diffResult);
+  if (!summary.includes('契約書・NDA 差分比較サマリー') || !summary.includes('変更箇所一覧')) {
+    throw new Error(`Diff summary formatting failed`);
+  }
+
+  console.log('  Sample Inline Diff Line Preview:');
+  for (const cl of changeLines.slice(0, 2)) {
+    const chunkDesc = (cl.inlineChunks || [])
+      .map((c) => (c.type === 'add' ? `[+${c.text}]` : c.type === 'delete' ? `[-${c.text}]` : c.text))
+      .join('');
+    console.log(`    Line ${cl.origLineNum}->${cl.modLineNum}: ${chunkDesc}`);
+  }
+  console.log('  ✔ [Test 9.1] Myers Diff Line & Inline Character Diff: PASSED');
+}
+
 async function testBuiltHtmlAndCspAudit() {
   console.log('\n========================================');
-  console.log('9. Built HTML / CSP / SEO Keyword Audit (All 10 Routes)');
+  console.log('10. Built HTML / CSP / SEO Keyword Audit (All 11 Routes)');
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
@@ -446,6 +496,7 @@ async function testBuiltHtmlAndCspAudit() {
     { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'log-masking/index.html', mustInclude: ['HARファイル', '機密情報', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-redaction/index.html', mustInclude: ['完全黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール', '完全免責'] },
+    { path: 'contract-diff/index.html', mustInclude: ['契約書・NDA', 'Diff', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 
@@ -474,7 +525,7 @@ async function testBuiltHtmlAndCspAudit() {
 
 async function testQualityBudgetAndDevIsolation() {
   console.log('\n========================================');
-  console.log('10. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
+  console.log('11. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
   console.log('========================================');
 
   // 1. 開発用ファイルの混入チェック (Zero Contamination)
@@ -491,8 +542,8 @@ async function testQualityBudgetAndDevIsolation() {
   }
   console.log('  ✔ [Dev Isolation] 0 dev simulator files leaked into production dist/: PASSED');
 
-  // 2. 8ツールの品質予算と直感UI要素の監査
-  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking', 'pdf-redaction'];
+  // 2. 9ツールの品質予算と直感UI要素の監査
+  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking', 'pdf-redaction', 'contract-diff'];
   for (const slug of toolSlugs) {
     const fullPath = path.join(root, 'dist', slug, 'index.html');
     const html = fs.readFileSync(fullPath, 'utf-8');
@@ -543,10 +594,11 @@ async function main() {
   await testPromptSanitizerAndRestore();
   await testLogMaskingEngine();
   await testPdfRedactionEngine();
+  await testContractDiffEngine();
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
   console.log('\n========================================');
-  console.log('ALL 10 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 11 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 

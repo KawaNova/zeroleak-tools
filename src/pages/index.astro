@@ -1,12 +1,12 @@
-﻿---
+---
 import Layout from '../layouts/Layout.astro';
 import Mascot from '../components/Mascot.astro';
-import { tools } from '../data/tools';
+import { tools, toolCategories } from '../data/tools';
 ---
 
 <Layout
   title="機密ファイル安心処理ツール群｜外部送信なし・ブラウザ完結 - ZeroLeak Tools"
-  description="登録不要・完全無料。給与明細PDFパスワード解除、個人情報CSV伏字化、写真EXIF削除など、ファイルを外部サーバーへ一切送信せずにお使いの端末内だけで高速安全に処理します。"
+  description="登録不要・完全無料。給与明細PDFパスワード解除、契約書Diff比較、不可逆墨消し、個人情報CSV伏字化など、ファイルを外部サーバーへ一切送信せずにお使いの端末内だけで高速安全に処理します。"
   canonicalPath="/"
 >
   <div class="space-y-10 sm:space-y-14 py-2 sm:py-4">
@@ -19,7 +19,7 @@ import { tools } from '../data/tools';
           <span class="text-emerald-600">安心のローカル業務ツール</span>
         </h1>
         <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-          給与明細・顧客データ・社外秘ファイルを、アップロードせずブラウザ内だけで処理。登録不要・無料です。
+          給与明細・契約書・顧客データ・社外秘ログを、アップロードせずブラウザ内だけで処理。登録不要・無料です。
         </p>
         <a
           href="#tools"
@@ -60,13 +60,52 @@ import { tools } from '../data/tools';
       </ul>
     </section>
 
-    <!-- ツール一覧：イラスト付きカード（説明は1行のみ） -->
-    <section id="tools" class="max-w-6xl mx-auto w-full space-y-4 scroll-mt-20">
-      <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 text-left px-2 sm:px-0">ツール一覧</h2>
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+    <!-- ツール一覧：3大カテゴリ分類タブ ＆ カードグリッド -->
+    <section id="tools" class="max-w-6xl mx-auto w-full space-y-5 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 px-2 sm:px-0">
+        <div>
+          <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 text-left">ツール一覧</h2>
+          <p id="categoryDescription" class="text-xs sm:text-sm text-slate-500 mt-1">
+            全9ツール・すべてブラウザ内完結（外部サーバー送信0バイト保証）
+          </p>
+        </div>
+      </div>
+
+      <!-- 3大カテゴリ分類タブUI -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 px-2 sm:px-0 no-scrollbar" role="tablist">
+        {
+          toolCategories.map((cat, idx) => {
+            const count = cat.id === 'all' ? tools.length : tools.filter(t => t.category === cat.id).length;
+            const isActive = idx === 0;
+            return (
+              <button
+                type="button"
+                role="tab"
+                data-category-target={cat.id}
+                data-description={cat.description}
+                aria-selected={isActive ? 'true' : 'false'}
+                class={`category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs ${
+                  isActive
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200'
+                }`}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+                <span class={`text-[11px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-slate-700 text-slate-200' : 'bg-slate-100 text-slate-500'}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })
+        }
+      </div>
+
+      <!-- カード一覧 -->
+      <ul id="toolCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {
           tools.map((t) => (
-            <li>
+            <li class="tool-card-item" data-category={t.category}>
               <a
                 href={t.href}
                 class={`group flex flex-row sm:flex-col h-full rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-150 ${t.accent.border}`}
@@ -117,3 +156,46 @@ import { tools } from '../data/tools';
 
   </div>
 </Layout>
+
+<script>
+  const tabButtons = document.querySelectorAll<HTMLButtonElement>('.category-tab-btn');
+  const cardItems = document.querySelectorAll<HTMLElement>('.tool-card-item');
+  const descriptionEl = document.getElementById('categoryDescription');
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetCat = btn.getAttribute('data-category-target');
+      const desc = btn.getAttribute('data-description');
+
+      // タブ状態切り替え
+      tabButtons.forEach((b) => {
+        const isCurrent = b === btn;
+        b.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        if (isCurrent) {
+          b.className = 'category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs bg-slate-900 text-white';
+          const badge = b.querySelector('span:last-child');
+          if (badge) badge.className = 'text-[11px] px-1.5 py-0.2 rounded-full bg-slate-700 text-slate-200';
+        } else {
+          b.className = 'category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200';
+          const badge = b.querySelector('span:last-child');
+          if (badge) badge.className = 'text-[11px] px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-500';
+        }
+      });
+
+      // 説明文更新
+      if (descriptionEl && desc) {
+        descriptionEl.textContent = desc;
+      }
+
+      // カードのフィルタリング表示
+      cardItems.forEach((card) => {
+        const cardCat = card.getAttribute('data-category');
+        if (targetCat === 'all' || cardCat === targetCat) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
