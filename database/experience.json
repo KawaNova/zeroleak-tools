@@ -238,8 +238,25 @@
     "lesson": "運転免許証やマイナンバーカードの画像を外部サイトにアップロードして透かしを入れるのは重大な漏洩リスク。ブラウザ内のHTML5 Canvas上で『〇〇提出用 悪用禁止 日付』の半透明文字列を千鳥格子（奇数行オフセット）で斜め回転配置することで、文字の隙間からの切り抜き偽造を防止。さらにアップロード画像の解像度（スマホ撮影の数千px）に応じてフォントサイズを自動スケーリングすることで、解像度負けによる透かしの極小化を防ぎ、提出先での目視可読性と不正転用防止を両立した。",
     "avoid": "高解像度画像に対して固定ピクセルサイズのフォントを描画し、透かしが小さすぎて見えなくなること。",
     "source": "身分証透かし (/id-watermark/) 実装"
+  },
+  {
+    "id": "exp-zl-016",
+    "date": "2026-10-19",
+    "category": "mobile_ux_testing",
+    "tags": [
+      "CDP",
+      "スマホ実機検証",
+      "タッチイベント",
+      "Canvas操作",
+      "横スクロール防止"
+    ],
+    "keyword": "CDPによる実機解像度エミュレーションとCanvasタッチイベント（TouchEvent）の同時登録",
+    "lesson": "Windows環境のChromeヘッドレスCLI（--window-size=375,667）はOSのウィンドウ最小幅制限（512px）により内部innerWidthが512pxとなり右端が切り落とされる盲点がある。Node.js標準のWebSocketでCDP（Emulation.setDeviceMetricsOverride）を叩くことで、サードパーティ不要でiPhone SE (375px) や Pixel 7 (412px) の真のモバイルビューポート・横スクロールはみ出し（scrollWidth > innerWidth）を100%正確に自動判定可能。また、スマホブラウザではマウスイベントだけでなくTouchEvent（touchstart/touchmove/touchend）の登録とpreventDefault()による画面スクロール抑止がCanvas操作ツールの実用性に不可欠。",
+    "avoid": "--window-size指定の簡易ヘッドレスキャプチャだけで『スマホ対応完了』と誤認し、タッチ操作の欠落やヘッダー押し広げを見落とすこと。",
+    "source": "モバイルUX実機評価 ＆ CDP自動監査"
   }
 ]
+
 
 
 

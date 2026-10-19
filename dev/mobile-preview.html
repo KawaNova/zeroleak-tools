@@ -197,13 +197,17 @@
     <div class="controls-group">
       <span style="font-size: 11px; color: #94a3b8;">確認ページ:</span>
       <select id="pageSelect" onchange="navigatePage(this.value)">
-        <option value="/">🏠 トップページ（ツール一覧）</option>
-        <option value="/csv-masking/">📄 CSV・テキスト伏字</option>
+        <option value="/">🏠 トップページ（3大カテゴリ）</option>
         <option value="/pdf-unlock/">🔓 給与明細・PDF解除</option>
+        <option value="/csv-masking/">📄 CSV・テキスト伏字</option>
         <option value="/exif-remover/">📍 写真位置情報(EXIF)削除</option>
+        <option value="/id-watermark/">🪪 身分証透かし焼き込み</option>
         <option value="/local-mosaic/">🕶️ 画像モザイク・黒塗り</option>
         <option value="/local-whisper/">🎙️ 社外秘音声文字起こし</option>
         <option value="/ai-prompt-sanitizer/">🤖 AIプロンプト仮名化</option>
+        <option value="/log-masking/">🛡️ HAR・.env機密マスク</option>
+        <option value="/pdf-redaction/">⬛ 機密PDF完全黒塗り</option>
+        <option value="/contract-diff/">⚖️ 契約書・NDA Diff比較</option>
         <option value="/legal/">⚖️ 利用規約・法務免責</option>
       </select>
 

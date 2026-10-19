@@ -513,6 +513,72 @@ const extraSchemaGraph = [
       drawOverlayRedactions();
     });
 
+    // スマホ・タブレット用タッチ操作
+    overlayCanvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 0) return;
+      e.preventDefault();
+      const rect = overlayCanvas.getBoundingClientRect();
+      const scaleX = overlayCanvas.width / rect.width;
+      const scaleY = overlayCanvas.height / rect.height;
+      startX = (e.touches[0].clientX - rect.left) * scaleX;
+      startY = (e.touches[0].clientY - rect.top) * scaleY;
+      isDrawing = true;
+    }, { passive: false });
+
+    overlayCanvas.addEventListener('touchmove', (e) => {
+      if (!isDrawing || e.touches.length === 0) return;
+      e.preventDefault();
+      const rect = overlayCanvas.getBoundingClientRect();
+      const scaleX = overlayCanvas.width / rect.width;
+      const scaleY = overlayCanvas.height / rect.height;
+      const currentX = (e.touches[0].clientX - rect.left) * scaleX;
+      const currentY = (e.touches[0].clientY - rect.top) * scaleY;
+
+      drawOverlayRedactions();
+
+      const ctx = overlayCanvas.getContext('2d');
+      if (ctx) {
+        const x = Math.min(startX, currentX);
+        const y = Math.min(startY, currentY);
+        const w = Math.abs(currentX - startX);
+        const h = Math.abs(currentY - startY);
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+        ctx.fillRect(x, y, w, h);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x, y, w, h);
+      }
+    }, { passive: false });
+
+    overlayCanvas.addEventListener('touchend', (e) => {
+      if (!isDrawing) return;
+      isDrawing = false;
+      const rect = overlayCanvas.getBoundingClientRect();
+      const scaleX = overlayCanvas.width / rect.width;
+      const scaleY = overlayCanvas.height / rect.height;
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+      const endX = (touch.clientX - rect.left) * scaleX;
+      const endY = (touch.clientY - rect.top) * scaleY;
+
+      const px = Math.min(startX, endX);
+      const py = Math.min(startY, endY);
+      const pw = Math.abs(endX - startX);
+      const ph = Math.abs(endY - startY);
+
+      if (pw > 5 && ph > 5) {
+        redactions.push({
+          pageNumber: currentPageNum,
+          x: px / overlayCanvas.width,
+          y: py / overlayCanvas.height,
+          width: pw / overlayCanvas.width,
+          height: ph / overlayCanvas.height,
+        });
+      }
+      drawOverlayRedactions();
+    });
+
     // ページ送り
     prevPageBtn.addEventListener('click', async () => {
       if (currentPageNum > 1) {
