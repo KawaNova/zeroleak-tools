@@ -254,9 +254,20 @@
     "lesson": "Windows環境のChromeヘッドレスCLI（--window-size=375,667）はOSのウィンドウ最小幅制限（512px）により内部innerWidthが512pxとなり右端が切り落とされる盲点がある。Node.js標準のWebSocketでCDP（Emulation.setDeviceMetricsOverride）を叩くことで、サードパーティ不要でiPhone SE (375px) や Pixel 7 (412px) の真のモバイルビューポート・横スクロールはみ出し（scrollWidth > innerWidth）を100%正確に自動判定可能。また、スマホブラウザではマウスイベントだけでなくTouchEvent（touchstart/touchmove/touchend）の登録とpreventDefault()による画面スクロール抑止がCanvas操作ツールの実用性に不可欠。",
     "avoid": "--window-size指定の簡易ヘッドレスキャプチャだけで『スマホ対応完了』と誤認し、タッチ操作の欠落やヘッダー押し広げを見落とすこと。",
     "source": "モバイルUX実機評価 ＆ CDP自動監査"
+  },
+  {
+    "id": "exp-zl-017",
+    "date": "2026-10-19",
+    "category": "product_integrity",
+    "tags": [
+      "機能の誠実性",
+      "ツール廃止",
+      "文字起こし",
+      "過剰表示"
+    ],
+    "keyword": "名乗る機能と実装が乖離したツールは直す前に外す判断をする",
+    "lesson": "/local-whisper/ は VAD による区間分割と手入力エディタに過ぎず、実際の音声認識を行わないのにタイトルで「文字起こし」を名乗っていた。マイク入力もWeb Speech API経由でクラウド通信が発生し「0バイト」表記と矛盾していた。サイト分析で実装を一行ずつ読み、表記と実態のズレを洗い出して判断材料にしたうえ、文言修正ではなくページ全体の廃止を選択。tools.ts・フッター・sitemap・related・検証スクリプトまで参照を網羅的に除去した。",
+    "avoid": "実装が不十分なまま、タイトル・FAQ・サンプルで機能を誇張し続けること。信頼を売るサイトでは誇張が最大の負債になる。",
+    "source": "サイト分析→/local-whisper/ 廃止"
   }
 ]
-
-
-
-

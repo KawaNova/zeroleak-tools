@@ -67,8 +67,9 @@
 2. **`/pdf-unlock/`** (`src/pages/pdf-unlock.astro`): 給与明細・源泉徴収票PDF パスワード解除（300DPI再構成）＆内部メタデータ（Author/Title等）完全抹消
 3. **`/exif-remover/`** (`src/utils/exif.ts`): 写真 位置情報（EXIF・GPS）100枚一括ロスレス削除＆純粋TS製ZIP出力
 4. **`/local-mosaic/`** (`src/utils/mosaic.ts`): 画像 顔・ナンバー・管理画面スクショ 不可逆モザイク＆完全黒塗り（正規化座標による複数画像一括適用＆ZIP出力）
-5. **`/local-whisper/`** (`src/utils/audio-transcribe.ts`): 社外秘音声のWeb Audio VAD発話区間分割・文字起こし＆`masking.ts`連携によるPII自動伏字化（TXT/SRT/VTT出力）
-6. **`/ai-prompt-sanitizer/`** (`src/utils/prompt-sanitizer.ts`): ChatGPT・生成AI送信前の固有名詞・機密トークン仮名化（`{{COMPANY_A}}`等）＆AI回答のワンクリック実名復元
+5. **`/ai-prompt-sanitizer/`** (`src/utils/prompt-sanitizer.ts`): ChatGPT・生成AI送信前の固有名詞・機密トークン仮名化（`{{COMPANY_A}}`等）＆AI回答のワンクリック実名復元
+
+> 備考: 旧 `/local-whisper/`（音声文字起こし）は、実際の音声認識を行わず機能が不十分だったため廃止済み。再導入する場合は Whisper WASM 等でオフライン文字起こしを実装し、モデル取得と「0バイト」表記の整合を設計してから行うこと。
 
 ### 6.2 新規ツール追加時の必須チェックリスト（共通UI・SEO・回遊）
 新しいツールページ（`src/pages/<tool-slug>.astro`）を追加する際は、必ず以下の6点を実装すること：

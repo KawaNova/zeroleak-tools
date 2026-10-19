@@ -10,12 +10,6 @@ import {
   stripImageMetadataLossless,
   createZipArchive,
 } from '../src/utils/exif.ts';
-import {
-  exportToPlainText,
-  exportToSrt,
-  exportToVtt,
-  generateSampleMeetingWavAndTranscript,
-} from '../src/utils/audio-transcribe.ts';
 import { applyRegionEffect } from '../src/utils/mosaic.ts';
 import {
   sanitizePromptText,
@@ -203,40 +197,6 @@ async function testExifAndZip() {
     throw new Error('Invalid ZIP header signature');
   }
   console.log(`  ✔ [Test 3.2] In-Browser ZIP Archive Generation (${zipBytes.length} bytes): PASSED`);
-}
-
-async function testAudioTranscribeAndMask() {
-  console.log('\n========================================');
-  console.log('4. Confidential Audio WAV & Transcript PII Masking (/local-whisper/)');
-  console.log('========================================');
-
-  const sample = generateSampleMeetingWavAndTranscript();
-  console.log(`  Generated Sample WAV: ${sample.fileName} (${sample.wavBytes.length} bytes, Segments: ${sample.segments.length})`);
-  // RIFF WAVE ヘッダ検証
-  const headerStr = String.fromCharCode(...sample.wavBytes.subarray(0, 4));
-  if (headerStr !== 'RIFF') {
-    throw new Error('WAV header generation failed');
-  }
-
-  const plainMasked = exportToPlainText(sample.segments, true, true);
-  console.log('  Masked Transcript Output:\n' + plainMasked.text.split('\n').map((l) => '    ' + l).join('\n'));
-  if (
-    plainMasked.text.includes('090-1234-5678') ||
-    plainMasked.text.includes('legal-team@example.co.jp') ||
-    plainMasked.text.includes('1234-5678-9012')
-  ) {
-    throw new Error('PII leaked in audio transcript export');
-  }
-  if (plainMasked.maskedCount < 3) {
-    throw new Error(`Expected >= 3 masked items, got ${plainMasked.maskedCount}`);
-  }
-
-  const srtOut = exportToSrt(sample.segments, true);
-  const vttOut = exportToVtt(sample.segments, true);
-  if (!srtOut.includes('-->') || !vttOut.startsWith('WEBVTT')) {
-    throw new Error('SRT/VTT formatting failed');
-  }
-  console.log(`  ✔ [Test 4.1] Audio WAV Synthesis & PII Masked TXT/SRT/VTT Export (${plainMasked.maskedCount} PII items masked): PASSED`);
 }
 
 async function testMosaicPixelEngine() {
@@ -567,12 +527,11 @@ async function testBuiltHtmlAndCspAudit() {
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'local-mosaic/index.html', mustInclude: ['モザイク＆黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
-    { path: 'local-whisper/index.html', mustInclude: ['文字起こし', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'log-masking/index.html', mustInclude: ['HARファイル', '機密情報', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-redaction/index.html', mustInclude: ['完全黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール', '完全免責'] },
@@ -629,7 +588,6 @@ async function testQualityBudgetAndDevIsolation() {
     'csv-masking',
     'exif-remover',
     'local-mosaic',
-    'local-whisper',
     'ai-prompt-sanitizer',
     'log-masking',
     'pdf-redaction',
@@ -681,7 +639,6 @@ async function main() {
   await testAllCsvs();
   await testAllPdfs();
   await testExifAndZip();
-  await testAudioTranscribeAndMask();
   await testMosaicPixelEngine();
   await testPromptSanitizerAndRestore();
   await testLogMaskingEngine();

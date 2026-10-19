@@ -135,7 +135,7 @@ export const tools: Tool[] = [
       { icon: '🧪', who: 'テスト環境の構築', text: '件数・構造はそのままダミー化' },
       { icon: '📣', who: '展示会リード共有', text: '同意のない連絡先だけを事前にマスク' },
     ],
-    related: ['ai-prompt-sanitizer', 'local-whisper'],
+    related: ['ai-prompt-sanitizer', 'log-masking'],
   },
   {
     slug: 'exif-remover',
@@ -211,46 +211,6 @@ export const tools: Tool[] = [
     related: ['exif-remover', 'ai-prompt-sanitizer'],
   },
   {
-    slug: 'local-whisper',
-    href: '/local-whisper/',
-    name: '音声 文字起こし＆PIIマスク',
-    tagline: '会議・1on1の録音をブラウザ内でテキスト化',
-    icon: '🎙️',
-    image: 'tool-whisper',
-    category: 'document_legal',
-    accent: { text: 'text-purple-700', border: 'hover:border-purple-500', soft: 'bg-purple-50', ring: 'border-purple-200' },
-
-    intent: '会議・面談の録音を文字にしたい',
-    panels: [
-      { icon: '🎙️', label: 'ふつうのやり方', text: '会議や1on1の録音を、クラウドの文字起こしサービスへアップロード' },
-      { icon: '🚨', label: '起きる事故', text: '声紋・私語・背景の電話まで保存され、NDA違反に。要約AIの監査ログにも平文で残る' },
-      { icon: '🛡️', label: 'ZeroLeakなら', text: '端末内で発話を検出→文字起こし→電話・メールを自動で伏字化' },
-    ],
-    blindSpots: [
-      {
-        icon: '🔊',
-        title: '音声はテキスト以上の「超高密度データ」であり、物理送信される',
-        html: 'AI文字起こしSaaSは、音声ファイルを生データのまま外部サーバーへ転送・保存します。<strong>役員の声紋、感情、同席者の私語、背景の電話の会話</strong>まで記録され、クラウド保存された時点でNDAに抵触します。',
-      },
-      {
-        icon: '📝',
-        title: '社内Copilotで要約する前に、個人情報（PII）の除去が必須',
-        html: 'Enterprise契約のChatGPTやCopilotで要約する場合でも、<strong>顧客電話番号・メール・マイナンバー・給与額</strong>をそのまま入力すると、社内監査ログに平文保存されます。事前にブラウザ内で伏字化します。',
-      },
-      {
-        icon: '⚡',
-        title: '重いAIモデルのDL待ちなし。Web Audio APIで0秒起動',
-        html: 'WASM版Whisper等は初回に数百MBのモデル取得が発生します。本ツールはブラウザ標準のWeb Audio APIと軽量VADを使うため、<strong>待ち時間0秒・回線不要</strong>で波形解析と文字起こしができます。',
-      },
-    ],
-    situations: [
-      { icon: '🏛️', who: '役員会議・M&A', text: '社外に出せない録音を端末内だけで文字化' },
-      { icon: '👥', who: '人事面談・1on1', text: '要配慮情報を含む対話をPIIマスク付きで' },
-      { icon: '🎬', who: '研修動画の字幕', text: 'タイムスタンプ付きSRT/VTTをそのまま出力' },
-    ],
-    related: ['ai-prompt-sanitizer', 'csv-masking'],
-  },
-  {
     slug: 'ai-prompt-sanitizer',
     href: '/ai-prompt-sanitizer/',
     name: 'AIプロンプト 機密サニタイザー',
@@ -282,7 +242,7 @@ export const tools: Tool[] = [
       { icon: '📑', who: '契約書・NDAの相談', text: '甲乙の社名やコードネームを記号化' },
       { icon: '🐞', who: '障害ログ・コード', text: '本番APIキーや社内URLを無害化して質問' },
     ],
-    related: ['csv-masking', 'local-whisper'],
+    related: ['csv-masking', 'log-masking'],
   },
   {
     slug: 'log-masking',
