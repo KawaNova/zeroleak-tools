@@ -4,8 +4,6 @@
 
 ## まだ
 - [ ] 【サイト改善】実機（Pixel）でのモバイル表示確認（headless キャプチャは右端が切れて見えるため）
-- [ ] 【Phase 3-1 収益化拡張】障害調査用 HARファイル / JSONログ / `.env` 機密トークン一括マスキングツール（`/log-masking/`）の実装
-  - 引き継ぎ要件: ブラウザ開発者ツールの `.har`（HTTP Archive JSON）や `.env`・サーバーログから `Cookie` / `Set-Cookie` / `Authorization: Bearer` / APIキー / パスワード / IP / メールをブラウザ内で一括無害化して再ダウンロード。複合KW: `HARファイル マスキング 一括 ブラウザ` / `ログ 個人情報 削除 サーバー送信なし`
 - [ ] 【Phase 3-2 収益化拡張】機密PDF 完全黒塗り（不可逆墨消し・Redaction）ツール（`/pdf-redaction/`）の実装
   - 引き継ぎ要件: PDF上に黒枠を重ねるだけの擬似マスク（コピペで下の文字が抜ける事故）を防ぐため、`pdfjs-dist` で300DPI Canvas化した上で `mosaic.ts` の黒塗り・モザイク座標を焼き込み、`pdf-lib` でテキスト層を含まない完全フラット化PDFとして再構築する。複合KW: `PDF 黒塗り 復元できない ブラウザ` / `PDF 墨消し 一括 サーバー送信なし`
 - [ ] 【Phase 3-3 収益化拡張】契約書・NDA条文 ローカル差分比較（Diff）＆赤入れPDF出力ツール（`/contract-diff/`）の実装

@@ -1,4 +1,4 @@
-﻿// 6ツールの「唯一の正本」データ。
+// 6ツールの「唯一の正本」データ。
 // トップのカード・各ツールの図解パネル・関連ツール・シチュエーションはすべてここから描画する（重複記述を排除）。
 // 画像は src/assets/illustrations/ に置く（無い場合は絵文字プレースホルダーで表示）。
 
@@ -259,6 +259,40 @@ export const tools: Tool[] = [
     ],
     related: ['csv-masking', 'local-whisper'],
   },
+  {
+    slug: 'log-masking',
+    href: '/log-masking/',
+    name: 'HAR・ログ・.env 機密マスク',
+    tagline: 'Cookie・Bearer・APIキーを外部提出前に一括無害化',
+    icon: '🛡️',
+    image: 'tool-log',
+    accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
+    intent: 'ベンダーにHAR・エラーログを渡したい',
+    panels: [
+      { icon: '📄', label: 'ふつうのやり方', text: '障害調査のため、ブラウザから書き出したHARや.envをそのまま外部ベンダーへ送信' },
+      { icon: '🚨', label: '起きる事故', text: 'Cookie・Bearerトークン・DBパスワード・顧客メールが生のまま社外へ丸見えに' },
+      { icon: '🛡️', label: 'ZeroLeakなら', text: 'ブラウザ内で機密ヘッダー・キーを一括置換。JSON構造を維持して安全に再保存' },
+    ],
+    blindSpots: [
+      {
+        icon: '🍪',
+        title: 'HARファイルにはあなたの「ログイン中Cookie・セッショントークン」が丸ごと含まれる',
+        html: 'ブラウザのNetworkタブからエクスポートしたHAR（HTTP Archive）は、通信した全HTTPリクエストを記録します。<strong>Cookie、Authorization: Bearer、CSRFトークン</strong>が含まれており、そのまま渡すとセッション乗っ取り（ハイジャック）が可能です。',
+      },
+      {
+        icon: '🔑',
+        title: '.env やサーバーログの「DBパスワード・APIキー」は即死インシデントになる',
+        html: 'エラーログや設定ファイルに含まれる<strong>Postgres/MySQLパスワード、AWS AccessKey、OpenAI APIキー</strong>は、外部へ渡ると即座に不正アクセスの原因となります。本ツールはJSONや設定ファイルの構造を維持したまま、機密値だけをピンポイントで無害化します。',
+      },
+    ],
+    situations: [
+      { icon: '🐞', who: 'SaaS障害調査', text: 'CookieやBearerを伏字化したHARを安全に添付' },
+      { icon: '⚙️', who: '外注・新人の環境構築', text: '本番パスワードを隠した.env.exampleを瞬時に生成' },
+      { icon: '📊', who: 'エラーログ共有', text: '顧客メール・内部IPを無害化してSlackで調査依頼' },
+    ],
+    related: ['ai-prompt-sanitizer', 'csv-masking'],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((t) => t.slug === slug)!;
+

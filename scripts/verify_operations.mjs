@@ -23,6 +23,12 @@ import {
   SAMPLE_AI_PROMPT,
   SAMPLE_CUSTOM_WORDS,
 } from '../src/utils/prompt-sanitizer.ts';
+import {
+  processLogMasking,
+  generateSampleHar,
+  generateSampleEnv,
+  DEFAULT_LOG_OPTIONS,
+} from '../src/utils/log-masking.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -338,19 +344,75 @@ async function testPromptSanitizerAndRestore() {
   );
 }
 
+async function testLogMaskingEngine() {
+  console.log('\n========================================');
+  console.log('7. HAR, JSON Log & .env Confidential Masking (/log-masking/)');
+  console.log('========================================');
+
+  // Test 7.1: HARファイルマスキング
+  const sampleHar = generateSampleHar();
+  const harResult = processLogMasking('network_capture.har', sampleHar, DEFAULT_LOG_OPTIONS);
+  
+  if (
+    harResult.maskedContent.includes('sess_secret_cookie_abcdef1234567890') ||
+    harResult.maskedContent.includes('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9') ||
+    harResult.maskedContent.includes('sk-proj-openai_live_secret_key_abcdef1234567890') ||
+    harResult.maskedContent.includes('security-admin@zeroleak-enterprise.jp') ||
+    harResult.maskedContent.includes('FAKEACCESSKEY999') ||
+    harResult.maskedContent.includes('192.168.1.105')
+  ) {
+    throw new Error('Confidential credentials leaked in masked HAR content');
+  }
+  if (!harResult.maskedContent.includes('[REDACTED_COOKIE]') || !harResult.maskedContent.includes('[REDACTED_AUTH_HEADER]')) {
+    throw new Error('Expected redacted placeholder tokens missing in masked HAR');
+  }
+  if (harResult.detectedCounts.total < 5) {
+    throw new Error(`Expected >= 5 redacted items in HAR, got ${harResult.detectedCounts.total}`);
+  }
+  console.log(`  ✔ [Test 7.1] HAR File Structured Redaction (${harResult.detectedCounts.total} items redacted): PASSED`);
+
+  // Test 7.2: .envファイルマスキング
+  const sampleEnv = generateSampleEnv();
+  const envResult = processLogMasking('.env.production', sampleEnv, DEFAULT_LOG_OPTIONS);
+
+  if (
+    envResult.maskedContent.includes('P@ssw0rd999_SuperSecret') ||
+    envResult.maskedContent.includes('SuperSecretPassword2026!') ||
+    envResult.maskedContent.includes('fake-sample-dummy-openai-key') ||
+    envResult.maskedContent.includes('fake_sample_dummy_github_token') ||
+    envResult.maskedContent.includes('security-officer@zeroleak-enterprise.jp')
+  ) {
+    throw new Error('Confidential credentials leaked in masked .env content');
+  }
+
+  if (!envResult.maskedContent.includes('[REDACTED_SECRET]')) {
+    throw new Error('Expected [REDACTED_SECRET] placeholder missing in masked .env');
+  }
+  console.log(`  ✔ [Test 7.2] .env Secret Values Redaction (${envResult.detectedCounts.total} items redacted): PASSED`);
+
+  // Test 7.3: プレーンテキストログ / Bearerトークン置換
+  const rawLog = '2026-10-19 12:00:00 [ERROR] Request failed with Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.test.sig and Cookie: session_id=abc12345; user=tester@example.com from 10.0.4.15';
+  const logResult = processLogMasking('server.log', rawLog, DEFAULT_LOG_OPTIONS);
+  if (logResult.maskedContent.includes('eyJhbGciOiJIUzI1NiJ9') || logResult.maskedContent.includes('tester@example.com') || logResult.maskedContent.includes('10.0.4.15')) {
+    throw new Error('Confidential credentials leaked in masked plain log');
+  }
+  console.log('  ✔ [Test 7.3] Plain Text Log Bearer/Cookie/IP/Email Redaction: PASSED');
+}
+
 async function testBuiltHtmlAndCspAudit() {
   console.log('\n========================================');
-  console.log('7. Built HTML / CSP / SEO Keyword Audit (All 8 Routes)');
+  console.log('8. Built HTML / CSP / SEO Keyword Audit (All 9 Routes)');
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'local-mosaic/index.html', mustInclude: ['モザイク＆黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'local-whisper/index.html', mustInclude: ['文字起こし', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'log-masking/index.html', mustInclude: ['HARファイル', '機密情報', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 
@@ -379,7 +441,7 @@ async function testBuiltHtmlAndCspAudit() {
 
 async function testQualityBudgetAndDevIsolation() {
   console.log('\n========================================');
-  console.log('8. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
+  console.log('9. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
   console.log('========================================');
 
   // 1. 開発用ファイルの混入チェック (Zero Contamination)
@@ -396,8 +458,8 @@ async function testQualityBudgetAndDevIsolation() {
   }
   console.log('  ✔ [Dev Isolation] 0 dev simulator files leaked into production dist/: PASSED');
 
-  // 2. 6ツールの品質予算と直感UI要素の監査
-  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer'];
+  // 2. 7ツールの品質予算と直感UI要素の監査
+  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking'];
   for (const slug of toolSlugs) {
     const fullPath = path.join(root, 'dist', slug, 'index.html');
     const html = fs.readFileSync(fullPath, 'utf-8');
@@ -444,10 +506,11 @@ async function main() {
   await testAudioTranscribeAndMask();
   await testMosaicPixelEngine();
   await testPromptSanitizerAndRestore();
+  await testLogMaskingEngine();
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
   console.log('\n========================================');
-  console.log('ALL 8 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 9 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 
@@ -455,4 +518,5 @@ main().catch((err) => {
   console.error('\n❌ Evaluation test failed:', err);
   process.exit(1);
 });
+
 

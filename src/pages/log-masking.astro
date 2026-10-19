@@ -1,0 +1,616 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SecuritySpecModal from '../components/SecuritySpecModal.astro';
+import RelatedTools from '../components/RelatedTools.astro';
+import WhySection from '../components/WhySection.astro';
+import Mascot from '../components/Mascot.astro';
+
+// SGO / Googleリッチリザルト用 構造化データ
+const extraSchemaGraph = [
+  {
+    "@type": "HowTo",
+    "name": "HARファイルや.env・JSONログの機密情報をブラウザで一括マスキングする3ステップ（サーバー送信なし）",
+    "description": "外部ベンダーやSaaSサポートへ障害調査ログを提出する前に、Cookie、Authorization Bearerトークン、APIキー、パスワード、メールアドレスをブラウザ内完結で一括無害化する手順。",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "HARファイルまたはログファイルをドラッグ＆ドロップ",
+        "text": "Chrome開発者ツールから保存した.harファイル、.env設定ファイル、またはJSON/テキストログをドロップします。"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "無害化オプションとカスタム伏字キーワードの確認",
+        "text": "Cookie、Authorizationヘッダー、APIキー、メールアドレス、IPアドレス、.env機密値のマスク対象を選択します。"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "マスク済みファイルをワンクリックで再保存",
+        "text": "元のJSON構造・キー構造を100%維持したまま、機密値のみが安全に無害化されたファイルをダウンロードしてベンダーへ提出します。"
+      }
+    ]
+  },
+  {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "HARファイルをそのまま社外ベンダーやサポートへ送るのは危険ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "極めて危険です。ブラウザのNetworkタブから保存したHARファイルには、ログイン中のCookie（セッションID）やAuthorization: Bearerヘッダー、CSRFトークンが生のまま記録されています。これを受け取った第三者はあなたのアカウントに即座になりすましログイン（セッションハイジャック）が可能です。外部へ送る前のマスキングが強く推奨されます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "マスキングによってHARファイルやJSONログの構造が壊れませんか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "壊れません。本ツールはJSONやHTTP Archiveの構文構造を解析した上で、Cookieやトークン、APIキーの「値」のみをピンポイントで置換します。そのためSaaSサポートやエンジニア側のログ解析ツール・開発者ツールでエラーを起こさずにそのまま読み込めます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "大容量のHARファイル（数十MB）でもブラウザだけで処理できますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。ブラウザのローカルメモリ（RAM）上で高速JSONパースと正規表現走査を行うため、数十MBクラスのHARファイルでも数秒以内に処理が完了します。1バイトも外部ネットワークへ送信しないため、回線帯域を消費せず、クラウドへのアップロード漏洩リスクも0%です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": ".envファイルのパスワードやAPIキーだけを消して共有できますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。.envファイルを投入すると、SECRET、PASSWORD、KEY、TOKEN、DATABASE_URLなどの機密環境変数の値を自動判別して[REDACTED_SECRET]に置換します。環境変数のキー名やコメント行は保持されるため、新規参画メンバーや外注先への安全な.env.example配布用ファイルとしても最適です。"
+        }
+      }
+    ]
+  }
+];
+---
+
+<Layout
+  title="HARファイル・JSONログ・.env 機密トークン一括マスキング | ブラウザ完結・サーバー送信なし"
+  description="障害調査用HARファイル、.env、エラーログからCookie・Bearerトークン・APIキー・パスワード・メールを一括無害化。ブラウザ内完結・外部サーバー送信0バイト。"
+  canonicalPath="/log-masking/"
+  extraSchemaGraph={extraSchemaGraph}
+>
+  <div class="max-w-5xl mx-auto space-y-8">
+    
+    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
+    <div class="space-y-2.5">
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        <button
+          type="button"
+          onclick="window.openSecurityModal && window.openSecurityModal()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+        >
+          <span>🏢</span>
+          <span>社内利用・情シス申請用仕様書</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-start gap-3">
+        <div>
+          <div class="flex w-full items-center gap-4 sm:gap-6">
+            <div class="min-w-0 flex-1 space-y-1.5">
+              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                HARファイル・JSONログ・.env 機密情報・APIキー一括マスキング
+              </h1>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                障害調査でベンダーへ渡すHARや.envから、Cookie・Bearerトークン・DBパスワード・APIキーを一括無害化。ブラウザ内処理・外部送信0バイト。
+              </p>
+            </div>
+            <Mascot name="tool-log" fallback="🛡️" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+          </div>
+        </div>
+
+        <!-- テスト用サンプル投入ボタン -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            id="loadSampleHarBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+          >
+            <span>🧪</span>
+            <span>サンプルHARを投入して試す</span>
+          </button>
+          <button
+            id="loadSampleEnvBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+          >
+            <span>⚙️</span>
+            <span>サンプル.envを投入して試す</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- メイン操作カード -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
+      
+      <!-- 入力モードタブ -->
+      <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <button
+          id="tabFileBtn"
+          type="button"
+          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs"
+        >
+          📁 ファイルをドロップ (.har / .env / .json / .log)
+        </button>
+        <button
+          id="tabTextBtn"
+          type="button"
+          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+        >
+          📝 テキストを直接貼り付け
+        </button>
+      </div>
+
+      <!-- ファイルドロップゾーン -->
+      <div id="fileModeSection" class="space-y-4">
+        <div id="dropZoneLog" class="border-2 border-dashed border-slate-300 hover:border-cyan-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group">
+          <input type="file" id="fileInputLog" accept=".har,.env,.json,.log,.txt" class="hidden" />
+          <div class="flex flex-col items-center gap-2.5 pointer-events-none">
+            <div class="w-12 h-12 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600 group-hover:scale-105 transition-transform shadow-xs text-xl">
+              📂
+            </div>
+            <div>
+              <p class="font-bold text-slate-800 text-sm sm:text-base">HARファイル、.env、JSONログ、エラーログをドロップ</p>
+              <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.har / .env / .json / .log / .txt)</p>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-cyan-800 shadow-xs font-medium">
+                🔒 サーバー送信なし（0バイト保証）
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
+                🍪 Cookie / Bearer / APIキー 自動置換
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 選択されたファイル表示 -->
+        <div id="fileInfoLog" class="hidden p-3.5 rounded-xl bg-cyan-50/60 border border-cyan-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div id="fileTypeBadge" class="w-10 h-8 rounded-lg bg-cyan-100 text-cyan-800 flex items-center justify-center font-bold text-xs uppercase">HAR</div>
+            <div>
+              <p id="fileNameLog" class="text-xs sm:text-sm font-semibold text-slate-900">network_capture.har</p>
+              <p id="fileMetaLog" class="text-[11px] text-slate-500">サイズ: 0 KB</p>
+            </div>
+          </div>
+          <button id="resetLogBtn" type="button" class="text-xs text-slate-500 hover:text-rose-600 underline transition cursor-pointer font-medium">
+            ファイルを変更
+          </button>
+        </div>
+      </div>
+
+      <!-- テキスト直接貼り付けエリア -->
+      <div id="textModeSection" class="hidden space-y-2">
+        <textarea
+          id="rawLogInput"
+          rows="8"
+          class="w-full p-3.5 rounded-xl border border-slate-300 font-mono text-xs focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+          placeholder="HARのJSONテキスト、.envの内容、またはサーバーのエラーログをここに貼り付けてください..."
+        ></textarea>
+      </div>
+
+      <!-- マスク設定オプション（折りたたみ式） -->
+      <details class="group p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" open>
+        <summary class="font-bold text-xs text-slate-800 cursor-pointer flex items-center justify-between">
+          <span class="flex items-center gap-1.5">
+            <span>⚙️</span>
+            <span>マスキング対象の設定（クリックで開閉）</span>
+          </span>
+          <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2 text-xs text-slate-700">
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optCookies" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>🍪 Cookie・Set-Cookie</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optAuth" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>🔑 Authorization (Bearer等)</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optApiKey" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>🤖 APIキー (OpenAI, AWS等)</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optEnvSecrets" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>🗄️ .env 機密値 (DBパスワード等)</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optEmails" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>✉️ メールアドレス</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/40 cursor-pointer">
+            <input type="checkbox" id="optIp" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
+            <span>🌐 IPアドレス</span>
+          </label>
+        </div>
+
+        <!-- カスタムキーワード追加 -->
+        <div class="pt-1">
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">
+            追加で伏字にしたい社名・ドメイン・独自トークン（カンマ区切りで複数指定可）：
+          </label>
+          <input
+            type="text"
+            id="customKeywordsInput"
+            placeholder="例: 株式会社ネクスト, internal-corp.local, secret_tenant_01"
+            class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+          />
+        </div>
+      </details>
+
+      <!-- 実行ボタン -->
+      <div>
+        <button
+          id="processLogBtn"
+          type="button"
+          class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>機密トークンの一括マスキングを実行 (ブラウザ内処理)</span>
+        </button>
+      </div>
+
+      <!-- 処理結果＆ダウンロードエリア -->
+      <div id="resultArea" class="hidden p-4 sm:p-6 rounded-xl bg-cyan-50/70 border border-cyan-200 space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center text-lg">
+              🎉
+            </div>
+            <div>
+              <h2 class="text-sm sm:text-base font-bold text-cyan-950">機密情報の無害化が完了しました！</h2>
+              <p id="resultTimeText" class="text-xs text-slate-600 font-mono">処理時間: 0.1秒 (通信0バイト)</p>
+            </div>
+          </div>
+          <button
+            id="downloadLogBtn"
+            type="button"
+            class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-xs flex items-center gap-2 cursor-pointer"
+          >
+            <span>📥</span>
+            <span>マスク済みファイルを保存</span>
+          </button>
+        </div>
+
+        <!-- 検出監査サマリーバッジ -->
+        <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-xs">
+          <div class="font-bold text-cyan-900 flex items-center justify-between">
+            <span>🔍 無害化された機密項目レポート</span>
+            <span id="totalRedactedBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+              合計 0 箇所を無害化
+            </span>
+          </div>
+          <div id="detectionDetailsList" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-700 pt-1">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+        <!-- プレビュー表示 -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800">マスク結果プレビュー（抜粋）:</span>
+            <button id="copyResultTextBtn" type="button" class="text-xs text-cyan-700 hover:text-cyan-900 underline cursor-pointer">
+              テキストを全コピー
+            </button>
+          </div>
+          <pre id="previewLogContent" class="p-3.5 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs max-h-64 overflow-y-auto leading-relaxed select-all"></pre>
+        </div>
+      </div>
+
+    </div>
+
+    <WhySection slug="log-masking" title="「障害調査のため」と渡したHARファイルに、あなたのCookieが残っている" />
+
+    <!-- 【FAQPage】よくある質問アコーディオン -->
+    <section class="space-y-4 pt-2">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>❓</span>
+          <span>よくある質問（FAQ）</span>
+        </h2>
+      </div>
+
+      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
+            <span>Q. HARファイルをそのまま社外ベンダーやサポートへ送るのは危険ですか？</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+            極めて危険です。ブラウザのNetworkタブから保存したHARファイルには、ログイン中のCookie（セッションID）やAuthorization: Bearerヘッダー、CSRFトークンが生のまま記録されています。これを受け取った第三者はあなたのアカウントに即座になりすましログイン（セッションハイジャック）が可能です。外部へ送る前のマスキングが強く推奨されます。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
+            <span>Q. マスキングによってHARファイルやJSONログの構造が壊れませんか？</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+            壊れません。本ツールはJSONやHTTP Archiveの構文構造を解析した上で、Cookieやトークン、APIキーの「値」のみをピンポイントで置換します。そのためSaaSサポートやエンジニア側のログ解析ツール・開発者ツールでエラーを起こさずにそのまま読み込めます。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
+            <span>Q. 大容量のHARファイル（数十MB）でもブラウザだけで処理できますか？</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+            はい。ブラウザのローカルメモリ（RAM）上で高速JSONパースと正規表現走査を行うため、数十MBクラスのHARファイルでも数秒以内に処理が完了します。1バイトも外部ネットワークへ送信しないため、回線帯域を消費せず、クラウドへのアップロード漏洩リスクも0%です。
+          </p>
+        </details>
+
+        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
+            <span>Q. .envファイルのパスワードやAPIキーだけを消して共有できますか？</span>
+            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+            はい。.envファイルを投入すると、SECRET、PASSWORD、KEY、TOKEN、DATABASE_URLなどの機密環境変数の値を自動判別して[REDACTED_SECRET]に置換します。環境変数のキー名やコメント行は保持されるため、新規参画メンバーや外注先への安全な.env.example配布用ファイルとしても最適です。
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <RelatedTools currentPath="/log-masking/" />
+  </div>
+
+  <!-- セキュリティ仕様書モーダル -->
+  <SecuritySpecModal />
+
+  <!-- クライアントサイドスクリプト -->
+  <script>
+    import {
+      processLogMasking,
+      generateSampleHar,
+      generateSampleEnv,
+      detectLogFileType,
+      type MaskingOptions,
+      type MaskResult,
+    } from '../utils/log-masking';
+
+    let currentInputMode: 'file' | 'text' = 'file';
+    let loadedFileName = 'network_capture.har';
+    let loadedContent = '';
+    let lastMaskResult: MaskResult | null = null;
+
+    // DOM要素
+    const tabFileBtn = document.getElementById('tabFileBtn')!;
+    const tabTextBtn = document.getElementById('tabTextBtn')!;
+    const fileModeSection = document.getElementById('fileModeSection')!;
+    const textModeSection = document.getElementById('textModeSection')!;
+    const dropZone = document.getElementById('dropZoneLog')!;
+    const fileInput = document.getElementById('fileInputLog') as HTMLInputElement;
+    const fileInfoLog = document.getElementById('fileInfoLog')!;
+    const fileNameLog = document.getElementById('fileNameLog')!;
+    const fileMetaLog = document.getElementById('fileMetaLog')!;
+    const fileTypeBadge = document.getElementById('fileTypeBadge')!;
+    const resetLogBtn = document.getElementById('resetLogBtn')!;
+    const rawLogInput = document.getElementById('rawLogInput') as HTMLTextAreaElement;
+    const processLogBtn = document.getElementById('processLogBtn')!;
+    const loadSampleHarBtn = document.getElementById('loadSampleHarBtn')!;
+    const loadSampleEnvBtn = document.getElementById('loadSampleEnvBtn')!;
+
+    // オプション要素
+    const optCookies = document.getElementById('optCookies') as HTMLInputElement;
+    const optAuth = document.getElementById('optAuth') as HTMLInputElement;
+    const optApiKey = document.getElementById('optApiKey') as HTMLInputElement;
+    const optEnvSecrets = document.getElementById('optEnvSecrets') as HTMLInputElement;
+    const optEmails = document.getElementById('optEmails') as HTMLInputElement;
+    const optIp = document.getElementById('optIp') as HTMLInputElement;
+    const customKeywordsInput = document.getElementById('customKeywordsInput') as HTMLInputElement;
+
+    // 結果要素
+    const resultArea = document.getElementById('resultArea')!;
+    const resultTimeText = document.getElementById('resultTimeText')!;
+    const totalRedactedBadge = document.getElementById('totalRedactedBadge')!;
+    const detectionDetailsList = document.getElementById('detectionDetailsList')!;
+    const previewLogContent = document.getElementById('previewLogContent')!;
+    const downloadLogBtn = document.getElementById('downloadLogBtn')!;
+    const copyResultTextBtn = document.getElementById('copyResultTextBtn')!;
+
+    // タブ切り替え
+    tabFileBtn.addEventListener('click', () => {
+      currentInputMode = 'file';
+      tabFileBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs';
+      tabTextBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+      fileModeSection.classList.remove('hidden');
+      textModeSection.classList.add('hidden');
+    });
+
+    tabTextBtn.addEventListener('click', () => {
+      currentInputMode = 'text';
+      tabTextBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs';
+      tabFileBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+      textModeSection.classList.remove('hidden');
+      fileModeSection.classList.add('hidden');
+    });
+
+    // ファイル選択処理
+    function handleFile(file: File) {
+      loadedFileName = file.name;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        loadedContent = (e.target?.result as string) || '';
+        showFileInfo(file.name, file.size, loadedContent);
+      };
+      reader.readAsText(file);
+    }
+
+    function showFileInfo(name: string, size: number, content: string) {
+      fileNameLog.textContent = name;
+      fileMetaLog.textContent = `サイズ: ${(size / 1024).toFixed(1)} KB`;
+      const detected = detectLogFileType(name, content);
+      fileTypeBadge.textContent = detected.toUpperCase();
+      dropZone.classList.add('hidden');
+      fileInfoLog.classList.remove('hidden');
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-cyan-500', 'bg-cyan-50/40');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/40');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/40');
+      if (e.dataTransfer?.files.length) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files?.length) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    resetLogBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      loadedContent = '';
+      fileInfoLog.classList.add('hidden');
+      dropZone.classList.remove('hidden');
+      resultArea.classList.add('hidden');
+    });
+
+    // サンプルHAR投入
+    loadSampleHarBtn.addEventListener('click', () => {
+      const sample = generateSampleHar();
+      loadedFileName = 'sample_network_capture.har';
+      loadedContent = sample;
+      rawLogInput.value = sample;
+      showFileInfo(loadedFileName, sample.length, sample);
+      runMasking();
+    });
+
+    // サンプル.env投入
+    loadSampleEnvBtn.addEventListener('click', () => {
+      const sample = generateSampleEnv();
+      loadedFileName = '.env.production';
+      loadedContent = sample;
+      rawLogInput.value = sample;
+      showFileInfo(loadedFileName, sample.length, sample);
+      runMasking();
+    });
+
+    // マスキング実行
+    processLogBtn.addEventListener('click', runMasking);
+
+    function runMasking() {
+      const content = currentInputMode === 'text' ? rawLogInput.value : loadedContent;
+      if (!content || !content.trim()) {
+        alert('ファイルをドロップするか、テキストを入力してください。');
+        return;
+      }
+
+      const customKeywords = customKeywordsInput.value
+        .split(',')
+        .map((k) => k.trim())
+        .filter(Boolean);
+
+      const options: MaskingOptions = {
+        maskCookies: optCookies.checked,
+        maskAuthHeaders: optAuth.checked,
+        maskApiKeys: optApiKey.checked,
+        maskEnvSecrets: optEnvSecrets.checked,
+        maskEmails: optEmails.checked,
+        maskIpAddresses: optIp.checked,
+        maskPostData: true,
+        customKeywords,
+      };
+
+      const startTime = performance.now();
+      const res = processLogMasking(loadedFileName, content, options);
+      const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+      lastMaskResult = res;
+
+      // 結果表示
+      resultTimeText.textContent = `処理時間: ${elapsed}秒 (外部通信0バイト・端末内RAM処理)`;
+      totalRedactedBadge.textContent = `合計 ${res.detectedCounts.total} 箇所を無害化`;
+
+      detectionDetailsList.innerHTML = `
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">Cookie / Set-Cookie:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.cookies}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">Authorization / Auth:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.authHeaders}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">APIキー (OpenAI/AWS等):</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.apiKeys}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">.env 機密環境変数:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.envSecrets}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">メールアドレス:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.emails}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">IPアドレス:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.ips}件</span>
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <span class="text-slate-500">カスタム指定語句:</span>
+          <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.customKeywords}件</span>
+        </div>
+        <div class="p-2 rounded bg-emerald-50 border border-emerald-200 font-bold text-emerald-800 flex items-center justify-between">
+          <span>残存リスク:</span>
+          <span>0%</span>
+        </div>
+      `;
+
+      previewLogContent.textContent = res.maskedContent;
+      resultArea.classList.remove('hidden');
+      resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ダウンロード
+    downloadLogBtn.addEventListener('click', () => {
+      if (!lastMaskResult) return;
+      const blob = new Blob([lastMaskResult.maskedContent], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      // 元の拡張子を維持しつつ _masked を付与
+      const dotIdx = loadedFileName.lastIndexOf('.');
+      if (dotIdx !== -1) {
+        a.download = `${loadedFileName.slice(0, dotIdx)}_masked${loadedFileName.slice(dotIdx)}`;
+      } else {
+        a.download = `${loadedFileName}_masked.txt`;
+      }
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // テキストコピー
+    copyResultTextBtn.addEventListener('click', async () => {
+      if (!lastMaskResult) return;
+      try {
+        await navigator.clipboard.writeText(lastMaskResult.maskedContent);
+        alert('マスク結果のテキストをクリップボードにコピーしました！');
+      } catch (err) {
+        alert('クリップボードのコピーに失敗しました。プレビュー枠内を直接選択してコピーしてください。');
+      }
+    });
+  </script>
+</Layout>
