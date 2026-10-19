@@ -1,4 +1,4 @@
-﻿---
+---
 import Layout from '../layouts/Layout.astro';
 import SecuritySpecModal from '../components/SecuritySpecModal.astro';
 import RelatedTools from '../components/RelatedTools.astro';
@@ -93,6 +93,14 @@ const extraSchemaGraph = [
         </button>
       </div>
 
+      <!-- ゼロくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
       <div class="flex flex-col items-start gap-3">
         <div>
           <div class="flex w-full items-center gap-4 sm:gap-6">
@@ -104,7 +112,7 @@ const extraSchemaGraph = [
             大容量CSVや名簿テキストから、マイナンバー・電話番号・氏名列を一括伏字化。ブラウザ内完結で外部送信は0バイトです。
           </p>
 </div>
-<Mascot name="tool-csv" fallback="📊" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+<Mascot name="tool-csv" fallback="📊" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
 </div>
         </div>
 
@@ -273,6 +281,12 @@ const extraSchemaGraph = [
             <span>マスキング済みCSVを保存</span>
           </button>
         </div>
+      </div>
+
+      <!-- ゼロくん完了メッセージ -->
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 font-medium">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <span><strong>ゼロくん：</strong>マスキングが完了しました！ファイルはこの端末内だけで処理され、外部には一切送信されていません。</span>
       </div>
 
       <!-- プレビュー表示 -->

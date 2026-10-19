@@ -91,6 +91,14 @@ const extraSchemaGraph = [
         </button>
       </div>
 
+      <!-- ゼロくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
       <div class="flex flex-col items-start gap-3">
         <div>
           <div class="flex w-full items-center gap-4 sm:gap-6">
@@ -102,7 +110,7 @@ const extraSchemaGraph = [
                 「黒枠を重ねただけ」で下の文字が抜ける事故を防止。Canvasラスタライズでテキスト層そのものを物理消滅させて再構築します。
               </p>
             </div>
-            <Mascot name="tool-pdf-redaction" fallback="⬛" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+            <Mascot name="tool-pdf-redaction" fallback="⬛" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
           </div>
         </div>
 
@@ -225,6 +233,12 @@ const extraSchemaGraph = [
               <span>⬛</span>
               <span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>
             </button>
+          </div>
+
+          <!-- ゼロくん完了メッセージ -->
+          <div class="flex items-center gap-2 p-3 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900 font-medium">
+            <span class="text-base select-none shrink-0">🛡️</span>
+            <span><strong>ゼロくん：</strong>墨消し処理はブラウザのCanvas上で不可逆にピクセル破壊されます。コピペで裏の文字が漏れる心配はありません。</span>
           </div>
 
           <!-- 法務防衛・完全免責事項（最重要常設バナー） -->

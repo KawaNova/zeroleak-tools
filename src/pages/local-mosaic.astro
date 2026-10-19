@@ -94,6 +94,14 @@ const extraSchemaGraph = [
         </button>
       </div>
 
+      <!-- ゼロくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
       <div class="flex flex-col items-start gap-3">
         <div>
           <div class="flex w-full items-center gap-4 sm:gap-6">
@@ -105,7 +113,7 @@ const extraSchemaGraph = [
             管理画面スクショや顔・ナンバーをドラッグで不可逆加工。Ctrl+V貼り付け＆複数枚一括適用に対応。
           </p>
 </div>
-<Mascot name="tool-mosaic" fallback="🕶️" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+<Mascot name="tool-mosaic" fallback="🕶️" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
 </div>
         </div>
 
@@ -333,6 +341,12 @@ const extraSchemaGraph = [
               <span>📦 全画像をZIPで一括保存</span>
             </button>
           </div>
+        </div>
+
+        <!-- ゼロくん完了メッセージ -->
+        <div class="flex items-center gap-2 p-3 rounded-xl bg-indigo-100/70 border border-indigo-200 text-xs text-indigo-950 font-medium">
+          <span class="text-base select-none shrink-0">🛡️</span>
+          <span><strong>ゼロくん：</strong>モザイク・黒塗りの加工が完了しました！ピクセルが不可逆消去され、端末内だけで安全に保存できます。</span>
         </div>
 
       </div>

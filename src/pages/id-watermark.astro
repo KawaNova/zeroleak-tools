@@ -90,6 +90,14 @@ const extraSchemaGraph = [
         </button>
       </div>
 
+      <!-- ゼロくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
       <div class="flex flex-col items-start gap-3">
         <div>
           <div class="flex w-full items-center gap-4 sm:gap-6">
@@ -101,7 +109,7 @@ const extraSchemaGraph = [
                 バイト・フリマ・賃貸申込での身分証提出時に「〇〇提出用 悪用禁止」の半透明透かしを焼き込み。不正転用を防止。ブラウザ内完結・外部送信0バイト。
               </p>
             </div>
-            <Mascot name="tool-watermark" fallback="🪪" width={420} eager class="hidden sm:block w-36 lg:w-48 rounded-2xl shrink-0" />
+            <Mascot name="tool-watermark" fallback="🪪" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
           </div>
         </div>
 
@@ -281,7 +289,7 @@ const extraSchemaGraph = [
         </div>
 
         <!-- ダウンロードボタン -->
-        <div class="pt-2">
+        <div class="pt-2 space-y-2">
           <button
             id="downloadImageBtn"
             type="button"
@@ -291,6 +299,10 @@ const extraSchemaGraph = [
             <span>📥</span>
             <span>透かし入り画像を保存（PNG）</span>
           </button>
+          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 font-medium">
+            <span class="text-base select-none shrink-0">🛡️</span>
+            <span><strong>ゼロくん：</strong>透かし処理はCanvas上で直接描画されています。画像が外部へ送られる心配はありません。</span>
+          </div>
         </div>
 
       </div>
