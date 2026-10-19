@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev --port 8105 --host",
-    "build": "astro build",
+    "sitemap": "node scripts/update_sitemap.mjs",
+    "build": "node scripts/update_sitemap.mjs && astro build",
     "preview": "astro preview --port 8105 --host",
     "serve:dev": "node scripts/dev_serve.mjs"
   },
