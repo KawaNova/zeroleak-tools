@@ -292,7 +292,41 @@ export const tools: Tool[] = [
     ],
     related: ['ai-prompt-sanitizer', 'csv-masking'],
   },
+  {
+    slug: 'pdf-redaction',
+    href: '/pdf-redaction/',
+    name: '機密PDF 完全黒塗り・墨消し',
+    tagline: 'コピペ復元不可。テキスト層を物理消去して再構築',
+    icon: '⬛',
+    image: 'tool-pdf-redaction',
+    accent: { text: 'text-slate-900', border: 'hover:border-slate-800', soft: 'bg-slate-100', ring: 'border-slate-300' },
+    intent: 'PDFの文字・金額を完全に墨消ししたい',
+    panels: [
+      { icon: '📄', label: 'ふつうのやり方', text: 'PDFの上に黒い四角形（図形）を重ねて「墨消し完了」として提出' },
+      { icon: '🚨', label: '起きる事故', text: '相手がCtrl+Aで全選択・コピペすると、黒い枠の下から文字が丸ごと抜ける' },
+      { icon: '🛡️', label: 'ZeroLeakなら', text: 'Canvasラスタライズで画素を破壊。テキスト層そのものを消滅させて再構築' },
+    ],
+    blindSpots: [
+      {
+        icon: '⚠️',
+        title: '「黒枠を上に重ねただけのPDF」は、コピペで1秒で下の文字が抜ける',
+        html: '世の中で起きる墨消し漏洩事故の9割はこれです。PDFの仕様上、上に黒い矩形を描画しても<strong>裏側のテキストレイヤー（文字コード情報）はそのまま保持</strong>されています。受領者がマウスで選択してCtrl+Cを押すだけで、隠したはずの氏名や金額が丸見えになります。',
+      },
+      {
+        icon: '🛡️',
+        title: '不可逆ラスタライズのみが「物理的復元ゼロ」を保証できる',
+        html: '本ツールはPDFの該当ページを高精細Canvas上でピクセル破壊（#000000上書き）し、<strong>テキスト層を物理的に含まないクリーンな画像PDFとして再構築</strong>します。OCR解析やレイヤー分解を行っても、文字情報は1バイトも存在しません。',
+      },
+    ],
+    situations: [
+      { icon: '🏛️', who: '裁判所・官公庁提出', text: '閲覧制限の墨消し資料をコピペ復元不能にして提出' },
+      { icon: '🧾', who: '見積・請求書の金額秘匿', text: '取引先へ提出する際、仕入れ値や単価を物理的に消去' },
+      { icon: '👥', who: '採用・人事書類', text: '面接官へ渡す履歴書からマイナンバーや家族情報を完全墨消し' },
+    ],
+    related: ['pdf-unlock', 'local-mosaic'],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((t) => t.slug === slug)!;
+
 

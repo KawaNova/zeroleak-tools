@@ -29,6 +29,10 @@ import {
   generateSampleEnv,
   DEFAULT_LOG_OPTIONS,
 } from '../src/utils/log-masking.ts';
+import {
+  analyzePdfRisks,
+  generateSampleConfidentialPdf,
+} from '../src/utils/pdf-redaction.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -399,13 +403,41 @@ async function testLogMaskingEngine() {
   console.log('  ✔ [Test 7.3] Plain Text Log Bearer/Cookie/IP/Email Redaction: PASSED');
 }
 
+async function testPdfRedactionEngine() {
+  console.log('\n========================================');
+  console.log('8. Confidential PDF Redaction & Risk Analyzer (/pdf-redaction/)');
+  console.log('========================================');
+
+  // Test 8.1: 合成機密PDFの生成と機密テキスト（マイナンバー・電話・メール）の自動リスク検出
+  const samplePdfBytes = await generateSampleConfidentialPdf();
+  const analysis = await analyzePdfRisks(samplePdfBytes, ['Chronos', 'Kentaro']);
+
+  if (analysis.numPages < 1) {
+    throw new Error('Sample confidential PDF generation returned 0 pages');
+  }
+  if (analysis.detectedRisks.length < 3) {
+    throw new Error(`Expected >= 3 detected leak risks, got ${analysis.detectedRisks.length}`);
+  }
+
+  const riskTypes = analysis.detectedRisks.map((r) => r.type);
+  if (!riskTypes.includes('mynumber') || !riskTypes.includes('phone') || !riskTypes.includes('email')) {
+    throw new Error('Auto detection failed to identify expected risk categories');
+  }
+
+  console.log(`  Detected ${analysis.detectedRisks.length} leak risks in sample PDF:`);
+  for (const r of analysis.detectedRisks) {
+    console.log(`    - [${r.type.toUpperCase()}] "${r.text}" on page ${r.pageNumber} at (nx: ${r.box.x.toFixed(2)}, ny: ${r.box.y.toFixed(2)})`);
+  }
+  console.log('  ✔ [Test 8.1] PDF Text Layer Risk Analysis & Coordinate Mapping: PASSED');
+}
+
 async function testBuiltHtmlAndCspAudit() {
   console.log('\n========================================');
-  console.log('8. Built HTML / CSP / SEO Keyword Audit (All 9 Routes)');
+  console.log('9. Built HTML / CSP / SEO Keyword Audit (All 10 Routes)');
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
@@ -413,6 +445,7 @@ async function testBuiltHtmlAndCspAudit() {
     { path: 'local-whisper/index.html', mustInclude: ['文字起こし', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'ai-prompt-sanitizer/index.html', mustInclude: ['ChatGPT・AIプロンプト', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'log-masking/index.html', mustInclude: ['HARファイル', '機密情報', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'pdf-redaction/index.html', mustInclude: ['完全黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール', '完全免責'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 
@@ -441,7 +474,7 @@ async function testBuiltHtmlAndCspAudit() {
 
 async function testQualityBudgetAndDevIsolation() {
   console.log('\n========================================');
-  console.log('9. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
+  console.log('10. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
   console.log('========================================');
 
   // 1. 開発用ファイルの混入チェック (Zero Contamination)
@@ -458,8 +491,8 @@ async function testQualityBudgetAndDevIsolation() {
   }
   console.log('  ✔ [Dev Isolation] 0 dev simulator files leaked into production dist/: PASSED');
 
-  // 2. 7ツールの品質予算と直感UI要素の監査
-  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking'];
+  // 2. 8ツールの品質予算と直感UI要素の監査
+  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking', 'pdf-redaction'];
   for (const slug of toolSlugs) {
     const fullPath = path.join(root, 'dist', slug, 'index.html');
     const html = fs.readFileSync(fullPath, 'utf-8');
@@ -491,12 +524,14 @@ async function testQualityBudgetAndDevIsolation() {
     console.log(`  ✔ [Quality Budget] ${slug}: 3-Panel Visual OK | FAQ (${schemaFaqMatches} questions) OK | 0-Byte count (${count0byte}/${max0byte}) OK`);
   }
 
-  // 3. /local-mosaic/ のコピペ剥がし体験デモ（RedactionDemo）監査
-  const mosaicHtml = fs.readFileSync(path.join(root, 'dist', 'local-mosaic', 'index.html'), 'utf-8');
-  if (!mosaicHtml.includes('secureRedactionCanvas') || !mosaicHtml.includes('copyFakeRedactionBtn')) {
-    throw new Error('Interactive RedactionDemo missing in /local-mosaic/');
+  // 3. /local-mosaic/ および /pdf-redaction/ の体験デモ（RedactionDemo）監査
+  for (const demoSlug of ['local-mosaic', 'pdf-redaction']) {
+    const dHtml = fs.readFileSync(path.join(root, 'dist', demoSlug, 'index.html'), 'utf-8');
+    if (!dHtml.includes('secureRedactionCanvas') || !dHtml.includes('copyFakeRedactionBtn')) {
+      throw new Error(`Interactive RedactionDemo missing in /${demoSlug}/`);
+    }
   }
-  console.log('  ✔ [Visual Interaction] RedactionDemo (copy-paste leak vs pixel destruction) in /local-mosaic/: PASSED');
+  console.log('  ✔ [Visual Interaction] RedactionDemo (copy-paste leak vs pixel destruction) in /local-mosaic/ & /pdf-redaction/: PASSED');
 }
 
 async function main() {
@@ -507,10 +542,11 @@ async function main() {
   await testMosaicPixelEngine();
   await testPromptSanitizerAndRestore();
   await testLogMaskingEngine();
+  await testPdfRedactionEngine();
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
   console.log('\n========================================');
-  console.log('ALL 9 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 10 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 
@@ -518,5 +554,6 @@ main().catch((err) => {
   console.error('\n❌ Evaluation test failed:', err);
   process.exit(1);
 });
+
 
 
