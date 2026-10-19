@@ -79,7 +79,10 @@
 4. **情シス申請用仕様書モーダル**: `<SecuritySpecModal />` を配置し、ヘッダー右上のボタンから呼び出せるようにする。
 5. **相互回遊デッキの統合**:
    - ページ最下部に `<RelatedTools currentPath="/<tool-slug>/" />` を配置する。
-   - `src/components/RelatedTools.astro` の `ALL_TOOLS` 配列、`src/layouts/Layout.astro` のヘッダー/フッター、`src/pages/index.astro` のカードグリッド、`public/sitemap.xml` に新ルートを追加する。
+   - `src/data/tools.ts` の `tools` 配列に新ツールを1件追加する（トップのカード・カテゴリタブ・図解パネル・関連ツール・「何をしたい？」チップはすべてここから描画される唯一の正本）。`RelatedTools.astro` に個別配列は無い。
+   - `src/layouts/Layout.astro` のフッターにリンクを追加する。
+   - イラスト `src/assets/illustrations/<image名>.jpg|png` を追加する（ゼロくん統一。文字なし・4:3）。未配置の間は絵文字表示になる。
+   - `public/sitemap.xml` は `npm run build` 時に `scripts/update_sitemap.mjs` が `src/pages/*.astro` から自動生成する（手動編集は不要。lastmod は各ページの最終コミット日）。
 6. **自動検証スクリプトへの登録**:
    - `scripts/verify_operations.mjs` にロジック単体テストとビルド後HTML/CSP監査を追加し、`npm run build` 後に `node --experimental-strip-types scripts/verify_operations.mjs` で全スイート `PASSED` を確認する。
 
