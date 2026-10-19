@@ -38,6 +38,12 @@ import {
   generateSampleContracts,
   formatDiffSummary,
 } from '../src/utils/contract-diff.ts';
+import {
+  generateDummyIdSvgUri,
+  applyWatermarkToCanvas,
+  DEFAULT_WATERMARK_OPTIONS,
+  getTodayDateString,
+} from '../src/utils/id-watermark.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -481,13 +487,87 @@ async function testContractDiffEngine() {
   console.log('  ✔ [Test 9.1] Myers Diff Line & Inline Character Diff: PASSED');
 }
 
+async function testIdWatermarkEngine() {
+  console.log('\n========================================');
+  console.log('10. ID Card & MyNumber Watermark Engine (/id-watermark/)');
+  console.log('========================================');
+
+  // Test 10.1: サンプル身分証（SVGデータURI）の構造検証
+  const dummySvgUri = generateDummyIdSvgUri();
+  if (!dummySvgUri.startsWith('data:image/svg+xml') || !decodeURIComponent(dummySvgUri).includes('運 転 免 許 証')) {
+    throw new Error('Dummy ID Card SVG generation failed');
+  }
+  console.log('  ✔ [Test 10.1] Dummy ID Card SVG Data URI Generation: PASSED');
+
+  // Test 10.2: 今日の日付フォーマット検証 (YYYY/MM/DD)
+  const today = getTodayDateString();
+  if (!/^\d{4}\/\d{2}\/\d{2}$/.test(today)) {
+    throw new Error(`Invalid today date string format: ${today}`);
+  }
+  console.log(`  Today Date String: ${today}`);
+  console.log('  ✔ [Test 10.2] Date Helper Formatting: PASSED');
+
+  // Test 10.3: Canvas描画コンテキストに対する透かし適用モック検証
+  const calls = {
+    fillText: [],
+    rotate: [],
+    translate: [],
+    save: 0,
+    restore: 0,
+  };
+
+  const mockCtx = {
+    save: () => { calls.save++; },
+    restore: () => { calls.restore++; },
+    translate: (x, y) => { calls.translate.push({ x, y }); },
+    rotate: (angle) => { calls.rotate.push(angle); },
+    fillText: (text, x, y) => { calls.fillText.push({ text, x, y }); },
+    set globalAlpha(v) {},
+    set fillStyle(v) {},
+    set font(v) {},
+    set textAlign(v) {},
+    set textBaseline(v) {},
+  };
+
+  // repeat パターンの描画テスト
+  applyWatermarkToCanvas(mockCtx, 800, 500, {
+    ...DEFAULT_WATERMARK_OPTIONS,
+    text: '2026/10/20 提出用 悪用禁止',
+    pattern: 'repeat',
+  });
+
+  if (calls.fillText.length < 5) {
+    throw new Error(`Expected >= 5 repeated watermark texts, got ${calls.fillText.length}`);
+  }
+  if (calls.save !== calls.restore || calls.save === 0) {
+    throw new Error('Canvas state save/restore imbalance');
+  }
+
+  // center パターン描画テスト
+  const centerCalls = { fillText: [] };
+  const mockCenterCtx = {
+    ...mockCtx,
+    fillText: (text, x, y) => { centerCalls.fillText.push({ text, x, y }); },
+  };
+  applyWatermarkToCanvas(mockCenterCtx, 800, 500, {
+    ...DEFAULT_WATERMARK_OPTIONS,
+    pattern: 'center',
+  });
+  if (centerCalls.fillText.length !== 1) {
+    throw new Error(`Center pattern expected exactly 1 text draw, got ${centerCalls.fillText.length}`);
+  }
+
+  console.log(`  Watermark repeat pattern drew ${calls.fillText.length} texts over 800x500 canvas`);
+  console.log('  ✔ [Test 10.3] HTML5 Canvas Watermark Rendering & Multi-pattern Logic: PASSED');
+}
+
 async function testBuiltHtmlAndCspAudit() {
   console.log('\n========================================');
-  console.log('10. Built HTML / CSP / SEO Keyword Audit (All 11 Routes)');
+  console.log('11. Built HTML / CSP / SEO Keyword Audit (All 12 Routes)');
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/local-whisper/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
@@ -497,6 +577,7 @@ async function testBuiltHtmlAndCspAudit() {
     { path: 'log-masking/index.html', mustInclude: ['HARファイル', '機密情報', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-redaction/index.html', mustInclude: ['完全黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール', '完全免責'] },
     { path: 'contract-diff/index.html', mustInclude: ['契約書・NDA', 'Diff', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'id-watermark/index.html', mustInclude: ['身分証', '透かし', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 
@@ -525,7 +606,7 @@ async function testBuiltHtmlAndCspAudit() {
 
 async function testQualityBudgetAndDevIsolation() {
   console.log('\n========================================');
-  console.log('11. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
+  console.log('12. Quality Budget & Dev Isolation Audit (Cognitive Load & Zero Contamination)');
   console.log('========================================');
 
   // 1. 開発用ファイルの混入チェック (Zero Contamination)
@@ -542,8 +623,19 @@ async function testQualityBudgetAndDevIsolation() {
   }
   console.log('  ✔ [Dev Isolation] 0 dev simulator files leaked into production dist/: PASSED');
 
-  // 2. 9ツールの品質予算と直感UI要素の監査
-  const toolSlugs = ['pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'local-whisper', 'ai-prompt-sanitizer', 'log-masking', 'pdf-redaction', 'contract-diff'];
+  // 2. 10ツールの品質予算と直感UI要素の監査
+  const toolSlugs = [
+    'pdf-unlock',
+    'csv-masking',
+    'exif-remover',
+    'local-mosaic',
+    'local-whisper',
+    'ai-prompt-sanitizer',
+    'log-masking',
+    'pdf-redaction',
+    'contract-diff',
+    'id-watermark',
+  ];
   for (const slug of toolSlugs) {
     const fullPath = path.join(root, 'dist', slug, 'index.html');
     const html = fs.readFileSync(fullPath, 'utf-8');
@@ -595,10 +687,11 @@ async function main() {
   await testLogMaskingEngine();
   await testPdfRedactionEngine();
   await testContractDiffEngine();
+  await testIdWatermarkEngine();
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
   console.log('\n========================================');
-  console.log('ALL 11 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 12 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 

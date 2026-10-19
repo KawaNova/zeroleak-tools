@@ -386,6 +386,40 @@ export const tools: Tool[] = [
     ],
     related: ['pdf-redaction', 'ai-prompt-sanitizer'],
   },
+  {
+    slug: 'id-watermark',
+    href: '/id-watermark/',
+    name: '身分証・マイナンバー 悪用防止透かし焼き込み',
+    tagline: '免許証・マイナンバー提出時の不正利用防止。文字・角度・透明度を調整',
+    icon: '🪪',
+    image: 'tool-watermark',
+    category: 'id_privacy',
+    accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
+    intent: '身分証や免許証の画像に提出用透かしを入れたい',
+    panels: [
+      { icon: '🪪', label: 'ふつうのやり方', text: 'バイトやフリマ、賃貸契約で求められた免許証・マイナンバー写真をそのまま提出する' },
+      { icon: '🚨', label: '起きる事故', text: '提出先からの内部流出やハッキングで身分証画像が流出し、勝手に口座開設や借入れに悪用される' },
+      { icon: '🛡️', label: 'ZeroLeakなら', text: 'ブラウザ内だけで「〇〇提出用 悪用禁止」の透かしを全面焼き込み。通信0バイトで安全に出力' },
+    ],
+    blindSpots: [
+      {
+        icon: '💳',
+        title: '提出した身分証画像は「そのまま別の契約」に使い回されるリスクがある',
+        html: '運転免許証やマイナンバーカードの無加工画像が一度流出すると、<strong>消費者金融のオンライン借入れ、格安SIMの不正契約、闇バイトの登録</strong>などに悪用されます。「〇〇提出用 悪用禁止 2026/10/20」と透かしを焼き込んでおくことで、第三者による別用途への転用を物理的に防げます。',
+      },
+      {
+        icon: '☁️',
+        title: '「透かしを入れるための無料加工サイト」に身分証をアップロードする危険',
+        html: 'ネット上の無料透かしツールや画像加工サイトは、画像をサーバーへアップロードして処理しています。<strong>悪用を防ぐために行ったはずの操作で、最も危険な生データを第三者サーバーへ預ける</strong>ことになります。本ツールはCanvas上で直接処理し、外部通信は一切発生しません。',
+      },
+    ],
+    situations: [
+      { icon: '💼', who: 'バイト・転職採用', text: '雇用契約・マイナンバー提出時に会社名・日付を透かし入れ' },
+      { icon: '🏠', who: '賃貸入居・不動産', text: '身分証コピーの提出時に「賃貸申込用」と明記して転用防止' },
+      { icon: '🛍️', who: 'フリマ・会員登録', text: '本人確認書類の提出時に「他目的使用禁止」を斜め焼き込み' },
+    ],
+    related: ['pdf-unlock', 'csv-masking'],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((t) => t.slug === slug)!;
