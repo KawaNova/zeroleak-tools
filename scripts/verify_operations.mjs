@@ -561,6 +561,17 @@ async function testBuiltHtmlAndCspAudit() {
     }
     console.log(`  ✔ [Route Audit] dist/${r.path} (${(html.length / 1024).toFixed(1)} KB): CSP + F12 Banner + RelatedTools + SEO Keywords OK`);
   }
+
+  // llms.txt 配備監査
+  const llmsPath = path.join(root, 'dist', 'llms.txt');
+  if (!fs.existsSync(llmsPath)) {
+    throw new Error('Missing built file: dist/llms.txt');
+  }
+  const llmsContent = fs.readFileSync(llmsPath, 'utf-8');
+  if (!llmsContent.includes('ZeroLeak Tools') || !llmsContent.includes('log-masking') || !llmsContent.includes('0 Bytes Server Transmission')) {
+    throw new Error('Invalid or incomplete dist/llms.txt content');
+  }
+  console.log(`  ✔ [AI/GEO Audit] dist/llms.txt (${(llmsContent.length / 1024).toFixed(1)} KB): Zero-Network Guarantees & 9 Tools Specs OK`);
 }
 
 async function testQualityBudgetAndDevIsolation() {
