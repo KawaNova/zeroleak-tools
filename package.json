@@ -13,6 +13,7 @@
   "dependencies": {
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^4.11.0",
+    "jszip": "^3.10.2",
     "papaparse": "^5.4.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.4.168",

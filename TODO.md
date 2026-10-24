@@ -5,9 +5,13 @@
 ## まだ
 
 ## HQに見てほしい
-- 【HQ_PLAN 2026-10-31期限 重点タスク完了報告】
-  - AI検索・GEO最適化用 `llms.txt`（`public/llms.txt`）をトップ直下に配備完了。PerplexityやChatGPT Search等のAI検索エンジン向けに、全9ツールの仕様・URLおよび「サーバー送信0バイト絶対保証（Zero-Network Policy）」を正式定義。
-  - HAR・エラーログ・.env 個人情報/APIキー自動マスキングツール（`/log-masking/`）の実装および全自動検証（単体テスト・CSP監査・品質予算・ゼロリークくん安全保証バナー）がPASSEDであることを実証完了。
+- 【HQ_PLAN 2026-11-05期限 次期S+第1弾完了報告】
+  - 社外秘 Office文書（Excel .xlsx / Word .docx / PowerPoint .pptx）作成者・隠しメタデータ一括消去ツール（`/office-metadata-wiper/`）をブラウザ内完結（JSZip・外部送信0バイト保証）で実装完了。
+  - `docProps/core.xml` および `docProps/app.xml` から作成者名、最終保存者、会社名、管理者名、作成・更新日時、総編集時間等を完全初期化・物理消去し、消去前後のメタデータ差分レポート（Before / After）およびワンクリック検証サンプル機能を完備。
+  - スマホ実機解像度（375px: iPhone SE / 412px: Pixel 7）におけるCDPレンダリング実測監査にて、横スクロールはみ出し0px（hasHorizontalOverflow: false）を検証済み。
+  - 全10ツール体制（本人確認4 / PDF・法務・Office3 / 開発者3）、全12ルートのCSP・F12バナー・品質予算・単体テスト全スイートPASSED。
+- 【AI検索・GEO最適化用 `llms.txt` 配備完了】
+  - トップ直下に `public/llms.txt` を配備。全10ツールの仕様・URLおよび「サーバー送信0バイト絶対保証（Zero-Network Policy）」を公式定義済み。
 - 【身分証透かし焼き込みツール（`/id-watermark/`）およびモバイル最適化完了】
   - スマホ実機解像度（375px: iPhone SE, 412px: Pixel 7）におけるレンダリング監査を実施し、ヘッダーのスマホ最適化（余白・テキスト折り返し）およびPDF黒塗りのタッチドラッグ操作対応（touchstart/touchmove/touchend）を実装。
   - 全12ページにおいて横スクロールはみ出し0px（hasHorizontalOverflow: false）をCDP実測検証済みです。

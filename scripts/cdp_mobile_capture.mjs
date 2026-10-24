@@ -106,9 +106,9 @@ server.listen(HTTP_PORT, async () => {
       '/csv-masking/',
       '/exif-remover/',
       '/local-mosaic/',
-      '/local-whisper/',
       '/ai-prompt-sanitizer/',
       '/log-masking/',
+      '/office-metadata-wiper/',
       '/pdf-unlock/',
       '/legal/',
     ];

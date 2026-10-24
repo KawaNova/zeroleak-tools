@@ -38,6 +38,11 @@ import {
   DEFAULT_WATERMARK_OPTIONS,
   getTodayDateString,
 } from '../src/utils/id-watermark.ts';
+import {
+  generateSampleOfficeDocx,
+  inspectOfficeMetadata,
+  wipeOfficeMetadata,
+} from '../src/utils/office-metadata.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -197,6 +202,28 @@ async function testExifAndZip() {
     throw new Error('Invalid ZIP header signature');
   }
   console.log(`  ✔ [Test 3.2] In-Browser ZIP Archive Generation (${zipBytes.length} bytes): PASSED`);
+}
+
+async function testOfficeMetadataWiperEngine() {
+  console.log('\n========================================');
+  console.log('4. Office Metadata Wiper Engine (/office-metadata-wiper/)');
+  console.log('========================================');
+
+  const sampleDocx = await generateSampleOfficeDocx();
+  const before = await inspectOfficeMetadata(sampleDocx);
+  if (!before.creator || !before.company || !before.lastModifiedBy) {
+    throw new Error('Sample Office docx metadata generation failed');
+  }
+  console.log(`  [Before Wipe] Creator: "${before.creator}" | Company: "${before.company}" | LastModifiedBy: "${before.lastModifiedBy}"`);
+
+  const wipeRes = await wipeOfficeMetadata(sampleDocx, 'sample_contract.docx');
+  const after = await inspectOfficeMetadata(wipeRes.cleanedBytes);
+  console.log(`  [After Wipe] Removed: ${wipeRes.removedPropertiesCount} properties | Remaining: ${after.totalPropertiesFound}`);
+
+  if (after.totalPropertiesFound !== 0 || after.creator || after.company || after.lastModifiedBy) {
+    throw new Error('Confidential Office metadata leaked after wipe');
+  }
+  console.log('  ✔ [Test 4.1] Office Document Metadata Deep Clean: PASSED');
 }
 
 async function testMosaicPixelEngine() {
@@ -527,7 +554,7 @@ async function testBuiltHtmlAndCspAudit() {
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/', '/office-metadata-wiper/'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
@@ -537,6 +564,7 @@ async function testBuiltHtmlAndCspAudit() {
     { path: 'pdf-redaction/index.html', mustInclude: ['完全黒塗り', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール', '完全免責'] },
     { path: 'contract-diff/index.html', mustInclude: ['契約書・NDA', 'Diff', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'id-watermark/index.html', mustInclude: ['身分証', '透かし', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
+    { path: 'office-metadata-wiper/index.html', mustInclude: ['Office文書', '作成者', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
   ];
 
@@ -568,10 +596,10 @@ async function testBuiltHtmlAndCspAudit() {
     throw new Error('Missing built file: dist/llms.txt');
   }
   const llmsContent = fs.readFileSync(llmsPath, 'utf-8');
-  if (!llmsContent.includes('ZeroLeak Tools') || !llmsContent.includes('log-masking') || !llmsContent.includes('0 Bytes Server Transmission')) {
+  if (!llmsContent.includes('ZeroLeak Tools') || !llmsContent.includes('log-masking') || !llmsContent.includes('office-metadata-wiper') || !llmsContent.includes('0 Bytes Server Transmission')) {
     throw new Error('Invalid or incomplete dist/llms.txt content');
   }
-  console.log(`  ✔ [AI/GEO Audit] dist/llms.txt (${(llmsContent.length / 1024).toFixed(1)} KB): Zero-Network Guarantees & 9 Tools Specs OK`);
+  console.log(`  ✔ [AI/GEO Audit] dist/llms.txt (${(llmsContent.length / 1024).toFixed(1)} KB): Zero-Network Guarantees & 10 Tools Specs OK`);
 }
 
 async function testQualityBudgetAndDevIsolation() {
@@ -604,6 +632,7 @@ async function testQualityBudgetAndDevIsolation() {
     'pdf-redaction',
     'contract-diff',
     'id-watermark',
+    'office-metadata-wiper',
   ];
   for (const slug of toolSlugs) {
     const fullPath = path.join(root, 'dist', slug, 'index.html');
@@ -650,6 +679,7 @@ async function main() {
   await testAllCsvs();
   await testAllPdfs();
   await testExifAndZip();
+  await testOfficeMetadataWiperEngine();
   await testMosaicPixelEngine();
   await testPromptSanitizerAndRestore();
   await testLogMaskingEngine();

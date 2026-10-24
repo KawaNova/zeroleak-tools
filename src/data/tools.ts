@@ -380,6 +380,40 @@ export const tools: Tool[] = [
     ],
     related: ['pdf-unlock', 'csv-masking'],
   },
+  {
+    slug: 'office-metadata-wiper',
+    href: '/office-metadata-wiper/',
+    name: 'Office文書 メタデータ消去',
+    tagline: 'Excel/Wordの作成者・会社名・履歴を抹消',
+    icon: '📑',
+    image: 'tool-diff',
+    category: 'document_legal',
+    accent: { text: 'text-teal-700', border: 'hover:border-teal-500', soft: 'bg-teal-50', ring: 'border-teal-200' },
+    intent: 'ExcelやWordから作成者名や会社名を消したい',
+    panels: [
+      { icon: '📊', label: 'ふつうのやり方', text: '社内作成したExcelやWordの見積書・提案書をそのまま社外へメール送付する' },
+      { icon: '🚨', label: '起きる事故', text: 'ファイルのプロパティやXML内に「作成者の実名」「会社名」「下請け外注先」「総編集時間」が残っており取引先に筒抜けになる' },
+      { icon: '🛡️', label: 'ZeroLeakなら', text: 'ブラウザ内でOffice内部XMLを展開し、作成者・会社名・更新履歴のみを完全初期化。通信0バイト' },
+    ],
+    blindSpots: [
+      {
+        icon: '👤',
+        title: 'Officeファイルの内部には「外注先や作成者の実名」が永続記録されている',
+        html: 'Excel（.xlsx）やWord（.docx）のプロパティには、<strong>作成者のフルネーム、所属会社、最終保存者、編集時間、テンプレート名</strong>が自動記録されます。下請けや外部パートナーが作成した資料を提出する際、元の下請け企業名が残ったまま提出される事故が多発しています。',
+      },
+      {
+        icon: '🚫',
+        title: '無料のファイル変換サイトへ社外秘Excelをアップロードするコンプラ違反',
+        html: 'Web上の無料プロパティ削除サイトは、ファイルを海外クラウドサーバーへ転送して処理します。<strong>見積金額や原価計算式、社外秘の提案書が第三者サーバーへ保存される</strong>ため、企業のセキュリティ規程に違反します。本ツールは端末内完結で外部送信は0バイトです。',
+      },
+    ],
+    situations: [
+      { icon: '💼', who: '営業・見積提出', text: 'Excel見積書の作成者名・最終更新者をクリアして提出' },
+      { icon: '🤝', who: '提案書・コンペ', text: 'Word企画書の下請け・外部協力会社の名前を完全に消去' },
+      { icon: '📑', who: '公募・官公庁入札', text: '応札資料のプロパティから会社名・PC環境情報を抹消' },
+    ],
+    related: ['pdf-unlock', 'contract-diff'],
+  },
 ];
 
 export const toolBySlug = (slug: string) => tools.find((t) => t.slug === slug)!;
