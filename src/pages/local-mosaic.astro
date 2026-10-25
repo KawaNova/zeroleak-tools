@@ -1,137 +1,70 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 import RedactionDemo from '../components/RedactionDemo.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "画像の顔・ナンバー・機密箇所にブラウザでモザイク・黒塗りを一括適用する3ステップ（サーバー送信なし）",
-    "description": "社外秘の管理画面キャプチャや現場写真・車両ナンバー・顔写真を、外部サーバーに一切送信せずブラウザ内Canvasだけでモザイク・ぼかし・黒塗り加工し、ZIP一括保存する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "画像・スクリーンショットをドラッグ＆ドロップ（複数枚対応）",
-        "text": "モザイクや黒塗りをかけたい写真・画面キャプチャ（JPEG/PNG/WebP）をまとめてドロップします。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "マウスまたはタッチで隠したい箇所をドラッグ指定",
-        "text": "「モザイク」「すりガラスぼかし」「完全黒塗り」「白抜き」から効果を選び、顔やナンバープレート、顧客名、URLバーをドラッグで囲みます。同じ座標を全画像へ一括適用することも可能です。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "ZIPで一括ダウンロードまたは個別保存",
-        "text": "ピクセル自体が不可逆に書き換えられ（EXIF位置情報も同時消去）、復元不可能な安全な画像として保存します。"
-      }
-    ]
+    name: '画像・スクリーンショットをドラッグ＆ドロップ（複数枚対応）',
+    text: 'モザイクや黒塗りをかけたい写真・画面キャプチャ（JPEG/PNG/WebP）をまとめてドロップします。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "社内管理画面のキャプチャや未公開製品の写真を無料モザイクサイトにアップロードするのは危険ですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "非常に危険です。一般的なオンライン画像編集ツールは、モザイクをかける前の『無加工の機密スクリーンショットや顔写真』を一度外部サーバーへアップロードします。ZeroLeak Toolsはサーバー送信なし（0バイト）で、お使いのPC・スマホのブラウザ内メモリ（HTML5 Canvas）だけで処理するため、社外秘画像が外部へ漏洩するリスクは0%です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "加工後の画像からモザイクや黒塗りを復元（逆算）されることはありませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ありません。PDFの注釈レイヤーのような『上に重ねただけのマスク』ではなく、Canvasの画素（RGBピクセル配列）そのものを破壊的に平均化・塗りつぶして再エンコードするため、元の文字や顔を復元することは原理的に不可能です。特に機密性の高いマイナンバーやAPIキーには『完全黒塗り』を推奨します。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "同じレイアウトの画面キャプチャ10枚〜50枚の同じ位置（URLバーや顧客名欄）に一括でモザイクをかけられますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。『現在のマスク領域を全画像に一括コピー』ボタンを押すだけで、1枚目で指定したモザイク・黒塗り座標（比率）を、読み込んだすべての画像へ一瞬で一括適用し、まとめてZIPファイルとしてダウンロードできます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "モザイク加工と同時に写真のEXIF（GPS位置情報）も消えますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。Canvasでピクセルを再出力する過程で、元の画像に含まれていたEXIF・GPS位置情報・カメラ機種名などのメタデータはすべて自動的に除去されます。"
-        }
-      }
-    ]
-  }
+    name: 'マウスまたはタッチで隠したい箇所をドラッグ指定',
+    text: '「モザイク」「すりガラスぼかし」「完全黒塗り」「白抜き」から効果を選び、顔やナンバープレート、顧客名、URLバーをドラッグで囲みます。同じ座標を全画像へ一括適用することも可能です。',
+  },
+  {
+    name: 'ZIPで一括ダウンロードまたは個別保存',
+    text: 'ピクセル自体が不可逆に書き換えられ（EXIF位置情報も同時消去）、復元不可能な安全な画像として保存します。',
+  },
+];
+
+const faqs = [
+  {
+    question: '社内管理画面のキャプチャや未公開製品の写真を無料モザイクサイトにアップロードするのは危険ですか？',
+    answer: '非常に危険です。一般的なオンライン画像編集ツールは、モザイクをかける前の『無加工の機密スクリーンショットや顔写真』を一度外部サーバーへアップロードします。ZeroLeak Toolsはサーバー送信なし（0バイト）で、お使いのPC・スマホのブラウザ内メモリ（HTML5 Canvas）だけで処理するため、社外秘画像が外部へ漏洩するリスクは0%です。',
+  },
+  {
+    question: '加工後の画像からモザイクや黒塗りを復元（逆算）されることはありませんか？',
+    answer: 'ありません。PDFの注釈レイヤーのような『上に重ねただけのマスク』ではなく、Canvasの画素（RGBピクセル配列）そのものを破壊的に平均化・塗りつぶして再エンコードするため、元の文字や顔を復元することは原理的に不可能です。特に機密性の高いマイナンバーやAPIキーには『完全黒塗り』を推奨します。',
+  },
+  {
+    question: '同じレイアウトの画面キャプチャ10枚〜50枚の同じ位置（URLバーや顧客名欄）に一括でモザイクをかけられますか？',
+    answer: 'はい。『現在のマスク領域を全画像に一括コピー』ボタンを押すだけで、1枚目で指定したモザイク・黒塗り座標（比率）を、読み込んだすべての画像へ一瞬で一括適用し、まとめてZIPファイルとしてダウンロードできます。',
+  },
+  {
+    question: 'モザイク加工と同時に写真のEXIF（GPS位置情報）も消えますか？',
+    answer: 'はい。Canvasでピクセルを再出力する過程で、元の画像に含まれていたEXIF・GPS位置情報・カメラ機種名などのメタデータはすべて自動的に除去されます。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="local-mosaic"
   title="画像・写真のモザイク＆完全黒塗り一括加工"
   description="社外秘の画面キャプチャ、顧客名、顔写真、車のナンバープレートをブラウザ内で即座にモザイク・黒塗り加工。外部送信なし・複数枚一括適用＆ZIP保存に対応。"
   canonicalPath="/local-mosaic/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="画像 顔・ナンバー・機密箇所モザイク＆黒塗り"
+  subtitle="管理画面スクショや顔・ナンバーをドラッグで不可逆加工。Ctrl+V貼り付け＆複数枚一括適用に対応。"
+  mascotName="tool-mosaic"
+  mascotFallback="🕶️"
+  whyTitle="「黒く塗ったから安全」では、コピペで剥がれる"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
-
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        
-
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-<div class="min-w-0 flex-1 space-y-1.5">
-<h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            画像 顔・ナンバー・機密箇所モザイク＆黒塗り
-          </h1>
-          <p class="text-slate-600 text-xs sm:text-sm mt-1">
-            管理画面スクショや顔・ナンバーをドラッグで不可逆加工。Ctrl+V貼り付け＆複数枚一括適用に対応。
-          </p>
-</div>
-<Mascot name="tool-mosaic" fallback="🕶️" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-</div>
-        </div>
-
-        <!-- ワンクリック検証用サンプルボタン -->
-        <button
-          id="loadSampleMosaicBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-        >
-          <span>🧪</span>
-          <span>模擬キャプチャ2枚で試す</span>
-        </button>
-      </div>
+  <div class="space-y-6">
+    <!-- ワンクリック検証用サンプルボタン -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        id="loadSampleMosaicBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      >
+        <span>🧪</span>
+        <span>模擬キャプチャ2枚で試す</span>
+      </button>
     </div>
 
     <!-- メイン操作パネル -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
-
       <!-- ファイルドロップゾーン -->
       <div
         id="dropZoneMosaic"
@@ -140,113 +73,106 @@ const extraSchemaGraph = [
         <input
           type="file"
           id="fileInputMosaic"
-          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
           multiple
+          accept="image/jpeg,image/png,image/webp"
           class="hidden"
         />
         <div class="flex flex-col items-center gap-2 pointer-events-none">
-          <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform shadow-xs">
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs text-xl font-bold">
             🕶️
           </div>
           <div>
             <p class="font-bold text-slate-800 text-sm sm:text-base">
-              モザイク・黒塗りしたい画像をドロップ（複数枚対応・Ctrl+V貼付OK）
+              モザイク・黒塗りしたい画像をドロップ
             </p>
             <p class="text-xs text-slate-500 mt-0.5">
-              クリックしてファイル選択 (.jpg, .png, .webp) • Win+Shift+S等で撮ったスクショをそのまま貼り付け可能
+              またはクリックして選択 • 複数枚まとめて選択・Ctrl+V貼り付け対応
             </p>
           </div>
-          <div class="flex flex-wrap items-center justify-center gap-2 mt-0.5">
-            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-indigo-800 shadow-xs font-medium">
-              🔒 サーバー送信0バイト（無加工画像は外部に出ません）
+          <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-700 shadow-2xs font-semibold">
+              🔒 サーバー送信0バイト保証
             </span>
-            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
-              📐 全画像への同一位置一括マスク対応
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-emerald-800 shadow-2xs font-bold">
+              🚫 EXIF位置情報も自動消去
             </span>
           </div>
         </div>
       </div>
 
-      <!-- エディタ＆一括操作ワークスペース（画像読み込み後に表示） -->
+      <!-- 作業ワークスペース（画像読み込み後に表示） -->
       <div id="mosaicWorkspace" class="hidden space-y-5">
-
-        <!-- ツールバー（エフェクト種類・強度・Undo/クリア・全画像一括コピー） -->
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            
-            <!-- エフェクト種別選択 -->
-            <div class="space-y-1.5">
-              <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
-                1. マスク種類を選択（画像上をドラッグして範囲指定）
-              </span>
-              <div class="flex flex-wrap items-center gap-2 text-xs">
-                <button
-                  type="button"
-                  data-effect="pixelate"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-indigo-600 text-white border-indigo-600 shadow-xs"
-                >
-                  🟦 ピクセルモザイク
-                </button>
-                <button
-                  type="button"
-                  data-effect="blur"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
-                >
-                  🌫️ すりガラスぼかし
-                </button>
-                <button
-                  type="button"
-                  data-effect="blackout"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
-                >
-                  ⬛ 完全黒塗り（海苔）
-                </button>
-                <button
-                  type="button"
-                  data-effect="whiteout"
-                  class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-white text-slate-700 border-slate-300 hover:border-slate-400 shadow-2xs"
-                >
-                  ⬜ 白塗り消去
-                </button>
-              </div>
+        <!-- ツールバー：モード切替 ＆ 強度スライダー ＆ 一括適用 -->
+        <div class="p-4 rounded-xl bg-slate-900 text-white space-y-4 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+            <!-- 加工モード選択 -->
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-slate-400 font-semibold mr-1">加工タイプ:</span>
+              <button
+                type="button"
+                data-effect="pixelate"
+                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
+              >
+                ⬛ モザイク
+              </button>
+              <button
+                type="button"
+                data-effect="blur"
+                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+              >
+                💧 ぼかし
+              </button>
+              <button
+                type="button"
+                data-effect="blackout"
+                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+              >
+                ■ 完全黒塗り
+              </button>
+              <button
+                type="button"
+                data-effect="whiteout"
+                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+              >
+                □ 白塗り
+              </button>
             </div>
 
-            <!-- 粗さ・強度スライダー -->
-            <div class="space-y-1.5 min-w-[200px]">
-              <div class="flex items-center justify-between text-[11px] text-slate-600">
-                <span class="font-bold">2. モザイク・ぼかし強度</span>
-                <span id="strengthValLabel" class="font-mono text-indigo-700 font-bold">18</span>
-              </div>
-              <input
-                type="range"
-                id="strengthSlider"
-                min="6"
-                max="48"
-                value="18"
-                class="w-full accent-indigo-600 cursor-pointer"
-              />
-            </div>
-
-            <!-- 編集アクションボタン群 -->
-            <div class="flex flex-wrap items-center gap-2 self-start lg:self-end">
+            <!-- 操作取り消し ＆ 全クリア -->
+            <div class="flex items-center gap-2">
               <button
                 type="button"
                 id="undoRegionBtn"
-                class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold shadow-xs transition cursor-pointer"
+                class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer font-medium"
               >
-                ↩ 1つ戻す
+                ↩ 直前を取り消す
               </button>
               <button
                 type="button"
                 id="clearRegionsBtn"
-                class="px-3 py-2 rounded-lg bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-300 text-xs font-semibold shadow-xs transition cursor-pointer"
+                class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 text-rose-300 border border-slate-700 transition cursor-pointer font-medium"
               >
                 🗑️ この画像の枠を全消去
               </button>
             </div>
           </div>
 
-          <!-- 複数枚の一括同期バー -->
+          <!-- 強度スライダー -->
+          <div class="pt-2 border-t border-slate-800 flex items-center gap-4 text-xs">
+            <span class="text-slate-400 font-semibold shrink-0">モザイク・ぼかし強度:</span>
+            <input
+              type="range"
+              id="strengthSlider"
+              min="6"
+              max="40"
+              value="18"
+              class="w-48 sm:w-64 accent-emerald-500 cursor-pointer"
+            />
+            <span id="strengthValLabel" class="font-mono text-emerald-400 font-bold">18</span>
+            <span class="text-slate-400 text-[11px] hidden sm:inline">（数字が大きいほど強く隠れます）</span>
+          </div>
+
+          <!-- 複数画像一括同期ボタン -->
           <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2 text-slate-700">
               <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold text-[11px]">
@@ -269,7 +195,6 @@ const extraSchemaGraph = [
 
         <!-- 画像切り替えサムネイル＆キャンバス領域 -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
-          
           <!-- 左：読み込み済み画像リスト -->
           <div class="lg:col-span-1 space-y-2">
             <div class="flex items-center justify-between text-xs text-slate-500 px-1">
@@ -306,7 +231,6 @@ const extraSchemaGraph = [
               ></canvas>
             </div>
           </div>
-
         </div>
 
         <!-- 保存＆一括ZIP出力フッターバー -->
@@ -348,571 +272,509 @@ const extraSchemaGraph = [
           <span class="text-base select-none shrink-0">🛡️</span>
           <span><strong>ゼロリークくん：</strong>モザイク・黒塗りの加工が完了しました！ピクセルが不可逆消去され、端末内だけで安全に保存できます。</span>
         </div>
-
       </div>
-
     </div>
 
-    <WhySection slug="local-mosaic" title="「黒く塗ったから安全」では、コピペで剥がれる" />
-
     <RedactionDemo />
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 社外秘のキャプチャを無料モザイクサイトにアップロードするのはなぜ危険なのですか？</span>
-            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            一般的なオンライン画像加工サイトは、モザイクをかける前の「生画像」を一度サーバーへ送信して処理します。つまり隠したい顧客名やAPIキーがそのまま外部サーバーに渡ってしまいます。ZeroLeak Toolsはサーバー送信なし（0バイト）でブラウザ内のメモリだけで完結するため安全です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 保存した画像からモザイクや黒塗りが外されることはありませんか？</span>
-            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            ありません。画像の上に図形を重ねただけのデータではなく、対象領域のピクセル（RGB値）自体を破壊的に書き換えて1枚のフラットな画像として出力するため、後からモザイクを剥がすことは不可能です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 複数枚のスクリーンショットの同じ位置に一括でモザイクをかけられますか？</span>
-            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。複数枚の画像をドロップし、1枚目でモザイクや黒塗りの枠を設定したあと「現在のマスク位置を全画像に一括コピー適用」をクリックすると、全画像の同じ位置に一括適用され、ZIPでまとめてダウンロードできます。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. モザイク加工と同時に写真のEXIF（GPS位置情報）も消えますか？</span>
-            <span class="text-indigo-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。Canvasでピクセルを再出力する過程で、元の画像に含まれていたEXIF・GPS位置情報・カメラ機種名などのメタデータはすべて自動的に除去されます。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <RelatedTools currentPath="/local-mosaic/" />
   </div>
+</ToolShell>
 
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
+<script>
+  import {
+    applyRegionEffect,
+    renderMaskedImageBytes,
+    generateSampleMosaicImages,
+    type MaskEffectType,
+    type NormalizedRegion,
+  } from '../utils/mosaic';
+  import { createZipArchive } from '../utils/exif';
 
-  <!-- クライアントサイドスクリプト -->
-  <script>
-    import {
-      applyRegionEffect,
-      renderMaskedImageBytes,
-      generateSampleMosaicImages,
-      type MaskEffectType,
-      type NormalizedRegion,
-    } from '../utils/mosaic';
-    import { createZipArchive } from '../utils/exif';
+  interface MosaicImageEntry {
+    id: string;
+    name: string;
+    mimeType: string;
+    sourceBytes: Uint8Array;
+    bitmap: ImageBitmap;
+    width: number;
+    height: number;
+    regions: NormalizedRegion[];
+  }
 
-    interface MosaicImageEntry {
-      id: string;
-      name: string;
-      mimeType: string;
-      sourceBytes: Uint8Array;
-      bitmap: ImageBitmap;
-      width: number;
-      height: number;
-      regions: NormalizedRegion[];
-    }
+  let entries: MosaicImageEntry[] = [];
+  let activeIndex = 0;
+  let currentEffect: MaskEffectType = 'pixelate';
+  let currentStrength = 18;
 
-    let entries: MosaicImageEntry[] = [];
-    let activeIndex = 0;
-    let currentEffect: MaskEffectType = 'pixelate';
-    let currentStrength = 18;
+  // ドラッグ描画状態
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragCurrentX = 0;
+  let dragCurrentY = 0;
 
-    // ドラッグ描画状態
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let dragCurrentX = 0;
-    let dragCurrentY = 0;
+  // DOM要素
+  const dropZone = document.getElementById('dropZoneMosaic')!;
+  const fileInput = document.getElementById('fileInputMosaic') as HTMLInputElement;
+  const loadSampleBtn = document.getElementById('loadSampleMosaicBtn')!;
+  const workspace = document.getElementById('mosaicWorkspace')!;
+  const strengthSlider = document.getElementById('strengthSlider') as HTMLInputElement;
+  const strengthValLabel = document.getElementById('strengthValLabel')!;
+  const undoRegionBtn = document.getElementById('undoRegionBtn')!;
+  const clearRegionsBtn = document.getElementById('clearRegionsBtn')!;
+  const applyRegionsToAllBtn = document.getElementById('applyRegionsToAllBtn')!;
+  const activeRegionCountText = document.getElementById('activeRegionCountText')!;
+  const imageTotalCount = document.getElementById('imageTotalCount')!;
+  const addMoreFilesBtn = document.getElementById('addMoreFilesBtn')!;
+  const imageListEl = document.getElementById('mosaicImageList')!;
+  const canvas = document.getElementById('mosaicEditorCanvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+  const canvasDimensionLabel = document.getElementById('canvasDimensionLabel')!;
+  const mosaicProcessStatus = document.getElementById('mosaicProcessStatus')!;
+  const downloadCurrentBtn = document.getElementById('downloadCurrentMaskedBtn')!;
+  const downloadAllZipBtn = document.getElementById('downloadAllMaskedZipBtn')!;
 
-    // DOM要素
-    const dropZone = document.getElementById('dropZoneMosaic')!;
-    const fileInput = document.getElementById('fileInputMosaic') as HTMLInputElement;
-    const loadSampleBtn = document.getElementById('loadSampleMosaicBtn')!;
-    const workspace = document.getElementById('mosaicWorkspace')!;
-    const strengthSlider = document.getElementById('strengthSlider') as HTMLInputElement;
-    const strengthValLabel = document.getElementById('strengthValLabel')!;
-    const undoRegionBtn = document.getElementById('undoRegionBtn')!;
-    const clearRegionsBtn = document.getElementById('clearRegionsBtn')!;
-    const applyRegionsToAllBtn = document.getElementById('applyRegionsToAllBtn')!;
-    const activeRegionCountText = document.getElementById('activeRegionCountText')!;
-    const imageTotalCount = document.getElementById('imageTotalCount')!;
-    const addMoreFilesBtn = document.getElementById('addMoreFilesBtn')!;
-    const imageListEl = document.getElementById('mosaicImageList')!;
-    const canvas = document.getElementById('mosaicEditorCanvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d')!;
-    const canvasDimensionLabel = document.getElementById('canvasDimensionLabel')!;
-    const mosaicProcessStatus = document.getElementById('mosaicProcessStatus')!;
-    const downloadCurrentBtn = document.getElementById('downloadCurrentMaskedBtn')!;
-    const downloadAllZipBtn = document.getElementById('downloadAllMaskedZipBtn')!;
+  // エフェクトモード切替
+  document.querySelectorAll('.effect-mode-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const eff = target.getAttribute('data-effect') as MaskEffectType;
+      if (!eff) return;
+      currentEffect = eff;
 
-    // エフェクトモード切替
-    document.querySelectorAll('.effect-mode-btn').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLElement;
-        const eff = target.getAttribute('data-effect') as MaskEffectType;
-        if (!eff) return;
-        currentEffect = eff;
-
-        document.querySelectorAll('.effect-mode-btn').forEach((b) => {
-          b.className =
-            'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500';
-        });
-        target.className =
-          'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50';
+      document.querySelectorAll('.effect-mode-btn').forEach((b) => {
+        b.className =
+          'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500';
       });
+      target.className =
+        'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50';
     });
+  });
 
-    // 強度スライダー
-    strengthSlider.addEventListener('input', () => {
-      currentStrength = Number(strengthSlider.value);
-      strengthValLabel.textContent = String(currentStrength);
-    });
+  // 強度スライダー
+  strengthSlider.addEventListener('input', () => {
+    currentStrength = Number(strengthSlider.value);
+    strengthValLabel.textContent = String(currentStrength);
+  });
 
-    // ファイルドロップ＆選択
-    dropZone.addEventListener('click', () => fileInput.click());
-    addMoreFilesBtn.addEventListener('click', () => fileInput.click());
+  // ファイルドロップ＆選択
+  dropZone.addEventListener('click', () => fileInput.click());
+  addMoreFilesBtn.addEventListener('click', () => fileInput.click());
 
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('border-emerald-500');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-emerald-500');
-    });
-    dropZone.addEventListener('drop', async (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('border-emerald-500');
-      if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
-        await addFiles(Array.from(e.dataTransfer.files));
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-emerald-500');
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-emerald-500');
+  });
+  dropZone.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-emerald-500');
+    if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+      await addFiles(Array.from(e.dataTransfer.files));
+    }
+  });
+
+  fileInput.addEventListener('change', async () => {
+    if (fileInput.files && fileInput.files.length > 0) {
+      await addFiles(Array.from(fileInput.files));
+      fileInput.value = '';
+    }
+  });
+
+  // Ctrl+V クリップボード画像貼り付け対応
+  window.addEventListener('paste', async (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    const pastedFiles: File[] = [];
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.startsWith('image/')) {
+        const f = items[i].getAsFile();
+        if (f) pastedFiles.push(f);
       }
-    });
+    }
+    if (pastedFiles.length > 0) {
+      await addFiles(pastedFiles);
+    }
+  });
 
-    fileInput.addEventListener('change', async () => {
-      if (fileInput.files && fileInput.files.length > 0) {
-        await addFiles(Array.from(fileInput.files));
-        fileInput.value = '';
-      }
-    });
-
-    // Ctrl+V クリップボード画像貼り付け対応
-    window.addEventListener('paste', async (e) => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-      const pastedFiles: File[] = [];
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.startsWith('image/')) {
-          const f = items[i].getAsFile();
-          if (f) pastedFiles.push(f);
-        }
-      }
-      if (pastedFiles.length > 0) {
-        await addFiles(pastedFiles);
-      }
-    });
-
-    // サンプル画像2枚読み込み
-    loadSampleBtn.addEventListener('click', async () => {
-      loadSampleBtn.setAttribute('disabled', 'true');
-      try {
-        const samples = await generateSampleMosaicImages();
-        entries = [];
-        for (const s of samples) {
-          const buf = s.bytes.buffer.slice(
-            s.bytes.byteOffset,
-            s.bytes.byteOffset + s.bytes.byteLength
-          ) as ArrayBuffer;
-          const blob = new Blob([buf], { type: s.mimeType });
-          const bitmap = await createImageBitmap(blob);
-          entries.push({
-            id: Math.random().toString(36).slice(2),
-            name: s.name,
-            mimeType: s.mimeType,
-            sourceBytes: s.bytes,
-            bitmap,
-            width: bitmap.width,
-            height: bitmap.height,
-            regions: s.presetRegions.map((r) => ({ ...r })),
-          });
-        }
-        activeIndex = 0;
-        workspace.classList.remove('hidden');
-        renderSidebarList();
-        renderActiveCanvas();
-        workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } finally {
-        loadSampleBtn.removeAttribute('disabled');
-      }
-    });
-
-    async function addFiles(files: File[]) {
-      const valid = files.filter(
-        (f) =>
-          /\.(jpe?g|png|webp)$/i.test(f.name) ||
-          ['image/jpeg', 'image/png', 'image/webp'].includes(f.type)
-      );
-      if (valid.length === 0) {
-        alert('JPEG / PNG / WebP 形式の画像を選択してください。');
-        return;
-      }
-
-      for (const f of valid) {
-        const buf = await f.arrayBuffer();
-        const bytes = new Uint8Array(buf);
-        const mime =
-          f.type || (f.name.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
-        const blob = new Blob([buf], { type: mime });
+  // サンプル画像2枚読み込み
+  loadSampleBtn.addEventListener('click', async () => {
+    loadSampleBtn.setAttribute('disabled', 'true');
+    try {
+      const samples = await generateSampleMosaicImages();
+      entries = [];
+      for (const s of samples) {
+        const buf = s.bytes.buffer.slice(
+          s.bytes.byteOffset,
+          s.bytes.byteOffset + s.bytes.byteLength
+        ) as ArrayBuffer;
+        const blob = new Blob([buf], { type: s.mimeType });
         const bitmap = await createImageBitmap(blob);
         entries.push({
           id: Math.random().toString(36).slice(2),
-          name: f.name || `clipboard_${entries.length + 1}.png`,
-          mimeType: mime,
-          sourceBytes: bytes,
+          name: s.name,
+          mimeType: s.mimeType,
+          sourceBytes: s.bytes,
           bitmap,
           width: bitmap.width,
           height: bitmap.height,
-          regions: [],
+          regions: s.presetRegions.map((r) => ({ ...r })),
         });
       }
-
-      activeIndex = entries.length - valid.length;
+      activeIndex = 0;
       workspace.classList.remove('hidden');
       renderSidebarList();
       renderActiveCanvas();
+      workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } finally {
+      loadSampleBtn.removeAttribute('disabled');
+    }
+  });
+
+  async function addFiles(files: File[]) {
+    const valid = files.filter(
+      (f) =>
+        /\.(jpe?g|png|webp)$/i.test(f.name) ||
+        ['image/jpeg', 'image/png', 'image/webp'].includes(f.type)
+    );
+    if (valid.length === 0) {
+      alert('JPEG / PNG / WebP 形式の画像を選択してください。');
+      return;
     }
 
-    function escapeHtml(str: string): string {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function renderSidebarList() {
-      imageTotalCount.textContent = String(entries.length);
-      imageListEl.innerHTML = entries
-        .map((entry, idx) => {
-          const isActive = idx === activeIndex;
-          const borderClass = isActive
-            ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold ring-1 ring-emerald-500/30'
-            : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50';
-          return `
-            <div
-              data-entry-idx="${idx}"
-              class="entry-select-card p-3 rounded-xl border transition cursor-pointer flex items-center justify-between gap-2 ${borderClass}"
-            >
-              <div class="min-w-0">
-                <p class="text-xs font-bold truncate">${escapeHtml(entry.name)}</p>
-                <p class="text-[11px] text-slate-500 font-mono">
-                  ${entry.width}×${entry.height} • マスク ${entry.regions.length}箇所
-                </p>
-              </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                entry.regions.length > 0
-                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                  : 'bg-slate-100 text-slate-500'
-              }">
-                ${entry.regions.length}枠
-              </span>
-            </div>
-          `;
-        })
-        .join('');
-
-      document.querySelectorAll('.entry-select-card').forEach((card) => {
-        card.addEventListener('click', (e) => {
-          const target = e.currentTarget as HTMLElement;
-          activeIndex = Number(target.getAttribute('data-entry-idx'));
-          renderSidebarList();
-          renderActiveCanvas();
-        });
+    for (const f of valid) {
+      const buf = await f.arrayBuffer();
+      const bytes = new Uint8Array(buf);
+      const mime =
+        f.type || (f.name.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
+      const blob = new Blob([buf], { type: mime });
+      const bitmap = await createImageBitmap(blob);
+      entries.push({
+        id: Math.random().toString(36).slice(2),
+        name: f.name || `clipboard_${entries.length + 1}.png`,
+        mimeType: mime,
+        sourceBytes: bytes,
+        bitmap,
+        width: bitmap.width,
+        height: bitmap.height,
+        regions: [],
       });
     }
 
-    function renderActiveCanvas() {
-      const entry = entries[activeIndex];
-      if (!entry) return;
+    activeIndex = entries.length - valid.length;
+    workspace.classList.remove('hidden');
+    renderSidebarList();
+    renderActiveCanvas();
+  }
 
-      canvas.width = entry.width;
-      canvas.height = entry.height;
-      canvasDimensionLabel.textContent = `${entry.width} × ${entry.height} px`;
-      activeRegionCountText.textContent = `現在の画像（${entry.name}）に ${entry.regions.length} 箇所のマスク領域が設定されています`;
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-      // 元画像を描画
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(entry.bitmap, 0, 0);
+  function renderSidebarList() {
+    imageTotalCount.textContent = String(entries.length);
+    imageListEl.innerHTML = entries
+      .map((entry, idx) => {
+        const isActive = idx === activeIndex;
+        const borderClass = isActive
+          ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold ring-1 ring-emerald-500/30'
+          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50';
+        return `
+          <div
+            data-entry-idx="${idx}"
+            class="entry-select-card p-3 rounded-xl border transition cursor-pointer flex items-center justify-between gap-2 ${borderClass}"
+          >
+            <div class="min-w-0">
+              <p class="text-xs font-bold truncate">${escapeHtml(entry.name)}</p>
+              <p class="text-[11px] text-slate-500 font-mono">
+                ${entry.width}×${entry.height} • マスク ${entry.regions.length}箇所
+              </p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              entry.regions.length > 0
+                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                : 'bg-slate-100 text-slate-500'
+            }">
+              ${entry.regions.length}枠
+            </span>
+          </div>
+        `;
+      })
+      .join('');
 
-      // 各マスク領域を適用
-      for (const reg of entry.regions) {
-        applyRegionEffect(ctx, canvas.width, canvas.height, reg);
-      }
-
-      // 編集中の枠ガイド線（プレビュー用点線）を描画
-      for (const reg of entry.regions) {
-        const rx = reg.nx * canvas.width;
-        const ry = reg.ny * canvas.height;
-        const rw = reg.nw * canvas.width;
-        const rh = reg.nh * canvas.height;
-        ctx.save();
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.75)';
-        ctx.lineWidth = Math.max(2, Math.round(canvas.width / 400));
-        ctx.setLineDash([6, 4]);
-        ctx.strokeRect(rx, ry, rw, rh);
-        ctx.restore();
-      }
-
-      // ドラッグ中の矩形プレビュー
-      if (isDragging) {
-        const x = Math.min(dragStartX, dragCurrentX);
-        const y = Math.min(dragStartY, dragCurrentY);
-        const w = Math.abs(dragCurrentX - dragStartX);
-        const h = Math.abs(dragCurrentY - dragStartY);
-
-        if (w > 4 && h > 4) {
-          const previewReg: NormalizedRegion = {
-            id: 'preview',
-            nx: x / canvas.width,
-            ny: y / canvas.height,
-            nw: w / canvas.width,
-            nh: h / canvas.height,
-            effect: currentEffect,
-            strength: currentStrength,
-          };
-          applyRegionEffect(ctx, canvas.width, canvas.height, previewReg);
-
-          ctx.save();
-          ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = Math.max(2, Math.round(canvas.width / 350));
-          ctx.strokeRect(x, y, w, h);
-          ctx.restore();
-        }
-      }
-    }
-
-    function getCanvasCoords(e: MouseEvent | Touch): { x: number; y: number } {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      return {
-        x: Math.max(0, Math.min(canvas.width, (e.clientX - rect.left) * scaleX)),
-        y: Math.max(0, Math.min(canvas.height, (e.clientY - rect.top) * scaleY)),
-      };
-    }
-
-    // マウスドラッグ操作
-    canvas.addEventListener('mousedown', (e) => {
-      if (!entries[activeIndex]) return;
-      isDragging = true;
-      const pt = getCanvasCoords(e);
-      dragStartX = pt.x;
-      dragStartY = pt.y;
-      dragCurrentX = pt.x;
-      dragCurrentY = pt.y;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const pt = getCanvasCoords(e);
-      dragCurrentX = pt.x;
-      dragCurrentY = pt.y;
-      renderActiveCanvas();
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      commitDraggedRegion();
-    });
-
-    // タッチ操作（スマホ・タブレット対応）
-    canvas.addEventListener(
-      'touchstart',
-      (e) => {
-        if (!entries[activeIndex] || e.touches.length === 0) return;
-        e.preventDefault();
-        isDragging = true;
-        const pt = getCanvasCoords(e.touches[0]);
-        dragStartX = pt.x;
-        dragStartY = pt.y;
-        dragCurrentX = pt.x;
-        dragCurrentY = pt.y;
-      },
-      { passive: false }
-    );
-
-    canvas.addEventListener(
-      'touchmove',
-      (e) => {
-        if (!isDragging || e.touches.length === 0) return;
-        e.preventDefault();
-        const pt = getCanvasCoords(e.touches[0]);
-        dragCurrentX = pt.x;
-        dragCurrentY = pt.y;
+    document.querySelectorAll('.entry-select-card').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        activeIndex = Number(target.getAttribute('data-entry-idx'));
+        renderSidebarList();
         renderActiveCanvas();
-      },
-      { passive: false }
-    );
-
-    canvas.addEventListener('touchend', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      commitDraggedRegion();
+      });
     });
+  }
 
-    function commitDraggedRegion() {
-      const entry = entries[activeIndex];
-      if (!entry) return;
+  function renderActiveCanvas() {
+    const entry = entries[activeIndex];
+    if (!entry) return;
 
+    canvas.width = entry.width;
+    canvas.height = entry.height;
+    canvasDimensionLabel.textContent = `${entry.width} × ${entry.height} px`;
+    activeRegionCountText.textContent = `現在の画像（${entry.name}）に ${entry.regions.length} 箇所のマスク領域が設定されています`;
+
+    // 元画像を描画
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(entry.bitmap, 0, 0);
+
+    // 各マスク領域を適用
+    for (const reg of entry.regions) {
+      applyRegionEffect(ctx, canvas.width, canvas.height, reg);
+    }
+
+    // 編集中の枠ガイド線（プレビュー用点線）を描画
+    for (const reg of entry.regions) {
+      const rx = reg.nx * canvas.width;
+      const ry = reg.ny * canvas.height;
+      const rw = reg.nw * canvas.width;
+      const rh = reg.nh * canvas.height;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.75)';
+      ctx.lineWidth = Math.max(2, Math.round(canvas.width / 400));
+      ctx.setLineDash([6, 4]);
+      ctx.strokeRect(rx, ry, rw, rh);
+      ctx.restore();
+    }
+
+    // ドラッグ中の矩形プレビュー
+    if (isDragging) {
       const x = Math.min(dragStartX, dragCurrentX);
       const y = Math.min(dragStartY, dragCurrentY);
       const w = Math.abs(dragCurrentX - dragStartX);
       const h = Math.abs(dragCurrentY - dragStartY);
 
-      if (w >= 6 && h >= 6) {
-        entry.regions.push({
-          id: Math.random().toString(36).slice(2),
+      if (w > 4 && h > 4) {
+        const previewReg: NormalizedRegion = {
+          id: 'preview',
           nx: x / canvas.width,
           ny: y / canvas.height,
           nw: w / canvas.width,
           nh: h / canvas.height,
           effect: currentEffect,
           strength: currentStrength,
+        };
+        applyRegionEffect(ctx, canvas.width, canvas.height, previewReg);
+
+        ctx.save();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = Math.max(2, Math.round(canvas.width / 350));
+        ctx.strokeRect(x, y, w, h);
+        ctx.restore();
+      }
+    }
+  }
+
+  function getCanvasCoords(e: MouseEvent | Touch): { x: number; y: number } {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: Math.max(0, Math.min(canvas.width, (e.clientX - rect.left) * scaleX)),
+      y: Math.max(0, Math.min(canvas.height, (e.clientY - rect.top) * scaleY)),
+    };
+  }
+
+  // マウスドラッグ操作
+  canvas.addEventListener('mousedown', (e) => {
+    if (!entries[activeIndex]) return;
+    isDragging = true;
+    const pt = getCanvasCoords(e);
+    dragStartX = pt.x;
+    dragStartY = pt.y;
+    dragCurrentX = pt.x;
+    dragCurrentY = pt.y;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const pt = getCanvasCoords(e);
+    dragCurrentX = pt.x;
+    dragCurrentY = pt.y;
+    renderActiveCanvas();
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    commitDraggedRegion();
+  });
+
+  // タッチ操作（スマホ・タブレット対応）
+  canvas.addEventListener(
+    'touchstart',
+    (e) => {
+      if (!entries[activeIndex] || e.touches.length === 0) return;
+      e.preventDefault();
+      isDragging = true;
+      const pt = getCanvasCoords(e.touches[0]);
+      dragStartX = pt.x;
+      dragStartY = pt.y;
+      dragCurrentX = pt.x;
+      dragCurrentY = pt.y;
+    },
+    { passive: false }
+  );
+
+  canvas.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!isDragging || e.touches.length === 0) return;
+      e.preventDefault();
+      const pt = getCanvasCoords(e.touches[0]);
+      dragCurrentX = pt.x;
+      dragCurrentY = pt.y;
+      renderActiveCanvas();
+    },
+    { passive: false }
+  );
+
+  canvas.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    commitDraggedRegion();
+  });
+
+  function commitDraggedRegion() {
+    const entry = entries[activeIndex];
+    if (!entry) return;
+
+    const x = Math.min(dragStartX, dragCurrentX);
+    const y = Math.min(dragStartY, dragCurrentY);
+    const w = Math.abs(dragCurrentX - dragStartX);
+    const h = Math.abs(dragCurrentY - dragStartY);
+
+    if (w >= 6 && h >= 6) {
+      entry.regions.push({
+        id: Math.random().toString(36).slice(2),
+        nx: x / canvas.width,
+        ny: y / canvas.height,
+        nw: w / canvas.width,
+        nh: h / canvas.height,
+        effect: currentEffect,
+        strength: currentStrength,
+      });
+    }
+    renderSidebarList();
+    renderActiveCanvas();
+  }
+
+  // Undo / Clear
+  undoRegionBtn.addEventListener('click', () => {
+    const entry = entries[activeIndex];
+    if (!entry || entry.regions.length === 0) return;
+    entry.regions.pop();
+    renderSidebarList();
+    renderActiveCanvas();
+  });
+
+  clearRegionsBtn.addEventListener('click', () => {
+    const entry = entries[activeIndex];
+    if (!entry) return;
+    entry.regions = [];
+    renderSidebarList();
+    renderActiveCanvas();
+  });
+
+  // 現在のマスク座標を全画像に一括コピー
+  applyRegionsToAllBtn.addEventListener('click', () => {
+    const current = entries[activeIndex];
+    if (!current) return;
+    if (current.regions.length === 0) {
+      alert('まず現在の画像上でモザイク・黒塗り領域をドラッグして作成してください。');
+      return;
+    }
+
+    for (let i = 0; i < entries.length; i++) {
+      if (i === activeIndex) continue;
+      entries[i].regions = current.regions.map((r) => ({
+        ...r,
+        id: Math.random().toString(36).slice(2),
+      }));
+    }
+
+    renderSidebarList();
+    renderActiveCanvas();
+    mosaicProcessStatus.textContent = `✔ 全${entries.length}枚に${current.regions.length}箇所のマスクを一括適用しました（外部通信0バイト）`;
+  });
+
+  // 表示中の1枚を保存
+  downloadCurrentBtn.addEventListener('click', async () => {
+    const entry = entries[activeIndex];
+    if (!entry) return;
+    const startTime = performance.now();
+    const { bytes } = await renderMaskedImageBytes(
+      entry.sourceBytes,
+      entry.mimeType,
+      entry.regions
+    );
+    const extMatch = entry.name.match(/(\.[^.]+)$/);
+    const ext = extMatch ? extMatch[1] : '.png';
+    const base = entry.name.replace(/\.[^.]+$/, '');
+    const outName = `${base}_masked${ext}`;
+    const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+    mosaicProcessStatus.textContent = `⚡ 出力完了: ${elapsed}秒 (通信0バイト)`;
+    triggerDownload(bytes, outName, entry.mimeType);
+  });
+
+  // 全画像をZIPで一括保存
+  downloadAllZipBtn.addEventListener('click', async () => {
+    if (entries.length === 0) return;
+    const startTime = performance.now();
+    downloadAllZipBtn.setAttribute('disabled', 'true');
+
+    try {
+      const zipFiles: { name: string; data: Uint8Array }[] = [];
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+        const { bytes } = await renderMaskedImageBytes(
+          entry.sourceBytes,
+          entry.mimeType,
+          entry.regions
+        );
+        const extMatch = entry.name.match(/(\.[^.]+)$/);
+        const ext = extMatch ? extMatch[1] : '.png';
+        const base = entry.name.replace(/\.[^.]+$/, '');
+        zipFiles.push({
+          name: `${base}_masked${ext}`,
+          data: bytes,
         });
       }
-      renderSidebarList();
-      renderActiveCanvas();
-    }
 
-    // Undo / Clear
-    undoRegionBtn.addEventListener('click', () => {
-      const entry = entries[activeIndex];
-      if (!entry || entry.regions.length === 0) return;
-      entry.regions.pop();
-      renderSidebarList();
-      renderActiveCanvas();
-    });
-
-    clearRegionsBtn.addEventListener('click', () => {
-      const entry = entries[activeIndex];
-      if (!entry) return;
-      entry.regions = [];
-      renderSidebarList();
-      renderActiveCanvas();
-    });
-
-    // 現在のマスク座標を全画像に一括コピー
-    applyRegionsToAllBtn.addEventListener('click', () => {
-      const current = entries[activeIndex];
-      if (!current) return;
-      if (current.regions.length === 0) {
-        alert('まず現在の画像上でモザイク・黒塗り領域をドラッグして作成してください。');
-        return;
-      }
-
-      for (let i = 0; i < entries.length; i++) {
-        if (i === activeIndex) continue;
-        entries[i].regions = current.regions.map((r) => ({
-          ...r,
-          id: Math.random().toString(36).slice(2),
-        }));
-      }
-
-      renderSidebarList();
-      renderActiveCanvas();
-      mosaicProcessStatus.textContent = `✔ 全${entries.length}枚に${current.regions.length}箇所のマスクを一括適用しました（外部通信0バイト）`;
-    });
-
-    // 表示中の1枚を保存（点線ガイドを含まない純粋なマスク済み画像を出力）
-    downloadCurrentBtn.addEventListener('click', async () => {
-      const entry = entries[activeIndex];
-      if (!entry) return;
-      const startTime = performance.now();
-      const { bytes } = await renderMaskedImageBytes(
-        entry.sourceBytes,
-        entry.mimeType,
-        entry.regions
-      );
-      const extMatch = entry.name.match(/(\.[^.]+)$/);
-      const ext = extMatch ? extMatch[1] : '.png';
-      const base = entry.name.replace(/\.[^.]+$/, '');
-      const outName = `${base}_masked${ext}`;
+      const zipBytes = createZipArchive(zipFiles);
       const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-      mosaicProcessStatus.textContent = `⚡ 出力完了: ${elapsed}秒 (通信0バイト)`;
-      triggerDownload(bytes, outName, entry.mimeType);
-    });
-
-    // 全画像をZIPで一括保存
-    downloadAllZipBtn.addEventListener('click', async () => {
-      if (entries.length === 0) return;
-      const startTime = performance.now();
-      downloadAllZipBtn.setAttribute('disabled', 'true');
-
-      try {
-        const zipFiles: { name: string; data: Uint8Array }[] = [];
-        for (let i = 0; i < entries.length; i++) {
-          const entry = entries[i];
-          const { bytes } = await renderMaskedImageBytes(
-            entry.sourceBytes,
-            entry.mimeType,
-            entry.regions
-          );
-          const extMatch = entry.name.match(/(\.[^.]+)$/);
-          const ext = extMatch ? extMatch[1] : '.png';
-          const base = entry.name.replace(/\.[^.]+$/, '');
-          zipFiles.push({
-            name: `${base}_masked${ext}`,
-            data: bytes,
-          });
-        }
-
-        const zipBytes = createZipArchive(zipFiles);
-        const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-        mosaicProcessStatus.textContent = `⚡ 全${entries.length}枚のZIP生成完了: ${elapsed}秒 (外部通信0バイト)`;
-        triggerDownload(zipBytes, 'zeroleak_masked_images.zip', 'application/zip');
-      } finally {
-        downloadAllZipBtn.removeAttribute('disabled');
-      }
-    });
-
-    function triggerDownload(bytes: Uint8Array, filename: string, mimeType: string) {
-      const buf = bytes.buffer.slice(
-        bytes.byteOffset,
-        bytes.byteOffset + bytes.byteLength
-      ) as ArrayBuffer;
-      const blob = new Blob([buf], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      mosaicProcessStatus.textContent = `⚡ 全${entries.length}枚のZIP生成完了: ${elapsed}秒 (外部通信0バイト)`;
+      triggerDownload(zipBytes, 'zeroleak_masked_images.zip', 'application/zip');
+    } finally {
+      downloadAllZipBtn.removeAttribute('disabled');
     }
-  </script>
-</Layout>
+  });
+
+  function triggerDownload(bytes: Uint8Array, filename: string, mimeType: string) {
+    const buf = bytes.buffer.slice(
+      bytes.byteOffset,
+      bytes.byteOffset + bytes.byteLength
+    ) as ArrayBuffer;
+    const blob = new Blob([buf], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>

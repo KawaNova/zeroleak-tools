@@ -36,13 +36,40 @@ export interface ToolCategory {
   label: string;
   icon: string;
   description: string;
+  hubPath?: string;
+  badge?: string;
+  tagline?: string;
 }
 
 export const toolCategories: ToolCategory[] = [
   { id: 'all', label: '全ツール', icon: '🌟', description: 'ブラウザ完結・外部送信0バイトのプライバシー保護ツール群' },
-  { id: 'id_privacy', label: '本人確認・個人情報', icon: '🪪', description: '給与明細、マイナンバーCSV、写真の位置情報保護' },
-  { id: 'document_legal', label: 'PDF・契約書・法務', icon: '📑', description: '機密PDFの完全黒塗り、パスワード解除、契約書Diff' },
-  { id: 'dev_security', label: '開発者・ITセキュリティ', icon: '💻', description: 'HAR/エラーログ/.envマスク、AIプロンプト仮名化、画面モザイク' },
+  {
+    id: 'id_privacy',
+    label: '本人確認・個人情報・画像',
+    icon: '🪪',
+    description: '身分証透かし、給与明細、マイナンバーCSV、写真の位置情報保護',
+    hubPath: '/privacy/',
+    badge: '本人確認・身分証・写真',
+    tagline: '免許証・給与明細・写真の位置情報をローカルで安全化',
+  },
+  {
+    id: 'document_legal',
+    label: 'PDF・Office・契約書・法務',
+    icon: '📑',
+    description: '機密PDFの完全黒塗り、パスワード解除、Officeメタデータ消去、契約書Diff',
+    hubPath: '/pdf/',
+    badge: 'PDF・Word・Excel・契約書',
+    tagline: '社外秘PDFの不可逆墨消しやOfficeメタデータの完全抹消',
+  },
+  {
+    id: 'dev_security',
+    label: 'ITセキュリティ・開発者',
+    icon: '💻',
+    description: 'HAR/エラーログ/.envマスク、AIプロンプト仮名化、画面モザイク',
+    hubPath: '/dev/',
+    badge: 'ログ・APIキー・AIプロンプト',
+    tagline: 'ChatGPT送信前や障害調査ログから機密情報を自動マスク',
+  },
 ];
 
 export interface Tool {

@@ -1,137 +1,70 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "ChatGPT・生成AIへ機密文書を投げる前に固有名詞・個人情報を仮名化し、AIの回答をワンクリックで実名復元する3ステップ",
-    "description": "社外秘の議事録・メール・ソースコードをChatGPTやClaudeへ送信する前に、ブラウザ内だけで社名・人名・APIキーを『{{COMPANY_A}}』等の記号に一括置換し、AIが出力した回答を元の固有名詞へ自動復元する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "AIに投げたい文章と固有名詞を入力",
-        "text": "議事録やメール下書き、契約書条文を入力欄に貼り付けます。法人名・メール・電話・APIキー・URLは自動検出され、人名や案件名も自由に追加できます。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "仮名化（トークン化）プロンプトをコピーしてAIへ送信",
-        "text": "すべて『{{COMPANY_A}}』『{{CUSTOM_A}}』等に安全置換されたプロンプトをコピーし、ChatGPTやClaudeへ貼り付けて要約・翻訳・推敲を依頼します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "AIの回答を貼り付けてワンクリックで元の実名に一括復元",
-        "text": "AIが出力した回答をSTEP 3の欄に貼り付けると、ブラウザ内メモリに保持された対照表を使って『{{COMPANY_A}}』等が元の取引先名・担当者名へ即座に自動復元されます。"
-      }
-    ]
+    name: 'AIに投げたい文章と固有名詞を入力',
+    text: '議事録やメール下書き、契約書条文を入力欄に貼り付けます。法人名・メール・電話・APIキー・URLは自動検出され、人名や案件名も自由に追加できます。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "単純な伏字（***）ではなく『{{COMPANY_A}}』のようなプレースホルダー記号に置換するのはなぜですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "すべての社名や人名を同じ『***』にしてしまうと、ChatGPTやClaudeが『誰が誰に対して何を依頼したのか』という文脈（主語と目的語の関係）を理解できなくなり、要約やメール作成の精度が著しく低下します。さらに回答を受け取った後に人間が手作業で実名へ書き直す手間が発生します。本ツールは同一の固有名詞を同一の識別トークン（{{COMPANY_A}}、{{COMPANY_B}}等）へ一貫して変換するため、AIの推論精度を100%維持したまま、回答をワンクリックで元の実名へ完全復元できます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "入力した社内メールや対照表（変換辞書）が外部サーバーへ送信されることはありませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "一切ありません。テキストの解析・置換・実名復元の処理はすべてお使いのブラウザ内部（RAM）のJavaScriptのみで実行されます。Content-Security-Policyにより外部通信自体が遮断されており、F12キーの開発者ツール（Networkタブ）で通信0バイトをいつでも確認できます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ChatGPT等の外部AIに送信するなら、なぜZeroLeak（漏洩ゼロ）なのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "OpenAIやAnthropic等の外部AIサービスへ『本物の機密データ』を1文字も渡さないためのツールだからです。本物の社名や金額を架空のダミー記号に置き換えてからAIに渡すため、AIサーバー側には機密が残りません。また、この仮名化・復元処理自体もお客様のブラウザ内（端末内）だけで実行され、当サイトのサーバー等へ送信されることは一切ありません。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "会社の生成AI利用ガイドライン（個人情報・取引先名の入力禁止）に準拠できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。多くの企業の生成AI利用規程では『顧客名・個人情報・未公開プロジェクト名・認証キーをプロンプトに含めないこと』が定められています。本ツールを通すことで、外部AIサービス側には抽象化された記号（{{COMPANY_A}}等）しか渡らないため、社内コンプライアンスを厳守しながら生成AIの業務効率化メリットを最大限に享受できます。"
-        }
-      }
-    ]
-  }
+    name: '仮名化（トークン化）プロンプトをコピーしてAIへ送信',
+    text: 'すべて『{{COMPANY_A}}』『{{CUSTOM_A}}』等に安全置換されたプロンプトをコピーし、ChatGPTやClaudeへ貼り付けて要約・翻訳・推敲を依頼します。',
+  },
+  {
+    name: 'AIの回答を貼り付けてワンクリックで元の実名に一括復元',
+    text: 'AIが出力した回答をSTEP 3の欄に貼り付けると、ブラウザ内メモリに保持された対照表を使って『{{COMPANY_A}}』等が元の取引先名・担当者名へ即座に自動復元されます。',
+  },
+];
+
+const faqs = [
+  {
+    question: '単純な伏字（***）ではなく『{{COMPANY_A}}』のようなプレースホルダー記号に置換するのはなぜですか？',
+    answer: 'すべての社名や人名を同じ『***』にしてしまうと、ChatGPTやClaudeが『誰が誰に対して何を依頼したのか』という文脈（主語と目的語の関係）を理解できなくなり、要約やメール作成の精度が著しく低下します。さらに回答を受け取った後に人間が手作業で実名へ書き直す手間が発生します。本ツールは同一の固有名詞を同一の識別トークン（{{COMPANY_A}}、{{COMPANY_B}}等）へ一貫して変換するため、AIの推論精度を100%維持したまま、回答をワンクリックで元の実名へ完全復元できます。',
+  },
+  {
+    question: '入力した社内メールや対照表（変換辞書）が外部サーバーへ送信されることはありませんか？',
+    answer: '一切ありません。テキストの解析・置換・実名復元の処理はすべてお使いのブラウザ内部（RAM）のJavaScriptのみで実行されます。Content-Security-Policyにより外部通信自体が遮断されており、F12キーの開発者ツール（Networkタブ）で通信0バイトをいつでも確認できます。',
+  },
+  {
+    question: 'ChatGPT等の外部AIに送信するなら、なぜZeroLeak（漏洩ゼロ）なのですか？',
+    answer: 'OpenAIやAnthropic等の外部AIサービスへ『本物の機密データ』を1文字も渡さないためのツールだからです。本物の社名や金額を架空のダミー記号に置き換えてからAIに渡すため、AIサーバー側には機密が残りません。また、この仮名化・復元処理自体もお客様のブラウザ内（端末内）だけで実行され、当サイトのサーバー等へ送信されることは一切ありません。',
+  },
+  {
+    question: '会社の生成AI利用ガイドライン（個人情報・取引先名の入力禁止）に準拠できますか？',
+    answer: 'はい。多くの企業の生成AI利用規程では『顧客名・個人情報・未公開プロジェクト名・認証キーをプロンプトに含めないこと』が定められています。本ツールを通すことで、外部AIサービス側には抽象化された記号（{{COMPANY_A}}等）しか渡らないため、社内コンプライアンスを厳守しながら生成AIの業務効率化メリットを最大限に享受できます。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="ai-prompt-sanitizer"
   title="ChatGPT・AIプロンプト 機密仮名化＆実名復元ツール"
   description="ChatGPT・Claudeへ社外秘メールや議事録を送る前に、取引先社名・担当者名・APIキーを『{{COMPANY_A}}』等の記号へ一括仮名化し、AI回答を1クリックで実名へ自動復元。外部AIへの漏洩をゼロにします。"
   canonicalPath="/ai-prompt-sanitizer/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="AIプロンプト 機密サニタイザー｜ブラウザ完結・サーバー送信なし"
+  subtitle="固有名詞を文脈が壊れない記号（{{COMPANY_A}}等）に仮名化し、AIの回答をワンクリックで実名復元します。"
+  mascotName="tool-ai"
+  mascotFallback="🤖"
+  whyTitle="「Copilot契約があるから安心」という最大の盲点"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
-
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        
-
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-<div class="min-w-0 flex-1 space-y-1.5">
-<h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            AIプロンプト 機密サニタイザー｜ブラウザ完結・サーバー送信なし
-          </h1>
-          <p class="text-slate-600 text-xs sm:text-sm mt-1">
-            固有名詞を文脈が壊れない記号（{`{{COMPANY_A}}`}等）に仮名化し、AIの回答をワンクリックで実名復元します。
-          </p>
-</div>
-<Mascot name="tool-ai" fallback="🤖" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-</div>
-        </div>
-
-        <!-- ワンクリック検証ボタン（手元に文章がない人向け） -->
-        <button
-          id="loadSamplePromptBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-        >
-          <span>🧪</span>
-          <span>3秒往復デモ（サンプル投入）</span>
-        </button>
-      </div>
+  <div class="space-y-6">
+    <!-- ワンクリック検証ボタン -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        id="loadSamplePromptBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      >
+        <span>🧪</span>
+        <span>3秒往復デモ（サンプル投入）</span>
+      </button>
     </div>
 
-    <!-- メインワークベンチ（ファーストビュー最優先） -->
+    <!-- メインワークベンチ -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
-
-      <!-- 設定バー（コンパクトに1行に集約・折りたたみ可能） -->
+      <!-- 設定バー -->
       <details class="group bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 text-xs" open>
         <summary class="flex items-center justify-between cursor-pointer select-none font-bold text-slate-700 list-none">
           <span class="flex items-center gap-1.5">
@@ -139,66 +72,64 @@ const extraSchemaGraph = [
             <span>自動検出カテゴリ ＆ 隠したい固有名詞</span>
             <span class="text-[10px] text-emerald-700 font-normal font-mono ml-2">※ブラウザメモリ内完結（外部送信0バイト）</span>
           </span>
-          <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-
-        <div class="pt-3 mt-2 border-t border-slate-200/60 space-y-3">
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optCompany" checked class="accent-amber-600 rounded" />
-              <span>🏢 法人・銀行名</span>
+        
+        <div class="pt-3 space-y-3">
+          <div class="flex flex-wrap items-center gap-3 text-slate-700">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optCompany" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>法人格（株式会社等）</span>
             </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optEmail" checked class="accent-amber-600 rounded" />
-              <span>✉️ メール</span>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optEmail" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>メールアドレス</span>
             </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optPhone" checked class="accent-amber-600 rounded" />
-              <span>📞 電話番号</span>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optPhone" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>電話番号</span>
             </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optSecret" checked class="accent-amber-600 rounded" />
-              <span>🔑 APIキー</span>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optSecret" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>APIキー・パスワード</span>
             </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optUrlIp" checked class="accent-amber-600 rounded" />
-              <span>🌐 URL / IP</span>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optUrlIp" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>URL / IPアドレス</span>
             </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-amber-400 shadow-2xs">
-              <input type="checkbox" id="optAmount" checked class="accent-amber-600 rounded" />
-              <span>💴 金額・予算</span>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="optAmount" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+              <span>金額（円・ドル等）</span>
             </label>
           </div>
 
-          <!-- 任意の固有名詞追加入力 -->
-          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-            <label for="customWordsInput" class="text-xs font-bold text-amber-900 shrink-0">
-              👤 追加固有名詞（担当者名・案件名など）：
+          <div class="space-y-1">
+            <label for="customWordsInput" class="block font-bold text-slate-700 text-[11px]">
+              追加で仮名化したい人名・案件名・製品名（カンマまたは改行で区切る）：
             </label>
             <input
               type="text"
               id="customWordsInput"
-              placeholder="例: 佐藤 健太郎, Project-Chronos, 極秘新製品X（カンマ区切り）"
-              class="w-full bg-white border border-slate-300 focus:border-amber-500 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:outline-none"
+              placeholder="例: 佐藤部長, プロジェクトTitan, 新規買収案, 〇〇病院"
+              class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:outline-none"
             />
           </div>
         </div>
       </details>
 
-      <!-- STEP 1 & STEP 2: 2カラム比較（生プロンプト入力 ➔ 安全化プロンプト出力） -->
+      <!-- 2ペイン：元テキスト入力 ＆ 仮名化プロンプト出力 -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        
-        <!-- STEP 1: 元テキスト入力 -->
-        <div class="space-y-2 flex flex-col">
-          <div class="flex items-center justify-between text-xs px-1">
-            <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] border border-slate-200 font-bold">STEP 1</span>
-              <span>元の社外秘テキスト・プロンプトを入力</span>
-            </span>
+        <!-- 左ペイン：生プロンプト入力 -->
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="rawPromptTextarea" class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-mono text-xs font-bold">STEP 1</span>
+              <span>AIに投げたい元の文章（社内メール・議事録・コード）</span>
+            </label>
             <button
               type="button"
               id="clearPromptBtn"
-              class="text-slate-400 hover:text-rose-600 text-[11px] cursor-pointer"
+              class="text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer"
             >
               クリア
             </button>
@@ -206,19 +137,19 @@ const extraSchemaGraph = [
           <textarea
             id="rawPromptTextarea"
             rows="10"
-            placeholder="ChatGPTやClaudeに要約・推敲・レビューさせたい社内メール、議事録、エラーログを貼り付けてください..."
-            class="w-full flex-1 bg-slate-50/70 border border-slate-200 focus:border-amber-500 focus:bg-white rounded-xl p-3.5 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none leading-relaxed transition"
+            placeholder="AIに要約・推敲させたい社外秘メールや議事録をここに貼り付けてください...&#10;（例：株式会社テックラボの佐藤部長より、プロジェクトTitanの概算見積500万円を受領しました。次週月曜までにメール返信案を作成してください。）"
+            class="w-full flex-1 bg-slate-50/50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl p-3 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none resize-y transition leading-relaxed"
           ></textarea>
         </div>
 
-        <!-- STEP 2: 仮名化済みプロンプト出力 -->
-        <div class="space-y-2 flex flex-col">
-          <div class="flex items-center justify-between text-xs px-1">
-            <span class="font-bold text-emerald-800 flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono text-[10px] font-bold">STEP 2</span>
-              <span>AI送信用の安全化プロンプト（固有名詞ゼロ）</span>
-            </span>
-            <span id="replacedStatBadge" class="text-[11px] font-mono text-amber-800 font-bold">
+        <!-- 右ペイン：仮名化（サニタイズ済み）出力 -->
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="sanitizedPromptTextarea" class="font-bold text-emerald-800 text-xs sm:text-sm flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono text-xs font-bold">STEP 2</span>
+              <span>安全化済みプロンプト（ChatGPT / Claude送信専用）</span>
+            </label>
+            <span id="replacedStatBadge" class="text-xs font-mono text-emerald-800 font-bold">
               0 箇所をトークン化
             </span>
           </div>
@@ -226,8 +157,8 @@ const extraSchemaGraph = [
             id="sanitizedPromptTextarea"
             readonly
             rows="10"
-            placeholder="ここに {{COMPANY_A}} 等へ置換された安全なプロンプトがリアルタイム出力されます..."
-            class="w-full flex-1 bg-emerald-50/30 border border-emerald-300 rounded-xl p-3.5 text-xs sm:text-sm text-emerald-950 font-mono focus:outline-none leading-relaxed"
+            placeholder="ここに自動で仮名化（{{COMPANY_A}}、{{CUSTOM_A}}等）された安全なプロンプトが出力されます..."
+            class="w-full flex-1 bg-emerald-50/20 border border-emerald-300 rounded-xl p-3 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none resize-y transition leading-relaxed select-all"
           ></textarea>
           <button
             type="button"
@@ -237,16 +168,12 @@ const extraSchemaGraph = [
             <span>📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る</span>
           </button>
         </div>
-
       </div>
 
-      <!-- 変換対照表（メモリ内トークンマップ）の可視化 -->
-      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+      <!-- トークン対照辞書（ブラウザRAM内保持） -->
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
         <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-slate-700 flex items-center gap-1.5">
-            <span>🔑</span>
-            <span>ブラウザ内メモリに保持中の変換辞書（対照表）</span>
-          </span>
+          <span class="font-bold text-slate-700">🔐 ブラウザ内部メモリに保持された対照辞書（端末内のみ）</span>
           <span class="text-[10px] text-slate-400">※タブを閉じると完全消去されます</span>
         </div>
         <div id="tokenMapContainer" class="flex flex-wrap gap-2 text-xs">
@@ -263,7 +190,7 @@ const extraSchemaGraph = [
               <span>🔄 AI（ChatGPT / Claude）の回答をワンクリックで実名へ復元</span>
             </span>
             <p class="text-xs text-slate-600">
-              AIが <code class="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded font-mono">{`{{COMPANY_A}}`}</code> 入りで返してきた文章を左に貼ると、右側に実名へ戻した完成文が出力されます。
+              AIが <code class="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded font-mono">&#123;&#123;COMPANY_A&#125;&#125;</code> 入りで返してきた文章を左に貼ると、右側に実名へ戻した完成文が出力されます。
             </p>
           </div>
           <span id="restoredStatBadge" class="text-xs font-mono text-indigo-800 font-bold shrink-0">
@@ -279,7 +206,7 @@ const extraSchemaGraph = [
             <textarea
               id="aiResponseInput"
               rows="6"
-              placeholder="例: {{COMPANY_A}} の {{CUSTOM_A}} 様、いつも大変お世話になっております。{{CUSTOM_C}} のお見積り（{{AMOUNT_A}}）について..."
+              placeholder="例: &#123;&#123;COMPANY_A&#125;&#125; の &#123;&#123;CUSTOM_A&#125;&#125; 様、いつも大変お世話になっております。&#123;&#123;CUSTOM_C&#125;&#125; のお見積り（&#123;&#123;AMOUNT_A&#125;&#125;）について..."
               class="w-full bg-white border border-slate-300 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
             ></textarea>
           </div>
@@ -311,191 +238,136 @@ const extraSchemaGraph = [
         <span class="text-base select-none shrink-0">🛡️</span>
         <span><strong>ゼロリークくん：</strong>固有名詞の仮名化と実名復元はお使いのブラウザメモリ内だけで行われます。対照辞書が外部に漏れることはありません。</span>
       </div>
-
     </div>
-
-    <WhySection slug="ai-prompt-sanitizer" title="「Copilot契約があるから安心」という最大の盲点" />
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
-          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
-            <span>Q. 普通の伏字（***）ではなく「{'{{COMPANY_A}}'}」のようなトークンに変換するメリットは何ですか？</span>
-            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            すべての固有名詞を同じ「***」に潰してしまうと、AIが「どの会社とどの担当者の話か」を区別できず要約精度が落ちる上、AIの回答を人間が手作業で実名へ書き直す手間がかかります。識別番号付きトークンならAIが文脈を正確に理解でき、返ってきた回答も1クリックで元の実名へ完全復元できます。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
-          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
-            <span>Q. ここに貼り付けた文章や変換辞書が外部に漏れることはありませんか？</span>
-            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            一切ありません。すべての処理はお使いのPC・スマホのブラウザ内メモリ上のみで実行され、外部サーバーへの通信は0バイトです。タブを閉じれば変換辞書もメモリから即座に消去されます。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm">
-          <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
-            <span>Q. ChatGPT等の外部AIに送信するなら、なぜ「ZeroLeak（漏洩ゼロ）」なのですか？</span>
-            <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            OpenAIやAnthropic等の外部AIサービスへ「本物の機密データ」を1文字も渡さないためのツールだからです。本物の社名や金額を架空のダミー記号に置き換えてからAIに渡すため、AIサーバー側には機密が残りません。また、この仮名化・復元処理自体もお客様の端末内（ブラウザ）だけで完結し、当サイトのサーバー等へ送信されることは一切ありません。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <!-- 相互回遊リンク -->
-    <RelatedTools currentPath="/ai-prompt-sanitizer/" />
-
   </div>
+</ToolShell>
 
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
+<script>
+  import {
+    sanitizePromptText,
+    restoreOriginalText,
+    SAMPLE_AI_PROMPT,
+    SAMPLE_CUSTOM_WORDS,
+    type ReplacementEntry,
+    type SanitizeOptions,
+  } from '../utils/prompt-sanitizer';
 
-  <!-- クライアントサイドスクリプト -->
-  <script>
-    import {
-      sanitizePromptText,
-      restoreOriginalText,
-      SAMPLE_AI_PROMPT,
-      SAMPLE_CUSTOM_WORDS,
-      type ReplacementEntry,
-      type SanitizeOptions,
-    } from '../utils/prompt-sanitizer';
+  let currentEntries: ReplacementEntry[] = [];
 
-    let currentEntries: ReplacementEntry[] = [];
+  const rawPromptTextarea = document.getElementById('rawPromptTextarea') as HTMLTextAreaElement;
+  const sanitizedPromptTextarea = document.getElementById(
+    'sanitizedPromptTextarea'
+  ) as HTMLTextAreaElement;
+  const customWordsInput = document.getElementById('customWordsInput') as HTMLInputElement;
+  const replacedStatBadge = document.getElementById('replacedStatBadge')!;
+  const tokenMapContainer = document.getElementById('tokenMapContainer')!;
+  const aiResponseInput = document.getElementById('aiResponseInput') as HTMLTextAreaElement;
+  const restoredOutputTextarea = document.getElementById(
+    'restoredOutputTextarea'
+  ) as HTMLTextAreaElement;
+  const restoredStatBadge = document.getElementById('restoredStatBadge')!;
 
-    const rawPromptTextarea = document.getElementById('rawPromptTextarea') as HTMLTextAreaElement;
-    const sanitizedPromptTextarea = document.getElementById(
-      'sanitizedPromptTextarea'
-    ) as HTMLTextAreaElement;
-    const customWordsInput = document.getElementById('customWordsInput') as HTMLInputElement;
-    const replacedStatBadge = document.getElementById('replacedStatBadge')!;
-    const tokenMapContainer = document.getElementById('tokenMapContainer')!;
-    const aiResponseInput = document.getElementById('aiResponseInput') as HTMLTextAreaElement;
-    const restoredOutputTextarea = document.getElementById(
-      'restoredOutputTextarea'
-    ) as HTMLTextAreaElement;
-    const restoredStatBadge = document.getElementById('restoredStatBadge')!;
+  const loadSampleBtn = document.getElementById('loadSamplePromptBtn')!;
+  const clearPromptBtn = document.getElementById('clearPromptBtn')!;
+  const copySanitizedBtn = document.getElementById('copySanitizedBtn')!;
+  const copyRestoredBtn = document.getElementById('copyRestoredBtn')!;
 
-    const loadSampleBtn = document.getElementById('loadSamplePromptBtn')!;
-    const clearPromptBtn = document.getElementById('clearPromptBtn')!;
-    const copySanitizedBtn = document.getElementById('copySanitizedBtn')!;
-    const copyRestoredBtn = document.getElementById('copyRestoredBtn')!;
+  const optCompany = document.getElementById('optCompany') as HTMLInputElement;
+  const optEmail = document.getElementById('optEmail') as HTMLInputElement;
+  const optPhone = document.getElementById('optPhone') as HTMLInputElement;
+  const optSecret = document.getElementById('optSecret') as HTMLInputElement;
+  const optUrlIp = document.getElementById('optUrlIp') as HTMLInputElement;
+  const optAmount = document.getElementById('optAmount') as HTMLInputElement;
 
-    const optCompany = document.getElementById('optCompany') as HTMLInputElement;
-    const optEmail = document.getElementById('optEmail') as HTMLInputElement;
-    const optPhone = document.getElementById('optPhone') as HTMLInputElement;
-    const optSecret = document.getElementById('optSecret') as HTMLInputElement;
-    const optUrlIp = document.getElementById('optUrlIp') as HTMLInputElement;
-    const optAmount = document.getElementById('optAmount') as HTMLInputElement;
+  function getOptions(): SanitizeOptions {
+    const rawCustom = customWordsInput.value
+      .split(/[,、\n]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
 
-    function getOptions(): SanitizeOptions {
-      const rawCustom = customWordsInput.value
-        .split(/[,、\n]/)
-        .map((s) => s.trim())
-        .filter(Boolean);
+    return {
+      maskCompany: optCompany.checked,
+      maskEmail: optEmail.checked,
+      maskPhone: optPhone.checked,
+      maskSecretKey: optSecret.checked,
+      maskMyNumberCard: true,
+      maskUrlIp: optUrlIp.checked,
+      maskAmount: optAmount.checked,
+      customWords: rawCustom,
+    };
+  }
 
-      return {
-        maskCompany: optCompany.checked,
-        maskEmail: optEmail.checked,
-        maskPhone: optPhone.checked,
-        maskSecretKey: optSecret.checked,
-        maskMyNumberCard: true,
-        maskUrlIp: optUrlIp.checked,
-        maskAmount: optAmount.checked,
-        customWords: rawCustom,
-      };
-    }
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-    function escapeHtml(str: string): string {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function runSanitizeAndRestore() {
-      const raw = rawPromptTextarea.value;
-      if (!raw.trim()) {
-        sanitizedPromptTextarea.value = '';
-        currentEntries = [];
-        replacedStatBadge.textContent = '0 箇所をトークン化';
-        tokenMapContainer.innerHTML =
-          '<span class="text-slate-500 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>';
-        runRestoreOnly();
-        return;
-      }
-
-      const res = sanitizePromptText(raw, getOptions());
-      sanitizedPromptTextarea.value = res.sanitizedText;
-      currentEntries = res.entries;
-      replacedStatBadge.textContent = `🛡️ ${res.entries.length}種・計${res.totalReplacedCount}箇所をトークン化済`;
-
-      if (res.entries.length === 0) {
-        tokenMapContainer.innerHTML =
-          '<span class="text-slate-500 text-xs">検出された機密項目はありません。</span>';
-      } else {
-        tokenMapContainer.innerHTML = res.entries
-          .map(
-            (e) => `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] shadow-xs">
-              <code class="text-amber-800 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-bold font-mono">${escapeHtml(e.token)}</code>
-              <span class="text-slate-400">⇄</span>
-              <span class="text-slate-700 font-medium">${escapeHtml(e.original)}</span>
-            </span>
-          `
-          )
-          .join('');
-      }
-
+  function runSanitizeAndRestore() {
+    const raw = rawPromptTextarea.value;
+    if (!raw.trim()) {
+      sanitizedPromptTextarea.value = '';
+      currentEntries = [];
+      replacedStatBadge.textContent = '0 箇所をトークン化';
+      tokenMapContainer.innerHTML =
+        '<span class="text-slate-500 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>';
       runRestoreOnly();
+      return;
     }
 
-    function runRestoreOnly() {
-      const aiText = aiResponseInput.value;
-      if (!aiText.trim()) {
-        restoredOutputTextarea.value = '';
-        restoredStatBadge.textContent = '復元済み: 0 箇所';
-        return;
-      }
-      const res = restoreOriginalText(aiText, currentEntries);
-      restoredOutputTextarea.value = res.restoredText;
-      restoredStatBadge.textContent = `✨ 復元完了: ${res.restoredTokenCount} 箇所のトークンを実名へ復元`;
+    const res = sanitizePromptText(raw, getOptions());
+    sanitizedPromptTextarea.value = res.sanitizedText;
+    currentEntries = res.entries;
+    replacedStatBadge.textContent = `🛡️ ${res.entries.length}種・計${res.totalReplacedCount}箇所をトークン化済`;
+
+    if (res.entries.length === 0) {
+      tokenMapContainer.innerHTML =
+        '<span class="text-slate-500 text-xs">検出された機密項目はありません。</span>';
+    } else {
+      tokenMapContainer.innerHTML = res.entries
+        .map(
+          (e) => `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] shadow-xs">
+            <code class="text-amber-800 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-bold font-mono">${escapeHtml(e.token)}</code>
+            <span class="text-slate-400">⇄</span>
+            <span class="text-slate-700 font-medium">${escapeHtml(e.original)}</span>
+          </span>
+        `
+        )
+        .join('');
     }
 
-    // イベント登録
-    [rawPromptTextarea, customWordsInput].forEach((el) => {
-      el.addEventListener('input', runSanitizeAndRestore);
-    });
-    [optCompany, optEmail, optPhone, optSecret, optUrlIp, optAmount].forEach((chk) => {
-      chk.addEventListener('change', runSanitizeAndRestore);
-    });
-    aiResponseInput.addEventListener('input', runRestoreOnly);
+    runRestoreOnly();
+  }
 
-    // サンプル一括投入（プロンプト仮名化 ＋ 模擬AI回答の実名復元まで同時セット）
-    loadSampleBtn.addEventListener('click', () => {
-      customWordsInput.value = SAMPLE_CUSTOM_WORDS.join(', ');
-      rawPromptTextarea.value = SAMPLE_AI_PROMPT;
-      runSanitizeAndRestore();
+  function runRestoreOnly() {
+    const aiText = aiResponseInput.value;
+    if (!aiText.trim()) {
+      restoredOutputTextarea.value = '';
+      restoredStatBadge.textContent = '復元済み: 0 箇所';
+      return;
+    }
+    const res = restoreOriginalText(aiText, currentEntries);
+    restoredOutputTextarea.value = res.restoredText;
+    restoredStatBadge.textContent = `✨ 復元完了: ${res.restoredTokenCount} 箇所のトークンを実名へ復元`;
+  }
 
-      // サンプルのトークンを使った模擬AI返信文を自動セットして実名復元を実演
-      aiResponseInput.value = `件名：【{{CUSTOM_C}}】お打ち合わせの御礼と初期費用・今後のスケジュールについて
+  [rawPromptTextarea, customWordsInput].forEach((el) => {
+    el.addEventListener('input', runSanitizeAndRestore);
+  });
+  [optCompany, optEmail, optPhone, optSecret, optUrlIp, optAmount].forEach((chk) => {
+    chk.addEventListener('change', runSanitizeAndRestore);
+  });
+  aiResponseInput.addEventListener('input', runRestoreOnly);
+
+  loadSampleBtn.addEventListener('click', () => {
+    customWordsInput.value = SAMPLE_CUSTOM_WORDS.join(', ');
+    rawPromptTextarea.value = SAMPLE_AI_PROMPT;
+    runSanitizeAndRestore();
+
+    aiResponseInput.value = `件名：【{{CUSTOM_C}}】お打ち合わせの御礼と初期費用・今後のスケジュールについて
 
 {{COMPANY_A}}
 {{CUSTOM_A}} 様（CC: {{CUSTOM_B}} 様）
@@ -507,34 +379,33 @@ const extraSchemaGraph = [
 なお、検証環境（{{URL_IP_A}}）への接続用キーは別途セキュア便にて {{EMAIL_A}} 宛にお送りいたします。
 緊急のご連絡は {{PHONE_A}} までお願いいたします。`;
 
-      runRestoreOnly();
-    });
+    runRestoreOnly();
+  });
 
-    clearPromptBtn.addEventListener('click', () => {
-      rawPromptTextarea.value = '';
-      customWordsInput.value = '';
-      aiResponseInput.value = '';
-      runSanitizeAndRestore();
-    });
+  clearPromptBtn.addEventListener('click', () => {
+    rawPromptTextarea.value = '';
+    customWordsInput.value = '';
+    aiResponseInput.value = '';
+    runSanitizeAndRestore();
+  });
 
-    copySanitizedBtn.addEventListener('click', () => {
-      if (!sanitizedPromptTextarea.value) return;
-      navigator.clipboard.writeText(sanitizedPromptTextarea.value).then(() => {
-        copySanitizedBtn.textContent = '✔ コピーしました！そのままChatGPTやClaudeへ貼り付けてください';
-        setTimeout(() => {
-          copySanitizedBtn.textContent = '📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る';
-        }, 2500);
-      });
+  copySanitizedBtn.addEventListener('click', () => {
+    if (!sanitizedPromptTextarea.value) return;
+    navigator.clipboard.writeText(sanitizedPromptTextarea.value).then(() => {
+      copySanitizedBtn.textContent = '✔ コピーしました！そのままChatGPTやClaudeへ貼り付けてください';
+      setTimeout(() => {
+        copySanitizedBtn.textContent = '📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る';
+      }, 2500);
     });
+  });
 
-    copyRestoredBtn.addEventListener('click', () => {
-      if (!restoredOutputTextarea.value) return;
-      navigator.clipboard.writeText(restoredOutputTextarea.value).then(() => {
-        copyRestoredBtn.textContent = '✔ 実名復元された完成文をコピーしました！';
-        setTimeout(() => {
-          copyRestoredBtn.textContent = '📋 実名復元された完成文をコピー';
-        }, 2000);
-      });
+  copyRestoredBtn.addEventListener('click', () => {
+    if (!restoredOutputTextarea.value) return;
+    navigator.clipboard.writeText(restoredOutputTextarea.value).then(() => {
+      copyRestoredBtn.textContent = '✔ 実名復元された完成文をコピーしました！';
+      setTimeout(() => {
+        copyRestoredBtn.textContent = '📋 実名復元された完成文をコピー';
+      }, 2000);
     });
-  </script>
-</Layout>
+  });
+</script>

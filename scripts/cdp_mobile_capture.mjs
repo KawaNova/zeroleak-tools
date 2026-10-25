@@ -72,13 +72,26 @@ server.listen(HTTP_PORT, async () => {
     'about:blank',
   ]);
 
-  // Chromeの起動待機
-  await new Promise((r) => setTimeout(r, 1500));
+  // Chromeの起動待機（リトライ付き）
+  let connected = false;
+  let versionData = null;
+  for (let i = 0; i < 10; i++) {
+    await new Promise((r) => setTimeout(r, 1000));
+    try {
+      const versionRes = await fetch(`http://127.0.0.1:${CDP_PORT}/json/version`);
+      versionData = await versionRes.json();
+      connected = true;
+      break;
+    } catch (e) {
+      // retry
+    }
+  }
+
+  if (!connected) {
+    throw new Error('Failed to connect to Chrome remote debugging port 9222 after 10s');
+  }
 
   try {
-    // CDP WebSocketターゲット取得
-    const versionRes = await fetch(`http://127.0.0.1:${CDP_PORT}/json/version`);
-    const versionData = await versionRes.json();
     console.log('Connected to Chrome version:', versionData['Browser']);
 
     const targetsRes = await fetch(`http://127.0.0.1:${CDP_PORT}/json/list`);
@@ -100,6 +113,9 @@ server.listen(HTTP_PORT, async () => {
 
     const routes = [
       '/',
+      '/privacy/',
+      '/pdf/',
+      '/dev/',
       '/id-watermark/',
       '/pdf-redaction/',
       '/contract-diff/',
@@ -112,6 +128,8 @@ server.listen(HTTP_PORT, async () => {
       '/pdf-unlock/',
       '/legal/',
     ];
+
+    let hasAnyOverflow = false;
 
     for (const dev of devices) {
       console.log(`Setting mobile device metrics: ${dev.name} (${dev.width}x${dev.height})`);
@@ -129,7 +147,7 @@ server.listen(HTTP_PORT, async () => {
       });
 
       for (const route of routes) {
-        const slug = route === '/' ? 'home' : route.replace(/\//g, '');
+        const slug = route === '/' ? 'home' : route.replace(/\//g, '_').replace(/^_|_$/g, '');
         const targetUrl = `http://localhost:${HTTP_PORT}${route}`;
 
         await callCdp(ws, 'Page.navigate', { url: targetUrl });
@@ -147,6 +165,9 @@ server.listen(HTTP_PORT, async () => {
         });
 
         const metrics = JSON.parse(evalRes.result.value);
+        if (metrics.hasHorizontalOverflow) {
+          hasAnyOverflow = true;
+        }
         const overflowStatus = metrics.hasHorizontalOverflow ? `⚠️ OVERFLOW docW=${metrics.docW} > vw=${metrics.vw}` : `✅ PERFECT (vw=${metrics.vw})`;
         console.log(`[${dev.name}] ${route}: ${overflowStatus}`);
 
@@ -166,6 +187,10 @@ server.listen(HTTP_PORT, async () => {
         const outPath = path.join(outDir, `${dev.name}_${slug}.png`);
         fs.writeFileSync(outPath, buf);
       }
+    }
+
+    if (hasAnyOverflow) {
+      throw new Error('Horizontal scroll overflow detected in mobile audit!');
     }
 
     ws.close();

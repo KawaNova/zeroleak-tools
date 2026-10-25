@@ -1,145 +1,79 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "未締結の契約書やNDAの新旧条文差分をブラウザで比較・赤入れする3ステップ（サーバー送信なし）",
-    "description": "外部Webツールにアップロードできない未締結契約書や秘密保持契約（NDA）の改定案を、ブラウザ内完結・通信0バイトで文字単位で精密比較し、赤入れレポートを出力する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "変更前（原文）と変更後（修正案）の条文を入力",
-        "text": "左側に自社提示版（または改定前条文）、右側に先方からの修正版（または改定案）を貼り付けるかテキストファイルをドロップします。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "文字・単語単位のインライン差分（Diff）を即座に確認",
-        "text": "追加された文言（緑太字）と削除された文言（赤打消し線）が文字単位でハイライトされ、但し書きや条件の改変を一目で見落としなく把握できます。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "赤入れレポートの確認・印刷/PDF保存",
-        "text": "差分統計を確認し、ブラウザからワンクリックで印刷・PDF保存して社内法務レビューや弁護士確認資料として活用します。"
-      }
-    ]
+    name: '変更前（原文）と変更後（修正案）の条文を入力',
+    text: '左側に自社提示版（または改定前条文）、右側に先方からの修正版（または改定案）を貼り付けるかテキストファイルをドロップします。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "未締結の契約書やNDAを一般的な無料Diffサイトに貼るとどんなリスクがありますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "一般的な無料Web Diffツールは、入力されたテキストを運営会社のWebサーバーへ送信して差分を算出しています。未公開の事業提携内容、損害賠償上限、違約金、取引金額などが第三者サーバーのログやキャッシュに平文で記録されるため、秘密保持契約（NDA）の義務違反や情報漏洩インシデントに直結します。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ZeroLeak Toolsの契約書Diff比較はなぜ外部送信されないのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "本ツールはMyers Diffアルゴリズムを純粋なTypeScript/JavaScriptでブラウザ内に実装しており、すべての差分計算がお使いのPC/スマホのブラウザ内部（メモリ上）だけで完結します。F12の開発者ツール Networkタブをご確認いただければ、通信が1バイトも発生しない（サーバー送信0バイト）ことをいつでも検証可能です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "句読点や短い但し書きの変更も検出できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。行単位の大まかな比較だけでなく、変更があった行の内部を1文字単位・単語単位で精密にインライン比較（Char/Word Diff）します。「〜を除く」「ただし〜とする」といった契約書の法的効果を左右する微細な加筆・削除も見落としません。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "比較した差分結果をPDFや紙で印刷して法務・弁護士に見せられますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。「🖨️ 赤入れレポートを印刷・PDF保存」ボタンを押すことで、不要な入力フォームやUIを除去し、変更前後の対比と赤入れハイライトのみを綺麗にレイアウトした印刷用スタイルでPDF保存・印刷が可能です。"
-        }
-      }
-    ]
-  }
+    name: '文字・単語単位のインライン差分（Diff）を即座に確認',
+    text: '追加された文言（緑太字）と削除された文言（赤打消し線）が文字単位でハイライトされ、但し書きや条件の改変を一目で見落としなく把握できます。',
+  },
+  {
+    name: '赤入れレポートの確認・印刷/PDF保存',
+    text: '差分統計を確認し、ブラウザからワンクリックで印刷・PDF保存して社内法務レビューや弁護士確認資料として活用します。',
+  },
+];
+
+const faqs = [
+  {
+    question: '未締結の契約書やNDAを一般的な無料Diffサイトに貼るとどんなリスクがありますか？',
+    answer: '一般的な無料Web Diffツールは、入力されたテキストを運営会社のWebサーバーへ送信して差分を算出しています。未公開の事業提携内容、損害賠償上限、違約金、取引金額などが第三者サーバーのログやキャッシュに平文で記録されるため、秘密保持契約（NDA）の義務違反や情報漏洩インシデントに直結します。',
+  },
+  {
+    question: 'ZeroLeak Toolsの契約書Diff比較はなぜ外部送信されないのですか？',
+    answer: '本ツールはMyers Diffアルゴリズムを純粋なTypeScript/JavaScriptでブラウザ内に実装しており、すべての差分計算がお使いのPC/スマホのブラウザ内部（メモリ上）だけで完結します。F12の開発者ツール Networkタブをご確認いただければ、通信が1バイトも発生しない（外部送信なし）ことをいつでも検証可能です。',
+  },
+  {
+    question: '句読点や短い但し書きの変更も検出できますか？',
+    answer: 'はい。行単位の大まかな比較だけでなく、変更があった行の内部を1文字単位・単語単位で精密にインライン比較（Char/Word Diff）します。「〜を除く」「ただし〜とする」といった契約書の法的効果を左右する微細な加筆・削除も見落としません。',
+  },
+  {
+    question: '比較した差分結果をPDFや紙で印刷して法務・弁護士に見せられますか？',
+    answer: 'はい。「🖨️ 赤入れレポートを印刷・PDF保存」ボタンを押すことで、不要な入力フォームやUIを除去し、変更前後の対比と赤入れハイライトのみを綺麗にレイアウトした印刷用スタイルでPDF保存・印刷が可能です。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="contract-diff"
   title="契約書・NDA 新旧条文Diff差分比較＆赤入れ | ブラウザ完結・サーバー送信なし"
   description="未締結契約書やNDAの変更点をブラウザ内で文字単位で精密比較。外部サーバー送信0バイトで秘密保持義務を完全防衛。赤入れPDF・印刷対応。"
   canonicalPath="/contract-diff/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="契約書・NDA 新旧条文Diff比較 ＆ 赤入れレポート"
+  subtitle="未締結の秘密保持契約・業務委託契約の新旧差分をブラウザ内だけで文字単位で比較。外部送信なしでNDA遵守。"
+  mascotName="tool-diff"
+  mascotFallback="⚖️"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
-    
-    <!-- ツールヘッダー -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-violet-50 border border-violet-200 text-xs text-violet-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-            <div class="min-w-0 flex-1 space-y-1.5">
-              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                契約書・NDA 新旧条文Diff比較 ＆ 赤入れレポート
-              </h1>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                未締結の秘密保持契約・業務委託契約の新旧差分をブラウザ内だけで文字単位で比較。外部サーバー送信0バイトでNDA遵守。
-              </p>
-            </div>
-            <Mascot name="tool-diff" fallback="⚖️" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-          </div>
-        </div>
-
-        <!-- テスト用サンプル投入ボタン -->
-        <div class="flex flex-wrap items-center gap-2">
-          <button
-            id="loadSampleNdaBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-900 border border-violet-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-          >
-            <span>🧪</span>
-            <span>サンプルNDA条文を投入して試す</span>
-          </button>
-          <button
-            id="clearAllBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer shrink-0"
-          >
-            <span>🗑️</span>
-            <span>クリア</span>
-          </button>
-        </div>
-      </div>
+  <div class="space-y-6">
+    <!-- テスト用サンプル投入ボタン -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        id="loadSampleNdaBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-900 border border-violet-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      >
+        <span>🧪</span>
+        <span>サンプルNDA条文を投入して試す</span>
+      </button>
+      <button
+        id="clearAllBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer shrink-0"
+      >
+        <span>🗑️</span>
+        <span>クリア</span>
+      </button>
     </div>
 
     <!-- ネットワーク遮断・免責バナー -->
     <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
       <span class="text-base shrink-0">🛡️</span>
       <div class="space-y-0.5">
-        <div class="font-bold">サーバー送信0バイト保証 ＆ 法務確認免責事項</div>
+        <div class="font-bold">外部送信なし保証 ＆ 法務確認免責事項</div>
         <p class="text-amber-800">
           入力された契約条文はブラウザのメモリ内でのみ解析され、外部サーバーへ送信されることは一切ありません。
           なお、本ツールは機械的なテキスト差分表示を行うものであり、契約条項の法的有効性や意図しない影響については、<strong>必ず弁護士・自社法務部門による目視確認</strong>を行ってください。
@@ -149,7 +83,6 @@ const extraSchemaGraph = [
 
     <!-- メイン作業エリア：左右2ペイン入力 -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      
       <!-- 左ペイン：変更前（原文 / 自社提示版） -->
       <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 flex flex-col space-y-3">
         <div class="flex items-center justify-between">
@@ -197,12 +130,10 @@ const extraSchemaGraph = [
           <span class="text-slate-600">ドラッグ＆ドロップ対応</span>
         </div>
       </div>
-
     </div>
 
     <!-- 差分比較結果エリア -->
     <div id="diffResultSection" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
-      
       <!-- 結果ヘッダー ＆ 統計サマリー -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
@@ -276,24 +207,12 @@ const extraSchemaGraph = [
           本ツールは文字一致による客観的差分抽出を行います。契約書の重要語句（善管注意義務、違約金条項、準拠法、専属管轄等）の法的ニュアンスについては、専門家への相談または自社法務の承認を経てからご締結ください。
         </p>
       </div>
-
     </div>
-
-    <!-- なぜ無料・なぜ安全なのか（WhySection） -->
-    <WhySection slug="contract-diff" />
-
-    <!-- 相互回遊デッキ -->
-    <RelatedTools currentPath="/contract-diff/" />
-
-    <!-- 情シス申請用仕様書モーダル -->
-    <SecuritySpecModal />
-
   </div>
-</Layout>
+</ToolShell>
 
 <style>
   @media print {
-    /* 印刷時はDiff結果だけを綺麗に出力 */
     body * {
       visibility: hidden;
     }
@@ -305,8 +224,12 @@ const extraSchemaGraph = [
       left: 0;
       top: 0;
       width: 100%;
-      border: none;
-      background: white;
+      border: none !important;
+      background: white !important;
+      padding: 0 !important;
+    }
+    nav, footer, button, .no-print {
+      display: none !important;
     }
   }
 </style>

@@ -2,6 +2,55 @@
 import Layout from '../layouts/Layout.astro';
 import Mascot from '../components/Mascot.astro';
 import { tools, toolCategories } from '../data/tools';
+
+// 3大カテゴリごとの代表ツール（各3件）
+const privacyTools = ['id-watermark', 'exif-remover', 'pdf-unlock']
+  .map(slug => tools.find(t => t.slug === slug)!)
+  .filter(Boolean);
+
+const pdfTools = ['pdf-redaction', 'office-metadata-wiper', 'contract-diff']
+  .map(slug => tools.find(t => t.slug === slug)!)
+  .filter(Boolean);
+
+const devTools = ['log-masking', 'ai-prompt-sanitizer', 'local-mosaic']
+  .map(slug => tools.find(t => t.slug === slug)!)
+  .filter(Boolean);
+
+const hubs = [
+  {
+    category: toolCategories.find(c => c.id === 'id_privacy')!,
+    tools: privacyTools,
+    totalCount: tools.filter(t => t.category === 'id_privacy').length,
+    theme: {
+      border: 'border-blue-200 hover:border-blue-400',
+      badge: 'bg-blue-50 text-blue-800 border-blue-200',
+      btn: 'bg-blue-600 hover:bg-blue-700 text-white',
+      accent: 'text-blue-700',
+    },
+  },
+  {
+    category: toolCategories.find(c => c.id === 'document_legal')!,
+    tools: pdfTools,
+    totalCount: tools.filter(t => t.category === 'document_legal').length,
+    theme: {
+      border: 'border-teal-200 hover:border-teal-400',
+      badge: 'bg-teal-50 text-teal-800 border-teal-200',
+      btn: 'bg-teal-600 hover:bg-teal-700 text-white',
+      accent: 'text-teal-700',
+    },
+  },
+  {
+    category: toolCategories.find(c => c.id === 'dev_security')!,
+    tools: devTools,
+    totalCount: tools.filter(t => t.category === 'dev_security').length,
+    theme: {
+      border: 'border-cyan-200 hover:border-cyan-400',
+      badge: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+      btn: 'bg-cyan-600 hover:bg-cyan-700 text-white',
+      accent: 'text-cyan-700',
+    },
+  },
+];
 ---
 
 <Layout
@@ -25,10 +74,10 @@ import { tools, toolCategories } from '../data/tools';
           給与明細・契約書・顧客データ・社外秘ログを、アップロードせずブラウザ内だけで処理。公式キャラクター「ゼロリークくん」がファイルの外漏れをブロックします。登録不要・完全無料です。
         </p>
         <a
-          href="#tools"
+          href="#categories"
           class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition"
         >
-          ツールを選ぶ ▼
+          3大カテゴリから選ぶ ▼
         </a>
       </div>
       <div>
@@ -44,7 +93,7 @@ import { tools, toolCategories } from '../data/tools';
       </div>
     </section>
 
-    <!-- 目的から探す：ツール名を知らなくても迷わない入り口 -->
+    <!-- 目的から探す（チップ一覧） -->
     <section class="max-w-5xl mx-auto px-2 sm:px-4 space-y-3 text-left">
       <h2 class="text-base sm:text-lg font-bold text-slate-900">何をしたいですか？</h2>
       <ul class="flex flex-wrap gap-2">
@@ -64,78 +113,107 @@ import { tools, toolCategories } from '../data/tools';
       </ul>
     </section>
 
-    <!-- ツール一覧：3大カテゴリ分類タブ ＆ カードグリッド -->
-    <section id="tools" class="max-w-6xl mx-auto w-full space-y-5 scroll-mt-20">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 px-2 sm:px-0">
-        <div>
-          <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 text-left">ツール一覧</h2>
-          <p id="categoryDescription" class="text-xs sm:text-sm text-slate-500 mt-1">
-            全{tools.length}ツール・すべてブラウザ内完結（外部サーバー送信0バイト保証）
-          </p>
-        </div>
+    <!-- 3大カテゴリハブ誘導カード（上部ナビゲーション） -->
+    <section id="categories" class="max-w-6xl mx-auto px-2 sm:px-4 space-y-4 scroll-mt-20">
+      <div class="text-left">
+        <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900">3大カテゴリからツールを探す</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+          全{tools.length}ツール・すべてブラウザ内完結（外部サーバー送信0バイト保証）
+        </p>
       </div>
 
-      <!-- 3大カテゴリ分類タブUI -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 px-2 sm:px-0 no-scrollbar" role="tablist">
-        {
-          toolCategories.map((cat, idx) => {
-            const count = cat.id === 'all' ? tools.length : tools.filter(t => t.category === cat.id).length;
-            const isActive = idx === 0;
-            return (
-              <button
-                type="button"
-                role="tab"
-                data-category-target={cat.id}
-                data-description={cat.description}
-                aria-selected={isActive ? 'true' : 'false'}
-                class={`category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs ${
-                  isActive
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200'
-                }`}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-                <span class={`text-[11px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-slate-700 text-slate-200' : 'bg-slate-100 text-slate-500'}`}>
-                  {count}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {hubs.map((h) => (
+          <a
+            href={h.category.hubPath}
+            class={`p-5 rounded-2xl bg-white border ${h.theme.border} hover:shadow-md transition flex flex-col justify-between group space-y-4`}
+          >
+            <div class="space-y-2 text-left">
+              <div class="flex items-center justify-between">
+                <span class="text-3xl">{h.category.icon}</span>
+                <span class={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${h.theme.badge}`}>
+                  全{h.totalCount}ツール
                 </span>
-              </button>
-            );
-          })
-        }
-      </div>
+              </div>
+              <h3 class={`text-base font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors`}>
+                {h.category.label}
+              </h3>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                {h.category.tagline}
+              </p>
+            </div>
 
-      <!-- カード一覧 -->
-      <ul id="toolCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {
-          tools.map((t) => (
-            <li class="tool-card-item" data-category={t.category}>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs font-bold text-slate-700 group-hover:text-slate-900">
+              <span>カテゴリ一覧を見る</span>
+              <span class="text-slate-400 group-hover:translate-x-1 transition-transform">▶</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 各カテゴリの厳選代表ツールカード（純化レイアウト） -->
+    <div class="max-w-6xl mx-auto px-2 sm:px-4 space-y-12">
+      {hubs.map((h) => (
+        <section class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-2.5">
+            <div class="text-left">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">{h.category.icon}</span>
+                <h3 class="text-base sm:text-xl font-bold text-slate-900">
+                  {h.category.label}
+                </h3>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">{h.category.description}</p>
+            </div>
+            <a
+              href={h.category.hubPath}
+              class={`inline-flex items-center gap-1 text-xs font-bold ${h.theme.accent} hover:underline whitespace-nowrap self-start sm:self-auto`}
+            >
+              <span>{h.category.label}をもっと見る（全{h.totalCount}件）</span>
+              <span>→</span>
+            </a>
+          </div>
+
+          <!-- 代表3ツールカード -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {h.tools.map((t) => (
               <a
                 href={t.href}
-                class={`group flex flex-row sm:flex-col h-full rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-150 ${t.accent.border}`}
+                class={`group flex flex-col h-full rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-150 ${t.accent.border}`}
               >
                 <Mascot
                   name={t.image}
                   fallback={t.icon}
                   alt=""
                   width={560}
-                  class={`w-28 sm:w-full shrink-0 aspect-[4/3] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
+                  class={`w-full shrink-0 aspect-[4/3] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
                 />
-                <div class="p-3 sm:p-4 space-y-1 text-left min-w-0 self-center">
-                  <h3 class={`text-sm sm:text-base font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug`}>
-                    {t.name}
-                  </h3>
-                  <p class="text-xs text-slate-500 leading-relaxed">{t.tagline}</p>
+                <div class="p-4 space-y-1.5 text-left flex-1 flex flex-col justify-between">
+                  <div>
+                    <h4 class={`text-sm sm:text-base font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug`}>
+                      {t.name}
+                    </h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mt-0.5">{t.tagline}</p>
+                  </div>
+                  <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400">
+                    <span class="font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      通信0バイト
+                    </span>
+                    <span class="font-bold text-slate-700 group-hover:text-slate-900 flex items-center gap-1">
+                      開く <span>▶</span>
+                    </span>
+                  </div>
                 </div>
               </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
 
     <!-- 【折りたたみ】安全性の根拠（詳細はここに集約。本文では繰り返さない） -->
-    <section class="max-w-5xl mx-auto w-full">
+    <section class="max-w-5xl mx-auto w-full px-2 sm:px-4">
       <details class="group bg-slate-50/70 border border-slate-200 rounded-2xl p-4">
         <summary class="flex items-center justify-between cursor-pointer list-none select-none text-slate-800 font-bold text-sm sm:text-base">
           <span>🛡️ なぜ「ブラウザ内で完結」すると安全なのですか？</span>
@@ -160,46 +238,3 @@ import { tools, toolCategories } from '../data/tools';
 
   </div>
 </Layout>
-
-<script>
-  const tabButtons = document.querySelectorAll<HTMLButtonElement>('.category-tab-btn');
-  const cardItems = document.querySelectorAll<HTMLElement>('.tool-card-item');
-  const descriptionEl = document.getElementById('categoryDescription');
-
-  tabButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const targetCat = btn.getAttribute('data-category-target');
-      const desc = btn.getAttribute('data-description');
-
-      // タブ状態切り替え
-      tabButtons.forEach((b) => {
-        const isCurrent = b === btn;
-        b.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
-        if (isCurrent) {
-          b.className = 'category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs bg-slate-900 text-white';
-          const badge = b.querySelector('span:last-child');
-          if (badge) badge.className = 'text-[11px] px-1.5 py-0.2 rounded-full bg-slate-700 text-slate-200';
-        } else {
-          b.className = 'category-tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200';
-          const badge = b.querySelector('span:last-child');
-          if (badge) badge.className = 'text-[11px] px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-500';
-        }
-      });
-
-      // 説明文更新
-      if (descriptionEl && desc) {
-        descriptionEl.textContent = desc;
-      }
-
-      // カードのフィルタリング表示
-      cardItems.forEach((card) => {
-        const cardCat = card.getAttribute('data-category');
-        if (targetCat === 'all' || cardCat === targetCat) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-</script>

@@ -1,134 +1,70 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 import RedactionDemo from '../components/RedactionDemo.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "PDFの機密情報を不可逆に完全黒塗り（ラスタライズ墨消し）する3ステップ（サーバー送信なし）",
-    "description": "裁判所・官公庁・取引先提出用に、外部サーバーへ1バイトも送信せずブラウザ内CanvasだけでPDFのテキスト層を物理消去し、コピペ復元不可能な不可逆黒塗りPDFを出力する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "PDFファイルをドラッグ＆ドロップ",
-        "text": "黒塗りしたい契約書、見積書、公文書、履歴書などのPDFをドロップします。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "黒塗り箇所の指定（ドラッグまたは自動検出）",
-        "text": "プレビュー画面上で隠したい箇所をマウスドラッグで囲むか、「個人情報（マイナンバー・電話等）を自動検出」で一括指定します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "不可逆ラスタライズ変換で完全消去PDFを保存",
-        "text": "テキスト層を物理的に消滅させた高精細ラスタライズPDFをダウンロードします。コピペもレイヤー剥がしも100%不可能です。"
-      }
-    ]
+    name: 'PDFファイルをドラッグ＆ドロップ',
+    text: '黒塗りしたい契約書、見積書、公文書、履歴書などのPDFをドロップします。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "なぜPDFの上に黒い四角形を重ねるだけの墨消しは危険なのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "一般的なPDF編集ソフトで四角形図形を文字の上に乗せただけの場合、PDF内部の『テキストレイヤー（文字コードデータ）』は消去されずにそのまま残っています。受け取った側がCtrl+A（全選択）してメモ帳に貼り付けたり、注釈オブジェクトを削除するだけで、隠したはずの氏名や金額が丸見えになります。本ツールは高精細Canvasラスタライズによりテキスト層を物理的に消滅させるため安全です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ラスタライズ（画像化）するとPDFの文字がぼやけたり画質が落ちませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "本ツールは一般的な印刷解像度と同等の高DPI（約200〜300DPI相当）でブラウザ内ラスタライズを行います。肉眼での閲覧やA4用紙への印刷において文字の輪郭が崩れず、非常に鮮明なクオリティを維持しながらテキスト層のみを完全抹消します。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "裁判所や官公庁、取引先への提出用書類として利用できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。裁判所への証拠提出や官公庁の開示請求書類、取引先への見積・請求書など、厳格な守秘義務が求められる墨消し資料に最適です。テキスト検索やOCRコピペによる情報漏洩事故を物理的に遮断できます（※提出前に必ずご自身でダウンロード結果を目視確認してください）。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "マイナンバーや電話番号などの個人情報は自動で検出できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。『個人情報を自動検出』ボタンを押すと、PDF内のテキストレイヤーを走査してマイナンバー（12桁）、電話番号、メールアドレスの該当箇所を自動検出し、ワンクリックで黒塗り枠を配置できます。"
-        }
-      }
-    ]
-  }
+    name: '黒塗り箇所の指定（ドラッグまたは自動検出）',
+    text: 'プレビュー画面上で隠したい箇所をマウスドラッグで囲むか、「個人情報（マイナンバー・電話等）を自動検出」で一括指定します。',
+  },
+  {
+    name: '不可逆ラスタライズ変換で完全消去PDFを保存',
+    text: 'テキスト層を物理的に消滅させた高精細ラスタライズPDFをダウンロードします。コピペもレイヤー剥がしも100%不可能です。',
+  },
+];
+
+const faqs = [
+  {
+    question: 'なぜPDFの上に黒い四角形を重ねるだけの墨消しは危険なのですか？',
+    answer: '一般的なPDF編集ソフトで四角形図形を文字の上に乗せただけの場合、PDF内部の『テキストレイヤー（文字コードデータ）』は消去されずにそのまま残っています。受け取った側がCtrl+A（全選択）してメモ帳に貼り付けたり、注釈オブジェクトを削除するだけで、隠したはずの氏名や金額が丸見えになります。本ツールは高精細Canvasラスタライズによりテキスト層を物理的に消滅させるため安全です。',
+  },
+  {
+    question: 'ラスタライズ（画像化）するとPDFの文字がぼやけたり画質が落ちませんか？',
+    answer: '本ツールは一般的な印刷解像度と同等の高DPI（約200〜300DPI相当）でブラウザ内ラスタライズを行います。肉眼での閲覧やA4用紙への印刷において文字の輪郭が崩れず、非常に鮮明なクオリティを維持しながらテキスト層のみを完全抹消します。',
+  },
+  {
+    question: '裁判所や官公庁、取引先への提出用書類として利用できますか？',
+    answer: 'はい。裁判所への証拠提出や官公庁の開示請求書類、取引先への見積・請求書など、厳格な守秘義務が求められる墨消し資料に最適です。テキスト検索やOCRコピペによる情報漏洩事故を物理的に遮断できます（※提出前に必ずご自身でダウンロード結果を目視確認してください）。',
+  },
+  {
+    question: 'マイナンバーや電話番号などの個人情報は自動で検出できますか？',
+    answer: 'はい。『個人情報を自動検出』ボタンを押すと、PDF内のテキストレイヤーを走査してマイナンバー（12桁）、電話番号、メールアドレスの該当箇所を自動検出し、ワンクリックで黒塗り枠を配置できます。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="pdf-redaction"
   title="機密PDF 完全黒塗り・不可逆墨消し | コピペ復元不可・ブラウザ完結・サーバー送信なし"
   description="PDFの氏名・金額・マイナンバーを不可逆黒塗り。コピペで文字が抜ける事故を完全防止（Canvasラスタライズ・テキスト層物理消滅）。ブラウザ内完結・外部送信0バイト。"
   canonicalPath="/pdf-redaction/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="機密PDF 完全黒塗り・不可逆墨消し（コピペ復元不可）"
+  subtitle="「黒枠を重ねただけ」で下の文字が抜ける事故を防止。Canvasラスタライズでテキスト層そのものを物理消滅させて再構築します。"
+  mascotName="tool-pdf-redaction"
+  mascotFallback="⬛"
+  whyTitle="「PDFの上に黒い四角を置いただけ」は、1秒で文字が抜ける"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
-    
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-            <div class="min-w-0 flex-1 space-y-1.5">
-              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                機密PDF 完全黒塗り・不可逆墨消し（コピペ復元不可）
-              </h1>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                「黒枠を重ねただけ」で下の文字が抜ける事故を防止。Canvasラスタライズでテキスト層そのものを物理消滅させて再構築します。
-              </p>
-            </div>
-            <Mascot name="tool-pdf-redaction" fallback="⬛" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-          </div>
-        </div>
-
-        <!-- テスト用サンプル投入ボタン -->
-        <button
-          id="loadSamplePdfRedactBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-        >
-          <span>🧪</span>
-          <span>サンプル機密PDFで試す（偽黒塗り体験付き）</span>
-        </button>
-      </div>
+  <div class="space-y-6">
+    <!-- テスト用サンプル投入ボタン -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        id="loadSamplePdfRedactBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      >
+        <span>🧪</span>
+        <span>サンプル機密PDFで試す（偽黒塗り体験付き）</span>
+      </button>
     </div>
 
     <!-- メイン操作カード -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
-      
       <!-- ファイルドロップゾーン -->
       <div id="dropZonePdfRedact" class="border-2 border-dashed border-slate-300 hover:border-slate-800 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-slate-100/50 cursor-pointer group">
         <input type="file" id="fileInputPdfRedact" accept=".pdf,application/pdf" class="hidden" />
@@ -153,7 +89,6 @@ const extraSchemaGraph = [
 
       <!-- ワークスペース（PDF読み込み後表示） -->
       <div id="redactWorkspace" class="hidden space-y-4">
-        
         <!-- コントロールバー -->
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-3">
@@ -252,431 +187,359 @@ const extraSchemaGraph = [
             </p>
           </div>
         </div>
-
       </div>
-
     </div>
 
     <!-- 3秒体験デモ（コピペ剥がれ vs 画素破壊） -->
     <RedactionDemo />
-
-    <WhySection slug="pdf-redaction" title="「PDFの上に黒い四角を置いただけ」は、1秒で文字が抜ける" />
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. なぜPDFの上に黒い四角形を重ねるだけの墨消しは危険なのですか？</span>
-            <span class="text-slate-900 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            一般的なPDF編集ソフトで四角形図形を文字の上に乗せただけの場合、PDF内部の「テキストレイヤー（文字コードデータ）」は消去されずにそのまま残っています。受け取った側がCtrl+A（全選択）してメモ帳に貼り付けたり、注釈オブジェクトを削除するだけで、隠したはずの氏名や金額が丸見えになります。本ツールは高精細Canvasラスタライズによりテキスト層を物理的に消滅させるため安全です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. ラスタライズ（画像化）するとPDFの文字がぼやけたり画質が落ちませんか？</span>
-            <span class="text-slate-900 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            本ツールは一般的な印刷解像度と同等の高DPI（約200〜300DPI相当）でブラウザ内ラスタライズを行います。肉眼での閲覧やA4用紙への印刷において文字の輪郭が崩れず、非常に鮮明なクオリティを維持しながらテキスト層のみを完全抹消します。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 裁判所や官公庁、取引先への提出用書類として利用できますか？</span>
-            <span class="text-slate-900 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。裁判所への証拠提出や官公庁の開示請求書類、取引先への見積・請求書など、厳格な守秘義務が求められる墨消し資料に最適です。テキスト検索やOCRコピペによる情報漏洩事故を物理的に遮断できます（※提出前に必ずご自身でダウンロード結果を目視確認してください）。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. マイナンバーや電話番号などの個人情報は自動で検出できますか？</span>
-            <span class="text-slate-900 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。「個人情報を自動検出」ボタンを押すと、PDF内のテキストレイヤーを走査してマイナンバー（12桁）、電話番号、メールアドレスの該当箇所を自動検出し、ワンクリックで黒塗り枠を配置できます。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <RelatedTools currentPath="/pdf-redaction/" />
   </div>
+</ToolShell>
 
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
+<script>
+  import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+  import {
+    analyzePdfRisks,
+    renderRedactedPdf,
+    generateSampleConfidentialPdf,
+    type RedactionBox,
+  } from '../utils/pdf-redaction';
 
-  <!-- クライアントサイドスクリプト -->
-  <script>
-    import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
-    import {
-      analyzePdfRisks,
-      renderRedactedPdf,
-      generateSampleConfidentialPdf,
-      type RedactionBox,
-      type DetectedLeakRisk,
-    } from '../utils/pdf-redaction';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/_astro/pdf.worker.min.yatZIOMy.mjs';
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/_astro/pdf.worker.BgryrOlp.mjs';
+  let currentPdfBytes: Uint8Array | null = null;
+  let currentFileName = 'document.pdf';
+  let currentPdfDoc: any = null;
+  let totalPages = 1;
+  let currentPageNum = 1;
+  let redactions: RedactionBox[] = [];
 
-    let currentPdfBytes: Uint8Array | null = null;
-    let currentFileName = 'document.pdf';
-    let currentPdfDoc: any = null;
-    let totalPages = 1;
-    let currentPageNum = 1;
-    let redactions: RedactionBox[] = [];
+  // ドラッグ状態
+  let isDrawing = false;
+  let startX = 0;
+  let startY = 0;
 
-    // ドラッグ状態
-    let isDrawing = false;
-    let startX = 0;
-    let startY = 0;
+  // DOM要素
+  const dropZone = document.getElementById('dropZonePdfRedact')!;
+  const fileInput = document.getElementById('fileInputPdfRedact') as HTMLInputElement;
+  const loadSampleBtn = document.getElementById('loadSamplePdfRedactBtn')!;
+  const workspace = document.getElementById('redactWorkspace')!;
+  const fileNameText = document.getElementById('pdfFileNameText')!;
+  const pageInfoText = document.getElementById('pdfPageInfoText')!;
+  const prevPageBtn = document.getElementById('prevPageBtn') as HTMLButtonElement;
+  const nextPageBtn = document.getElementById('nextPageBtn') as HTMLButtonElement;
+  const autoDetectBtn = document.getElementById('autoDetectRisksBtn')!;
+  const clearBtn = document.getElementById('clearRedactionsBtn')!;
+  const executeBtn = document.getElementById('executeRedactionBtn') as HTMLButtonElement;
+  const renderCanvas = document.getElementById('pdfRenderCanvas') as HTMLCanvasElement;
+  const overlayCanvas = document.getElementById('pdfOverlayCanvas') as HTMLCanvasElement;
+  const risksBanner = document.getElementById('detectedRisksBanner')!;
+  const risksCountText = document.getElementById('detectedRisksCountText')!;
 
-    // DOM要素
-    const dropZone = document.getElementById('dropZonePdfRedact')!;
-    const fileInput = document.getElementById('fileInputPdfRedact') as HTMLInputElement;
-    const loadSampleBtn = document.getElementById('loadSamplePdfRedactBtn')!;
-    const workspace = document.getElementById('redactWorkspace')!;
-    const fileNameText = document.getElementById('pdfFileNameText')!;
-    const pageInfoText = document.getElementById('pdfPageInfoText')!;
-    const prevPageBtn = document.getElementById('prevPageBtn') as HTMLButtonElement;
-    const nextPageBtn = document.getElementById('nextPageBtn') as HTMLButtonElement;
-    const autoDetectBtn = document.getElementById('autoDetectRisksBtn')!;
-    const clearBtn = document.getElementById('clearRedactionsBtn')!;
-    const executeBtn = document.getElementById('executeRedactionBtn')!;
-    const renderCanvas = document.getElementById('pdfRenderCanvas') as HTMLCanvasElement;
-    const overlayCanvas = document.getElementById('pdfOverlayCanvas') as HTMLCanvasElement;
-    const risksBanner = document.getElementById('detectedRisksBanner')!;
-    const risksCountText = document.getElementById('detectedRisksCountText')!;
+  // ファイルドロップ
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-slate-800', 'bg-slate-100');
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-slate-800', 'bg-slate-100');
+  });
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-slate-800', 'bg-slate-100');
+    if (e.dataTransfer?.files.length) {
+      loadPdfFile(e.dataTransfer.files[0]);
+    }
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files?.length) {
+      loadPdfFile(fileInput.files[0]);
+    }
+  });
 
-    // ファイルドロップ
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('border-slate-800', 'bg-slate-100');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-slate-800', 'bg-slate-100');
-    });
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('border-slate-800', 'bg-slate-100');
-      if (e.dataTransfer?.files.length) {
-        loadPdfFile(e.dataTransfer.files[0]);
-      }
-    });
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files?.length) {
-        loadPdfFile(fileInput.files[0]);
-      }
-    });
+  async function loadPdfFile(file: File) {
+    currentFileName = file.name;
+    const arrayBuffer = await file.arrayBuffer();
+    currentPdfBytes = new Uint8Array(arrayBuffer);
+    redactions = [];
+    await initializePdfViewer();
+  }
 
-    async function loadPdfFile(file: File) {
-      currentFileName = file.name;
-      const arrayBuffer = await file.arrayBuffer();
-      currentPdfBytes = new Uint8Array(arrayBuffer);
-      redactions = [];
-      await initializePdfViewer();
+  // サンプル投入
+  loadSampleBtn.addEventListener('click', async () => {
+    currentFileName = 'sample_confidential_report.pdf';
+    currentPdfBytes = await generateSampleConfidentialPdf();
+    redactions = [];
+    await initializePdfViewer();
+    // サンプルの場合は自動検出も即座に実行
+    await runAutoDetect();
+  });
+
+  async function initializePdfViewer() {
+    if (!currentPdfBytes) return;
+    currentPdfDoc = await pdfjsLib.getDocument({
+      data: currentPdfBytes,
+      useSystemFonts: true,
+    }).promise;
+    totalPages = currentPdfDoc.numPages;
+    currentPageNum = 1;
+    fileNameText.textContent = currentFileName;
+    dropZone.classList.add('hidden');
+    workspace.classList.remove('hidden');
+    await renderCurrentPage();
+  }
+
+  async function renderCurrentPage() {
+    if (!currentPdfDoc) return;
+    pageInfoText.textContent = `ページ: ${currentPageNum} / ${totalPages}`;
+    prevPageBtn.disabled = currentPageNum <= 1;
+    nextPageBtn.disabled = currentPageNum >= totalPages;
+
+    const page = await currentPdfDoc.getPage(currentPageNum);
+    const viewport = page.getViewport({ scale: 1.5 });
+
+    renderCanvas.width = viewport.width;
+    renderCanvas.height = viewport.height;
+    overlayCanvas.width = viewport.width;
+    overlayCanvas.height = viewport.height;
+
+    const ctx = renderCanvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+      await page.render({
+        canvasContext: ctx,
+        viewport,
+      }).promise;
     }
 
-    // サンプル投入
-    loadSampleBtn.addEventListener('click', async () => {
-      currentFileName = 'sample_confidential_report.pdf';
-      currentPdfBytes = await generateSampleConfidentialPdf();
-      redactions = [];
-      await initializePdfViewer();
-      // サンプルの場合は自動検出も即座に実行
-      await runAutoDetect();
-    });
+    drawOverlayRedactions();
+  }
 
-    async function initializePdfViewer() {
-      if (!currentPdfBytes) return;
-      currentPdfDoc = await pdfjsLib.getDocument({
-        data: currentPdfBytes,
-        useSystemFonts: true,
-      }).promise;
-      totalPages = currentPdfDoc.numPages;
-      currentPageNum = 1;
-      fileNameText.textContent = currentFileName;
-      dropZone.classList.add('hidden');
-      workspace.classList.remove('hidden');
+  function drawOverlayRedactions() {
+    const ctx = overlayCanvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+    const pageRedactions = redactions.filter((r) => r.pageNumber === currentPageNum);
+    for (const r of pageRedactions) {
+      const x = r.x * overlayCanvas.width;
+      const y = r.y * overlayCanvas.height;
+      const w = r.width * overlayCanvas.width;
+      const h = r.height * overlayCanvas.height;
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+      ctx.fillRect(x, y, w, h);
+
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(x, y, w, h);
+    }
+  }
+
+  overlayCanvas.addEventListener('mousedown', (e) => {
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    startX = (e.clientX - rect.left) * scaleX;
+    startY = (e.clientY - rect.top) * scaleY;
+    isDrawing = true;
+  });
+
+  overlayCanvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    const currentX = (e.clientX - rect.left) * scaleX;
+    const currentY = (e.clientY - rect.top) * scaleY;
+
+    drawOverlayRedactions();
+
+    const ctx = overlayCanvas.getContext('2d');
+    if (ctx) {
+      const x = Math.min(startX, currentX);
+      const y = Math.min(startY, currentY);
+      const w = Math.abs(currentX - startX);
+      const h = Math.abs(currentY - startY);
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+      ctx.fillRect(x, y, w, h);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, w, h);
+    }
+  });
+
+  overlayCanvas.addEventListener('mouseup', (e) => {
+    if (!isDrawing) return;
+    isDrawing = false;
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    const endX = (e.clientX - rect.left) * scaleX;
+    const endY = (e.clientY - rect.top) * scaleY;
+
+    const px = Math.min(startX, endX);
+    const py = Math.min(startY, endY);
+    const pw = Math.abs(endX - startX);
+    const ph = Math.abs(endY - startY);
+
+    if (pw > 5 && ph > 5) {
+      redactions.push({
+        pageNumber: currentPageNum,
+        x: px / overlayCanvas.width,
+        y: py / overlayCanvas.height,
+        width: pw / overlayCanvas.width,
+        height: ph / overlayCanvas.height,
+      });
+    }
+    drawOverlayRedactions();
+  });
+
+  overlayCanvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 0) return;
+    e.preventDefault();
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    startX = (e.touches[0].clientX - rect.left) * scaleX;
+    startY = (e.touches[0].clientY - rect.top) * scaleY;
+    isDrawing = true;
+  }, { passive: false });
+
+  overlayCanvas.addEventListener('touchmove', (e) => {
+    if (!isDrawing || e.touches.length === 0) return;
+    e.preventDefault();
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    const currentX = (e.touches[0].clientX - rect.left) * scaleX;
+    const currentY = (e.touches[0].clientY - rect.top) * scaleY;
+
+    drawOverlayRedactions();
+
+    const ctx = overlayCanvas.getContext('2d');
+    if (ctx) {
+      const x = Math.min(startX, currentX);
+      const y = Math.min(startY, currentY);
+      const w = Math.abs(currentX - startX);
+      const h = Math.abs(currentY - startY);
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+      ctx.fillRect(x, y, w, h);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, w, h);
+    }
+  }, { passive: false });
+
+  overlayCanvas.addEventListener('touchend', (e) => {
+    if (!isDrawing) return;
+    isDrawing = false;
+    const rect = overlayCanvas.getBoundingClientRect();
+    const scaleX = overlayCanvas.width / rect.width;
+    const scaleY = overlayCanvas.height / rect.height;
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+    const endX = (touch.clientX - rect.left) * scaleX;
+    const endY = (touch.clientY - rect.top) * scaleY;
+
+    const px = Math.min(startX, endX);
+    const py = Math.min(startY, endY);
+    const pw = Math.abs(endX - startX);
+    const ph = Math.abs(endY - startY);
+
+    if (pw > 5 && ph > 5) {
+      redactions.push({
+        pageNumber: currentPageNum,
+        x: px / overlayCanvas.width,
+        y: py / overlayCanvas.height,
+        width: pw / overlayCanvas.width,
+        height: ph / overlayCanvas.height,
+      });
+    }
+    drawOverlayRedactions();
+  });
+
+  prevPageBtn.addEventListener('click', async () => {
+    if (currentPageNum > 1) {
+      currentPageNum--;
       await renderCurrentPage();
     }
-
-    async function renderCurrentPage() {
-      if (!currentPdfDoc) return;
-      pageInfoText.textContent = `ページ: ${currentPageNum} / ${totalPages}`;
-      prevPageBtn.disabled = currentPageNum <= 1;
-      nextPageBtn.disabled = currentPageNum >= totalPages;
-
-      const page = await currentPdfDoc.getPage(currentPageNum);
-      const viewport = page.getViewport({ scale: 1.5 }); // 画面表示用スケール
-
-      renderCanvas.width = viewport.width;
-      renderCanvas.height = viewport.height;
-      overlayCanvas.width = viewport.width;
-      overlayCanvas.height = viewport.height;
-
-      const ctx = renderCanvas.getContext('2d');
-      if (ctx) {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
-        await page.render({
-          canvasContext: ctx,
-          viewport,
-        }).promise;
-      }
-
-      drawOverlayRedactions();
+  });
+  nextPageBtn.addEventListener('click', async () => {
+    if (currentPageNum < totalPages) {
+      currentPageNum++;
+      await renderCurrentPage();
     }
+  });
 
-    function drawOverlayRedactions() {
-      const ctx = overlayCanvas.getContext('2d');
-      if (!ctx) return;
-      ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  clearBtn.addEventListener('click', () => {
+    redactions = redactions.filter((r) => r.pageNumber !== currentPageNum);
+    drawOverlayRedactions();
+  });
 
-      const pageRedactions = redactions.filter((r) => r.pageNumber === currentPageNum);
-      for (const r of pageRedactions) {
-        const x = r.x * overlayCanvas.width;
-        const y = r.y * overlayCanvas.height;
-        const w = r.width * overlayCanvas.width;
-        const h = r.height * overlayCanvas.height;
+  autoDetectBtn.addEventListener('click', runAutoDetect);
 
-        // 黒塗り矩形
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-        ctx.fillRect(x, y, w, h);
+  async function runAutoDetect() {
+    if (!currentPdfBytes) return;
+    const analysis = await analyzePdfRisks(currentPdfBytes);
+    if (analysis.detectedRisks.length > 0) {
+      risksCountText.textContent = `⚠️ 個人情報・機密テキストを ${analysis.detectedRisks.length} 箇所検出しました（自動で黒塗り枠を配置）`;
+      risksBanner.classList.remove('hidden');
 
-        // ガイド枠線
-        ctx.strokeStyle = '#ef4444';
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(x, y, w, h);
-      }
-    }
-
-    // ドラッグによる矩形追加
-    overlayCanvas.addEventListener('mousedown', (e) => {
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      startX = (e.clientX - rect.left) * scaleX;
-      startY = (e.clientY - rect.top) * scaleY;
-      isDrawing = true;
-    });
-
-    overlayCanvas.addEventListener('mousemove', (e) => {
-      if (!isDrawing) return;
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      const currentX = (e.clientX - rect.left) * scaleX;
-      const currentY = (e.clientY - rect.top) * scaleY;
-
-      drawOverlayRedactions();
-
-      const ctx = overlayCanvas.getContext('2d');
-      if (ctx) {
-        const x = Math.min(startX, currentX);
-        const y = Math.min(startY, currentY);
-        const w = Math.abs(currentX - startX);
-        const h = Math.abs(currentY - startY);
-
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
-        ctx.fillRect(x, y, w, h);
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, w, h);
-      }
-    });
-
-    overlayCanvas.addEventListener('mouseup', (e) => {
-      if (!isDrawing) return;
-      isDrawing = false;
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      const endX = (e.clientX - rect.left) * scaleX;
-      const endY = (e.clientY - rect.top) * scaleY;
-
-      const px = Math.min(startX, endX);
-      const py = Math.min(startY, endY);
-      const pw = Math.abs(endX - startX);
-      const ph = Math.abs(endY - startY);
-
-      if (pw > 5 && ph > 5) {
+      for (const risk of analysis.detectedRisks) {
         redactions.push({
-          pageNumber: currentPageNum,
-          x: px / overlayCanvas.width,
-          y: py / overlayCanvas.height,
-          width: pw / overlayCanvas.width,
-          height: ph / overlayCanvas.height,
+          pageNumber: risk.pageNumber,
+          x: risk.box.x,
+          y: risk.box.y,
+          width: risk.box.width,
+          height: risk.box.height,
+          textPreview: risk.text,
         });
       }
       drawOverlayRedactions();
-    });
+    } else {
+      alert('マイナンバー・電話・メール等の既知パターンは検出されませんでした。マウスドラッグで隠したい箇所を指定してください。');
+    }
+  }
 
-    // スマホ・タブレット用タッチ操作
-    overlayCanvas.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 0) return;
-      e.preventDefault();
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      startX = (e.touches[0].clientX - rect.left) * scaleX;
-      startY = (e.touches[0].clientY - rect.top) * scaleY;
-      isDrawing = true;
-    }, { passive: false });
-
-    overlayCanvas.addEventListener('touchmove', (e) => {
-      if (!isDrawing || e.touches.length === 0) return;
-      e.preventDefault();
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      const currentX = (e.touches[0].clientX - rect.left) * scaleX;
-      const currentY = (e.touches[0].clientY - rect.top) * scaleY;
-
-      drawOverlayRedactions();
-
-      const ctx = overlayCanvas.getContext('2d');
-      if (ctx) {
-        const x = Math.min(startX, currentX);
-        const y = Math.min(startY, currentY);
-        const w = Math.abs(currentX - startX);
-        const h = Math.abs(currentY - startY);
-
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
-        ctx.fillRect(x, y, w, h);
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, w, h);
+  executeBtn.addEventListener('click', async () => {
+    if (!currentPdfBytes) return;
+    if (redactions.length === 0) {
+      if (!confirm('黒塗り枠が指定されていません。このまま全ページをラスタライズ（画像化）してテキスト層を消滅させますか？')) {
+        return;
       }
-    }, { passive: false });
+    }
 
-    overlayCanvas.addEventListener('touchend', (e) => {
-      if (!isDrawing) return;
-      isDrawing = false;
-      const rect = overlayCanvas.getBoundingClientRect();
-      const scaleX = overlayCanvas.width / rect.width;
-      const scaleY = overlayCanvas.height / rect.height;
-      const touch = e.changedTouches[0];
-      if (!touch) return;
-      const endX = (touch.clientX - rect.left) * scaleX;
-      const endY = (touch.clientY - rect.top) * scaleY;
+    executeBtn.disabled = true;
+    executeBtn.innerHTML = `<span>⏳</span><span>高精細ラスタライズ処理中...</span>`;
 
-      const px = Math.min(startX, endX);
-      const py = Math.min(startY, endY);
-      const pw = Math.abs(endX - startX);
-      const ph = Math.abs(endY - startY);
-
-      if (pw > 5 && ph > 5) {
-        redactions.push({
-          pageNumber: currentPageNum,
-          x: px / overlayCanvas.width,
-          y: py / overlayCanvas.height,
-          width: pw / overlayCanvas.width,
-          height: ph / overlayCanvas.height,
-        });
-      }
-      drawOverlayRedactions();
-    });
-
-    // ページ送り
-    prevPageBtn.addEventListener('click', async () => {
-      if (currentPageNum > 1) {
-        currentPageNum--;
-        await renderCurrentPage();
-      }
-    });
-    nextPageBtn.addEventListener('click', async () => {
-      if (currentPageNum < totalPages) {
-        currentPageNum++;
-        await renderCurrentPage();
-      }
-    });
-
-    // 枠全消去
-    clearBtn.addEventListener('click', () => {
-      redactions = redactions.filter((r) => r.pageNumber !== currentPageNum);
-      drawOverlayRedactions();
-    });
-
-    // 自動検出
-    autoDetectBtn.addEventListener('click', runAutoDetect);
-
-    async function runAutoDetect() {
-      if (!currentPdfBytes) return;
-      const analysis = await analyzePdfRisks(currentPdfBytes);
-      if (analysis.detectedRisks.length > 0) {
-        risksCountText.textContent = `⚠️ 個人情報・機密テキストを ${analysis.detectedRisks.length} 箇所検出しました（自動で黒塗り枠を配置）`;
-        risksBanner.classList.remove('hidden');
-
-        for (const risk of analysis.detectedRisks) {
-          redactions.push({
-            pageNumber: risk.pageNumber,
-            x: risk.box.x,
-            y: risk.box.y,
-            width: risk.box.width,
-            height: risk.box.height,
-            textPreview: risk.text,
-          });
-        }
-        drawOverlayRedactions();
+    try {
+      const { pdfBytes, totalRedactionsApplied } = await renderRedactedPdf(currentPdfBytes, redactions);
+      
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const dotIdx = currentFileName.lastIndexOf('.');
+      if (dotIdx !== -1) {
+        a.download = `${currentFileName.slice(0, dotIdx)}_redacted.pdf`;
       } else {
-        alert('マイナンバー・電話・メール等の既知パターンは検出されませんでした。マウスドラッグで隠したい箇所を指定してください。');
+        a.download = `${currentFileName}_redacted.pdf`;
       }
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      alert(`不可逆黒塗り完了！\n${totalRedactionsApplied} 箇所のピクセルを物理破壊し、テキスト層を含まないクリーンなPDFを出力しました。\n※提出前に必ずご自身でダウンロード結果を目視確認してください。`);
+    } catch (err) {
+      alert('処理中にエラーが発生しました: ' + (err as any)?.message);
+    } finally {
+      executeBtn.disabled = false;
+      executeBtn.innerHTML = `<span>⬛</span><span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>`;
     }
-
-    // 完全黒塗り実行
-    executeBtn.addEventListener('click', async () => {
-      if (!currentPdfBytes) return;
-      if (redactions.length === 0) {
-        if (!confirm('黒塗り枠が指定されていません。このまま全ページをラスタライズ（画像化）してテキスト層を消滅させますか？')) {
-          return;
-        }
-      }
-
-      executeBtn.disabled = true;
-      executeBtn.innerHTML = `<span>⏳</span><span>高精細ラスタライズ処理中...</span>`;
-
-      try {
-        const { pdfBytes, totalRedactionsApplied } = await renderRedactedPdf(currentPdfBytes, redactions);
-        
-        // ダウンロード
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const dotIdx = currentFileName.lastIndexOf('.');
-        if (dotIdx !== -1) {
-          a.download = `${currentFileName.slice(0, dotIdx)}_redacted.pdf`;
-        } else {
-          a.download = `${currentFileName}_redacted.pdf`;
-        }
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        alert(`不可逆黒塗り完了！\n${totalRedactionsApplied} 箇所のピクセルを物理破壊し、テキスト層を含まないクリーンなPDFを出力しました。\n※提出前に必ずご自身でダウンロード結果を目視確認してください。`);
-      } catch (err) {
-        alert('処理中にエラーが発生しました: ' + (err as any)?.message);
-      } finally {
-        executeBtn.disabled = false;
-        executeBtn.innerHTML = `<span>⬛</span><span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>`;
-      }
-    });
-  </script>
-</Layout>
+  });
+</script>

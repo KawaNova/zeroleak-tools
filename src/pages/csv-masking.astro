@@ -1,136 +1,69 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "CSV・テキストの個人情報・マイナンバーを一括自動マスキングする3ステップ",
-    "description": "社内テストや外部委託提出用CSVから、ブラウザ内完結・外部送信0バイトで個人情報を一括伏字化する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "CSVファイルをドラッグ＆ドロップ",
-        "text": "マスキングしたいCSVファイルまたはテキストを配置します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "マスキング対象列と検出ルールの確認",
-        "text": "自動判別された個人情報列（氏名、マイナンバー、電話番号、メール等）を確認・選択します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "一括マスキング実行とダウンロード",
-        "text": "一瞬で伏字化されたプレビューを確認し、UTF-8 BOM付きCSVとして保存します。"
-      }
-    ]
+    name: 'CSVファイルをドラッグ＆ドロップ',
+    text: 'マスキングしたいCSVファイルまたはテキストを配置します。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "社外ベンダーへ提出するテストデータからマイナンバーをマスキングする法的義務はありますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。マイナンバー法（番号法）では、社会保障・税・災害対策の法令で定められた正当な手続き以外でのマイナンバーの提供・収集が厳格に禁止されています。システム開発のテストや外部委託に実マイナンバーをそのまま渡すことは重大な法令違反となるため、事前の確実なマスキングまたはダミー化が必須です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Excelで開いたときに日本語が文字化けしませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ご安心ください。本ツールからダウンロードされるCSVファイルには、Excel対応用の「UTF-8 BOM（Byte Order Mark）」が自動付与されているため、WindowsやMacのMicrosoft Excelで開いても文字化けせずにそのまま閲覧・編集が可能です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "機密データや顧客名簿をWebサイトに入力して漏洩するリスクはありませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ZeroLeak Toolsは、ブラウザ内のローカルメモリ（RAM）上でのみ文字列置換・パースを実行します。サーバー側へデータを送信するAPI通信処理そのものが一切存在しないため、クラウド上にデータが保存・漏洩するリスクは技術的に0%です。F12開発者ツールのNetworkタブで外部通信0件をご確認いただけます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "数万行の大容量CSVファイルでも動作しますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。PapaParseと最適化されたJavaScript正規表現エンジンにより、ブラウザメモリ内で高速ストリーム処理されます。一般的な数千〜数万行のCSVであれば、わずか数秒以内に処理が完了します。"
-        }
-      }
-    ]
-  }
+    name: 'マスキング対象列と検出ルールの確認',
+    text: '自動判別された個人情報列（氏名、マイナンバー、電話番号、メール等）を確認・選択します。',
+  },
+  {
+    name: '一括マスキング実行とダウンロード',
+    text: '一瞬で伏字化されたプレビューを確認し、UTF-8 BOM付きCSVとして保存します。',
+  },
+];
+
+const faqs = [
+  {
+    question: '社外ベンダーへ提出するテストデータからマイナンバーをマスキングする法的義務はありますか？',
+    answer: 'はい。マイナンバー法（番号法）では、社会保障・税・災害対策の法令で定められた正当な手続き以外でのマイナンバーの提供・収集が厳格に禁止されています。システム開発のテストや外部委託に実マイナンバーをそのまま渡すことは重大な法令違反となるため、事前の確実なマスキングまたはダミー化が必須です。',
+  },
+  {
+    question: 'Excelで開いたときに日本語が文字化けしませんか？',
+    answer: 'ご安心ください。本ツールからダウンロードされるCSVファイルには、Excel対応用の「UTF-8 BOM（Byte Order Mark）」が自動付与されているため、WindowsやMacのMicrosoft Excelで開いても文字化けせずにそのまま閲覧・編集が可能です。',
+  },
+  {
+    question: '機密データや顧客名簿をWebサイトに入力して漏洩するリスクはありませんか？',
+    answer: 'ZeroLeak Toolsは、ブラウザ内のローカルメモリ（RAM）上でのみ文字列置換・パースを実行します。サーバー側へデータを送信するAPI通信処理そのものが一切存在しないため、クラウド上にデータが保存・漏洩するリスクは技術的に0%です。F12開発者ツールのNetworkタブで外部通信0件をご確認いただけます。',
+  },
+  {
+    question: '数万行の大容量CSVファイルでも動作しますか？',
+    answer: 'はい。PapaParseと最適化されたJavaScript正規表現エンジンにより、ブラウザメモリ内で高速ストリーム処理されます。一般的な数千〜数万行のCSVであれば、わずか数秒以内に処理が完了します。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="csv-masking"
   title="CSV・テキスト 個人情報・マイナンバー一括伏字マスキング"
   description="社内テストや外部提出用CSVから個人情報・マイナンバー・電話番号・メールを一括伏字化。ブラウザ内完結・外部サーバー送信0バイト。"
   canonicalPath="/csv-masking/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="CSV・テキスト 個人情報＆マイナンバー 自動マスキング"
+  subtitle="大容量CSVや名簿テキストから、マイナンバー・電話番号・氏名列を一括伏字化。ブラウザ内完結で外部送信は0バイトです。"
+  mascotName="tool-csv"
+  mascotFallback="📊"
+  whyTitle="「テスト用だから本番CSVでOK」が重大インシデントを招く"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
-    
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        
-
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-<div class="min-w-0 flex-1 space-y-1.5">
-<h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            CSV・テキスト 個人情報＆マイナンバー 自動マスキング
-          </h1>
-          <p class="text-slate-600 text-xs sm:text-sm mt-1">
-            大容量CSVや名簿テキストから、マイナンバー・電話番号・氏名列を一括伏字化。ブラウザ内完結で外部送信は0バイトです。
-          </p>
-</div>
-<Mascot name="tool-csv" fallback="📊" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-</div>
-        </div>
-
-        <!-- テスト用サンプルデータ投入ボタン -->
-        <button
-          id="loadSampleCsvBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-        >
-          <span>🧪</span>
-          <span>架空の名簿サンプルで試す</span>
-        </button>
-      </div>
+  <div class="space-y-6">
+    <!-- テスト用サンプルデータ投入ボタン -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        id="loadSampleCsvBtn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      >
+        <span>🧪</span>
+        <span>架空の名簿サンプルで試す</span>
+      </button>
     </div>
 
-    <!-- メイン操作カード（ファーストビュー最優先） -->
+    <!-- メイン操作カード -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
-      
       <!-- 入力モードタブ -->
       <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
         <button id="tabCsvBtn" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs">
@@ -141,112 +74,109 @@ const extraSchemaGraph = [
         </button>
       </div>
 
-      <!-- CSVモードエリア -->
+      <!-- モード1: CSVファイル -->
       <div id="csvModeSection" class="space-y-4">
         <!-- ドロップゾーン -->
         <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-emerald-50/20 cursor-pointer group">
           <input type="file" id="fileInput" accept=".csv,.txt" class="hidden" />
           <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition-transform shadow-xs">
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs text-xl font-bold">
+              📊
             </div>
             <div>
-              <p class="font-bold text-slate-800 text-sm sm:text-base">CSVファイルをここにドラッグ＆ドロップ</p>
-              <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.csv, .txt)</p>
+              <p class="font-bold text-slate-800 text-sm sm:text-base">CSVファイルをドロップ</p>
+              <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.csv, .txt) • UTF-8 / Shift-JIS対応</p>
             </div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
-              <span>🔒 お使いの端末メモリ内だけで処理（サーバー送信なし）</span>
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-emerald-900 shadow-xs font-bold">
+                🔒 サーバー送信なし（0バイト保証）
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs font-semibold">
+                ⚡ 10万行のCSVも端末内で瞬時に処理
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- 読み込み中/ファイル情報 -->
-        <div id="fileInfoArea" class="hidden p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <!-- 選択中ファイルインフォバー -->
+        <div id="fileInfoArea" class="hidden p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 flex items-center justify-between text-xs">
           <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">CSV</div>
+            <span class="text-base">📄</span>
             <div>
-              <p id="fileNameText" class="text-xs sm:text-sm font-semibold text-slate-900">sample.csv</p>
-              <p id="fileMetaText" class="text-[11px] text-slate-500">行数: 0 | サイズ: 0 KB</p>
+              <div class="font-bold text-slate-900" id="fileNameText">filename.csv</div>
+              <div class="text-slate-500 font-mono text-[11px]" id="fileMetaText">行数: 0 | サイズ: 0 KB</div>
             </div>
           </div>
-          <button id="resetFileBtn" type="button" class="text-xs text-slate-500 hover:text-rose-600 underline transition cursor-pointer font-medium">
+          <button id="resetFileBtn" type="button" class="text-slate-500 hover:text-rose-600 text-xs font-semibold cursor-pointer">
             ファイルを変更
           </button>
         </div>
 
-        <!-- カラム選択設定 -->
-        <div id="columnSettingsArea" class="hidden space-y-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <!-- カラム選択エリア（CSV読み込み後表示） -->
+        <div id="columnSettingsArea" class="hidden space-y-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
           <div class="flex items-center justify-between">
-            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-              <span>🎯 マスキング対象列の指定</span>
-              <span class="text-[10px] font-normal text-emerald-700">（個人情報列を自動判別して初期選択）</span>
-            </h3>
-            <button id="selectAllColsBtn" type="button" class="text-xs text-slate-600 hover:text-emerald-700 underline cursor-pointer font-medium">全選択 / 解除</button>
+            <span class="font-bold text-xs text-slate-900">マスキング対象のカラムを選択（自動判定済み）:</span>
+            <button id="selectAllColsBtn" type="button" class="text-xs text-emerald-700 hover:text-emerald-900 font-semibold cursor-pointer">
+              すべて選択 / 解除
+            </button>
           </div>
-          <div id="columnCheckboxList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1 text-xs">
-            <!-- JSで動的生成 -->
+          <div id="columnCheckboxList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            <!-- チェックボックス動的挿入 -->
           </div>
         </div>
       </div>
 
-      <!-- テキスト貼り付けモードエリア -->
-      <div id="textModeSection" class="hidden space-y-3">
-        <div>
-          <label for="rawTextInput" class="block text-xs font-semibold text-slate-700 mb-1.5">マスキングしたいテキストまたはCSVテキストをペースト：</label>
-          <textarea id="rawTextInput" rows="6" placeholder="例: 山田太郎, 090-1234-5678, yamada@example.com, 123-4567, 123456789012" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm text-slate-900 font-mono focus:border-emerald-500 focus:bg-white focus:outline-none"></textarea>
-        </div>
+      <!-- モード2: 自由テキスト -->
+      <div id="textModeSection" class="hidden space-y-2">
+        <label for="rawTextInput" class="block text-xs font-bold text-slate-700">
+          マスキングしたいテキストを貼り付け（CSV、メール本文、ログなど）:
+        </label>
+        <textarea
+          id="rawTextInput"
+          rows="6"
+          placeholder="山田太郎, 090-1234-5678, 1234-5678-9012, taro@example.com&#10;佐藤花子, 080-9876-5432, 9876-5432-1098, hanako@example.com"
+          class="w-full text-xs font-mono p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 leading-relaxed"
+        ></textarea>
       </div>
 
-      <!-- マスキング詳細ルール設定（折りたたみ可能） -->
-      <details class="group bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 text-xs" open>
-        <summary class="flex items-center justify-between cursor-pointer select-none font-bold text-slate-700 list-none">
-          <span class="flex items-center gap-1.5">
-            <span>⚙️</span>
-            <span>自動検出ルール ＆ 伏字形式</span>
-            <span class="text-[10px] text-emerald-700 font-normal font-mono ml-2">※正規表現で一括置換</span>
-          </span>
-          <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
-        </summary>
-
-        <div class="pt-3 mt-2 border-t border-slate-200/60 space-y-3">
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs">
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
-              <input type="checkbox" id="optMyNumber" checked class="accent-emerald-600 rounded" />
-              <span>マイナンバー (12桁)</span>
-            </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
-              <input type="checkbox" id="optPhone" checked class="accent-emerald-600 rounded" />
-              <span>電話番号 (携帯・固定)</span>
-            </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
-              <input type="checkbox" id="optEmail" checked class="accent-emerald-600 rounded" />
-              <span>メールアドレス</span>
-            </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
-              <input type="checkbox" id="optPostal" checked class="accent-emerald-600 rounded" />
-              <span>郵便番号</span>
-            </label>
-            <label class="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-emerald-400 shadow-2xs">
-              <input type="checkbox" id="optCard" checked class="accent-emerald-600 rounded" />
-              <span>クレジットカード</span>
-            </label>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-3 pt-1 text-xs text-slate-700">
-            <span class="text-slate-500 font-medium">伏字形式:</span>
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="radio" name="replaceStyle" value="asterisk" checked class="accent-emerald-600" />
-              <span>アスタリスク (例: ****-****-****)</span>
-            </label>
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="radio" name="replaceStyle" value="tag" class="accent-emerald-600" />
-              <span>タグ形式 (例: [マイナンバー伏字])</span>
-            </label>
-          </div>
+      <!-- マスキング詳細ルール設定 -->
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
+        <span class="font-bold text-slate-800 block">検出・置換ルール設定:</span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="optMyNumber" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <span class="text-slate-700 font-medium">マイナンバー (12桁)</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="optPhone" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <span class="text-slate-700 font-medium">電話・携帯番号</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="optEmail" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <span class="text-slate-700 font-medium">メールアドレス</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="optPostal" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <span class="text-slate-700 font-medium">郵便番号 (7桁)</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="optCard" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <span class="text-slate-700 font-medium">クレジットカード番号</span>
+          </label>
         </div>
-      </details>
+
+        <div class="flex items-center gap-4 pt-1 text-[11px] text-slate-600">
+          <span class="font-semibold text-slate-700">置換形式:</span>
+          <label class="flex items-center gap-1 cursor-pointer">
+            <input type="radio" name="replaceStyle" value="asterisk" checked class="text-emerald-600 focus:ring-emerald-500" />
+            <span>伏字（例: 090-****-5678）</span>
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer">
+            <input type="radio" name="replaceStyle" value="tag" class="text-emerald-600 focus:ring-emerald-500" />
+            <span>タグ置換（例: [PHONE]）</span>
+          </label>
+        </div>
+      </div>
 
       <!-- 実行ボタン -->
       <div class="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -258,7 +188,6 @@ const extraSchemaGraph = [
         </button>
         <span id="speedTimer" class="text-xs text-emerald-700 font-mono font-medium hidden">⚡ 処理完了: 0.04秒 (通信0バイト)</span>
       </div>
-
     </div>
 
     <!-- プレビュー＆ダウンロードエリア -->
@@ -294,351 +223,283 @@ const extraSchemaGraph = [
         <!-- テーブル動的レンダリング -->
       </div>
     </div>
-
-    <WhySection slug="csv-masking" title="「テスト用だから本番CSVでOK」が重大インシデントを招く" />
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 社外ベンダーへ提出するテストデータからマイナンバーをマスキングする法的義務はありますか？</span>
-            <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。マイナンバー法（番号法）では、社会保障・税・災害対策の法令で定められた正当な手続き以外でのマイナンバーの提供・収集が厳格に禁止されています。システム開発のテストや外部委託に実マイナンバーをそのまま渡すことは重大な法令違反となるため、事前の確実なマスキングまたはダミー化が必須です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. Excelで開いたときに日本語が文字化けしませんか？</span>
-            <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            ご安心ください。本ツールからダウンロードされるCSVファイルには、Excel対応用の「UTF-8 BOM（Byte Order Mark）」が自動付与されているため、WindowsやMacのMicrosoft Excelで開いても文字化けせずにそのまま閲覧・編集が可能です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 機密データや顧客名簿をWebサイトに入力して漏洩するリスクはありませんか？</span>
-            <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            ZeroLeak Toolsは、ブラウザ内のローカルメモリ（RAM）上でのみ文字列置換・パースを実行します。サーバー側へデータを送信するAPI通信処理そのものが一切存在しないため、クラウド上にデータが保存・漏洩するリスクは技術的に0%です。F12開発者ツールのNetworkタブで外部通信0件をご確認いただけます。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 数万行の大容量CSVファイルでも動作しますか？</span>
-            <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。PapaParseと最適化されたJavaScript正規表現エンジンにより、ブラウザメモリ内で高速ストリーム処理されます。一般的な数千〜数万行のCSVであれば、わずか数秒以内に処理が完了します。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <RelatedTools currentPath="/csv-masking/" />
   </div>
+</ToolShell>
 
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
+<script>
+  import Papa from 'papaparse';
+  import { maskTextContent, isPersonalInfoColumn } from '../utils/masking';
 
-  <!-- クライアントサイドスクリプト -->
-  <script>
-    import Papa from 'papaparse';
-    import { maskTextContent, isPersonalInfoColumn } from '../utils/masking';
+  let currentMode = 'csv';
+  let rawCsvData: any[][] = [];
+  let headers: string[] = [];
+  let maskedResultCsv: string = '';
+  let currentFileName = 'masked_data.csv';
 
-    let currentMode = 'csv'; // 'csv' | 'text'
-    let rawCsvData: any[][] = [];
-    let headers: string[] = [];
-    let maskedResultCsv: string = '';
-    let currentFileName = 'masked_data.csv';
+  const tabCsvBtn = document.getElementById('tabCsvBtn')!;
+  const tabTextBtn = document.getElementById('tabTextBtn')!;
+  const csvModeSection = document.getElementById('csvModeSection')!;
+  const textModeSection = document.getElementById('textModeSection')!;
+  const dropZone = document.getElementById('dropZone')!;
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  const fileInfoArea = document.getElementById('fileInfoArea')!;
+  const fileNameText = document.getElementById('fileNameText')!;
+  const fileMetaText = document.getElementById('fileMetaText')!;
+  const resetFileBtn = document.getElementById('resetFileBtn')!;
+  const columnSettingsArea = document.getElementById('columnSettingsArea')!;
+  const columnCheckboxList = document.getElementById('columnCheckboxList')!;
+  const selectAllColsBtn = document.getElementById('selectAllColsBtn')!;
+  const rawTextInput = document.getElementById('rawTextInput') as HTMLTextAreaElement;
+  const processBtn = document.getElementById('processBtn')!;
+  const speedTimer = document.getElementById('speedTimer')!;
+  const resultSection = document.getElementById('resultSection')!;
+  const previewTableContainer = document.getElementById('previewTableContainer')!;
+  const downloadBtn = document.getElementById('downloadBtn')!;
+  const loadSampleCsvBtn = document.getElementById('loadSampleCsvBtn')!;
 
-    // 要素取得
-    const tabCsvBtn = document.getElementById('tabCsvBtn')!;
-    const tabTextBtn = document.getElementById('tabTextBtn')!;
-    const csvModeSection = document.getElementById('csvModeSection')!;
-    const textModeSection = document.getElementById('textModeSection')!;
-    const dropZone = document.getElementById('dropZone')!;
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    const fileInfoArea = document.getElementById('fileInfoArea')!;
-    const fileNameText = document.getElementById('fileNameText')!;
-    const fileMetaText = document.getElementById('fileMetaText')!;
-    const resetFileBtn = document.getElementById('resetFileBtn')!;
-    const columnSettingsArea = document.getElementById('columnSettingsArea')!;
-    const columnCheckboxList = document.getElementById('columnCheckboxList')!;
-    const selectAllColsBtn = document.getElementById('selectAllColsBtn')!;
-    const rawTextInput = document.getElementById('rawTextInput') as HTMLTextAreaElement;
-    const processBtn = document.getElementById('processBtn')!;
-    const speedTimer = document.getElementById('speedTimer')!;
-    const resultSection = document.getElementById('resultSection')!;
-    const previewTableContainer = document.getElementById('previewTableContainer')!;
-    const downloadBtn = document.getElementById('downloadBtn')!;
-    const loadSampleCsvBtn = document.getElementById('loadSampleCsvBtn')!;
+  tabCsvBtn.addEventListener('click', () => {
+    currentMode = 'csv';
+    tabCsvBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs';
+    tabTextBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+    csvModeSection.classList.remove('hidden');
+    textModeSection.classList.add('hidden');
+  });
 
-    // タブ切り替え
-    tabCsvBtn.addEventListener('click', () => {
-      currentMode = 'csv';
-      tabCsvBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs';
-      tabTextBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
-      csvModeSection.classList.remove('hidden');
-      textModeSection.classList.add('hidden');
-    });
+  tabTextBtn.addEventListener('click', () => {
+    currentMode = 'text';
+    tabTextBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs';
+    tabCsvBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+    textModeSection.classList.remove('hidden');
+    csvModeSection.classList.add('hidden');
+  });
 
-    tabTextBtn.addEventListener('click', () => {
-      currentMode = 'text';
-      tabTextBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 cursor-pointer shadow-xs';
-      tabCsvBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
-      textModeSection.classList.remove('hidden');
-      csvModeSection.classList.add('hidden');
-    });
-
-    // サンプルCSV読み込みボタン
-    loadSampleCsvBtn.addEventListener('click', async () => {
-      try {
-        const res = await fetch('/sample_employees.csv');
-        const text = await res.text();
-        parseCsvText(text, 'sample_employees.csv', text.length);
-      } catch (err) {
-        alert('サンプルデータの取得に失敗しました。');
-      }
-    });
-
-    // ファイル選択 & D&D
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('border-emerald-500');
-    });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-emerald-500'));
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('border-emerald-500');
-      if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    });
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files && fileInput.files[0]) {
-        handleFile(fileInput.files[0]);
-      }
-    });
-
-    resetFileBtn.addEventListener('click', () => {
-      rawCsvData = [];
-      headers = [];
-      fileInput.value = '';
-      fileInfoArea.classList.add('hidden');
-      columnSettingsArea.classList.add('hidden');
-      dropZone.classList.remove('hidden');
-      resultSection.classList.add('hidden');
-    });
-
-    function handleFile(file: File) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        parseCsvText(text, file.name, file.size);
-      };
-      reader.readAsText(file);
+  loadSampleCsvBtn.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/sample_employees.csv');
+      const text = await res.text();
+      parseCsvText(text, 'sample_employees.csv', text.length);
+    } catch (err) {
+      alert('サンプルデータの取得に失敗しました。');
     }
+  });
 
-    function parseCsvText(text: string, fileName: string, sizeBytes: number) {
-      currentFileName = fileName.replace(/\.[^/.]+$/, "") + "_masked.csv";
-      fileNameText.textContent = fileName;
-
-      Papa.parse(text, {
-        skipEmptyLines: true,
-        complete: (results) => {
-          rawCsvData = results.data as any[][];
-          if (rawCsvData.length > 0) {
-            headers = rawCsvData[0].map((h, i) => String(h || `列${i + 1}`));
-            fileMetaText.textContent = `行数: ${rawCsvData.length} | カラム数: ${headers.length} | サイズ: ${(sizeBytes / 1024).toFixed(1)} KB`;
-            renderColumnCheckboxes();
-            dropZone.classList.add('hidden');
-            fileInfoArea.classList.remove('hidden');
-            columnSettingsArea.classList.remove('hidden');
-            resultSection.classList.add('hidden');
-          }
-        }
-      });
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-emerald-500');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-emerald-500'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-emerald-500');
+    if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
     }
-
-    function renderColumnCheckboxes() {
-      columnCheckboxList.innerHTML = '';
-      headers.forEach((h, index) => {
-        const isAutoTarget = isPersonalInfoColumn(h);
-        const label = document.createElement('label');
-        label.className = 'flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 cursor-pointer hover:border-slate-300 shadow-2xs';
-        label.innerHTML = `
-          <input type="checkbox" data-col-index="${index}" ${isAutoTarget ? 'checked' : ''} class="col-check rounded text-emerald-600 border-slate-300 focus:ring-0" />
-          <span class="truncate ${isAutoTarget ? 'text-emerald-800 font-bold' : 'font-medium'}" title="${h}">${h}</span>
-        `;
-        columnCheckboxList.appendChild(label);
-      });
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) {
+      handleFile(fileInput.files[0]);
     }
+  });
 
-    let allCheckedState = false;
-    selectAllColsBtn.addEventListener('click', () => {
-      allCheckedState = !allCheckedState;
-      const checkboxes = columnCheckboxList.querySelectorAll<HTMLInputElement>('.col-check');
-      checkboxes.forEach(cb => cb.checked = allCheckedState);
-    });
+  resetFileBtn.addEventListener('click', () => {
+    rawCsvData = [];
+    headers = [];
+    fileInput.value = '';
+    fileInfoArea.classList.add('hidden');
+    columnSettingsArea.classList.add('hidden');
+    dropZone.classList.remove('hidden');
+    resultSection.classList.add('hidden');
+  });
 
-    // マスキング実行
-    processBtn.addEventListener('click', () => {
-      const startTime = performance.now();
+  function handleFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      parseCsvText(text, file.name, file.size);
+    };
+    reader.readAsText(file);
+  }
 
-      const optMyNumber = (document.getElementById('optMyNumber') as HTMLInputElement).checked;
-      const optPhone = (document.getElementById('optPhone') as HTMLInputElement).checked;
-      const optEmail = (document.getElementById('optEmail') as HTMLInputElement).checked;
-      const optPostal = (document.getElementById('optPostal') as HTMLInputElement).checked;
-      const optCard = (document.getElementById('optCard') as HTMLInputElement).checked;
-      const replaceStyle = (document.querySelector('input[name="replaceStyle"]:checked') as HTMLInputElement).value as 'asterisk' | 'tag';
+  function parseCsvText(text: string, fileName: string, sizeBytes: number) {
+    currentFileName = fileName.replace(/\.[^/.]+$/, "") + "_masked.csv";
+    fileNameText.textContent = fileName;
 
-      const maskOptions = {
-        maskMyNumber: optMyNumber,
-        maskPhone: optPhone,
-        maskEmail: optEmail,
-        maskPostal: optPostal,
-        maskCreditCard: optCard,
-        replacementType: replaceStyle
-      };
-
-      if (currentMode === 'csv') {
-        if (rawCsvData.length === 0) {
-          alert('CSVファイルを選択するか、「サンプルCSVを読み込む」を押してください。');
-          return;
+    Papa.parse(text, {
+      skipEmptyLines: true,
+      complete: (results) => {
+        rawCsvData = results.data as any[][];
+        if (rawCsvData.length > 0) {
+          headers = rawCsvData[0].map((h, i) => String(h || `列${i + 1}`));
+          fileMetaText.textContent = `行数: ${rawCsvData.length} | カラム数: ${headers.length} | サイズ: ${(sizeBytes / 1024).toFixed(1)} KB`;
+          renderColumnCheckboxes();
+          dropZone.classList.add('hidden');
+          fileInfoArea.classList.remove('hidden');
+          columnSettingsArea.classList.remove('hidden');
+          resultSection.classList.add('hidden');
         }
-
-        // 対象列インデックス取得
-        const checkedCols = new Set<number>();
-        const checkboxes = columnCheckboxList.querySelectorAll<HTMLInputElement>('.col-check');
-        checkboxes.forEach(cb => {
-          if (cb.checked) {
-            checkedCols.add(Number(cb.getAttribute('data-col-index')));
-          }
-        });
-
-        // データ変換（ヘッダー以外の行）
-        const maskedData: any[][] = [];
-        maskedData.push(rawCsvData[0]); // ヘッダーは保持
-
-        for (let r = 1; r < rawCsvData.length; r++) {
-          const row = rawCsvData[r];
-          const newRow: any[] = [];
-          for (let c = 0; c < row.length; c++) {
-            let val = String(row[c] || '');
-            if (checkedCols.has(c)) {
-              val = maskTextContent(val, maskOptions);
-              if (val.length > 0 && !val.includes('*') && !val.includes('伏字')) {
-                val = replaceStyle === 'asterisk' 
-                  ? (val.length > 1 ? val[0] + '***' : '***') 
-                  : '[伏字]';
-              }
-            } else {
-              val = maskTextContent(val, maskOptions);
-            }
-            newRow.push(val);
-          }
-          maskedData.push(newRow);
-        }
-
-        maskedResultCsv = Papa.unparse(maskedData);
-        renderPreviewTable(maskedData.slice(0, 11)); // 先頭10行
-      } else {
-        const raw = rawTextInput.value;
-        if (!raw.trim()) {
-          alert('マスキングするテキストを入力してください。');
-          return;
-        }
-        maskedResultCsv = maskTextContent(raw, maskOptions);
-        renderTextPreview(raw, maskedResultCsv);
       }
-
-      const elapsed = ((performance.now() - startTime) / 1000).toFixed(3);
-      speedTimer.textContent = `⚡ 処理完了: ${elapsed}秒 (通信0バイト)`;
-      speedTimer.classList.remove('hidden');
-      resultSection.classList.remove('hidden');
-      resultSection.scrollIntoView({ behavior: 'smooth' });
     });
+  }
 
-    function renderPreviewTable(rows: any[][]) {
-      if (rows.length === 0) return;
-      let html = '<table class="w-full text-xs text-left border-collapse text-slate-700 font-mono">';
-      html += '<thead class="bg-slate-100 border-b border-slate-200 text-slate-900"><tr>';
-      rows[0].forEach((col: any) => {
-        html += `<th class="p-2.5 border-r border-slate-200 whitespace-nowrap font-bold">${escapeHtml(String(col))}</th>`;
-      });
-      html += '</tr></thead><tbody>';
-
-      for (let i = 1; i < rows.length; i++) {
-        html += `<tr class="border-b border-slate-200/80 hover:bg-slate-100/60">`;
-        rows[i].forEach((col: any) => {
-          const val = String(col);
-          const isMasked = val.includes('*') || val.includes('伏字');
-          const cellClass = isMasked ? 'text-emerald-900 font-bold bg-emerald-50' : '';
-          html += `<td class="p-2 border-r border-slate-200/80 whitespace-nowrap ${cellClass}">${escapeHtml(val)}</td>`;
-        });
-        html += '</tr>';
-      }
-      html += '</tbody></table>';
-      previewTableContainer.innerHTML = html;
-    }
-
-    function renderTextPreview(original: string, masked: string) {
-      previewTableContainer.innerHTML = `
-        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-          <div>
-            <div class="text-slate-600 font-bold mb-1">【元テキスト】</div>
-            <pre class="p-3 bg-slate-100 rounded-xl text-slate-800 whitespace-pre-wrap max-h-60 overflow-y-auto border border-slate-200">${escapeHtml(original)}</pre>
-          </div>
-          <div>
-            <div class="text-emerald-800 font-bold mb-1">【マスキング後】</div>
-            <pre class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-950 font-bold whitespace-pre-wrap max-h-60 overflow-y-auto">${escapeHtml(masked)}</pre>
-          </div>
-        </div>
+  function renderColumnCheckboxes() {
+    columnCheckboxList.innerHTML = '';
+    headers.forEach((h, index) => {
+      const isAutoTarget = isPersonalInfoColumn(h);
+      const label = document.createElement('label');
+      label.className = 'flex items-center gap-1.5 p-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 cursor-pointer hover:border-slate-300 shadow-2xs';
+      label.innerHTML = `
+        <input type="checkbox" data-col-index="${index}" ${isAutoTarget ? 'checked' : ''} class="col-check rounded text-emerald-600 border-slate-300 focus:ring-0" />
+        <span class="truncate ${isAutoTarget ? 'text-emerald-800 font-bold' : 'font-medium'}" title="${h}">${h}</span>
       `;
-    }
+      columnCheckboxList.appendChild(label);
+    });
+  }
 
-    function escapeHtml(str: string): string {
-      return str.replace(/[&<>"']/g, (m) => {
-        switch (m) {
-          case '&': return '&amp;';
-          case '<': return '&lt;';
-          case '>': return '&gt;';
-          case '"': return '&quot;';
-          case "'": return '&#39;';
-          default: return m;
+  let allCheckedState = false;
+  selectAllColsBtn.addEventListener('click', () => {
+    allCheckedState = !allCheckedState;
+    const checkboxes = columnCheckboxList.querySelectorAll<HTMLInputElement>('.col-check');
+    checkboxes.forEach(cb => cb.checked = allCheckedState);
+  });
+
+  processBtn.addEventListener('click', () => {
+    const startTime = performance.now();
+
+    const optMyNumber = (document.getElementById('optMyNumber') as HTMLInputElement).checked;
+    const optPhone = (document.getElementById('optPhone') as HTMLInputElement).checked;
+    const optEmail = (document.getElementById('optEmail') as HTMLInputElement).checked;
+    const optPostal = (document.getElementById('optPostal') as HTMLInputElement).checked;
+    const optCard = (document.getElementById('optCard') as HTMLInputElement).checked;
+    const replaceStyle = (document.querySelector('input[name="replaceStyle"]:checked') as HTMLInputElement).value as 'asterisk' | 'tag';
+
+    const maskOptions = {
+      maskMyNumber: optMyNumber,
+      maskPhone: optPhone,
+      maskEmail: optEmail,
+      maskPostal: optPostal,
+      maskCreditCard: optCard,
+      replacementType: replaceStyle
+    };
+
+    if (currentMode === 'csv') {
+      if (rawCsvData.length === 0) {
+        alert('CSVファイルを選択するか、「サンプルCSVを読み込む」を押してください。');
+        return;
+      }
+
+      const checkedCols = new Set<number>();
+      const checkboxes = columnCheckboxList.querySelectorAll<HTMLInputElement>('.col-check');
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          checkedCols.add(Number(cb.getAttribute('data-col-index')));
         }
       });
+
+      const maskedData: any[][] = [];
+      maskedData.push(rawCsvData[0]);
+
+      for (let r = 1; r < rawCsvData.length; r++) {
+        const row = rawCsvData[r];
+        const newRow: any[] = [];
+        for (let c = 0; c < row.length; c++) {
+          let val = String(row[c] || '');
+          if (checkedCols.has(c)) {
+            val = maskTextContent(val, maskOptions);
+            if (val.length > 0 && !val.includes('*') && !val.includes('伏字')) {
+              val = replaceStyle === 'asterisk' 
+                ? (val.length > 1 ? val[0] + '***' : '***') 
+                : '[伏字]';
+            }
+          } else {
+            val = maskTextContent(val, maskOptions);
+          }
+          newRow.push(val);
+        }
+        maskedData.push(newRow);
+      }
+
+      maskedResultCsv = Papa.unparse(maskedData);
+      renderPreviewTable(maskedData.slice(0, 11));
+    } else {
+      const raw = rawTextInput.value;
+      if (!raw.trim()) {
+        alert('マスキングするテキストを入力してください。');
+        return;
+      }
+      maskedResultCsv = maskTextContent(raw, maskOptions);
+      renderTextPreview(raw, maskedResultCsv);
     }
 
-    // ダウンロード
-    downloadBtn.addEventListener('click', () => {
-      if (!maskedResultCsv) return;
-      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]); // Excel 文字化け防止 BOM
-      const blob = new Blob([bom, maskedResultCsv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = currentFileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+    const elapsed = ((performance.now() - startTime) / 1000).toFixed(3);
+    speedTimer.textContent = `⚡ 処理完了: ${elapsed}秒 (通信0バイト)`;
+    speedTimer.classList.remove('hidden');
+    resultSection.classList.remove('hidden');
+    resultSection.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  function renderPreviewTable(rows: any[][]) {
+    if (rows.length === 0) return;
+    let html = '<table class="w-full text-xs text-left border-collapse text-slate-700 font-mono">';
+    html += '<thead class="bg-slate-100 border-b border-slate-200 text-slate-900"><tr>';
+    rows[0].forEach((col: any) => {
+      html += `<th class="p-2.5 border-r border-slate-200 whitespace-nowrap font-bold">${escapeHtml(String(col))}</th>`;
     });
-  </script>
-</Layout>
+    html += '</tr></thead><tbody>';
+
+    for (let i = 1; i < rows.length; i++) {
+      html += `<tr class="border-b border-slate-200/80 hover:bg-slate-100/60">`;
+      rows[i].forEach((col: any) => {
+        const val = String(col);
+        const isMasked = val.includes('*') || val.includes('伏字');
+        const cellClass = isMasked ? 'text-emerald-900 font-bold bg-emerald-50' : '';
+        html += `<td class="p-2 border-r border-slate-200/80 whitespace-nowrap ${cellClass}">${escapeHtml(val)}</td>`;
+      });
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    previewTableContainer.innerHTML = html;
+  }
+
+  function renderTextPreview(original: string, masked: string) {
+    previewTableContainer.innerHTML = `
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div>
+          <div class="text-slate-600 font-bold mb-1">【元テキスト】</div>
+          <pre class="p-3 bg-slate-100 rounded-xl text-slate-800 whitespace-pre-wrap max-h-60 overflow-y-auto border border-slate-200">${escapeHtml(original)}</pre>
+        </div>
+        <div>
+          <div class="text-emerald-800 font-bold mb-1">【マスキング後】</div>
+          <pre class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-950 font-bold whitespace-pre-wrap max-h-60 overflow-y-auto">${escapeHtml(masked)}</pre>
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(str: string): string {
+    return str.replace(/[&<>"']/g, (m) => {
+      switch (m) {
+        case '&': return '&amp;';
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '"': return '&quot;';
+        case "'": return '&#39;';
+        default: return m;
+      }
+    });
+  }
+
+  downloadBtn.addEventListener('click', () => {
+    if (!maskedResultCsv) return;
+    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const blob = new Blob([bom, maskedResultCsv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentFileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>

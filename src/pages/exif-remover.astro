@@ -1,356 +1,231 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "写真のEXIF・GPS位置情報をブラウザで一括削除する3ステップ（サーバー送信なし）",
-    "description": "JPEG・PNG・WebP画像に含まれるGPS座標、撮影日時、カメラ機種名などのEXIFメタデータを、外部サーバーへ一切送信せずブラウザ内で一括消去してZIP保存する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "写真ファイルをまとめてドラッグ＆ドロップ",
-        "text": "位置情報やEXIFを消したい写真（JPEG/PNG/WebP、100枚規模の一括投入に対応）をドロップゾーンに配置します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "ブラウザ内でGPS・EXIFを自動検出＆一括抹消",
-        "text": "ドロップと同時にブラウザ内のメモリ上でGPS座標・機種名・撮影日時を解析し、画質劣化ゼロ（ロスレス）またはピクセル再描画で即座に消去します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "ZIPで一括ダウンロードまたは個別保存",
-        "text": "メタデータ除去済みの安全な画像群をワンクリックでZIP一括ダウンロード、または1枚ずつ保存します。"
-      }
-    ]
+    name: '写真ファイルをまとめてドラッグ＆ドロップ',
+    text: '位置情報やEXIFを消したい写真（JPEG/PNG/WebP、100枚規模の一括投入に対応）をドロップゾーンに配置します。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "写真をそのままSNSやブログ、社内資料に載せるとどんな危険がありますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "スマートフォン（iPhone / Android）やデジタルカメラで撮影した写真には、目に見えないEXIFメタデータとして「GPSの緯度・経度（自宅や取引先・工場の正確な住所）」「撮影日時」「使用端末・OSバージョン」が記録されています。そのままWeb公開や外部提出を行うと、自宅マンションや未公開施設の場所が特定される重大なプライバシー・機密漏洩につながります。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "一般的な無料EXIF削除サイトと何が違うのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "多くの無料オンライン画像ツールは、写真ファイルを一度運営者のサーバーへアップロードして処理します。つまり「消したい位置情報付きのプライベート写真や社外秘の現場写真」を第三者のサーバーへ渡していることになります。ZeroLeak Toolsは「サーバー送信なし（0バイト）」で、お使いのブラウザ内部だけで一括処理するため、情報漏洩リスクが0%です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "100枚などの大量の写真も一括でブラウザ処理できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。画像のバイナリ構造からEXIF/GPS/XMPチャンクのみを直接切り離す「高速ロスレス消去モード」を搭載しているため、画質を1ミリも劣化させず、100枚規模の画像でも数秒で一括処理し、ブラウザ内で即座にZIPアーカイブへまとめてダウンロードできます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "JPEGだけでなくPNGやWebPのメタデータにも対応していますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。JPEGのEXIF（APP1〜APP15・COMセグメント）だけでなく、PNGのeXIf・tEXt・iTXt・zTXt・tIMEチャンク、およびWebPのEXIF・XMPチャンクの解析・一括削除に完全対応しています。"
-        }
-      }
-    ]
-  }
+    name: 'ブラウザ内でGPS・EXIFを自動検出＆一括抹消',
+    text: 'ドロップと同時にブラウザ内のメモリ上でGPS座標・機種名・撮影日時を解析し、画質劣化ゼロ（ロスレス）またはピクセル再描画で即座に消去します。',
+  },
+  {
+    name: 'ZIPで一括ダウンロードまたは個別保存',
+    text: 'メタデータ除去済みの安全な画像群をワンクリックでZIP一括ダウンロード、または1枚ずつ保存します。',
+  },
+];
+
+const faqs = [
+  {
+    question: '写真をそのままWebや取引先に送るとどんな情報がバレますか？',
+    answer:
+      'EXIFメタデータには、GPSによる正確な緯度・経度・高度だけでなく、撮影日時（秒単位）、使用したスマートフォンやカメラの機種名、レンズ情報、OSバージョン、編集に使用したソフトウェア名などが記録されています。本ツールではこれらをまとめて検出し、一括削除します。',
+  },
+  {
+    question: '他の無料EXIF削除サイトと何が違うのですか？',
+    answer:
+      '一般的なオンラインEXIF削除ツールは、写真を一度外部サーバーにアップロードして処理します。しかし「位置情報を消したいプライベート写真や社外秘写真」を外部サーバーに送信すること自体が情報漏洩リスクとなります。当ツールはサーバー送信なし（0バイト）で、ブラウザ内部のメモリだけで完結するため安全です。',
+  },
+  {
+    question: '100枚以上の写真を一括で処理してZIPで落とせますか？',
+    answer:
+      'はい。複数枚のドラッグ＆ドロップに対応しており、100枚規模の写真でも数秒で一括クリーンアップし、ブラウザ内で生成した1つのZIPファイルとしてまとめてダウンロードできます。',
+  },
+  {
+    question: '「高速ロスレス消去」と「ピクセル完全再描画」の違いは何ですか？',
+    answer:
+      '「高速ロスレス消去」は画像データ本体には一切触れず、EXIF/GPS/XMP等のメタデータ領域のみをバイナリ単位で切り離すため、画質劣化が0%で超高速です。一方「ピクセル完全再描画」はHTML5 Canvas上に画素だけを描画して一から画像ファイルを再生成するため、未知の独自チャンクも含めて100%初期化したい場合に適しています。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="exif-remover"
   title="写真の位置情報（EXIF・GPS）一括削除｜画質劣化なし"
   description="写真のEXIF・GPS位置情報・撮影日時・カメラ機種名をブラウザ内で一括削除。画質劣化ゼロで100枚規模のJPEG/PNG/WebPを安全にクリーンアップ＆ZIP出力。"
   canonicalPath="/exif-remover/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし"
+  subtitle="スマホやデジカメで撮影した写真に潜むGPS座標（自宅・現場の住所）、撮影日時、端末機種名、編集ソフト情報を検出して一括抹消。ブラウザ内だけで高速処理し、そのままZIPで一括保存できます。"
+  whyTitle="「位置情報を消すために写真をネットに送る」という最大の矛盾"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
+  <!-- メイン操作パネル -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
 
-    <!-- ツールヘッダー & H1（複合キーワード「一括 ブラウザ」「サーバー送信なし」を明記） -->
-    <div class="space-y-3">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        
+    <!-- 複数ファイル対応ドラッグ＆ドロップゾーン（最優先ワークベンチ） -->
+    <div
+      id="dropZoneExif"
+      class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group"
+    >
+      <input
+        type="file"
+        id="fileInputExif"
+        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+        multiple
+        class="hidden"
+      />
+      <div class="flex flex-col items-center gap-3 pointer-events-none">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
+          📍
+        </div>
+        <div>
+          <p class="font-bold text-slate-800 text-base sm:text-lg">
+            写真・画像ファイルをここにまとめてドロップ（複数・100枚一括対応）
+          </p>
+          <p class="text-xs text-slate-500 mt-1">
+            またはクリックしてファイルを選択（対応形式: JPEG / PNG / WebP）
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-cyan-800 shadow-xs font-medium">
+            🔒 サーバー送信0バイト（ドロップと同時にブラウザ内でEXIF削除）
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
+            📦 ZIP一括保存対応
+          </span>
+        </div>
+      </div>
+    </div>
 
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
+    <!-- 操作サブバー：ワンクリックテスト ＆ 消去モード選択 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+      <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
+      <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="space-y-0.5">
+          <span class="font-bold text-slate-800 flex items-center gap-1.5">
+            <span>🧪</span>
+            <span>手元に位置情報付き写真がない場合：</span>
+          </span>
+          <p class="text-[11px] text-slate-500">
+            東京・渋谷・大阪のGPS座標と端末名を含むテスト画像3枚を自動生成
+          </p>
+        </div>
         <button
+          id="loadSampleExifBtn"
           type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+          class="px-3.5 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
         >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
+          <span>サンプル3枚投入</span>
         </button>
       </div>
 
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-cyan-50 border border-cyan-200 text-xs text-cyan-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
+      <!-- 消去モード選択バー -->
+      <div class="flex items-center justify-between gap-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="space-y-0.5">
+          <span class="font-bold text-slate-800 flex items-center gap-1.5">
+            <span>⚙️</span>
+            <span>消去処理モード：</span>
+          </span>
+          <p class="text-[11px] text-slate-500">
+            通常は画質無劣化の「高速ロスレス」推奨
+          </p>
+        </div>
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+          <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
+            <input
+              type="radio"
+              name="stripMode"
+              value="lossless"
+              checked
+              class="accent-cyan-600 text-xs"
+            />
+            <span class="font-bold">⚡ 高速ロスレス</span>
+          </label>
+          <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
+            <input
+              type="radio"
+              name="stripMode"
+              value="canvas"
+              class="accent-cyan-600 text-xs"
+            />
+            <span>🛡️ Canvas再描画</span>
+          </label>
+        </div>
       </div>
-
-      <div class="flex items-center gap-4 sm:gap-6">
-<div class="min-w-0 flex-1 space-y-1.5">
-<h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし
-      </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-        スマホやデジカメで撮影した写真に潜む<strong>GPS座標（自宅・現場の住所）、撮影日時、端末機種名、編集ソフト情報</strong>を検出して一括抹消。
-        <strong>外部サーバー送信なし（0バイト）</strong>でお使いのブラウザ内だけで高速処理し、そのままZIPで一括ダウンロードできます。
-      </p>
-</div>
-<Mascot name="tool-exif" fallback="📍" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-</div>
     </div>
 
-    <!-- メイン操作パネル -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+    <!-- 処理中プログレス表示 -->
+    <div id="exifProgressArea" class="hidden space-y-2 p-5 rounded-xl bg-slate-50 border border-slate-200">
+      <div class="flex items-center justify-between text-xs font-semibold text-cyan-800">
+        <span id="exifProgressLabel">ブラウザ内でEXIF・GPS解析＆消去中...</span>
+        <span id="exifProgressCount" class="font-mono">0 / 0</span>
+      </div>
+      <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+        <div id="exifProgressBar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-600 transition-all duration-150" style="width: 0%"></div>
+      </div>
+    </div>
 
-      <!-- 複数ファイル対応ドラッグ＆ドロップゾーン（最優先ワークベンチ） -->
-      <div
-        id="dropZoneExif"
-        class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group"
-      >
-        <input
-          type="file"
-          id="fileInputExif"
-          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-          multiple
-          class="hidden"
-        />
-        <div class="flex flex-col items-center gap-3 pointer-events-none">
-          <div class="w-16 h-16 rounded-2xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
-            📍
-          </div>
-          <div>
-            <p class="font-bold text-slate-800 text-base sm:text-lg">
-              写真・画像ファイルをここにまとめてドロップ（複数・100枚一括対応）
-            </p>
-            <p class="text-xs text-slate-500 mt-1">
-              またはクリックしてファイルを選択（対応形式: JPEG / PNG / WebP）
-            </p>
-          </div>
-          <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-cyan-800 shadow-xs font-medium">
-              🔒 サーバー送信0バイト（ドロップと同時にブラウザ内でEXIF削除）
+    <!-- 処理結果＆一括ZIPダウンロードエリア -->
+    <div id="exifResultArea" class="hidden space-y-5 pt-2">
+      
+      <!-- サマリー＆一括アクションバー -->
+      <div class="p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
+              ✔ 一括クリーンアップ完了
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
-              📦 ZIP一括保存対応
+            <span id="exifStatTime" class="text-xs font-mono text-slate-600">
+              ⚡ 処理時間: 0.05秒 (通信0バイト)
+            </span>
+          </div>
+          <p id="exifSummaryText" class="text-sm font-bold text-slate-900">
+            3枚の画像から計 1.2 KB のEXIF・GPS位置情報を完全抹消しました
+          </p>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
+            <span id="exifGpsCountBadge" class="inline-flex items-center gap-1 text-rose-800 font-bold">
+              📍 GPS座標検出・抹消: 0枚
+            </span>
+            <span>•</span>
+            <span id="exifMetaCountBadge" class="text-cyan-800 font-bold">
+              🏷️ カメラ/EXIF検出・抹消: 0枚
             </span>
           </div>
         </div>
-      </div>
 
-      <!-- 操作サブバー：ワンクリックテスト ＆ 消去モード選択 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-        <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
-        <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <div class="space-y-0.5">
-            <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <span>🧪</span>
-              <span>手元に位置情報付き写真がない場合：</span>
-            </span>
-            <p class="text-[11px] text-slate-500">
-              東京・渋谷・大阪のGPS座標と端末名を含むテスト画像3枚を自動生成
-            </p>
-          </div>
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
           <button
-            id="loadSampleExifBtn"
+            id="downloadAllZipBtn"
             type="button"
-            class="px-3.5 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
+            class="flex-1 lg:flex-none px-6 py-3 rounded-xl font-bold text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>サンプル3枚投入</span>
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span id="downloadZipBtnLabel">全ファイルをZIPで一括保存</span>
+          </button>
+          <button
+            id="clearExifListBtn"
+            type="button"
+            class="px-4 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold shadow-xs transition cursor-pointer"
+          >
+            クリア
           </button>
         </div>
-
-        <!-- 消去モード選択バー -->
-        <div class="flex items-center justify-between gap-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <div class="space-y-0.5">
-            <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <span>⚙️</span>
-              <span>消去モード：</span>
-            </span>
-            <p class="text-[11px] text-slate-500">
-              画質劣化0%の高速ロスレスを推奨
-            </p>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
-              <input
-                type="radio"
-                name="stripMode"
-                value="lossless"
-                checked
-                class="accent-cyan-600 text-xs"
-              />
-              <span class="font-bold">⚡ 高速ロスレス</span>
-            </label>
-            <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
-              <input
-                type="radio"
-                name="stripMode"
-                value="canvas"
-                class="accent-cyan-600 text-xs"
-              />
-              <span>🛡️ Canvas再描画</span>
-            </label>
-          </div>
-        </div>
       </div>
 
-      <!-- 処理中プログレス表示 -->
-      <div id="exifProgressArea" class="hidden space-y-2 p-5 rounded-xl bg-slate-50 border border-slate-200">
-        <div class="flex items-center justify-between text-xs font-semibold text-cyan-800">
-          <span id="exifProgressLabel">ブラウザ内でEXIF・GPS解析＆消去中...</span>
-          <span id="exifProgressCount" class="font-mono">0 / 0</span>
-        </div>
-        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
-          <div id="exifProgressBar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-600 transition-all duration-150" style="width: 0%"></div>
-        </div>
+      <!-- ゼロリークくん完了メッセージ -->
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-cyan-100/70 border border-cyan-200 text-xs text-cyan-950 font-medium">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <span><strong>ゼロリークくん：</strong>位置情報の消去が完了しました！写真はお使いの端末内だけで安全に処理されています。</span>
       </div>
 
-      <!-- 処理結果＆一括ZIPダウンロードエリア -->
-      <div id="exifResultArea" class="hidden space-y-5 pt-2">
-        
-        <!-- サマリー＆一括アクションバー -->
-        <div class="p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          <div class="space-y-1.5">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
-                ✔ 一括クリーンアップ完了
-              </span>
-              <span id="exifStatTime" class="text-xs font-mono text-slate-600">
-                ⚡ 処理時間: 0.05秒 (通信0バイト)
-              </span>
-            </div>
-            <p id="exifSummaryText" class="text-sm font-bold text-slate-900">
-              3枚の画像から計 1.2 KB のEXIF・GPS位置情報を完全抹消しました
-            </p>
-            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
-              <span id="exifGpsCountBadge" class="inline-flex items-center gap-1 text-rose-800 font-bold">
-                📍 GPS座標検出・抹消: 0枚
-              </span>
-              <span>•</span>
-              <span id="exifMetaCountBadge" class="text-cyan-800 font-bold">
-                🏷️ カメラ/EXIF検出・抹消: 0枚
-              </span>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
-            <button
-              id="downloadAllZipBtn"
-              type="button"
-              class="flex-1 lg:flex-none px-6 py-3 rounded-xl font-bold text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              <span id="downloadZipBtnLabel">全ファイルをZIPで一括保存</span>
-            </button>
-            <button
-              id="clearExifListBtn"
-              type="button"
-              class="px-4 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold shadow-xs transition cursor-pointer"
-            >
-              クリア
-            </button>
-          </div>
+      <!-- ファイル別 検出＆消去レポート一覧 -->
+      <div class="space-y-2.5">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span class="font-bold text-slate-700">個別ファイル一覧＆メタデータ抹消レポート</span>
+          <span id="exifListCountNotice">表示中: 0件</span>
         </div>
-
-        <!-- ゼロリークくん完了メッセージ -->
-        <div class="flex items-center gap-2 p-3 rounded-xl bg-cyan-100/70 border border-cyan-200 text-xs text-cyan-950 font-medium">
-          <span class="text-base select-none shrink-0">🛡️</span>
-          <span><strong>ゼロリークくん：</strong>位置情報の消去が完了しました！写真はお使いの端末内だけで安全に処理されています。</span>
+        <div id="exifFileList" class="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+          <!-- JSで動的挿入 -->
         </div>
-
-        <!-- ファイル別 検出＆消去レポート一覧 -->
-        <div class="space-y-2.5">
-          <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-            <span class="font-bold text-slate-700">📋 ファイル別 検出メタデータ＆消去ステータス</span>
-            <span>すべて除去後の検証（再スキャンで残存0件を確認済）</span>
-          </div>
-
-          <div id="exifFileList" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
-            <!-- JSで各ファイルのBefore/Afterカードを描画 -->
-          </div>
-        </div>
-
       </div>
 
     </div>
 
-    <WhySection slug="exif-remover" title="「SNSが消してくれるから大丈夫」という落とし穴" />
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 写真をそのままWebや取引先に送るとどんな情報がバレますか？</span>
-            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            EXIFメタデータには、GPSによる正確な緯度・経度・高度だけでなく、撮影日時（秒単位）、使用したスマートフォンやカメラの機種名、レンズ情報、OSバージョン、編集に使用したソフトウェア名などが記録されています。本ツールではこれらをまとめて検出し、一括削除します。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 他の無料EXIF削除サイトと何が違うのですか？</span>
-            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            一般的なオンラインEXIF削除ツールは、写真を一度外部サーバーにアップロードして処理します。しかし「位置情報を消したいプライベート写真や社外秘写真」を外部サーバーに送信すること自体が情報漏洩リスクとなります。当ツールはサーバー送信なし（0バイト）で、ブラウザ内部のメモリだけで完結するため安全です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 100枚以上の写真を一括で処理してZIPで落とせますか？</span>
-            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。複数枚のドラッグ＆ドロップに対応しており、100枚規模の写真でも数秒で一括クリーンアップし、ブラウザ内で生成した1つのZIPファイルとしてまとめてダウンロードできます。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 「高速ロスレス消去」と「ピクセル完全再描画」の違いは何ですか？</span>
-            <span class="text-cyan-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            「高速ロスレス消去」は画像データ本体には一切触れず、EXIF/GPS/XMP等のメタデータ領域のみをバイナリ単位で切り離すため、画質劣化が0%で超高速です。一方「ピクセル完全再描画」はHTML5 Canvas上に画素だけを描画して一から画像ファイルを再生成するため、未知の独自チャンクも含めて100%初期化したい場合に適しています。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <RelatedTools currentPath="/exif-remover/" />
   </div>
-
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
 
   <!-- クライアントサイドスクリプト -->
   <script>
@@ -398,253 +273,226 @@ const extraSchemaGraph = [
       const checked = document.querySelector(
         'input[name="stripMode"]:checked'
       ) as HTMLInputElement | null;
-      return checked?.value === 'canvas' ? 'canvas' : 'lossless';
+      return checked && checked.value === 'canvas' ? 'canvas' : 'lossless';
     }
 
-    function formatBytes(bytes: number): string {
-      if (bytes < 1024) return `${bytes} B`;
-      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    // 単一ファイル処理
+    async function processSingleFile(
+      fileData: Uint8Array,
+      fileName: string,
+      mode: 'lossless' | 'canvas'
+    ): Promise<ProcessedItem> {
+      const beforeReport = inspectImageMetadata(fileData);
+      let cleanedBytes: Uint8Array;
+      let removedBytes = 0;
+
+      if (mode === 'lossless' && (beforeReport.format === 'jpeg' || beforeReport.format === 'png' || beforeReport.format === 'webp')) {
+        const stripped = stripImageMetadataLossless(fileData);
+        cleanedBytes = stripped.cleanedBytes;
+        removedBytes = stripped.removedBytes;
+      } else {
+        const stripped = await stripImageMetadataCanvas(fileData);
+        cleanedBytes = stripped.cleanedBytes;
+        removedBytes = Math.max(0, fileData.byteLength - cleanedBytes.byteLength);
+      }
+
+      const afterReport = inspectImageMetadata(cleanedBytes);
+
+      return {
+        originalName: fileName,
+        cleanedName: fileName.replace(/\.([^.]+)$/, '_clean.$1'),
+        originalSize: fileData.byteLength,
+        cleanedSize: cleanedBytes.byteLength,
+        removedBytes,
+        beforeReport,
+        afterReport,
+        cleanedBytes,
+        mimeType: beforeReport.format === 'png' ? 'image/png' : beforeReport.format === 'webp' ? 'image/webp' : 'image/jpeg',
+      };
     }
 
-    function escapeHtml(str: string): string {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    // 複数ファイル一括処理フロー
+    async function handleFiles(files: (File | { name: string; data: Uint8Array })[]) {
+      if (files.length === 0) return;
+
+      const mode = getSelectedMode();
+      progressArea.classList.remove('hidden');
+      progressBar.style.width = '0%';
+      progressLabel.textContent = `ブラウザ内でEXIF・GPS解析＆消去中 (${mode === 'lossless' ? '高速ロスレス' : 'Canvas再描画'})...`;
+      progressCount.textContent = `0 / ${files.length}`;
+
+      const startTime = performance.now();
+      const newItems: ProcessedItem[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const item = files[i];
+        let bytes: Uint8Array;
+        let name: string;
+
+        if (item instanceof File) {
+          name = item.name;
+          const ab = await item.arrayBuffer();
+          bytes = new Uint8Array(ab);
+        } else {
+          name = item.name;
+          bytes = item.data;
+        }
+
+        const processed = await processSingleFile(bytes, name, mode);
+        newItems.push(processed);
+
+        const percent = Math.round(((i + 1) / files.length) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressCount.textContent = `${i + 1} / ${files.length}`;
+      }
+
+      const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+      processedItems = [...newItems, ...processedItems];
+
+      progressArea.classList.add('hidden');
+      renderResults(elapsed);
     }
 
-    // D&D イベント
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('border-emerald-500');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-emerald-500');
-    });
-    dropZone.addEventListener('drop', async (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('border-emerald-500');
-      if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
-        const files = Array.from(e.dataTransfer.files);
-        await processFileBatch(files);
-      }
-    });
-
-    fileInput.addEventListener('change', async () => {
-      if (fileInput.files && fileInput.files.length > 0) {
-        const files = Array.from(fileInput.files);
-        await processFileBatch(files);
-        fileInput.value = '';
-      }
-    });
-
-    // サンプル写真3枚投入
-    loadSampleBtn.addEventListener('click', async () => {
-      loadSampleBtn.setAttribute('disabled', 'true');
-      try {
-        const samples = await generateSampleExifJpegs();
-        await processRawBatch(samples);
-      } finally {
-        loadSampleBtn.removeAttribute('disabled');
-      }
-    });
-
-    // クリアボタン
-    clearExifListBtn.addEventListener('click', () => {
-      processedItems = [];
-      fileListContainer.innerHTML = '';
-      resultArea.classList.add('hidden');
-    });
-
-    async function processFileBatch(files: File[]) {
-      const validFiles = files.filter((f) =>
-        /\.(jpe?g|png|webp)$/i.test(f.name) ||
-        ['image/jpeg', 'image/png', 'image/webp'].includes(f.type)
-      );
-      if (validFiles.length === 0) {
-        alert('対応している画像ファイル（JPEG / PNG / WebP）を選択してください。');
+    // 結果レンダリング
+    function renderResults(elapsedSec: string) {
+      if (processedItems.length === 0) {
+        resultArea.classList.add('hidden');
         return;
       }
 
-      const rawList: { name: string; bytes: Uint8Array }[] = [];
-      for (const f of validFiles) {
-        const buf = await f.arrayBuffer();
-        rawList.push({ name: f.name, bytes: new Uint8Array(buf) });
-      }
-      await processRawBatch(rawList);
-    }
+      resultArea.classList.remove('hidden');
 
-    async function processRawBatch(rawFiles: { name: string; bytes: Uint8Array }[]) {
-      const mode = getSelectedMode();
-      const startTime = performance.now();
+      const totalFiles = processedItems.length;
+      const totalRemovedBytes = processedItems.reduce((acc, it) => acc + it.removedBytes, 0);
+      const totalGpsCount = processedItems.filter((it) => it.beforeReport.hasGps).length;
+      const totalMetaCount = processedItems.filter((it) => it.beforeReport.hasExif).length;
 
-      progressArea.classList.remove('hidden');
-      resultArea.classList.add('hidden');
-      processedItems = [];
+      statTime.textContent = `⚡ 処理時間: ${elapsedSec}秒 (通信0バイト)`;
+      summaryText.textContent = `${totalFiles}枚の画像から計 ${(totalRemovedBytes / 1024).toFixed(1)} KB のEXIF・GPS位置情報を完全抹消しました`;
+      gpsCountBadge.textContent = `📍 GPS座標検出・抹消: ${totalGpsCount}枚`;
+      metaCountBadge.textContent = `🏷️ カメラ/EXIF検出・抹消: ${totalMetaCount}枚`;
+      downloadZipBtnLabel.textContent = `${totalFiles}枚をZIPで一括保存 (${(processedItems.reduce((a, b) => a + b.cleanedSize, 0) / (1024 * 1024)).toFixed(1)} MB)`;
 
-      const total = rawFiles.length;
-      for (let i = 0; i < total; i++) {
-        const item = rawFiles[i];
-        progressLabel.textContent = `ブラウザ内でEXIF・GPS解析＆消去中... (${item.name})`;
-        progressCount.textContent = `${i + 1} / ${total}`;
-        progressBar.style.width = `${Math.round(((i + 1) / total) * 100)}%`;
-
-        const beforeReport = inspectImageMetadata(item.bytes);
-        if (beforeReport.format === 'unknown') continue;
-
-        let cleanedBytes: Uint8Array;
-        let removedBytes = 0;
-
-        if (mode === 'canvas') {
-          cleanedBytes = await stripImageMetadataCanvas(item.bytes, beforeReport.format);
-          removedBytes = Math.max(0, beforeReport.metadataByteCount);
-        } else {
-          const res = stripImageMetadataLossless(item.bytes);
-          cleanedBytes = res.cleanedBytes;
-          removedBytes = res.removedBytes;
-        }
-
-        const afterReport = inspectImageMetadata(cleanedBytes);
-        const extMatch = item.name.match(/(\.[^.]+)$/);
-        const ext = extMatch ? extMatch[1] : '.jpg';
-        const baseName = item.name.replace(/\.[^.]+$/, '');
-        const cleanedName = `${baseName}_clean${ext}`;
-        const mimeType =
-          beforeReport.format === 'png'
-            ? 'image/png'
-            : beforeReport.format === 'webp'
-            ? 'image/webp'
-            : 'image/jpeg';
-
-        processedItems.push({
-          originalName: item.name,
-          cleanedName,
-          originalSize: item.bytes.length,
-          cleanedSize: cleanedBytes.length,
-          removedBytes,
-          beforeReport,
-          afterReport,
-          cleanedBytes,
-          mimeType,
-        });
+      const listCountNotice = document.getElementById('exifListCountNotice');
+      if (listCountNotice) {
+        listCountNotice.textContent = `表示中: ${totalFiles}件`;
       }
 
-      const elapsedSec = ((performance.now() - startTime) / 1000).toFixed(2);
-      progressArea.classList.add('hidden');
-      renderResults(elapsedSec);
-    }
+      fileListContainer.innerHTML = '';
+      processedItems.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className =
+          'p-3.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
 
-    function renderResults(elapsedSec: string) {
-      if (processedItems.length === 0) return;
+        const beforeTagsStr =
+          item.beforeReport.detectedTags.length > 0
+            ? item.beforeReport.detectedTags.join(', ')
+            : '検出なし';
 
-      const totalRemovedBytes = processedItems.reduce((acc, i) => acc + i.removedBytes, 0);
-      const gpsDetectedCount = processedItems.filter((i) => i.beforeReport.hasGps).length;
-      const metaDetectedCount = processedItems.filter(
-        (i) =>
-          i.beforeReport.hasExif ||
-          i.beforeReport.hasXmpOrIptc ||
-          i.beforeReport.hasComment ||
-          i.removedBytes > 0
-      ).length;
-
-      statTime.textContent = `⚡ 処理完了: ${elapsedSec}秒 (${processedItems.length}枚一括・外部通信0バイト)`;
-      summaryText.textContent = `${processedItems.length}枚の画像から計 ${formatBytes(
-        totalRemovedBytes
-      )} のEXIF・GPS位置情報を完全抹消しました`;
-      gpsCountBadge.textContent = `📍 GPS座標検出・抹消: ${gpsDetectedCount}枚`;
-      metaCountBadge.textContent = `🏷️ EXIF/メタデータ抹消: ${metaDetectedCount}枚`;
-      downloadZipBtnLabel.textContent = `全${processedItems.length}枚をZIPで一括保存`;
-
-      fileListContainer.innerHTML = processedItems
-        .map((item, idx) => {
-          const hasTags = item.beforeReport.detectedTags.length > 0;
-          const tagsHtml = hasTags
-            ? item.beforeReport.detectedTags
-                .map((t) => {
-                  const isGps = t.includes('GPS');
-                  const badgeClass = isGps
-                    ? 'bg-rose-50 text-rose-800 border-rose-200'
-                    : 'bg-amber-50 text-amber-800 border-amber-200';
-                  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-semibold ${badgeClass}">🗑️ ${escapeHtml(
-                    t
-                  )} → 消去済</span>`;
-                })
-                .join(' ')
-            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-medium">メタデータなし（クリーン確認済）</span>`;
-
-          return `
-            <div class="p-4 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
-              <div class="space-y-1.5 min-w-0">
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="px-2 py-0.5 rounded bg-slate-100 text-cyan-900 font-mono text-[10px] uppercase font-bold border border-slate-200">
-                    ${item.beforeReport.format}
-                  </span>
-                  <span class="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                    ${escapeHtml(item.originalName)}
-                  </span>
-                  <span class="text-[11px] text-slate-500 font-mono">
-                    (${formatBytes(item.originalSize)} → ${formatBytes(item.cleanedSize)})
-                  </span>
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5">
-                  ${tagsHtml}
-                </div>
-              </div>
-              <div class="flex items-center gap-2 self-end sm:self-center flex-shrink-0">
-                <span class="text-[11px] text-emerald-700 font-bold">✔ 残存EXIF 0件</span>
-                <button
-                  type="button"
-                  data-download-idx="${idx}"
-                  class="single-download-btn px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-cyan-800 border border-slate-300 text-xs font-bold transition cursor-pointer shadow-2xs"
-                >
-                  📥 個別保存
-                </button>
-              </div>
+        card.innerHTML = `
+          <div class="space-y-1 min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900 truncate max-w-[240px] sm:max-w-md">${item.originalName}</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-100 text-slate-700">${item.beforeReport.format}</span>
+              ${
+                item.beforeReport.hasGps
+                  ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800">GPS座標あり</span>'
+                  : ''
+              }
             </div>
-          `;
-        })
-        .join('');
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-500">
+              <span>元: ${(item.originalSize / 1024).toFixed(1)} KB</span>
+              <span>→</span>
+              <span class="text-teal-700 font-semibold">後: ${(item.cleanedSize / 1024).toFixed(1)} KB (-${item.removedBytes}B)</span>
+              <span>•</span>
+              <span class="text-slate-600">消去項目: ${beforeTagsStr}</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            data-download-idx="${index}"
+            class="px-3.5 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span>📥</span>
+            <span>保存</span>
+          </button>
+        `;
 
-      // 個別保存ボタンのイベント登録
-      document.querySelectorAll('.single-download-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          const target = e.currentTarget as HTMLElement;
-          const idx = Number(target.getAttribute('data-download-idx'));
-          const item = processedItems[idx];
-          if (!item) return;
-          triggerDownload(item.cleanedBytes, item.cleanedName, item.mimeType);
-        });
+        fileListContainer.appendChild(card);
       });
 
-      resultArea.classList.remove('hidden');
-      resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      fileListContainer.querySelectorAll('button[data-download-idx]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-download-idx') || '0', 10);
+          const target = processedItems[idx];
+          if (target) {
+            const blob = new Blob([target.cleanedBytes], { type: target.mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = target.cleanedName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }
+        });
+      });
     }
 
-    // ZIP一括保存ボタン
+    // ZIPダウンロード実行
     downloadAllZipBtn.addEventListener('click', () => {
       if (processedItems.length === 0) return;
-      const zipEntries = processedItems.map((item) => ({
+      const zipFiles = processedItems.map((item) => ({
         name: item.cleanedName,
         data: item.cleanedBytes,
       }));
-      const zipBytes = createZipArchive(zipEntries);
-      triggerDownload(zipBytes, 'zeroleak_exif_cleaned_photos.zip', 'application/zip');
-    });
-
-    function triggerDownload(bytes: Uint8Array, filename: string, mimeType: string) {
-      const buf = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
-      const blob = new Blob([buf], { type: mimeType });
+      const zipBuffer = createZipArchive(zipFiles);
+      const blob = new Blob([zipBuffer], { type: 'application/zip' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = filename;
+      a.download = `zeroleak_photos_clean_${Date.now()}.zip`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }
+    });
+
+    // クリア
+    clearExifListBtn.addEventListener('click', () => {
+      processedItems = [];
+      resultArea.classList.add('hidden');
+      fileInput.value = '';
+    });
+
+    // サンプル投入
+    loadSampleBtn.addEventListener('click', async () => {
+      const sampleFiles = generateSampleExifJpegs();
+      await handleFiles(sampleFiles);
+    });
+
+    // ドラッグ＆ドロップイベント
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-cyan-500', 'bg-cyan-50/30');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/30');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/30');
+      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+        handleFiles(Array.from(e.dataTransfer.files));
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files.length > 0) {
+        handleFiles(Array.from(fileInput.files));
+      }
+    });
   </script>
-</Layout>
+</ToolShell>

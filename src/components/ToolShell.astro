@@ -1,0 +1,213 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SecuritySpecModal from './SecuritySpecModal.astro';
+import RelatedTools from './RelatedTools.astro';
+import WhySection from './WhySection.astro';
+import Mascot from './Mascot.astro';
+import { toolBySlug } from '../data/tools';
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface HowToStepItem {
+  name: string;
+  text: string;
+}
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  h1: string;
+  subtitle: string;
+  mascotName?: string;
+  mascotFallback?: string;
+  whyTitle?: string;
+  howToSteps?: HowToStepItem[];
+  faqs?: FaqItem[];
+  customSchema?: any[];
+  maxWidthClass?: string; // デフォルトは max-w-5xl
+}
+
+const {
+  slug,
+  title,
+  description,
+  canonicalPath,
+  h1,
+  subtitle,
+  mascotName,
+  mascotFallback = '🛡️',
+  whyTitle,
+  howToSteps = [],
+  faqs = [],
+  customSchema = [],
+  maxWidthClass = 'max-w-5xl',
+} = Astro.props;
+
+// 構造化データの自動生成（HowTo + FAQPage）
+const schemaGraph: any[] = [...customSchema];
+
+if (howToSteps.length > 0) {
+  schemaGraph.push({
+    '@type': 'HowTo',
+    name: `${h1}をブラウザで安全に実行する手順（サーバー送信なし）`,
+    description,
+    step: howToSteps.map((step) => ({
+      '@type': 'HowToStep',
+      name: step.name,
+      text: step.text,
+    })),
+  });
+}
+
+if (faqs.length > 0) {
+  schemaGraph.push({
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  });
+}
+
+// ツールマスコットの決定
+const effectiveMascotName = mascotName || (slug ? toolBySlug(slug)?.image : undefined);
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  extraSchemaGraph={schemaGraph}
+>
+  <div class={`${maxWidthClass} mx-auto space-y-8`}>
+    
+    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始 Above the Fold） -->
+    <div class="space-y-2.5">
+      <div class="flex flex-wrap items-center justify-end gap-2">
+        <!-- 情シス向けセキュリティ仕様書 ボタン -->
+        <button
+          type="button"
+          onclick="window.openSecurityModal && window.openSecurityModal()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+        >
+          <span>🏢</span>
+          <span>社内利用・情シス申請用仕様書</span>
+        </button>
+      </div>
+
+      <!-- ゼロリークくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
+      <div class="flex flex-col items-start gap-3">
+        <div>
+          <div class="flex w-full items-center gap-4 sm:gap-6">
+            <div class="min-w-0 flex-1 space-y-1.5">
+              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                {h1}
+              </h1>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                {subtitle}
+              </p>
+            </div>
+            {effectiveMascotName && (
+              <Mascot
+                name={effectiveMascotName}
+                fallback={mascotFallback}
+                width={420}
+                eager
+                class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0"
+              />
+            )}
+          </div>
+        </div>
+
+        <!-- サンプル投入ボタンなどのスロット -->
+        <slot name="sample-button" />
+      </div>
+    </div>
+
+    <!-- メイン操作エリア（各ツール固有のWASM/JSワークスペース＆ファイルドロップゾーン） -->
+    <slot />
+
+    <!-- 3コマ図解パネル（WhySection） -->
+    {slug && (
+      <WhySection
+        slug={slug}
+        title={whyTitle || '「無料サイトだから」とアップロードする前に知るべき重大リスク'}
+      />
+    )}
+
+    <!-- 疑問形 <h2> ＋直下結論のSEO解説セクション（見やすさ・SEO_CORE_RULES準拠） -->
+    {faqs.length > 0 && (
+      <section class="space-y-6 pt-2">
+        <div class="border-b border-slate-200 pb-3">
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span>💡</span>
+            <span>利用前・社外共有前の重要チェックポイント</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          {faqs.slice(0, 4).map((f) => (
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <h3 class="font-bold text-slate-900 flex items-start gap-1.5 leading-snug">
+                <span class="shrink-0 text-emerald-700">❓</span>
+                <span>{f.question}</span>
+              </h3>
+              <p class="text-slate-600 leading-relaxed text-xs">
+                {f.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 【FAQPage】よくある質問アコーディオン -->
+    {faqs.length > 0 && (
+      <section class="space-y-4 pt-2">
+        <div class="border-b border-slate-200 pb-2">
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span>❓</span>
+            <span>よくある質問（FAQ）</span>
+          </h2>
+        </div>
+
+        <div class="space-y-3 text-xs sm:text-sm text-slate-700">
+          {faqs.map((f) => (
+            <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
+              <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
+                <span>{f.question}</span>
+                <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+                {f.answer}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 相互回遊リンク -->
+    <RelatedTools currentPath={canonicalPath} />
+
+  </div>
+
+  <!-- セキュリティ仕様書モーダル -->
+  <SecuritySpecModal />
+</Layout>

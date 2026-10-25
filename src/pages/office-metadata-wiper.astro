@@ -1,360 +1,176 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "ExcelやWordの作成者・会社名・隠しメタデータをブラウザで一括消去する3ステップ（サーバー送信なし）",
-    "description": "社外・取引先へExcel（.xlsx）やWord（.docx）を送付する前に、ファイルのプロパティや内部XMLに記録された作成者名・最終保存者・会社名・編集時間をブラウザ内完結で一括消去する手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Office文書（.xlsx, .docx, .pptx）をドラッグ＆ドロップ",
-        "text": "社外へ提出したいExcel見積書、Word提案書、PowerPoint企画書をドロップゾーンに投入します（複数ファイルの一括投入にも対応）。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "検出された作成者・会社名・日時の確認",
-        "text": "ファイル内部のdocProps/core.xmlおよびapp.xmlから検出された作成者名、最終更新者、会社名、編集時間などの隠しメタデータを確認します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "メタデータ消去済みOfficeファイルをダウンロード",
-        "text": "文書の本文・数式・レイアウトをそのまま保持し、個人情報・社内情報のみが物理抹消されたファイルをワンクリックで再保存します。"
-      }
-    ]
+    name: 'Office文書（.xlsx, .docx, .pptx）をドラッグ＆ドロップ',
+    text: '社外へ提出したいExcel見積書、Word提案書、PowerPoint企画書をドロップゾーンに投入します（複数ファイルの一括投入にも対応）。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "ExcelやWordのプロパティを消さずに取引先に送ると、なぜ危険なのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Officeファイルには、画面上には見えない「作成者の実名」「会社名」「下請けや外注先のPCユーザー名」「総編集時間」がXMLメタデータとして永続記録されているためです。そのままメール添付すると、社内関係者の実名や下請け構造が取引先に完全に筒抜けになります。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "ファイルを無料Webサイトにアップロードしてメタデータを消すリスクは？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "無料のオンライン変換サイトの多くは、ファイルを海外クラウドサーバーへ転送して処理します。見積書・提案書・社外秘のExcelを外部サーバーへ送信した時点で企業のセキュリティ規程違反（情報漏洩事故）となるため、端末内（ブラウザ内）だけで完結するツールが必須です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "メタデータを消去してもExcelやWordの表・文書レイアウトは壊れませんか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "壊れません。Office Open XML標準に準拠し、メタデータを格納するプロパティ部分（docProps/core.xml, app.xml）のみを初期化し、本文（xl/worksheets/ や word/document.xml）のデータ・数式・マクロ構造には一切手を加えません。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "複数のOfficeファイルを一度にまとめて消去できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。複数の.xlsxや.docxファイルを同時にドラッグ＆ドロップして、一括でメタデータを消去できます。消去後は個別ダウンロードまたはZIP一括ダウンロードが可能です。"
-        }
-      }
-    ]
-  }
+    name: '検出された作成者・会社名・日時の確認',
+    text: 'ファイル内部のdocProps/core.xmlおよびapp.xmlから検出された作成者名、最終更新者、会社名、編集時間などの隠しメタデータを確認します。',
+  },
+  {
+    name: 'メタデータ消去済みOfficeファイルをダウンロード',
+    text: '文書の本文・数式・レイアウトをそのまま保持し、個人情報・社内情報のみが物理抹消されたファイルをワンクリックで再保存します。',
+  },
+];
+
+const faqs = [
+  {
+    question: 'ExcelやWordのプロパティを消さずに取引先に送ると、なぜ危険なのですか？',
+    answer:
+      'Officeファイルには、画面上には見えない「作成者の実名」「会社名」「下請けや外注先のPCユーザー名」「総編集時間」がXMLメタデータとして永続記録されているためです。そのままメール添付すると、社内関係者の実名や下請け構造が取引先に完全に筒抜けになります。',
+  },
+  {
+    question: 'ファイルを無料Webサイトにアップロードしてメタデータを消すリスクは？',
+    answer:
+      '無料のオンライン変換サイトの多くは、ファイルを海外クラウドサーバーへ転送して処理します。見積書・提案書・社外秘のExcelを外部サーバーへ送信した時点で企業のセキュリティ規程違反（情報漏洩事故）となるため、端末内（ブラウザ内）だけで完結するツールが必須です。',
+  },
+  {
+    question: 'メタデータを消去してもExcelやWordの表・文書レイアウトは壊れませんか？',
+    answer:
+      '壊れません。Office Open XML標準に準拠し、メタデータを格納するプロパティ部分（docProps/core.xml, app.xml）のみを初期化し、本文（xl/worksheets/ や word/document.xml）のデータ・数式・マクロ構造には一切手を加えません。',
+  },
+  {
+    question: '複数のOfficeファイルを一度にまとめて消去できますか？',
+    answer:
+      'はい。複数の.xlsxや.docxファイルを同時にドラッグ＆ドロップして、一括でメタデータを消去できます。消去後は個別ダウンロードまたはZIP一括ダウンロードが可能です。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="office-metadata-wiper"
   title="Excel・Word 作成者・隠しメタデータ一括消去ツール | サーバー送信なし・ブラウザ完結"
   description="社外へ送る.xlsxや.docxから、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ内完結・外部送信0バイトで情報漏洩をブロック。"
   canonicalPath="/office-metadata-wiper/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="Office文書（Excel・Word）作成者・隠しメタデータ一括消去"
+  subtitle="社外へ送る.xlsxや.docxから、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ内完結で外部通信は一切発生しません。"
+  whyTitle="「プロパティを消したつもり」で、下請け企業名が残る事故"
+  howToSteps={howToSteps}
+  faqs={faqs}
+  maxWidthClass="max-w-4xl"
 >
-  <div class="max-w-4xl mx-auto space-y-8">
+  <!-- ワンクリック検証用サンプルボタン -->
+  <button
+    slot="sample-button"
+    id="loadSampleOfficeBtn"
+    type="button"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+  >
+    <span>🧪</span>
+    <span>模擬Office文書（機密メタデータ入り）で試す</span>
+  </button>
+
+  <!-- メイン操作カード -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
     
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-teal-50 border border-teal-200 text-xs text-teal-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-            <div class="min-w-0 flex-1 space-y-1.5">
-              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                Office文書（Excel・Word）作成者・隠しメタデータ一括消去
-              </h1>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                社外へ送る.xlsxや.docxから、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ内完結で外部送信は0バイトです。
-              </p>
-            </div>
-            <Mascot name="tool-diff" fallback="📑" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-          </div>
+    <!-- ファイルドロップゾーン -->
+    <div
+      id="dropZoneOffice"
+      class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-teal-50/20 cursor-pointer group"
+    >
+      <input
+        type="file"
+        id="fileInputOffice"
+        accept=".xlsx,.docx,.pptx,.xlsm,.xltx,.potx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        multiple
+        class="hidden"
+      />
+      <div class="flex flex-col items-center gap-2.5 pointer-events-none">
+        <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 group-hover:scale-105 transition-transform shadow-xs text-xl">
+          📑
         </div>
-
-        <!-- ワンクリック検証用サンプルボタン -->
-        <button
-          id="loadSampleOfficeBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-        >
-          <span>🧪</span>
-          <span>模擬Office文書（機密メタデータ入り）で試す</span>
-        </button>
+        <div>
+          <p class="font-bold text-slate-800 text-sm sm:text-base">
+            Excel (.xlsx) / Word (.docx) / PowerPoint (.pptx) をドロップ
+          </p>
+          <p class="text-xs text-slate-500 mt-0.5">
+            またはクリックしてファイル選択（複数ファイルの一括投入に対応）
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-teal-800 shadow-xs font-medium">
+            🔒 外部送信なし（ファイルは端末外に出ません）
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
+            👤 作成者・最終保存者・会社名を完全初期化
+          </span>
+        </div>
       </div>
     </div>
 
-    <!-- メイン操作カード（開いた瞬間にドロップゾーンが見えるAbove the Fold配置） -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
+    <!-- 処理中プログレス表示 -->
+    <div id="officeProgressArea" class="hidden text-center py-6 space-y-3">
+      <div class="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-xs text-teal-800 font-semibold">ブラウザ内でOffice内部XMLを展開 ＆ 機密メタデータ消去中...</p>
+    </div>
+
+    <!-- 処理結果＆ダウンロードエリア -->
+    <div id="officeResultArea" class="hidden space-y-4">
       
-      <!-- ファイルドロップゾーン -->
-      <div
-        id="dropZoneOffice"
-        class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-teal-50/20 cursor-pointer group"
-      >
-        <input
-          type="file"
-          id="fileInputOffice"
-          accept=".xlsx,.docx,.pptx,.xlsm,.xltx,.potx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-          multiple
-          class="hidden"
-        />
-        <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-          <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 group-hover:scale-105 transition-transform shadow-xs text-xl">
-            📑
+      <!-- 完了サマリーバー -->
+      <div class="p-4 sm:p-5 rounded-xl bg-teal-50/80 border border-teal-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xl shrink-0">
+            🎉
           </div>
           <div>
-            <p class="font-bold text-slate-800 text-sm sm:text-base">
-              Excel (.xlsx) / Word (.docx) / PowerPoint (.pptx) をドロップ
-            </p>
-            <p class="text-xs text-slate-500 mt-0.5">
-              またはクリックしてファイル選択（複数ファイルの一括投入に対応）
+            <h2 class="text-sm sm:text-base font-bold text-teal-950">
+              作成者・会社名・編集履歴の消去が完了しました！
+            </h2>
+            <p id="resultTimeText" class="text-xs text-slate-600 font-mono mt-0.5">
+              処理時間: 0.05秒 (通信0バイト)
             </p>
           </div>
-          <div class="flex flex-wrap items-center justify-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-teal-800 shadow-xs font-medium">
-              🔒 サーバー送信0バイト（ファイルは端末外に出ません）
-            </span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
-              👤 作成者・最終保存者・会社名を完全初期化
-            </span>
-          </div>
+        </div>
+        <button
+          id="downloadCleanFileBtn"
+          type="button"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+        >
+          <span>📥</span>
+          <span id="downloadBtnLabel">消去済みファイルを保存</span>
+        </button>
+      </div>
+
+      <!-- ゼロリークくん完了メッセージ -->
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-teal-100/70 border border-teal-200 text-xs text-teal-950 font-medium">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <span><strong>ゼロリークくん：</strong>Office文書のメタデータを消去しました！ファイルはこの端末内だけで再構築され、外部には一切送信されていません。</span>
+      </div>
+
+      <!-- 検出・抹消されたメタデータ監査レポート -->
+      <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-xs">
+        <div class="font-bold text-xs text-slate-900 flex items-center justify-between border-b border-slate-100 pb-2">
+          <span class="flex items-center gap-1.5">
+            <span>🔍</span>
+            <span>消去された内部プロパティ・メタデータ一覧（Before / After）</span>
+          </span>
+          <span id="removedCountBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+            残存メタデータ 0件
+          </span>
+        </div>
+
+        <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-700">
+          <!-- JSで動的挿入 -->
         </div>
       </div>
 
-      <!-- 処理中プログレス表示 -->
-      <div id="officeProgressArea" class="hidden text-center py-6 space-y-3">
-        <div class="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-xs text-teal-800 font-semibold">ブラウザ内でOffice内部XMLを展開 ＆ 機密メタデータ消去中...</p>
-      </div>
-
-      <!-- 処理結果＆ダウンロードエリア -->
-      <div id="officeResultArea" class="hidden space-y-4">
-        
-        <!-- 完了サマリーバー -->
-        <div class="p-4 sm:p-5 rounded-xl bg-teal-50/80 border border-teal-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xl shrink-0">
-              🎉
-            </div>
-            <div>
-              <h2 class="text-sm sm:text-base font-bold text-teal-950">
-                作成者・会社名・編集履歴の消去が完了しました！
-              </h2>
-              <p id="resultTimeText" class="text-xs text-slate-600 font-mono mt-0.5">
-                処理時間: 0.05秒 (通信0バイト)
-              </p>
-            </div>
-          </div>
-          <button
-            id="downloadCleanFileBtn"
-            type="button"
-            class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
-          >
-            <span>📥</span>
-            <span id="downloadBtnLabel">消去済みファイルを保存</span>
-          </button>
-        </div>
-
-        <!-- ゼロリークくん完了メッセージ -->
-        <div class="flex items-center gap-2 p-3 rounded-xl bg-teal-100/70 border border-teal-200 text-xs text-teal-950 font-medium">
-          <span class="text-base select-none shrink-0">🛡️</span>
-          <span><strong>ゼロリークくん：</strong>Office文書のメタデータを消去しました！ファイルはこの端末内だけで再構築され、外部には一切送信されていません。</span>
-        </div>
-
-        <!-- 検出・抹消されたメタデータ監査レポート -->
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-xs">
-          <div class="font-bold text-xs text-slate-900 flex items-center justify-between border-b border-slate-100 pb-2">
-            <span class="flex items-center gap-1.5">
-              <span>🔍</span>
-              <span>消去された内部プロパティ・メタデータ一覧（Before / After）</span>
-            </span>
-            <span id="removedCountBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
-              残存メタデータ 0件
-            </span>
-          </div>
-
-          <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-700">
-            <!-- JSで動的挿入 -->
-          </div>
-        </div>
-
-        <!-- 複数ファイル処理時のファイル一覧 -->
-        <div id="multiFileListArea" class="hidden space-y-2">
-          <p class="text-xs font-bold text-slate-800">処理済みファイル一覧：</p>
-          <div id="multiFileList" class="space-y-1.5">
-            <!-- JSで動的挿入 -->
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between pt-1">
-          <button
-            id="resetOfficeBtn"
-            type="button"
-            class="text-xs text-slate-500 hover:text-slate-800 underline transition cursor-pointer"
-          >
-            別のファイルを消去する
-          </button>
-        </div>
-
+      <div class="flex items-center justify-between pt-1">
+        <button
+          id="resetOfficeBtn"
+          type="button"
+          class="text-xs text-slate-500 hover:text-slate-800 underline transition cursor-pointer"
+        >
+          別のファイルを消去する
+        </button>
       </div>
 
     </div>
 
-    <!-- 3コマ図解パネル（WhySection） -->
-    <WhySection slug="office-metadata-wiper" title="「プロパティを消したつもり」で、下請け企業名が残る事故" />
-
-    <!-- 疑問形 <h2> ＋直下結論のSEO解説セクション（見やすさ・SEO_CORE_RULES準拠） -->
-    <section class="space-y-6 pt-4">
-      <div class="border-b border-slate-200 pb-3">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>💡</span>
-          <span>社外提出前のOfficeファイル消去における重要ポイント</span>
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-          <h3 class="font-bold text-slate-900 flex items-center gap-1.5">
-            <span>🚨</span>
-            <span>Q. プロパティを消さずに送ると、なぜ危険なのですか？</span>
-          </h3>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            Officeファイルには、画面上には見えない「作成者の実名」「会社名」「下請けや外注先のPCユーザー名」「総編集時間」がXMLメタデータとして永続記録されているためです。そのままメール添付すると、社内関係者の実名や下請け構造が取引先に完全に筒抜けになります。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-          <h3 class="font-bold text-slate-900 flex items-center gap-1.5">
-            <span>🛡️</span>
-            <span>Q. 無料のWeb変換サイトにアップロードするリスクは？</span>
-          </h3>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            無料のオンライン変換サイトの多くは、ファイルを海外クラウドサーバーへ転送して処理します。見積書・提案書・社外秘のExcelを外部サーバーへ送信した時点で企業のセキュリティ規程違反（情報漏洩事故）となるため、端末内（ブラウザ内）だけで完結するツールが必須です。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-          <h3 class="font-bold text-slate-900 flex items-center gap-1.5">
-            <span>📐</span>
-            <span>Q. メタデータを消去しても表や文書レイアウトは壊れませんか？</span>
-          </h3>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            壊れません。Office Open XML標準に準拠し、メタデータを格納するプロパティ部分（docProps/core.xml, app.xml）のみを初期化し、本文（xl/worksheets/ や word/document.xml）のデータ・数式・マクロ構造には一切手を加えません。
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-          <h3 class="font-bold text-slate-900 flex items-center gap-1.5">
-            <span>🏢</span>
-            <span>Q. 社内イントラネットや情シス申請で利用できますか？</span>
-          </h3>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            はい、ご利用いただけます。当サイトは全処理がクライアントサイド（ブラウザ内JavaScript/WASM）で完結し、外部通信は一切発生しません。右上の「社内利用・情シス申請用仕様書」ボタンから技術仕様書をPDF印刷して社内稟議にご活用いただけます。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    <section class="space-y-4 pt-2">
-      <div class="border-b border-slate-200 pb-2">
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>❓</span>
-          <span>よくある質問（FAQ）</span>
-        </h2>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. ExcelやWordのプロパティを消さずに取引先に送ると、なぜ危険なのですか？</span>
-            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            Officeファイルには、画面上には見えない「作成者の実名」「会社名」「下請けや外注先のPCユーザー名」「総編集時間」がXMLメタデータとして永続記録されているためです。そのままメール添付すると、社内関係者の実名や下請け構造が取引先に完全に筒抜けになります。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. ファイルを無料Webサイトにアップロードしてメタデータを消すリスクは？</span>
-            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            無料のオンライン変換サイトの多くは、ファイルを海外クラウドサーバーへ転送して処理します。見積書・提案書・社外秘のExcelを外部サーバーへ送信した時点で企業のセキュリティ規程違反（情報漏洩事故）となるため、端末内（ブラウザ内）だけで完結するツールが必須です。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. メタデータを消去してもExcelやWordの表・文書レイアウトは壊れませんか？</span>
-            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            壊れません。Office Open XML標準に準拠し、メタデータを格納するプロパティ部分（docProps/core.xml, app.xml）のみを初期化し、本文（xl/worksheets/ や word/document.xml）のデータ・数式・マクロ構造には一切手を加えません。
-          </p>
-        </details>
-
-        <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-          <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-            <span>Q. 複数のOfficeファイルを一度にまとめて消去できますか？</span>
-            <span class="text-teal-700 group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <p class="mt-3 text-slate-600 leading-relaxed text-xs">
-            はい。複数の.xlsxや.docxファイルを同時にドラッグ＆ドロップして、一括でメタデータを消去できます。消去後は個別ダウンロードまたはZIP一括ダウンロードが可能です。
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <RelatedTools currentPath="/office-metadata-wiper/" />
   </div>
-
-  <!-- セキュリティ仕様書モーダル -->
-  <SecuritySpecModal />
 
   <!-- クライアントサイドスクリプト -->
   <script>
@@ -526,4 +342,4 @@ const extraSchemaGraph = [
       }
     });
   </script>
-</Layout>
+</ToolShell>

@@ -1,0 +1,237 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Mascot from '../../components/Mascot.astro';
+import SecuritySpecModal from '../../components/SecuritySpecModal.astro';
+import { tools, toolCategories } from '../../data/tools';
+
+// 本人確認・個人情報・画像カテゴリのツール一覧
+const targetSlugs = ['id-watermark', 'exif-remover', 'pdf-unlock', 'csv-masking', 'local-mosaic'];
+const categoryTools = targetSlugs.map(slug => tools.find(t => t.slug === slug)!).filter(Boolean);
+
+const otherCategories = toolCategories.filter(c => c.id !== 'all' && c.id !== 'id_privacy');
+
+const title = '本人確認・個人情報・写真のプライバシー保護ツール一覧 | サーバー送信なし・ブラウザ完結';
+const description = '身分証透かし焼き込み、給与明細PDF解除、マイナンバー伏字化、写真EXIF・GPS削除をブラウザ内完結で。サーバー送信0バイト保証で情報漏洩を物理遮断。';
+const canonicalPath = '/privacy/';
+
+const extraSchemaGraph = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://zeroleaktools.com/' },
+      { '@type': 'ListItem', position: 2, name: '本人確認・個人情報・画像', item: 'https://zeroleaktools.com/privacy/' },
+    ],
+  },
+  {
+    '@type': 'CollectionPage',
+    name: '本人確認・個人情報・写真のプライバシー保護ツール一覧',
+    description,
+    url: 'https://zeroleaktools.com/privacy/',
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: '免許証やマイナンバーの写真を無料サイトで加工するのは危険ですか？',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          'text': '極めて危険です。一般的な無料画像加工サイトや透かしツールは、画像を海外クラウドサーバーへアップロードして処理します。身分証明書の生データが第三者サーバーへ保存されると、不正借入れや口座開設に悪用される恐れがあります。ZeroLeak Toolsは端末内完結で外部送信は0バイトです。',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: '写真の位置情報（EXIF）を削除しないと自宅が特定されますか？',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          'text': 'はい。スマートフォンで撮影した写真にはGPS座標（緯度・経度）が記録されており、SNSやフリマアプリに投稿すると自宅や職場がピンポイントで特定されるストーカー被害のリスクがあります。投稿前のEXIF消去が必須です。',
+        },
+      },
+    ],
+  },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  extraSchemaGraph={extraSchemaGraph}
+>
+  <div class="max-w-5xl mx-auto space-y-10">
+    
+    <!-- パンくずリスト -->
+    <nav aria-label="Breadcrumb" class="text-xs text-slate-500">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-slate-800 transition">ホーム</a></li>
+        <li><span>/</span></li>
+        <li class="font-semibold text-slate-800">本人確認・個人情報・画像</li>
+      </ol>
+    </nav>
+
+    <!-- ハブヘッダー -->
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold">
+          <span>🪪</span>
+          <span>本人確認・身分証・個人情報・写真</span>
+        </span>
+        <button
+          type="button"
+          onclick="window.openSecurityModal && window.openSecurityModal()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+        >
+          <span>🏢</span>
+          <span>社内利用・情シス申請用仕様書</span>
+        </button>
+      </div>
+
+      <!-- ゼロリークくん見守り保証バナー -->
+      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 shadow-2xs">
+        <span class="text-base select-none shrink-0">🛡️</span>
+        <p class="leading-relaxed">
+          <strong class="font-bold">ゼロリークくん安全保証：</strong>本カテゴリの全ツールは端末内だけで動作します。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
+        </p>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-2">
+        <div class="space-y-2 max-w-2xl">
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            本人確認・個人情報・写真の<br class="hidden sm:inline" />
+            <span class="text-blue-700">プライバシー保護ツール一覧</span>
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            運転免許証やマイナンバーカードの提出用透かし、給与明細のパスワード解除、写真の位置情報（EXIF/GPS）削除、顧客名簿の自動伏字化をブラウザ内完結で安全に実行します。
+          </p>
+        </div>
+        <Mascot name="tool-watermark" fallback="🪪" width={320} eager class="w-24 sm:w-36 lg:w-44 rounded-2xl shrink-0 self-center md:self-auto" />
+      </div>
+    </div>
+
+    <!-- よくある情報漏洩事故 vs ZeroLeakの物理遮断 -->
+    <section class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-50/50 to-slate-50 border border-blue-100 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">⚠️</span>
+        <h2 class="text-sm sm:text-base font-bold text-slate-900">
+          本人確認・個人情報取り扱いで多発する3大インシデント
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+          <span class="font-bold text-rose-700 flex items-center gap-1">
+            <span>🚨</span>
+            <span>身分証コピーの不正転用</span>
+          </span>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            提出先に保存された無加工の免許証画像が流出し、勝手に消費者金融の借入れや口座開設に悪用される事故。
+          </p>
+          <div class="pt-1 text-[10px] text-blue-700 font-semibold">
+            👉 「身分証透かし焼き込み」で提出目的を不可逆印字
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+          <span class="font-bold text-rose-700 flex items-center gap-1">
+            <span>🚨</span>
+            <span>写真のGPSから自宅特定</span>
+          </span>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            フリマ出品やSNS投稿写真に含まれるEXIFデータから、緯度経度が抜き出されて自宅が特定される被害。
+          </p>
+          <div class="pt-1 text-[10px] text-blue-700 font-semibold">
+            👉 「写真EXIF一括削除」で位置情報を完全抹消
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+          <span class="font-bold text-rose-700 flex items-center gap-1">
+            <span>🚨</span>
+            <span>年収・マイナンバーの海外送信</span>
+          </span>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            住宅ローンやe-Taxのため、無料PDF解除サイトに源泉徴収票をアップロードし機密が外部サーバーへ漏洩。
+          </p>
+          <div class="pt-1 text-[10px] text-blue-700 font-semibold">
+            👉 「給与明細PDF解除」でローカル端末内解除
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ツール一覧カードグリッド -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span>🛠️</span>
+          <span>利用可能なツール（{categoryTools.length}件）</span>
+        </h2>
+        <span class="text-xs text-slate-500">外部通信 0 バイト保証</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {categoryTools.map((t) => (
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md transition space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-xl shrink-0">
+                    {t.icon}
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                      <a href={t.href} class="hover:text-blue-700 transition">
+                        {t.name}
+                      </a>
+                    </h3>
+                    <p class="text-[11px] text-slate-500 font-mono mt-0.5">{t.tagline}</p>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                {t.panels[2].text}
+              </p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                ✔ 通信0バイト
+              </span>
+              <a
+                href={t.href}
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-xs cursor-pointer"
+              >
+                <span>ツールを開く</span>
+                <span>▶</span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 他カテゴリハブへの相互案内 -->
+    <section class="space-y-4 pt-4 border-t border-slate-200">
+      <h2 class="text-sm font-bold text-slate-800">他のカテゴリハブを見る：</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {otherCategories.map((c) => (
+          <a
+            href={c.hubPath}
+            class="p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-400 hover:shadow-xs transition flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">{c.icon}</span>
+              <div>
+                <p class="font-bold text-slate-900 text-xs sm:text-sm group-hover:text-blue-700 transition">{c.label}</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">{c.tagline}</p>
+              </div>
+            </div>
+            <span class="text-slate-400 group-hover:translate-x-1 transition-transform text-sm">▶</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+  </div>
+
+  <SecuritySpecModal />
+</Layout>

@@ -14,3 +14,4 @@ yarn-error.log*
 .DS_Store
 *.local
 workspace/screenshots/
+workspace/.tmp_chrome_profile/

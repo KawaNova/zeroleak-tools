@@ -1,4 +1,4 @@
-// public/sitemap.xml を src/pages/*.astro から自動生成する。
+// public/sitemap.xml を src/pages/**/*.astro から自動生成する。
 // lastmod は各ページファイルの最終コミット日（未コミットの変更がある場合は本日）。
 // `npm run build` の前段で実行されるため、手動更新は不要。
 import fs from 'node:fs';
@@ -30,17 +30,46 @@ function lastmodOf(relFile) {
   return iso || today();
 }
 
-const files = fs.readdirSync(pagesDir).filter((f) => f.endsWith('.astro')).sort();
+function getAllAstroFiles(dir, base = '') {
+  let results = [];
+  const list = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of list) {
+    const relPath = base ? `${base}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      results = results.concat(getAllAstroFiles(path.join(dir, entry.name), relPath));
+    } else if (entry.isFile() && entry.name.endsWith('.astro')) {
+      results.push(relPath);
+    }
+  }
+  return results;
+}
 
-const entries = files.map((f) => {
-  const slug = f.replace(/\.astro$/, '');
-  const isHome = slug === 'index';
-  const isLegal = slug === 'legal';
+const files = getAllAstroFiles(pagesDir).sort();
+
+const entries = files.map((relFile) => {
+  // relFile の例:
+  // "index.astro" -> "/"
+  // "legal.astro" -> "/legal/"
+  // "pdf-unlock.astro" -> "/pdf-unlock/"
+  // "privacy/index.astro" -> "/privacy/"
+  let urlPath = '';
+  if (relFile === 'index.astro') {
+    urlPath = '/';
+  } else if (relFile.endsWith('/index.astro')) {
+    urlPath = `/${relFile.replace(/\/index\.astro$/, '')}/`;
+  } else {
+    urlPath = `/${relFile.replace(/\.astro$/, '')}/`;
+  }
+
+  const isHome = urlPath === '/';
+  const isLegal = urlPath === '/legal/';
+  const isHub = urlPath === '/privacy/' || urlPath === '/pdf/' || urlPath === '/dev/';
+
   return {
-    loc: isHome ? `${siteUrl}/` : `${siteUrl}/${slug}/`,
-    lastmod: lastmodOf(`src/pages/${f}`),
-    changefreq: isLegal ? 'monthly' : 'weekly',
-    priority: isHome ? '1.0' : isLegal ? '0.5' : '0.9',
+    loc: `${siteUrl}${urlPath}`,
+    lastmod: lastmodOf(`src/pages/${relFile}`),
+    changefreq: isLegal ? 'monthly' : isHub ? 'daily' : 'weekly',
+    priority: isHome ? '1.0' : isHub ? '0.95' : isLegal ? '0.5' : '0.9',
   };
 });
 

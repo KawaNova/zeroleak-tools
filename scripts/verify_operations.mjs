@@ -550,11 +550,14 @@ async function testIdWatermarkEngine() {
 
 async function testBuiltHtmlAndCspAudit() {
   console.log('\n========================================');
-  console.log('11. Built HTML / CSP / SEO Keyword Audit (All 12 Routes)');
+  console.log('11. Built HTML / CSP / SEO Keyword Audit (All 15 Routes: 1 Home + 3 Category Hubs + 10 Tools + 1 Legal)');
   console.log('========================================');
 
   const routes = [
-    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/csv-masking/', '/pdf-unlock/', '/exif-remover/', '/local-mosaic/', '/ai-prompt-sanitizer/', '/log-masking/', '/pdf-redaction/', '/contract-diff/', '/id-watermark/', '/office-metadata-wiper/'] },
+    { path: 'index.html', mustInclude: ['サーバー送信0バイト', '/privacy/', '/pdf/', '/dev/'] },
+    { path: 'privacy/index.html', mustInclude: ["connect-src 'self'", '本人確認', '個人情報', 'サーバー送信0バイト'] },
+    { path: 'pdf/index.html', mustInclude: ["connect-src 'self'", 'PDF', 'Office', 'サーバー送信0バイト'] },
+    { path: 'dev/index.html', mustInclude: ["connect-src 'self'", '開発者', 'サーバー送信0バイト'] },
     { path: 'csv-masking/index.html', mustInclude: ["connect-src 'self'", 'マイナンバー', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'pdf-unlock/index.html', mustInclude: ['パスワード解除＆メタデータ削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'exif-remover/index.html', mustInclude: ['位置情報（EXIF・GPS）削除', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },

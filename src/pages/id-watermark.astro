@@ -1,611 +1,489 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import SecuritySpecModal from '../components/SecuritySpecModal.astro';
-import RelatedTools from '../components/RelatedTools.astro';
-import WhySection from '../components/WhySection.astro';
-import Mascot from '../components/Mascot.astro';
+import ToolShell from '../components/ToolShell.astro';
 
-// SGO / Googleリッチリザルト用 構造化データ
-const extraSchemaGraph = [
+const howToSteps = [
   {
-    "@type": "HowTo",
-    "name": "運転免許証やマイナンバーカードの画像に悪用防止透かしをブラウザで焼き込む3ステップ（サーバー送信なし）",
-    "description": "バイト応募、フリマ出品、賃貸申込などで身分証明書の画像提出を求められた際、第三者による不正転用を防ぐために「〇〇提出用 悪用禁止」の半透明透かしをブラウザ内完結・通信0バイトで焼き込む手順。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "身分証画像（免許証・マイナンバー・保険証）を選択またはドロップ",
-        "text": "スマートフォンで撮影した運転免許証やマイナンバーカード、健康保険証の画像をドラッグ＆ドロップまたはファイル選択で読み込みます。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "透かし文字と日付・不透明度・角度を調整",
-        "text": "「〇〇提出用 悪用禁止」などの提出先企業名や今日の日付を指定し、文字が読める範囲で透かしの濃度（20〜30%推奨）や斜めリピートパターンをプレビューしながら調整します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "透かし入り画像をワンクリックで安全に保存",
-        "text": "Canvas上で完全に一体化された画像をダウンロードして提出先に送信します。外部サーバーを一切経由しないため生画像流出リスクは0%です。"
-      }
-    ]
+    name: '身分証画像（免許証・マイナンバー・保険証）を選択またはドロップ',
+    text: 'スマートフォンで撮影した運転免許証やマイナンバーカード、健康保険証の画像をドラッグ＆ドロップまたはファイル選択で読み込みます。',
   },
   {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "身分証の画像に「透かし」を入れるのはなぜ安全対策として有効なのですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "運転免許証やマイナンバーカードの無加工画像が流出した場合、第三者に勝手に格安SIMの契約やオンライン銀行口座開設、消費者金融での不正借入れに使い回される重大な被害が発生します。「2026/10/20 〇〇社提出用 他目的使用禁止」と斜めに文字を焼き込んでおくことで、万が一提出先から画像が外部流出しても、別の審査で不正利用されることを物理的に防ぐことができます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "透かしを入れた身分証は、公式の本人確認審査で受理されますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "大半の正規企業やサービス（バイト採用、賃貸契約、フリマ本人確認等）では、氏名・生年月日・住所・有効期限・顔写真が目視で明瞭に確認できる状態であれば、悪用防止目的の半透明透かし入り画像を受理しています。ただし、提出先の自動AI審査（eKYC等）の要件によっては再提出を求められる場合があるため、ダウンロード前に重要項目が隠れていないか必ず目視でご確認ください。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "透かしを入れるために無料の画像加工サイトを使うのは危険ですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "極めて危険です。一般的な無料Web画像編集サイトは、アップロードされた身分証画像をサーバーへ送信・保存して処理しています。悪用を防ぐために行ったはずの操作で、最も機密性の高い身分証の生データを運営企業や海外クラウドへ預けることになります。ZeroLeak Toolsはお使いのブラウザ内部（HTML5 Canvas）だけで処理し、外部通信は1バイトも発生しません。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "マイナンバーカードの裏面（12桁のマイナンバー）も透かしで保護できますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。表面・裏面を問わず任意の画像に透かしを焼き込めます。なお、マイナンバー法により、法律で定められた公的機関や雇用主等の正規の手続きを除き、マイナンバーカード裏面（12桁の個人番号）の提出・コピーを求めることは禁止されています。一般的な本人確認では表面のみの提出が推奨されます。"
-        }
-      }
-    ]
-  }
+    name: '透かし文字と日付・不透明度・角度を調整',
+    text: '「〇〇提出用 悪用禁止」などの提出先企業名や今日の日付を指定し、文字が読める範囲で透かしの濃度（20〜30%推奨）や斜めリピートパターンをプレビューしながら調整します。',
+  },
+  {
+    name: '透かし入り画像をワンクリックで安全に保存',
+    text: 'Canvas上で完全に一体化された画像をダウンロードして提出先に送信します。外部サーバーを一切経由しないため生画像流出リスクは0%です。',
+  },
+];
+
+const faqs = [
+  {
+    question: '身分証の画像に「透かし」を入れるのはなぜ安全対策として有効なのですか？',
+    answer:
+      '運転免許証やマイナンバーカードの無加工画像が流出した場合、第三者に勝手に格安SIMの契約やオンライン銀行口座開設、消費者金融での不正借入れに使い回される重大な被害が発生します。「2026/10/20 〇〇社提出用 他目的使用禁止」と斜めに文字を焼き込んでおくことで、万が一提出先から画像が外部流出しても、別の審査で不正利用されることを物理的に防ぐことができます。',
+  },
+  {
+    question: '透かしを入れた身分証は、公式の本人確認審査で受理されますか？',
+    answer:
+      '大半の正規企業やサービス（バイト採用、賃貸契約、フリマ本人確認等）では、氏名・生年月日・住所・有効期限・顔写真が目視で明瞭に確認できる状態であれば、悪用防止目的の半透明透かし入り画像を受理しています。ただし、提出先の自動AI審査（eKYC等）の要件によっては再提出を求められる場合があるため、ダウンロード前に重要項目が隠れていないか必ず目視でご確認ください。',
+  },
+  {
+    question: '透かしを入れるために無料の画像加工サイトを使うのは危険ですか？',
+    answer:
+      '極めて危険です。一般的な無料Web画像編集サイトは、アップロードされた身分証画像をサーバーへ送信・保存して処理しています。悪用を防ぐために行ったはずの操作で、最も機密性の高い身分証の生データを運営企業や海外クラウドへ預けることになります。ZeroLeak Toolsはお使いのブラウザ内部（HTML5 Canvas）だけで処理し、外部通信は1バイトも発生しません。',
+  },
+  {
+    question: 'マイナンバーカードの裏面（12桁のマイナンバー）も透かしで保護できますか？',
+    answer:
+      'はい。表面・裏面を問わず任意の画像に透かしを焼き込めます。なお、マイナンバー法により、法律で定められた公的機関や雇用主等の正規の手続きを除き、マイナンバーカード裏面（12桁の個人番号）の提出・コピーを求めることは禁止されています。一般的な本人確認では表面のみの提出が推奨されます。',
+  },
 ];
 ---
 
-<Layout
+<ToolShell
+  slug="id-watermark"
   title="身分証・マイナンバー 悪用防止透かし焼き込み | ブラウザ完結・サーバー送信なし"
   description="運転免許証やマイナンバーカード提出時の不正利用・使い回し防止。「〇〇提出用 悪用禁止」の透かしをブラウザ内だけで斜め全面に焼き込み。外部サーバー送信0バイト。"
   canonicalPath="/id-watermark/"
-  extraSchemaGraph={extraSchemaGraph}
+  h1="身分証・マイナンバー 悪用防止透かし焼き込み"
+  subtitle="バイト応募、賃貸契約、フリマ本人確認で送る免許証・マイナンバー・保険証に、「〇〇提出用 転載・悪用禁止」をブラウザ内で不可逆焼き込み。通信0バイトで安全に出力。"
+  whyTitle="提出した身分証画像は「そのまま別の契約」に使い回されるリスクがある"
+  howToSteps={howToSteps}
+  faqs={faqs}
 >
-  <div class="max-w-5xl mx-auto space-y-8">
+  <!-- ワンクリック検証用サンプルボタン -->
+  <button
+    slot="sample-button"
+    id="loadSampleIdBtn"
+    type="button"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+  >
+    <span>🧪</span>
+    <span>見本運転免許証で試す</span>
+  </button>
+
+  <!-- メイン操作ワークスペース (2カラム: 設定コントロール ＆ リアルタイムプレビュー) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
-    <!-- ツールヘッダー -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        <button
-          type="button"
-          onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
-        >
-          <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
-        </button>
-      </div>
-
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-            <div class="min-w-0 flex-1 space-y-1.5">
-              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                身分証・マイナンバー 悪用防止透かし焼き込み
-              </h1>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                バイト・フリマ・賃貸申込での身分証提出時に「〇〇提出用 悪用禁止」の半透明透かしを焼き込み。不正転用を防止。ブラウザ内完結・外部送信0バイト。
-              </p>
-            </div>
-            <Mascot name="tool-watermark" fallback="🪪" width={420} eager class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0" />
-          </div>
-        </div>
-
-        <!-- テスト用サンプル投入ボタン -->
-        <div class="flex flex-wrap items-center gap-2">
-          <button
-            id="loadSampleIdBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-          >
-            <span>🧪</span>
-            <span>サンプル身分証（見本免許証）で試す</span>
-          </button>
-          <button
-            id="resetBtn"
-            type="button"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer shrink-0"
-          >
-            <span>🗑️</span>
-            <span>リセット</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ネットワーク遮断・免責バナー -->
-    <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
-      <span class="text-base shrink-0">🛡️</span>
-      <div class="space-y-0.5">
-        <div class="font-bold">サーバー送信0バイト保証 ＆ 提出前目視確認の必須義務</div>
-        <p class="text-amber-800">
-          選択された身分証画像はお使いのPC/スマートフォンのメモリ上（Canvas）でのみ描画処理され、外部サーバーへ送信・保存されることは一切ありません。
-          なお、提出先の審査要件を満たすため、<strong>氏名・生年月日・住所・有効期限・公安印などの重要項目が透かしで不鮮明になっていないか</strong>、必ずご自身で目視確認の上でご提出ください。
-        </p>
-      </div>
-    </div>
-
-    <!-- メイン作業エリア：2カラムレイアウト -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- 左カラム：透かし設定コントロール (5カラム) -->
+    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-5">
       
-      <!-- 左カラム：設定・操作パネル (5カラム) -->
-      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-5">
-        
-        <!-- 1. 画像読込 -->
-        <div class="space-y-2">
-          <label class="block text-xs font-bold text-slate-800">
-            1. 身分証画像の選択（免許証・マイナンバー等）
-          </label>
-          <div
-            id="dropZone"
-            class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-4 text-center cursor-pointer bg-slate-50/50 hover:bg-blue-50/30 transition group"
-          >
-            <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp" class="hidden" />
-            <div class="space-y-1 select-none">
-              <span class="text-2xl block group-hover:scale-110 transition-transform">📸</span>
-              <p class="text-xs font-bold text-slate-700">クリックして身分証を選択</p>
-              <p class="text-[11px] text-slate-600">または画像をここにドロップ / Ctrl+V貼り付け</p>
-            </div>
+      <!-- ファイル選択 ＆ ドロップエリア -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-800">
+          1. 身分証画像を選択（免許証・マイナンバー等）
+        </label>
+        <div
+          id="dropZone"
+          class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-4 text-center transition bg-slate-50/70 hover:bg-blue-50/20 cursor-pointer group"
+        >
+          <input
+            type="file"
+            id="imageFileInput"
+            accept="image/*"
+            class="hidden"
+          />
+          <div class="flex flex-col items-center gap-1.5 pointer-events-none">
+            <span class="text-2xl group-hover:scale-110 transition-transform">📷</span>
+            <p class="font-bold text-slate-700 text-xs sm:text-sm">画像をドロップ または クリックして選択</p>
+            <p class="text-[11px] text-slate-600">JPEG, PNG, WebP対応 • スマホ撮影写真OK</p>
           </div>
         </div>
+      </div>
 
-        <!-- 2. 透かしテキスト設定 -->
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label for="watermarkTextInput" class="text-xs font-bold text-slate-800">
-              2. 透かし文字の指定
-            </label>
-            <button
-              id="insertDateBtn"
-              type="button"
-              class="text-[11px] font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded transition cursor-pointer"
-            >
-              📅 今日の日付を追加
-            </button>
+      <!-- 透かしテキスト入力 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label for="watermarkText" class="block text-xs font-bold text-slate-800">
+            2. 焼き込む透かし文字列
+          </label>
+          <button
+            type="button"
+            id="insertDateBtn"
+            class="text-[11px] text-blue-700 hover:underline font-semibold cursor-pointer"
+          >
+            + 今日の日付を挿入
+          </button>
+        </div>
+        <textarea
+          id="watermarkText"
+          rows="2"
+          class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+          placeholder="〇〇社 提出用 悪用禁止"
+        >〇〇提出用 悪用禁止</textarea>
+
+        <!-- クイック挿入プリセット -->
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+            〇〇社 提出用 悪用禁止
+          </button>
+          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+            本人確認用 転載禁止
+          </button>
+          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+            賃貸契約用 他目的使用不可
+          </button>
+        </div>
+      </div>
+
+      <!-- 透かしレイアウトパターン -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-800">
+          3. 透かしの配置パターン
+        </label>
+        <div class="grid grid-cols-3 gap-2">
+          <label class="pattern-label flex flex-col items-center justify-center p-2.5 rounded-xl border border-blue-500 bg-blue-50/50 cursor-pointer text-center transition">
+            <input type="radio" name="pattern" value="repeat" checked class="hidden" />
+            <span class="text-base mb-1">📐</span>
+            <span class="text-xs font-bold text-slate-800">全面リピート</span>
+            <span class="text-[10px] text-slate-600">（推奨）</span>
+          </label>
+          <label class="pattern-label flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer text-center transition">
+            <input type="radio" name="pattern" value="center" class="hidden" />
+            <span class="text-base mb-1">➖</span>
+            <span class="text-xs font-bold text-slate-800">中央1本</span>
+            <span class="text-[10px] text-slate-600">（控えめ）</span>
+          </label>
+          <label class="pattern-label flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer text-center transition">
+            <input type="radio" name="pattern" value="cross" class="hidden" />
+            <span class="text-base mb-1">✖️</span>
+            <span class="text-xs font-bold text-slate-800">クロスX字</span>
+            <span class="text-[10px] text-slate-600">（強力防御）</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 濃度（透明度）＆ 文字サイズ ＆ 角度スライダー -->
+      <div class="space-y-3.5 pt-1 border-t border-slate-100">
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-bold text-slate-700">文字の濃さ（不透明度）：</span>
+            <span id="opacityVal" class="font-mono text-blue-600 font-bold">25%</span>
           </div>
           <input
-            type="text"
-            id="watermarkTextInput"
-            value="本人確認 提出用 悪用禁止"
-            placeholder="例: 2026/10/20 〇〇提出用 悪用禁止"
-            class="w-full text-xs sm:text-sm font-medium text-slate-900 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+            type="range"
+            id="opacitySlider"
+            min="10"
+            max="60"
+            value="25"
+            class="w-full accent-blue-600 cursor-pointer"
           />
-
-          <!-- プリセットボタン -->
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-slate-600 block">よく使われる定型文:</span>
-            <div class="flex flex-wrap gap-1.5">
-              <button type="button" class="preset-btn text-[11px] px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition cursor-pointer" data-text="本人確認 提出用 悪用禁止">
-                本人確認（汎用）
-              </button>
-              <button type="button" class="preset-btn text-[11px] px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition cursor-pointer" data-text="〇〇提出用 他目的使用厳禁">
-                他目的使用禁止
-              </button>
-              <button type="button" class="preset-btn text-[11px] px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition cursor-pointer" data-text="賃貸入居申込用 悪用禁止">
-                賃貸入居申込
-              </button>
-              <button type="button" class="preset-btn text-[11px] px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition cursor-pointer" data-text="バイト採用手続き用 コピー厳禁">
-                アルバイト提出
-              </button>
-            </div>
+          <div class="flex justify-between text-[10px] text-slate-600">
+            <span>薄め (10%)</span>
+            <span>推奨 (20〜30%)</span>
+            <span>濃いめ (60%)</span>
           </div>
         </div>
 
-        <!-- 3. 詳細スライダー調整 -->
-        <div class="space-y-3 pt-2 border-t border-slate-100">
-          <label class="block text-xs font-bold text-slate-800">
-            3. 透かしの濃度・サイズ・パターンの微調整
-          </label>
-
-          <!-- パターン切替 -->
-          <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
-            <button type="button" id="patternRepeatBtn" class="pattern-tab-btn py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition" data-pattern="repeat">
-              斜めリピート
-            </button>
-            <button type="button" id="patternCenterBtn" class="pattern-tab-btn py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition" data-pattern="center">
-              中央1本
-            </button>
-            <button type="button" id="patternCrossBtn" class="pattern-tab-btn py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition" data-pattern="cross">
-              クロスX字
-            </button>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-bold text-slate-700">文字サイズ：</span>
+            <span id="fontSizeVal" class="font-mono text-blue-600 font-bold">小</span>
           </div>
-
-          <!-- 不透明度スライダー -->
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-medium text-slate-600">
-              <span>透かしの濃さ（不透明度）</span>
-              <span id="opacityValLabel">25% (推奨: 20〜30%)</span>
-            </div>
-            <input type="range" id="opacitySlider" min="10" max="60" value="25" step="1" class="w-full accent-blue-600 cursor-pointer" />
-          </div>
-
-          <!-- フォントサイズ -->
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-medium text-slate-600">
-              <span>文字サイズ</span>
-              <span id="fontSizeValLabel">28 px</span>
-            </div>
-            <input type="range" id="fontSizeSlider" min="16" max="64" value="28" step="2" class="w-full accent-blue-600 cursor-pointer" />
-          </div>
-
-          <!-- 回転角度 -->
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] font-medium text-slate-600">
-              <span>回転角度</span>
-              <span id="angleValLabel">-30°</span>
-            </div>
-            <input type="range" id="angleSlider" min="-60" max="60" value="-30" step="5" class="w-full accent-blue-600 cursor-pointer" />
-          </div>
-
-          <!-- 文字色パレット -->
-          <div class="space-y-1">
-            <span class="text-[11px] font-medium text-slate-600 block">透かし文字色:</span>
-            <div class="flex items-center gap-2">
-              <label class="color-choice-label inline-flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="watermarkColor" value="#475569" checked class="hidden" />
-                <span class="w-6 h-6 rounded-full bg-slate-600 border-2 border-white ring-2 ring-blue-500 shadow-xs inline-block"></span>
-                <span class="text-xs text-slate-700">グレー</span>
-              </label>
-              <label class="color-choice-label inline-flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="watermarkColor" value="#000000" class="hidden" />
-                <span class="w-6 h-6 rounded-full bg-black border-2 border-white ring-1 ring-slate-300 shadow-xs inline-block"></span>
-                <span class="text-xs text-slate-700">黒</span>
-              </label>
-              <label class="color-choice-label inline-flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="watermarkColor" value="#dc2626" class="hidden" />
-                <span class="w-6 h-6 rounded-full bg-rose-600 border-2 border-white ring-1 ring-slate-300 shadow-xs inline-block"></span>
-                <span class="text-xs text-slate-700">赤</span>
-              </label>
-              <label class="color-choice-label inline-flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="watermarkColor" value="#ffffff" class="hidden" />
-                <span class="w-6 h-6 rounded-full bg-white border-2 border-slate-300 ring-1 ring-slate-200 shadow-xs inline-block"></span>
-                <span class="text-xs text-slate-700">白</span>
-              </label>
-            </div>
-          </div>
-
+          <input
+            type="range"
+            id="fontSizeSlider"
+            min="20"
+            max="60"
+            value="34"
+            class="w-full accent-blue-600 cursor-pointer"
+          />
         </div>
 
-        <!-- ダウンロードボタン -->
-        <div class="pt-2 space-y-2">
-          <button
-            id="downloadImageBtn"
-            type="button"
-            disabled
-            class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold text-sm shadow-xs transition cursor-pointer disabled:cursor-not-allowed"
-          >
-            <span>📥</span>
-            <span>透かし入り画像を保存（PNG）</span>
-          </button>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 font-medium">
-            <span class="text-base select-none shrink-0">🛡️</span>
-            <span><strong>ゼロリークくん：</strong>透かし処理はCanvas上で直接描画されています。画像が外部へ送られる心配はありません。</span>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-bold text-slate-700">文字の傾き（角度）：</span>
+            <span id="angleVal" class="font-mono text-blue-600 font-bold">-25°</span>
           </div>
+          <input
+            type="range"
+            id="angleSlider"
+            min="-60"
+            max="60"
+            value="-25"
+            class="w-full accent-blue-600 cursor-pointer"
+          />
         </div>
 
+        <!-- 文字色選択 -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 mb-1.5">文字の色：</span>
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+              <input type="radio" name="colorMode" value="red" checked class="accent-rose-600" />
+              <span class="w-3.5 h-3.5 rounded-full bg-rose-600 inline-block"></span>
+              <span>赤色 (警戒・目立つ)</span>
+            </label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+              <input type="radio" name="colorMode" value="dark" class="accent-slate-800" />
+              <span class="w-3.5 h-3.5 rounded-full bg-slate-800 inline-block"></span>
+              <span>黒色 (シック)</span>
+            </label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+              <input type="radio" name="colorMode" value="white" class="accent-slate-400" />
+              <span class="w-3.5 h-3.5 rounded-full bg-white border border-slate-300 inline-block"></span>
+              <span>白色 (反転)</span>
+            </label>
+          </div>
+        </div>
       </div>
 
-      <!-- 右カラム：リアルタイムプレビュー (7カラム) -->
-      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
-        
-        <!-- プレビューヘッダー -->
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-2">
-            <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
-              <span>🖼️ リアルタイム完成プレビュー</span>
-            </h2>
-            <span id="imageResolutionBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-              画像未選択
-            </span>
-          </div>
-          <span class="text-xs text-slate-600">提出先で文字が読めるか確認</span>
+      <!-- ダウンロード ＆ アクション -->
+      <div class="pt-2 border-t border-slate-100 space-y-2">
+        <button
+          type="button"
+          id="downloadBtn"
+          disabled
+          class="w-full py-3 px-4 rounded-xl font-bold text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>📥</span>
+          <span>透かし入り画像を保存（PNG）</span>
+        </button>
+        <div class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 font-medium">
+          <span class="text-base select-none shrink-0">🛡️</span>
+          <span><strong>ゼロリークくん：</strong>透かし処理はCanvas上で直接描画されています。画像が外部へ送られる心配はありません。</span>
         </div>
-
-        <!-- Canvas表示コンテナ -->
-        <div class="relative bg-slate-100/70 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center min-h-[360px] p-2">
-          <div id="emptyNotice" class="text-center text-slate-600 space-y-2 p-8">
-            <span class="text-4xl block">🪪</span>
-            <p class="text-sm font-bold text-slate-700">身分証画像が選択されていません</p>
-            <p class="text-xs text-slate-600 max-w-sm mx-auto">
-              左の「身分証を選択」から免許証等の写真を読み込むか、上の「🧪 サンプル身分証で試す」ボタンを押してください。
-            </p>
-          </div>
-          <canvas id="previewCanvas" class="max-w-full max-h-[500px] object-contain rounded shadow-xs hidden"></canvas>
-        </div>
-
-        <!-- 目視確認チェックボックス ＆ アラート -->
-        <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 space-y-1.5">
-          <div class="font-bold flex items-center gap-1 text-blue-950">
-            <span>⚠️ 提出前のチェックリスト</span>
-          </div>
-          <ul class="list-disc list-inside space-y-0.5 text-blue-800 text-[11px]">
-            <li>氏名・生年月日・住所・有効期限・写真が透かし文字で隠れて潰れていませんか？</li>
-            <li>濃すぎる場合は、左のスライダーで不透明度（20〜25%）を下げてください。</li>
-            <li>「〇〇提出用」と指定した提出先企業名・日付が正しく入っていますか？</li>
-          </ul>
-        </div>
-
       </div>
 
     </div>
 
-    <!-- なぜ無料・なぜ安全なのか（WhySection） -->
-    <WhySection slug="id-watermark" />
+    <!-- 右カラム：リアルタイムプレビュー (7カラム) -->
+    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+      
+      <!-- プレビューヘッダー -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
+            <span>🖼️ リアルタイム完成プレビュー</span>
+          </h2>
+          <span id="imageResolutionBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+            画像未選択
+          </span>
+        </div>
+        <span class="text-xs text-slate-600">提出先で文字が読めるか確認</span>
+      </div>
 
-    <!-- 相互回遊デッキ -->
-    <RelatedTools currentPath="/id-watermark/" />
+      <!-- Canvas表示コンテナ -->
+      <div class="relative bg-slate-100/70 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center min-h-[360px] p-2">
+        <div id="emptyNotice" class="text-center text-slate-600 space-y-2 p-8">
+          <span class="text-4xl block">🪪</span>
+          <p class="text-sm font-bold text-slate-700">身分証画像が選択されていません</p>
+          <p class="text-xs text-slate-600 max-w-sm mx-auto">
+            左の「身分証を選択」から免許証等の写真を読み込むか、上の「🧪 見本運転免許証で試す」ボタンを押してください。
+          </p>
+        </div>
+        <canvas id="previewCanvas" class="max-w-full max-h-[500px] object-contain rounded shadow-xs hidden"></canvas>
+      </div>
 
-    <!-- 情シス申請用仕様書モーダル -->
-    <SecuritySpecModal />
+      <!-- 目視確認チェックボックス ＆ アラート -->
+      <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 space-y-1.5">
+        <div class="font-bold flex items-center gap-1 text-blue-950">
+          <span>⚠️ 提出前のチェックリスト</span>
+        </div>
+        <ul class="list-disc list-inside space-y-0.5 text-blue-800 text-[11px]">
+          <li>氏名・生年月日・住所・有効期限・写真が透かし文字で隠れて潰れていませんか？</li>
+          <li>濃すぎる場合は、左のスライダーで不透明度（20〜25%）を下げてください。</li>
+          <li>「〇〇提出用」と指定した提出先企業名・日付が正しく入っていますか？</li>
+        </ul>
+      </div>
+
+    </div>
 
   </div>
-</Layout>
 
-<script>
-  import {
-    applyWatermarkToCanvas,
-    getTodayDateString,
-    generateDummyIdSvgUri,
-    DEFAULT_WATERMARK_OPTIONS,
-    type WatermarkOptions,
-    type WatermarkPattern
-  } from '../utils/id-watermark';
+  <!-- クライアントサイドスクリプト -->
+  <script>
+    import {
+      applyWatermarkToCanvas,
+      getTodayDateString,
+      generateDummyIdSvgUri,
+      DEFAULT_WATERMARK_OPTIONS,
+      type WatermarkOptions,
+      type WatermarkPattern
+    } from '../utils/id-watermark';
 
-  const imageFileInput = document.getElementById('imageFileInput') as HTMLInputElement;
-  const dropZone = document.getElementById('dropZone') as HTMLElement;
-  const loadSampleIdBtn = document.getElementById('loadSampleIdBtn') as HTMLButtonElement;
-  const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
-  const insertDateBtn = document.getElementById('insertDateBtn') as HTMLButtonElement;
-  const watermarkTextInput = document.getElementById('watermarkTextInput') as HTMLInputElement;
-  const opacitySlider = document.getElementById('opacitySlider') as HTMLInputElement;
-  const opacityValLabel = document.getElementById('opacityValLabel') as HTMLElement;
-  const fontSizeSlider = document.getElementById('fontSizeSlider') as HTMLInputElement;
-  const fontSizeValLabel = document.getElementById('fontSizeValLabel') as HTMLElement;
-  const angleSlider = document.getElementById('angleSlider') as HTMLInputElement;
-  const angleValLabel = document.getElementById('angleValLabel') as HTMLElement;
-  const downloadImageBtn = document.getElementById('downloadImageBtn') as HTMLButtonElement;
-  const previewCanvas = document.getElementById('previewCanvas') as HTMLCanvasElement;
-  const emptyNotice = document.getElementById('emptyNotice') as HTMLElement;
-  const imageResolutionBadge = document.getElementById('imageResolutionBadge') as HTMLElement;
+    const imageFileInput = document.getElementById('imageFileInput') as HTMLInputElement;
+    const dropZone = document.getElementById('dropZone') as HTMLElement;
+    const loadSampleIdBtn = document.getElementById('loadSampleIdBtn') as HTMLButtonElement;
+    const insertDateBtn = document.getElementById('insertDateBtn') as HTMLButtonElement;
+    const watermarkText = document.getElementById('watermarkText') as HTMLTextAreaElement;
+    const opacitySlider = document.getElementById('opacitySlider') as HTMLInputElement;
+    const opacityVal = document.getElementById('opacityVal') as HTMLElement;
+    const fontSizeSlider = document.getElementById('fontSizeSlider') as HTMLInputElement;
+    const fontSizeVal = document.getElementById('fontSizeVal') as HTMLElement;
+    const angleSlider = document.getElementById('angleSlider') as HTMLInputElement;
+    const angleVal = document.getElementById('angleVal') as HTMLElement;
+    const previewCanvas = document.getElementById('previewCanvas') as HTMLCanvasElement;
+    const emptyNotice = document.getElementById('emptyNotice') as HTMLElement;
+    const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
+    const imageResolutionBadge = document.getElementById('imageResolutionBadge') as HTMLElement;
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    const patternLabels = document.querySelectorAll('.pattern-label');
 
-  let currentImage: HTMLImageElement | null = null;
-  let currentFileName = 'watermarked_id.png';
+    let currentLoadedImage: HTMLImageElement | null = null;
+    let originalFileName: string = 'watermarked_id.png';
 
-  const currentOptions: WatermarkOptions = {
-    ...DEFAULT_WATERMARK_OPTIONS
-  };
+    function getCurrentOptions(): WatermarkOptions {
+      const selectedPatternRadio = document.querySelector('input[name="pattern"]:checked') as HTMLInputElement;
+      const pattern = (selectedPatternRadio ? selectedPatternRadio.value : 'repeat') as WatermarkPattern;
 
-  function updatePreview() {
-    if (!currentImage) {
-      previewCanvas.classList.add('hidden');
-      emptyNotice.classList.remove('hidden');
-      downloadImageBtn.disabled = true;
-      imageResolutionBadge.textContent = '画像未選択';
-      return;
+      const selectedColorRadio = document.querySelector('input[name="colorMode"]:checked') as HTMLInputElement;
+      const colorMode = selectedColorRadio ? selectedColorRadio.value : 'red';
+      const color = colorMode === 'red' ? '#dc2626' : colorMode === 'dark' ? '#0f172a' : '#ffffff';
+
+      const opacity = parseInt(opacitySlider.value, 10) / 100;
+      const fontSize = parseInt(fontSizeSlider.value, 10);
+      const angle = parseInt(angleSlider.value, 10);
+
+      return {
+        text: watermarkText.value.trim() || '〇〇提出用 悪用禁止',
+        opacity,
+        fontSize,
+        angle,
+        pattern,
+        color,
+      };
     }
 
-    const width = currentImage.naturalWidth || currentImage.width;
-    const height = currentImage.naturalHeight || currentImage.height;
+    function renderWatermark() {
+      if (!currentLoadedImage) return;
 
-    previewCanvas.width = width;
-    previewCanvas.height = height;
+      const width = currentLoadedImage.naturalWidth || currentLoadedImage.width;
+      const height = currentLoadedImage.naturalHeight || currentLoadedImage.height;
 
-    const ctx = previewCanvas.getContext('2d');
-    if (!ctx) return;
+      previewCanvas.width = width;
+      previewCanvas.height = height;
 
-    // 1. 元画像を描画
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(currentImage, 0, 0, width, height);
+      const ctx = previewCanvas.getContext('2d');
+      if (!ctx) return;
 
-    // 2. 透かしを描画（解像度に応じたフォントスケール補正）
-    // 基準幅 800px を想定し、高解像度画像（2000px等）の場合は比率でスケール
-    const scale = Math.max(width / 800, 1.0);
-    const scaledOptions: WatermarkOptions = {
-      ...currentOptions,
-      fontSize: currentOptions.fontSize * scale
-    };
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(currentLoadedImage, 0, 0, width, height);
 
-    applyWatermarkToCanvas(ctx, width, height, scaledOptions);
+      const opts = getCurrentOptions();
+      applyWatermarkToCanvas(ctx, width, height, opts);
 
-    previewCanvas.classList.remove('hidden');
-    emptyNotice.classList.add('hidden');
-    downloadImageBtn.disabled = false;
-    imageResolutionBadge.textContent = `${width} × ${height} px`;
-  }
-
-  function loadImageFromUri(uri: string, filename: string) {
-    const img = new Image();
-    img.onload = () => {
-      currentImage = img;
-      currentFileName = filename;
-      updatePreview();
-    };
-    img.src = uri;
-  }
-
-  function handleFileSelect(file: File) {
-    if (!file.type.startsWith('image/')) {
-      alert('画像ファイル（PNG、JPEG、WebP）を選択してください。');
-      return;
+      emptyNotice.classList.add('hidden');
+      previewCanvas.classList.remove('hidden');
+      downloadBtn.removeAttribute('disabled');
+      imageResolutionBadge.textContent = `${width} × ${height} px`;
     }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUri = e.target?.result as string;
-      loadImageFromUri(dataUri, file.name.replace(/\.[^/.]+$/, '') + '_watermarked.png');
-    };
-    reader.readAsDataURL(file);
-  }
 
-  // ファイル入力
-  dropZone.addEventListener('click', () => imageFileInput.click());
-  imageFileInput.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (file) handleFileSelect(file);
-  });
-
-  // ドラッグ＆ドロップ
-  dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('border-blue-500', 'bg-blue-50/50');
-  });
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-blue-500', 'bg-blue-50/50');
-  });
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('border-blue-500', 'bg-blue-50/50');
-    const file = e.dataTransfer?.files[0];
-    if (file) handleFileSelect(file);
-  });
-
-  // Ctrl+V クリップボード貼り付け
-  window.addEventListener('paste', (e) => {
-    const items = e.clipboardData?.items;
-    if (!items) return;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf('image') !== -1) {
-        const file = items[i].getAsFile();
-        if (file) handleFileSelect(file);
-        break;
-      }
+    function loadImageFromSrc(src: string, fileName: string = 'sample_id.png') {
+      const img = new Image();
+      img.onload = () => {
+        currentLoadedImage = img;
+        originalFileName = fileName;
+        renderWatermark();
+      };
+      img.src = src;
     }
-  });
 
-  // サンプル身分証投入
-  loadSampleIdBtn.addEventListener('click', () => {
-    const sampleUri = generateDummyIdSvgUri();
-    loadImageFromUri(sampleUri, 'sample_license_watermarked.png');
-  });
-
-  // リセット
-  resetBtn.addEventListener('click', () => {
-    currentImage = null;
-    imageFileInput.value = '';
-    updatePreview();
-  });
-
-  // 透かしテキスト変更
-  watermarkTextInput.addEventListener('input', () => {
-    currentOptions.text = watermarkTextInput.value;
-    updatePreview();
-  });
-
-  // 今日の日付を挿入
-  insertDateBtn.addEventListener('click', () => {
-    const today = getTodayDateString();
-    if (!watermarkTextInput.value.includes(today)) {
-      watermarkTextInput.value = `${today} ${watermarkTextInput.value}`.trim();
-      currentOptions.text = watermarkTextInput.value;
-      updatePreview();
-    }
-  });
-
-  // プリセットボタン
-  document.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const text = btn.getAttribute('data-text');
-      if (text) {
-        watermarkTextInput.value = text;
-        currentOptions.text = text;
-        updatePreview();
+    // ファイル選択
+    imageFileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          loadImageFromSrc(event.target?.result as string, file.name);
+        };
+        reader.readAsDataURL(file);
       }
     });
-  });
 
-  // パターン切替
-  const patternButtons = document.querySelectorAll<HTMLButtonElement>('.pattern-tab-btn');
-  patternButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const pattern = btn.getAttribute('data-pattern') as WatermarkPattern;
-      currentOptions.pattern = pattern;
-      patternButtons.forEach((b) => {
-        if (b === btn) {
-          b.className = 'pattern-tab-btn py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition';
-        } else {
-          b.className = 'pattern-tab-btn py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
-        }
+    // ドラッグ＆ドロップ
+    dropZone.addEventListener('click', () => imageFileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-blue-500', 'bg-blue-50/40');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50/40');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50/40');
+      const file = e.dataTransfer?.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          loadImageFromSrc(event.target?.result as string, file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // スライダー連動
+    opacitySlider.addEventListener('input', () => {
+      opacityVal.textContent = `${opacitySlider.value}%`;
+      renderWatermark();
+    });
+
+    fontSizeSlider.addEventListener('input', () => {
+      const val = parseInt(fontSizeSlider.value, 10);
+      fontSizeVal.textContent = val < 30 ? '小' : val < 45 ? '中' : '大';
+      renderWatermark();
+    });
+
+    angleSlider.addEventListener('input', () => {
+      angleVal.textContent = `${angleSlider.value}°`;
+      renderWatermark();
+    });
+
+    watermarkText.addEventListener('input', renderWatermark);
+
+    document.querySelectorAll('input[name="pattern"]').forEach((el) => {
+      el.addEventListener('change', () => {
+        patternLabels.forEach((lbl) => {
+          const radio = lbl.querySelector('input') as HTMLInputElement;
+          if (radio.checked) {
+            lbl.className = 'pattern-label flex flex-col items-center justify-center p-2.5 rounded-xl border border-blue-500 bg-blue-50/50 cursor-pointer text-center transition';
+          } else {
+            lbl.className = 'pattern-label flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer text-center transition';
+          }
+        });
+        renderWatermark();
       });
-      updatePreview();
     });
-  });
 
-  // 不透明度スライダー
-  opacitySlider.addEventListener('input', () => {
-    const val = parseInt(opacitySlider.value, 10);
-    currentOptions.opacity = val / 100;
-    opacityValLabel.textContent = `${val}% ${val <= 30 ? '(推奨)' : '(濃いめ)'}`;
-    updatePreview();
-  });
+    document.querySelectorAll('input[name="colorMode"]').forEach((el) => {
+      el.addEventListener('change', renderWatermark);
+    });
 
-  // 文字サイズスライダー
-  fontSizeSlider.addEventListener('input', () => {
-    const val = parseInt(fontSizeSlider.value, 10);
-    currentOptions.fontSize = val;
-    fontSizeValLabel.textContent = `${val} px`;
-    updatePreview();
-  });
-
-  // 角度スライダー
-  angleSlider.addEventListener('input', () => {
-    const val = parseInt(angleSlider.value, 10);
-    currentOptions.angle = val;
-    angleValLabel.textContent = `${val}°`;
-    updatePreview();
-  });
-
-  // 文字色
-  document.querySelectorAll<HTMLInputElement>('input[name="watermarkColor"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      currentOptions.color = radio.value;
-      // リング表示切り替え
-      document.querySelectorAll('.color-choice-label span:first-of-type').forEach((circle) => {
-        circle.classList.remove('ring-2', 'ring-blue-500');
-        circle.classList.add('ring-1', 'ring-slate-300');
+    // プリセットボタン
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        watermarkText.value = btn.textContent?.trim() || '';
+        renderWatermark();
       });
-      const checkedCircle = radio.parentElement?.querySelector('span:first-of-type');
-      if (checkedCircle) {
-        checkedCircle.classList.remove('ring-1', 'ring-slate-300');
-        checkedCircle.classList.add('ring-2', 'ring-blue-500');
-      }
-      updatePreview();
     });
-  });
 
-  // ダウンロード
-  downloadImageBtn.addEventListener('click', () => {
-    if (!currentImage) return;
-    previewCanvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
+    // 日付挿入
+    insertDateBtn.addEventListener('click', () => {
+      const today = getTodayDateString();
+      if (!watermarkText.value.includes(today)) {
+        watermarkText.value = `${watermarkText.value} ${today}`.trim();
+        renderWatermark();
+      }
+    });
+
+    // サンプル投入
+    loadSampleIdBtn?.addEventListener('click', () => {
+      const sampleUri = generateDummyIdSvgUri();
+      loadImageFromSrc(sampleUri, '見本_運転免許証.png');
+    });
+
+    // ダウンロード
+    downloadBtn.addEventListener('click', () => {
+      if (!currentLoadedImage) return;
+      const dataUrl = previewCanvas.toDataURL('image/png');
       const a = document.createElement('a');
-      a.href = url;
-      a.download = currentFileName;
+      a.href = dataUrl;
+      const baseName = originalFileName.replace(/\.[^/.]+$/, '');
+      a.download = `${baseName}_watermarked.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 'image/png');
-  });
-</script>
+    });
+  </script>
+</ToolShell>
