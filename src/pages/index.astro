@@ -63,29 +63,29 @@ const hubs = [
 >
   <div class="space-y-6 sm:space-y-10 py-1 sm:py-3">
 
-    <!-- ヒーロー：スマホでは超コンパクト・PCでは2カラム -->
+    <!-- ヒーロー：スマホでは横並びで省スペース＆マスコット大型化・PCでは2カラム -->
     <section class="max-w-5xl mx-auto px-2 sm:px-4">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-xs">
-        <div class="space-y-2 sm:space-y-3 text-left min-w-0 flex-1">
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-semibold">
+      <div class="flex flex-row items-center justify-between gap-3 sm:gap-8 bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 shadow-xs">
+        <div class="space-y-1.5 sm:space-y-3 text-left min-w-0 flex-1">
+          <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] sm:text-xs font-semibold">
             <span>🛡️ 番人ゼロリークくんが安心保証</span>
           </div>
-          <h1 class="text-lg sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
-            機密ファイルを<span class="text-emerald-600">1バイトも送信しない</span>、安心のローカル業務ツール
+          <h1 class="text-base sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+            機密ファイルを<span class="text-emerald-600">外部送信ゼロ</span>で安心処理
           </h1>
-          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            給与明細・契約書・名簿CSV・社外秘ログをブラウザ内メモリだけで安全処理。登録不要・完全無料・通信0バイト。
+          <p class="text-slate-600 text-[11px] sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
+            給与明細・契約書・CSV・ログをブラウザ内メモリだけで安全処理。登録不要・完全無料。
           </p>
         </div>
 
-        <div class="flex items-center gap-3 shrink-0 self-center sm:self-auto">
+        <div class="flex items-center shrink-0 self-center">
           <Mascot
             name="hero-home"
             fallback="🛡️"
             alt="ゼロリークくん"
             width={320}
             eager
-            class="w-20 sm:w-36 md:w-44 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl"
+            class="w-24 sm:w-36 md:w-44 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shadow-2xs border border-slate-100"
           />
         </div>
       </div>
@@ -106,7 +106,7 @@ const hubs = [
         {hubs.map((h) => (
           <a
             href={h.category.hubPath}
-            class={`p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border ${h.theme.border} hover:shadow-xs transition flex flex-col justify-between text-left group`}
+            class={`p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white border ${h.theme.border} hover:shadow-xs transition flex flex-col justify-between text-left group`}
           >
             <div class="flex items-center justify-between">
               <span class="text-xl sm:text-2xl">{h.category.icon}</span>
@@ -115,8 +115,9 @@ const hubs = [
               </span>
             </div>
             <div class="mt-1.5 sm:mt-2">
-              <div class={`text-xs sm:text-sm font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors truncate`}>
-                {h.category.label}
+              <div class={`text-[11px] sm:text-sm font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors leading-tight`}>
+                <span class="sm:hidden">{h.category.mobileLabel ?? h.category.label}</span>
+                <span class="hidden sm:inline">{h.category.label}</span>
               </div>
               <div class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5 hidden sm:block">
                 {h.category.tagline}
@@ -148,26 +149,32 @@ const hubs = [
             </a>
           </div>
 
-          <!-- ツール一覧：スマホでは1行リスト型、PCでは3列カード -->
-          <!-- 1. スマホ表示用：1行コンパクトリスト（高さ抑えて劇的ダイエット） -->
+          <!-- ツール一覧：スマホではサムネイル付きリスト型、PCでは3列カード -->
+          <!-- 1. スマホ表示用：ZeroLeakくんサムネイル付きの薄型リスト（高さ抑えて劇的ダイエット） -->
           <div class="grid grid-cols-1 gap-2 sm:hidden">
             {h.tools.map((t) => (
               <a
                 href={t.href}
-                class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 transition-colors group"
+                class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 transition-colors group"
               >
                 <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                  <span class="text-xl shrink-0">{t.icon}</span>
+                  <Mascot
+                    name={t.image}
+                    fallback={t.icon}
+                    alt=""
+                    width={96}
+                    class="w-12 h-12 rounded-lg object-cover shrink-0 shadow-2xs border border-slate-200/60"
+                  />
                   <div class="min-w-0">
                     <div class="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">
-                      {t.name}
+                      {t.shortName ?? t.name}
                     </div>
                     <div class="text-[11px] text-slate-500 truncate mt-0.5">
                       {t.tagline}
                     </div>
                   </div>
                 </div>
-                <span class="text-[11px] font-bold text-slate-700 bg-white px-2 py-1 rounded-lg border border-slate-200 shadow-2xs shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                <span class="text-[11px] font-bold text-slate-700 bg-white px-2 py-1.5 rounded-lg border border-slate-200 shadow-2xs shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
                   開く ▶
                 </span>
               </a>

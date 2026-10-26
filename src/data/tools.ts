@@ -34,6 +34,7 @@ export type CategoryId = 'all' | 'id_privacy' | 'document_legal' | 'dev_security
 export interface ToolCategory {
   id: CategoryId;
   label: string;
+  mobileLabel?: string;
   icon: string;
   description: string;
   hubPath?: string;
@@ -46,6 +47,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: 'id_privacy',
     label: '本人確認・個人情報・画像',
+    mobileLabel: '本人確認・個人',
     icon: '🪪',
     description: '身分証透かし、給与明細、マイナンバーCSV、写真の位置情報保護',
     hubPath: '/privacy/',
@@ -55,6 +57,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: 'document_legal',
     label: 'PDF・Office・契約書・法務',
+    mobileLabel: 'PDF・契約書',
     icon: '📑',
     description: '機密PDFの完全黒塗り、パスワード解除、Officeメタデータ消去、契約書Diff',
     hubPath: '/pdf/',
@@ -64,6 +67,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: 'dev_security',
     label: 'ITセキュリティ・開発者',
+    mobileLabel: 'IT・開発ログ',
     icon: '💻',
     description: 'HAR/エラーログ/.envマスク、AIプロンプト仮名化、画面モザイク',
     hubPath: '/dev/',
@@ -76,6 +80,7 @@ export interface Tool {
   slug: string;
   href: string;
   name: string;
+  shortName?: string;
   tagline: string;
   icon: string;
   image: string; // illustrations 内のファイル名（拡張子なし）
@@ -207,6 +212,7 @@ export const tools: Tool[] = [
     slug: 'local-mosaic',
     href: '/local-mosaic/',
     name: '画像 モザイク＆黒塗り加工',
+    shortName: '画像モザイク・不可逆黒塗り',
     tagline: '画面スクショ・顔・ナンバーを不可逆に加工',
     icon: '🕶️',
     image: 'tool-mosaic',
@@ -241,6 +247,7 @@ export const tools: Tool[] = [
     slug: 'ai-prompt-sanitizer',
     href: '/ai-prompt-sanitizer/',
     name: 'AIプロンプト 機密サニタイザー',
+    shortName: 'AIプロンプト 機密仮名化＆復元',
     tagline: 'ChatGPT送信前に仮名化。回答は実名に復元',
     icon: '🤖',
     image: 'tool-ai',
@@ -275,6 +282,7 @@ export const tools: Tool[] = [
     slug: 'log-masking',
     href: '/log-masking/',
     name: 'HAR・ログ・.env 機密マスク',
+    shortName: 'HAR・ログ・.env マスク',
     tagline: 'Cookie・Bearer・APIキーを外部提出前に一括無害化',
     icon: '🛡️',
     image: 'tool-log',
@@ -343,6 +351,7 @@ export const tools: Tool[] = [
     slug: 'contract-diff',
     href: '/contract-diff/',
     name: '契約書・NDA 秘密保持Diff比較',
+    shortName: '契約書・NDA Diff比較',
     tagline: '未締結契約・NDAの新旧差分をブラウザ内比較。赤入れPDF出力',
     icon: '⚖️',
     image: 'tool-diff',
@@ -377,7 +386,8 @@ export const tools: Tool[] = [
     slug: 'id-watermark',
     href: '/id-watermark/',
     name: '身分証・マイナンバー 悪用防止透かし焼き込み',
-    tagline: '免許証・マイナンバー提出時の不正利用防止。文字・角度・透明度を調整',
+    shortName: '身分証 透かし焼き込み',
+    tagline: '免許証提出時の不正利用防止。文字・角度を調整',
     icon: '🪪',
     image: 'tool-watermark',
     category: 'id_privacy',
@@ -411,6 +421,7 @@ export const tools: Tool[] = [
     slug: 'office-metadata-wiper',
     href: '/office-metadata-wiper/',
     name: 'Office文書 メタデータ消去',
+    shortName: 'Excel/Word メタデータ消去',
     tagline: 'Excel/Wordの作成者・会社名・履歴を抹消',
     icon: '📑',
     image: 'tool-diff',
