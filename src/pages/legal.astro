@@ -1,122 +1,239 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Mascot from '../components/Mascot.astro';
 ---
 
 <Layout
-  title="利用規約・免責事項・プライバシーポリシー"
-  description="ZeroLeak Toolsの利用規約、完全免責事項、およびプライバシーポリシー。完全ローカル処理に関するセキュリティ指針。"
+  title="利用規約・免責事項・プライバシーポリシー - ZeroLeak Tools"
+  description="ZeroLeak Toolsの利用規約、免責事項、およびプライバシーポリシー。端末内完全ローカル処理に関するセキュリティ指針。"
   canonicalPath="/legal/"
 >
-  <div class="max-w-4xl mx-auto py-4 sm:py-6 space-y-8 sm:space-y-10">
-    <!-- ヘッダー -->
-    <div class="border-b border-slate-200 pb-4 sm:pb-6">
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">利用規約 ＆ 法務ポリシー</h1>
-      <p class="text-slate-500 text-xs sm:text-sm mt-1 sm:mt-2">
-        制定日: 2026年10月10日 | 最終改定日: 2026年10月10日
-      </p>
+  <div class="max-w-4xl mx-auto py-3 sm:py-6 space-y-6 sm:space-y-8 text-left">
+
+    <!-- ページヘッダー：親しみやすく安心感のあるトーン -->
+    <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-semibold">
+            <span>🛡️ ゼロリークくんの安心ガイド</span>
+          </div>
+          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            ご利用規約 ＆ プライバシーポリシー
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-2xl">
+            ZeroLeak Tools（ゼロリーク・ツールズ）をいつでも安心・安全にご利用いただくための技術方針、利用ルール、および免責事項をわかりやすく定めています。
+          </p>
+        </div>
+        <div class="shrink-0 hidden sm:block">
+          <Mascot
+            name="hero-home"
+            fallback="🛡️"
+            alt="ゼロリークくん"
+            width={160}
+            class="w-24 sm:w-28 aspect-[4/3] object-cover rounded-xl border border-slate-100 shadow-2xs"
+          />
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+        <span>制定日: 2026年10月10日</span>
+        <span>最終改定日: 2026年10月26日</span>
+      </div>
     </div>
 
-    <!-- 0バイト保証・セキュリティ原則 -->
-    <section class="bg-white border border-emerald-200 rounded-2xl p-5 sm:p-6 shadow-xs">
-      <div class="flex items-center gap-3 mb-3 sm:mb-4">
-        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-lg border border-emerald-100">🛡️</span>
-        <h2 class="text-lg sm:text-xl font-bold text-emerald-950">完全ローカル・外部送信0バイトの技術原則</h2>
-      </div>
-      <p class="text-slate-700 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
-        ZeroLeak Tools（以下「当サイト」）で提供されるすべてのツール（CSVマスキング、PDFパスワード解除等）は、
-        <strong>ご利用者の端末（ブラウザ内部のJavaScript / WebAssembly / メモリ上）のみで完結して実行</strong>されます。
-      </p>
-      <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 pl-1 sm:pl-2">
-        <li>アップロードされたファイルや入力テキストデータが、当サイトのサーバーや第三者のサーバーへ送信されることは一切ありません。</li>
-        <li>サーバーログやアクセスログに入力データが記録されることは技術的に不可能です。</li>
-        <li>ブラウザのF12開発者ツール（Networkタブ）を開いていただくことで、ツールの操作中に外部通信が0件であることをいつでもご自身でご確認いただけます。</li>
-      </ul>
-    </section>
-
-    <!-- 完全免責事項 -->
-    <section class="space-y-3 sm:space-y-4">
-      <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-        1. 免責事項（完全免責の合意）
+    <!-- 【ひと目でわかる】3大安心サマリーカード（ファーストビューで要点把握） -->
+    <section class="space-y-2.5">
+      <h2 class="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider px-1">
+        30秒でわかる安心の要点
       </h2>
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 text-xs sm:text-sm text-slate-700 space-y-3 leading-relaxed shadow-xs">
-        <p>
-          当サイトのツールは、可能な限りの精度・整合性を保つよう設計されていますが、プログラムの正確性、完全性、特定目的への適合性についてはいかなる保証も行いません。
-        </p>
-        <p>
-          当ツールの利用により生じた、直接的・間接的・派生的損害（ファイルの破損・消失、マスキング漏れによる損害、業務の中断、利益の損失等）について、当サイト運営者は一切の法的責任を負いかねます。
-        </p>
-        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium">
-          ※ 重要な業務データや提出書類を取り扱う際は、必ず事前に元ファイルのバックアップを取得した上でご利用ください。またマスキング結果は提出前に必ず目視で再確認してください。
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🛡️</span>
+            <div class="text-xs sm:text-sm font-bold text-emerald-950">外部送信ゼロ保証</div>
+          </div>
+          <p class="text-[11px] sm:text-xs text-emerald-900/80 leading-relaxed">
+            ファイルや文字はブラウザのメモリ上だけで処理。サーバーへ1バイトも送信・保存されません。
+          </p>
+        </div>
+
+        <div class="bg-blue-50/70 border border-blue-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">💾</span>
+            <div class="text-xs sm:text-sm font-bold text-blue-950">原本のバックアップ推奨</div>
+          </div>
+          <p class="text-[11px] sm:text-xs text-blue-900/80 leading-relaxed">
+            マスキングや墨消しを行う前に、お手元のPCに大切な元ファイルの控えを残してご利用ください。
+          </p>
+        </div>
+
+        <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🔑</span>
+            <div class="text-xs sm:text-sm font-bold text-amber-950">正規保有ファイル限定</div>
+          </div>
+          <p class="text-[11px] sm:text-xs text-amber-900/80 leading-relaxed">
+            パスワード解除等は、ご自身が閲覧権限とパスワードをお持ちの正規書類にのみお使いください。
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- パスワード解除ツールの適法利用規約 -->
-    <section class="space-y-3 sm:space-y-4">
-      <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-        2. PDFパスワード解除ツールの利用規律（適法利用の誓約）
-      </h2>
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 text-xs sm:text-sm text-slate-700 space-y-3 leading-relaxed shadow-xs">
+    <!-- 0バイト保証・セキュリティ原則 -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+      <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+        <span class="text-lg">🛡️</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+          外部送信0バイトの技術原則
+        </h2>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+        ZeroLeak Tools（以下「当サイト」）で提供されるすべてのツール（CSVマスキング、PDFパスワード解除、EXIF削除、墨消し等）は、
+        <strong>ご利用者の端末（ブラウザ内部のJavaScript / WebAssembly / メモリ上）のみで完結して実行</strong>されます。
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <div class="text-xs font-bold text-slate-900">① サーバー送信ゼロ</div>
+          <p class="text-[11px] text-slate-600 leading-normal">
+            アップロードされたファイルや入力テキストが、当サイトや第三者のサーバーへ送信されることは一切ありません。
+          </p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <div class="text-xs font-bold text-slate-900">② ログ蓄積ゼロ</div>
+          <p class="text-[11px] text-slate-600 leading-normal">
+            サーバー側で計算を行わない静的配信のため、入力データがアクセスログ等に記録されることは技術的に不可能です。
+          </p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <div class="text-xs font-bold text-slate-900">③ F12でいつでも検証可能</div>
+          <p class="text-[11px] text-slate-600 leading-normal">
+            ブラウザのF12開発者ツール（Networkタブ）で、ツール操作中に外部通信が0件であることを目視確認できます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. 免責事項 -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+      <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+        <span class="text-lg">⚖️</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+          1. 免責事項（ご利用にあたってのご留意点）
+        </h2>
+      </div>
+      <div class="text-xs sm:text-sm text-slate-700 space-y-2.5 leading-relaxed">
         <p>
-          当サイトの「PDFパスワード安全解除ツール」は、<strong>ご利用者ご自身が正規にパスワードを知っており、かつ閲覧・編集・保存の正当な権限を有しているファイル（ご自身の給与明細、源泉徴収票、自身宛ての請求書等）</strong>から、提出便宜（住宅ローン審査や確定申告提出等）のために既知のパスワードを除去することを目的としています。
+          当サイトのツールは、可能な限りの精度・整合性を保つよう細心の注意を払って設計されていますが、プログラムの正確性、完全性、および特定の利用目的への適合性についてはいかなる保証も行いません。
         </p>
-        <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-medium">
+        <p>
+          当ツールの利用により生じた、直接的・間接的・派生的損害（ファイルの破損・消失、マスキング漏れによる損害、業務の中断、利益の損失等）について、当サイト運営者は一切の法的責任を負いかねます。
+        </p>
+      </div>
+      <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-xs leading-relaxed flex items-start gap-2">
+        <span class="text-base shrink-0">💡</span>
+        <div>
+          <strong>【ご利用前のお願い】</strong><br />
+          重要な業務データや官公庁・取引先への提出書類を取り扱う際は、必ず事前に元ファイルのバックアップ（控え）をお手元に保存した上でご利用ください。また、マスキングや墨消しの結果は提出前に必ず目視で再確認してください。
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. パスワード解除ツールの適法利用規約 -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+      <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+        <span class="text-lg">🔓</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+          2. PDFパスワード解除ツールの利用規約（正当なファイルのみ）
+        </h2>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+        当サイトの「PDFパスワード解除ツール」は、<strong>ご利用者ご自身が正規にパスワードを知っており、かつ閲覧・編集・保存の正当な権限を有しているファイル（ご自身の給与明細、源泉徴収票、自身宛ての請求書等）</strong>から、提出便宜（住宅ローン審査や確定申告提出等）のために既知のパスワードを除去することを目的としています。
+      </p>
+      <div class="p-3.5 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900 text-xs leading-relaxed flex items-start gap-2">
+        <span class="text-base shrink-0">🚫</span>
+        <div>
           <strong>【禁止事項】</strong><br />
           第三者の不正なファイル、不正アクセス行為、クラッキング、著作権侵害、その他法令に反する目的での利用を固く禁じます。本ツールは総当たり攻撃（ブルートフォース）等を行うツールではありません。
         </div>
       </div>
     </section>
 
-    <!-- AdSense対応プライバシーポリシー -->
-    <section class="space-y-3 sm:space-y-4">
-      <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-        3. プライバシーポリシー（個人情報保護方針）
-      </h2>
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 text-xs sm:text-sm text-slate-700 space-y-4 leading-relaxed shadow-xs">
-        <div>
-          <h3 class="font-bold text-slate-900 mb-1">個人情報の取り扱い</h3>
-          <p class="text-slate-600">
-            当サイトは、ツールに入力された氏名、電話番号、マイナンバー、給与情報等の個人情報を一切収集・蓄積・外部送信いたしません。
+    <!-- 3. プライバシーポリシー -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+      <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+        <span class="text-lg">🔒</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+          3. プライバシーポリシー（個人情報の取り扱い）
+        </h2>
+      </div>
+
+      <div class="space-y-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <h3 class="font-bold text-slate-900">個人情報の不保持・非送信</h3>
+          <p class="text-slate-600 text-xs">
+            当サイトは、ツールに入力された氏名、電話番号、マイナンバー、給与情報、社内機密等のデータを一切収集・蓄積・外部送信いたしません。
           </p>
         </div>
 
-        <div>
-          <h3 class="font-bold text-slate-900 mb-1">Cookie（クッキー）および広告配信について</h3>
-          <p class="text-slate-600">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <h3 class="font-bold text-slate-900">Cookie（クッキー）および広告配信について</h3>
+          <p class="text-slate-600 text-xs">
             当サイトでは、サービスの改善および今後の適切な広告配信（Google AdSense等を含む第三者配信事業者）のために、Cookieを使用する場合があります。
             Googleなどの第三者配信事業者は、Cookieを使用して、ユーザーが当サイトや他のウェブサイトに過去にアクセスした際の情報に基づいて広告を配信します。
           </p>
-          <p class="text-xs text-slate-500 mt-1">
-            ユーザーは、Googleの広告設定（<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline font-medium">https://adssettings.google.com/</a>）でパーソナライズ広告を無効にできます。また、ブラウザの設定によりCookieの受け入れを拒否することも可能です。
+          <p class="text-[11px] text-slate-500 pt-1">
+            ユーザーは、Googleの広告設定（<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline font-medium">https://adssettings.google.com/</a>）でパーソナライズ広告を無効にできます。また、お使いのブラウザの設定によりCookieの受け入れを拒否することも可能です。
           </p>
         </div>
 
-        <div>
-          <h3 class="font-bold text-slate-900 mb-1">アクセス解析について</h3>
-          <p class="text-slate-600">
-            当サイトは利用者のプライバシー保護を最優先とし、個人を特定できる外部トラッキングは行いません。将来的にサイトパフォーマンス測定を行う場合でも、匿名化された集計データのみを取り扱います。
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <h3 class="font-bold text-slate-900">アクセス解析について</h3>
+          <p class="text-slate-600 text-xs">
+            当サイトは利用者のプライバシー保護を最優先とし、個人を特定できる外部トラッキングは行いません。将来的にサイトパフォーマンス測定を行う場合でも、個人と紐付かない匿名化された集計データのみを取り扱います。
           </p>
         </div>
       </div>
     </section>
 
-    <!-- 運営者情報 -->
-    <section class="space-y-3 sm:space-y-4">
-      <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-        4. 運営者情報 ＆ お問い合わせ
-      </h2>
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 text-xs sm:text-sm text-slate-700 space-y-2 leading-relaxed shadow-xs">
-        <p><strong>サイト名:</strong> ZeroLeak Tools（ゼロリーク・ツールズ）</p>
-        <p><strong>運営組織:</strong> ZeroLeak オープンテクノロジー開発チーム</p>
-        <p><strong>配信基盤:</strong> Cloudflare Pages（静的エッジ配信・維持費完全0円モデル）</p>
-        <p class="text-xs text-slate-500 pt-2 border-t border-slate-100">
-          お問い合わせやセキュリティに関するご質問・技術検証のご相談は、サイトヘッダーに記載の公式リポジトリまたは運営窓口までお願いいたします。
-        </p>
+    <!-- 4. 運営者情報 -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+      <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+        <span class="text-lg">🏢</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+          4. 運営者情報 ＆ お問い合わせ
+        </h2>
       </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-700 pt-1">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <div class="text-[11px] text-slate-400 font-bold mb-0.5">サイト名</div>
+          <div class="font-semibold text-slate-900">ZeroLeak Tools</div>
+          <div class="text-[10px] text-slate-500">（ゼロリーク・ツールズ）</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <div class="text-[11px] text-slate-400 font-bold mb-0.5">運営組織</div>
+          <div class="font-semibold text-slate-900">ZeroLeak 開発チーム</div>
+          <div class="text-[10px] text-slate-500">（完全ローカルOSS技術推進）</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <div class="text-[11px] text-slate-400 font-bold mb-0.5">配信インフラ</div>
+          <div class="font-semibold text-slate-900">Cloudflare Pages</div>
+          <div class="text-[10px] text-slate-500">（静的エッジ配信・維持費0円モデル）</div>
+        </div>
+      </div>
+      <p class="text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+        セキュリティに関するご質問や技術検証のご相談は、公式サイトまたは公式GitHubリポジトリ窓口までお願いいたします。
+      </p>
     </section>
+
+    <!-- トップへ戻るボタン -->
+    <div class="text-center pt-2 pb-6">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs sm:text-sm hover:bg-slate-800 transition shadow-xs"
+      >
+        <span>←</span>
+        <span>ツール一覧に戻る</span>
+      </a>
+    </div>
+
   </div>
 </Layout>
