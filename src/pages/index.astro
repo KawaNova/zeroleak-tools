@@ -26,6 +26,7 @@ const hubs = [
       badge: 'bg-blue-50 text-blue-800 border-blue-200',
       btn: 'bg-blue-600 hover:bg-blue-700 text-white',
       accent: 'text-blue-700',
+      bgLight: 'bg-blue-50/50',
     },
   },
   {
@@ -37,6 +38,7 @@ const hubs = [
       badge: 'bg-teal-50 text-teal-800 border-teal-200',
       btn: 'bg-teal-600 hover:bg-teal-700 text-white',
       accent: 'text-teal-700',
+      bgLight: 'bg-teal-50/50',
     },
   },
   {
@@ -48,6 +50,7 @@ const hubs = [
       badge: 'bg-cyan-50 text-cyan-800 border-cyan-200',
       btn: 'bg-cyan-600 hover:bg-cyan-700 text-white',
       accent: 'text-cyan-700',
+      bgLight: 'bg-cyan-50/50',
     },
   },
 ];
@@ -58,146 +61,142 @@ const hubs = [
   description="登録不要・完全無料。給与明細PDFパスワード解除、契約書Diff比較、不可逆墨消し、個人情報CSV伏字化など、ファイルを外部サーバーへ一切送信せずにお使いの端末内だけで高速安全に処理します。"
   canonicalPath="/"
 >
-  <div class="space-y-10 sm:space-y-14 py-2 sm:py-4">
+  <div class="space-y-6 sm:space-y-10 py-1 sm:py-3">
 
-    <!-- ヒーロー：キャラクターが「ファイルは外へ出ない」を1枚で伝える -->
-    <section class="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 max-w-5xl mx-auto px-2 sm:px-4">
-      <div class="space-y-3 sm:space-y-4 text-left">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-          <span>🛡️ 番人「ゼロリークくん」が見守る安全設計</span>
+    <!-- ヒーロー：スマホでは超コンパクト・PCでは2カラム -->
+    <section class="max-w-5xl mx-auto px-2 sm:px-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-8 bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-xs">
+        <div class="space-y-2 sm:space-y-3 text-left min-w-0 flex-1">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-semibold">
+            <span>🛡️ 番人ゼロリークくんが安心保証</span>
+          </div>
+          <h1 class="text-lg sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+            機密ファイルを<span class="text-emerald-600">1バイトも送信しない</span>、安心のローカル業務ツール
+          </h1>
+          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+            給与明細・契約書・名簿CSV・社外秘ログをブラウザ内メモリだけで安全処理。登録不要・完全無料・通信0バイト。
+          </p>
         </div>
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
-          機密ファイルを<br />1バイトも送信しない、<br />
-          <span class="text-emerald-600">安心のローカル業務ツール</span>
-        </h1>
-        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-          給与明細・契約書・顧客データ・社外秘ログを、アップロードせずブラウザ内だけで処理。公式キャラクター「ゼロリークくん」がファイルの外漏れをブロックします。登録不要・完全無料です。
-        </p>
-        <a
-          href="#categories"
-          class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition"
-        >
-          3大カテゴリから選ぶ ▼
-        </a>
-      </div>
-      <div>
-        <Mascot
-          name="hero-home"
-          fallback="🛡️"
-          alt="ゼロリークくんがパソコンを守り、ファイルがクラウドへ送られないことを示すイラスト"
-          width={720}
-          eager
-          class="w-full max-w-[16rem] sm:max-w-sm md:max-w-none mx-auto rounded-3xl"
-        />
-        <p class="text-center text-xs text-slate-500 mt-2 font-medium">ZeroLeak Tools 公式番人「ゼロリークくん」</p>
+
+        <div class="flex items-center gap-3 shrink-0 self-center sm:self-auto">
+          <Mascot
+            name="hero-home"
+            fallback="🛡️"
+            alt="ゼロリークくん"
+            width={320}
+            eager
+            class="w-20 sm:w-36 md:w-44 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl"
+          />
+        </div>
       </div>
     </section>
 
-    <!-- 目的から探す（チップ一覧） -->
-    <section class="max-w-5xl mx-auto px-2 sm:px-4 space-y-3 text-left">
-      <h2 class="text-base sm:text-lg font-bold text-slate-900">何をしたいですか？</h2>
-      <ul class="flex flex-wrap gap-2">
-        {
-          tools.map((t) => (
-            <li>
-              <a
-                href={t.href}
-                class={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 shadow-xs transition ${t.accent.border} hover:text-slate-900`}
-              >
-                <span aria-hidden="true">{t.icon}</span>
-                <span>{t.intent}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <!-- 3大カテゴリハブ誘導カード（上部ナビゲーション） -->
-    <section id="categories" class="max-w-6xl mx-auto px-2 sm:px-4 space-y-4 scroll-mt-20">
-      <div class="text-left">
-        <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900">3大カテゴリからツールを探す</h2>
-        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
-          全{tools.length}ツール・すべてブラウザ内完結（外部サーバー送信0バイト保証）
-        </p>
+    <!-- 3大カテゴリへの最速ナビゲーション（スマホ: 押しやすい3連コンパクトタイル / PC: 3連カード） -->
+    <section id="categories" class="max-w-5xl mx-auto px-2 sm:px-4 space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
+          <span>📂</span>
+          <span>カテゴリから探す（全{tools.length}ツール）</span>
+        </h2>
+        <span class="text-[11px] text-slate-500 font-mono hidden sm:inline">サーバー送信0バイト保証</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- スマホ: 3連タイルボタン（横並びで即座に選べる） -->
+      <div class="grid grid-cols-3 gap-2">
         {hubs.map((h) => (
           <a
             href={h.category.hubPath}
-            class={`p-5 rounded-2xl bg-white border ${h.theme.border} hover:shadow-md transition flex flex-col justify-between group space-y-4`}
+            class={`p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border ${h.theme.border} hover:shadow-xs transition flex flex-col justify-between text-left group`}
           >
-            <div class="space-y-2 text-left">
-              <div class="flex items-center justify-between">
-                <span class="text-3xl">{h.category.icon}</span>
-                <span class={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${h.theme.badge}`}>
-                  全{h.totalCount}ツール
-                </span>
-              </div>
-              <h3 class={`text-base font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors`}>
-                {h.category.label}
-              </h3>
-              <p class="text-xs text-slate-500 leading-relaxed">
-                {h.category.tagline}
-              </p>
+            <div class="flex items-center justify-between">
+              <span class="text-xl sm:text-2xl">{h.category.icon}</span>
+              <span class={`text-[10px] sm:text-[11px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full border ${h.theme.badge}`}>
+                {h.totalCount}件
+              </span>
             </div>
-
-            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs font-bold text-slate-700 group-hover:text-slate-900">
-              <span>カテゴリ一覧を見る</span>
-              <span class="text-slate-400 group-hover:translate-x-1 transition-transform">▶</span>
+            <div class="mt-1.5 sm:mt-2">
+              <div class={`text-xs sm:text-sm font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors truncate`}>
+                {h.category.label}
+              </div>
+              <div class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5 hidden sm:block">
+                {h.category.tagline}
+              </div>
             </div>
           </a>
         ))}
       </div>
     </section>
 
-    <!-- 各カテゴリの厳選代表ツールカード（純化レイアウト） -->
-    <div class="max-w-6xl mx-auto px-2 sm:px-4 space-y-12">
+    <!-- 各カテゴリの厳選ツール一覧（スマホ: 1行リスト型UI / PC: 3列カードグリッド） -->
+    <div class="max-w-5xl mx-auto px-2 sm:px-4 space-y-6 sm:space-y-8">
       {hubs.map((h) => (
-        <section class="space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-2.5">
-            <div class="text-left">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">{h.category.icon}</span>
-                <h3 class="text-base sm:text-xl font-bold text-slate-900">
-                  {h.category.label}
-                </h3>
-              </div>
-              <p class="text-xs text-slate-500 mt-0.5">{h.category.description}</p>
+        <section class="bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-5 shadow-xs space-y-3">
+          <!-- カテゴリヘッダー -->
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-lg sm:text-xl">{h.category.icon}</span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">
+                {h.category.label}
+              </h3>
             </div>
             <a
               href={h.category.hubPath}
-              class={`inline-flex items-center gap-1 text-xs font-bold ${h.theme.accent} hover:underline whitespace-nowrap self-start sm:self-auto`}
+              class={`inline-flex items-center gap-1 text-xs font-bold ${h.theme.accent} hover:underline whitespace-nowrap`}
             >
-              <span>{h.category.label}をもっと見る（全{h.totalCount}件）</span>
+              <span>一覧へ（全{h.totalCount}件）</span>
               <span>→</span>
             </a>
           </div>
 
-          <!-- 代表3ツールカード -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- ツール一覧：スマホでは1行リスト型、PCでは3列カード -->
+          <!-- 1. スマホ表示用：1行コンパクトリスト（高さ抑えて劇的ダイエット） -->
+          <div class="grid grid-cols-1 gap-2 sm:hidden">
             {h.tools.map((t) => (
               <a
                 href={t.href}
-                class={`group flex flex-col h-full rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-150 ${t.accent.border}`}
+                class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 transition-colors group"
+              >
+                <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                  <span class="text-xl shrink-0">{t.icon}</span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">
+                      {t.name}
+                    </div>
+                    <div class="text-[11px] text-slate-500 truncate mt-0.5">
+                      {t.tagline}
+                    </div>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700 bg-white px-2 py-1 rounded-lg border border-slate-200 shadow-2xs shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                  開く ▶
+                </span>
+              </a>
+            ))}
+          </div>
+
+          <!-- 2. PC・タブレット表示用：美しい3列カードグリッド -->
+          <div class="hidden sm:grid sm:grid-cols-3 gap-3.5">
+            {h.tools.map((t) => (
+              <a
+                href={t.href}
+                class={`group flex flex-col h-full rounded-xl bg-slate-50/50 hover:bg-white border border-slate-200 overflow-hidden hover:shadow-sm transition-all duration-150 ${t.accent.border}`}
               >
                 <Mascot
                   name={t.image}
                   fallback={t.icon}
                   alt=""
-                  width={560}
-                  class={`w-full shrink-0 aspect-[4/3] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
+                  width={420}
+                  class={`w-full shrink-0 aspect-[16/9] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
                 />
-                <div class="p-4 space-y-1.5 text-left flex-1 flex flex-col justify-between">
+                <div class="p-3 space-y-1 text-left flex-1 flex flex-col justify-between">
                   <div>
-                    <h4 class={`text-sm sm:text-base font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug`}>
+                    <h4 class={`text-sm font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug truncate`}>
                       {t.name}
                     </h4>
-                    <p class="text-xs text-slate-500 leading-relaxed mt-0.5">{t.tagline}</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mt-0.5 line-clamp-1">{t.tagline}</p>
                   </div>
                   <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400">
-                    <span class="font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    <span class="font-medium text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                       通信0バイト
                     </span>
                     <span class="font-bold text-slate-700 group-hover:text-slate-900 flex items-center gap-1">
@@ -214,21 +213,21 @@ const hubs = [
 
     <!-- 【折りたたみ】安全性の根拠（詳細はここに集約。本文では繰り返さない） -->
     <section class="max-w-5xl mx-auto w-full px-2 sm:px-4">
-      <details class="group bg-slate-50/70 border border-slate-200 rounded-2xl p-4">
-        <summary class="flex items-center justify-between cursor-pointer list-none select-none text-slate-800 font-bold text-sm sm:text-base">
+      <details class="group bg-slate-50/70 border border-slate-200 rounded-xl sm:rounded-2xl p-3.5 sm:p-4">
+        <summary class="flex items-center justify-between cursor-pointer list-none select-none text-slate-800 font-bold text-xs sm:text-sm">
           <span>🛡️ なぜ「ブラウザ内で完結」すると安全なのですか？</span>
           <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
         </summary>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 mt-3 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed text-left">
-          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-3 mt-2.5 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed text-left">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
             <div class="font-bold text-slate-900">① 外部通信ゼロを自分で確認できる</div>
             <p>ブラウザのCSPで通信を遮断。F12のNetworkタブで、処理中に外部通信が0件であることを目視確認できます。</p>
           </div>
-          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
             <div class="font-bold text-slate-900">② アップロード待ちがない</div>
             <p>大容量のPDFやCSVでも、クラウドへの往復転送がありません。端末のメモリ上で直接処理します。</p>
           </div>
-          <div class="p-3 bg-white rounded-xl border border-slate-200/60 space-y-1">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
             <div class="font-bold text-slate-900">③ 無料のまま続けられる</div>
             <p>サーバー側で計算しない静的配信のため、維持費がかからず、有料化の心配もありません。</p>
           </div>

@@ -146,6 +146,9 @@ server.listen(HTTP_PORT, async () => {
         maxTouchPoints: 5,
       });
 
+      // 初回のリサイズ・レイアウト確定を待機
+      await new Promise((r) => setTimeout(r, 500));
+
       for (const route of routes) {
         const slug = route === '/' ? 'home' : route.replace(/\//g, '_').replace(/^_|_$/g, '');
         const targetUrl = `http://localhost:${HTTP_PORT}${route}`;
@@ -153,11 +156,12 @@ server.listen(HTTP_PORT, async () => {
         await callCdp(ws, 'Page.navigate', { url: targetUrl });
         await new Promise((r) => setTimeout(r, 600));
 
-        // ドキュメントの実際の幅（横はみ出しがないか）を検証
+        // ドキュメントの実際の幅（横はみ出しがないか）と高さを検証
         const evalRes = await callCdp(ws, 'Runtime.evaluate', {
           expression: `JSON.stringify({
             vw: window.innerWidth,
             docW: document.documentElement.scrollWidth,
+            docH: document.documentElement.scrollHeight,
             bodyW: document.body.scrollWidth,
             hasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth
           })`,
@@ -169,7 +173,7 @@ server.listen(HTTP_PORT, async () => {
           hasAnyOverflow = true;
         }
         const overflowStatus = metrics.hasHorizontalOverflow ? `⚠️ OVERFLOW docW=${metrics.docW} > vw=${metrics.vw}` : `✅ PERFECT (vw=${metrics.vw})`;
-        console.log(`[${dev.name}] ${route}: ${overflowStatus}`);
+        console.log(`[${dev.name}] ${route}: ${overflowStatus} (docH=${metrics.docH})`);
 
         // スクリーンショット撮影
         const shot = await callCdp(ws, 'Page.captureScreenshot', {
