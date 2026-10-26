@@ -19,27 +19,27 @@ const labelTone = ['text-slate-500', 'text-rose-700', tool.accent.text];
 ---
 
 <!-- 【トピック1】なぜ必要か：3コマ図解 -->
-<section class="bg-slate-100/90 border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-5 text-left">
-  <div class="space-y-1.5">
-    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-bold">
+<section class="bg-slate-100/90 border border-slate-200/90 rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 space-y-3.5 sm:space-y-5 text-left">
+  <div class="space-y-1">
+    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 text-[11px] font-bold">
       <span>💡 なぜこのツールが必要？</span>
     </div>
-    <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">{title}</h2>
+    <h2 class="text-base sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">{title}</h2>
   </div>
 
-  <ol class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-0 items-stretch">
+  <ol class="grid grid-cols-1 md:grid-cols-3 gap-2.5 md:gap-0 items-stretch">
     {
       tool.panels.map((p, i) => (
         <li class="relative md:flex md:items-stretch">
-          <div class={`flex-1 rounded-2xl border p-4 sm:p-5 space-y-2 shadow-xs ${panelTone[i]}`}>
+          <div class={`flex-1 rounded-xl sm:rounded-2xl border p-3.5 sm:p-5 space-y-1.5 shadow-2xs ${panelTone[i]}`}>
             <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-slate-900 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+              <span class="w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
                 {i + 1}
               </span>
-              <span class={`text-xs font-bold ${labelTone[i]}`}>{p.label}</span>
+              <span class={`text-[11px] font-bold ${labelTone[i]}`}>{p.label}</span>
             </div>
-            <div class="text-3xl" aria-hidden="true">{p.icon}</div>
-            <p class="text-sm text-slate-800 leading-relaxed font-medium">{p.text}</p>
+            <div class="text-2xl sm:text-3xl" aria-hidden="true">{p.icon}</div>
+            <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">{p.text}</p>
           </div>
           {i < 2 && (
             <span
@@ -54,20 +54,20 @@ const labelTone = ['text-slate-500', 'text-rose-700', tool.accent.text];
     }
   </ol>
 
-  <details class="group rounded-2xl bg-white border border-slate-200 p-4">
-    <summary class="flex items-center justify-between cursor-pointer list-none select-none text-sm font-bold text-slate-800">
+  <details class="group rounded-xl sm:rounded-2xl bg-white border border-slate-200 p-3 sm:p-4">
+    <summary class="flex items-center justify-between cursor-pointer list-none select-none text-xs sm:text-sm font-bold text-slate-800">
       <span>📖 くわしい理由を見る</span>
       <span class="text-slate-400 text-xs group-open:rotate-180 transition-transform">▼</span>
     </summary>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mt-3">
       {
         tool.blindSpots.map((b) => (
-          <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-1.5">
-            <h3 class="text-sm font-bold text-slate-900 flex items-start gap-2">
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 sm:p-4 space-y-1">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900 flex items-start gap-1.5">
               <span aria-hidden="true">{b.icon}</span>
               <span>{b.title}</span>
             </h3>
-            <p class="text-xs text-slate-600 leading-relaxed" set:html={b.html} />
+            <p class="text-[11px] sm:text-xs text-slate-600 leading-relaxed" set:html={b.html} />
           </div>
         ))
       }
@@ -76,18 +76,18 @@ const labelTone = ['text-slate-500', 'text-rose-700', tool.accent.text];
 </section>
 
 <!-- 【トピック2】実務シチュエーション：アイコンタイル -->
-<section class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 space-y-4 shadow-xs text-left">
-  <h2 class="text-base sm:text-xl font-bold text-slate-900 tracking-tight">こんな場面で使われています</h2>
-  <ul class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<section class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 space-y-3 shadow-xs text-left">
+  <h2 class="text-sm sm:text-xl font-bold text-slate-900 tracking-tight">こんな場面で使われています</h2>
+  <ul class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
     {
       tool.situations.map((s) => (
-        <li class="flex items-start gap-3 rounded-2xl bg-slate-50/80 border border-slate-200 p-4">
-          <span class={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 border ${tool.accent.soft} ${tool.accent.ring}`} aria-hidden="true">
+        <li class="flex items-start gap-2.5 rounded-xl bg-slate-50/80 border border-slate-200 p-3">
+          <span class={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 border ${tool.accent.soft} ${tool.accent.ring}`} aria-hidden="true">
             {s.icon}
           </span>
           <div class="min-w-0">
-            <div class="text-sm font-bold text-slate-900">{s.who}</div>
-            <p class="text-xs text-slate-600 leading-relaxed mt-0.5">{s.text}</p>
+            <div class="text-xs sm:text-sm font-bold text-slate-900">{s.who}</div>
+            <p class="text-[11px] text-slate-600 leading-relaxed mt-0.5">{s.text}</p>
           </div>
         </li>
       ))

@@ -90,53 +90,47 @@ const effectiveMascotName = mascotName || (slug ? toolBySlug(slug)?.image : unde
 >
   <div class={`${maxWidthClass} mx-auto space-y-8`}>
     
-    <!-- ツールヘッダー（清潔感・スリム化・3秒作業開始 Above the Fold） -->
-    <div class="space-y-2.5">
-      <div class="flex flex-wrap items-center justify-end gap-2">
-        <!-- 情シス向けセキュリティ仕様書 ボタン -->
+    <!-- ツールヘッダー（ファーストビュー最優先・3秒作業開始 Above the Fold） -->
+    <div class="space-y-2.5 text-left">
+      <!-- 最上部メタバー：信頼バナー ＆ 情シス仕様書ボタンを横並び1行に集約 -->
+      <div class="flex items-center justify-between gap-2">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900 text-[10px] sm:text-xs font-semibold">
+          <span>🛡️</span>
+          <span>サーバー送信0バイト保証</span>
+          <span class="text-[10px] text-emerald-700 font-normal hidden sm:inline">（F12 Networkタブで通信ゼロ検証可能）</span>
+        </div>
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+          class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-[11px] font-semibold border border-slate-200 shadow-2xs transition cursor-pointer shrink-0"
         >
           <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
+          <span class="hidden sm:inline">社内利用・</span><span>情シス仕様書</span>
         </button>
       </div>
 
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>ファイルは端末の外に出ません。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col items-start gap-3">
-        <div>
-          <div class="flex w-full items-center gap-4 sm:gap-6">
-            <div class="min-w-0 flex-1 space-y-1.5">
-              <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                {h1}
-              </h1>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                {subtitle}
-              </p>
-            </div>
-            {effectiveMascotName && (
-              <Mascot
-                name={effectiveMascotName}
-                fallback={mascotFallback}
-                width={420}
-                eager
-                class="w-16 sm:w-36 lg:w-48 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shrink-0"
-              />
-            )}
+      <!-- タイトル ＆ マスコット ＆ サンプル投入スロット -->
+      <div class="flex items-center justify-between gap-3 sm:gap-6 pt-1">
+        <div class="min-w-0 flex-1 space-y-1">
+          <h1 class="text-base sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+            {h1}
+          </h1>
+          <p class="text-slate-600 text-[11px] sm:text-xs leading-relaxed line-clamp-2 sm:line-clamp-none">
+            {subtitle}
+          </p>
+          <div class="pt-1.5 flex items-center gap-2">
+            <slot name="sample-button" />
           </div>
         </div>
-
-        <!-- サンプル投入ボタンなどのスロット -->
-        <slot name="sample-button" />
+        {effectiveMascotName && (
+          <Mascot
+            name={effectiveMascotName}
+            fallback={mascotFallback}
+            width={160}
+            eager
+            class="w-16 sm:w-28 aspect-[4/3] object-cover rounded-xl shadow-2xs border border-slate-100 shrink-0"
+          />
+        )}
       </div>
     </div>
 
@@ -151,52 +145,31 @@ const effectiveMascotName = mascotName || (slug ? toolBySlug(slug)?.image : unde
       />
     )}
 
-    <!-- 疑問形 <h2> ＋直下結論のSEO解説セクション（見やすさ・SEO_CORE_RULES準拠） -->
+    <!-- 【FAQPage】利用前・社外共有前の重要チェックポイント（よくある質問・重複排除＆第1問展開） -->
     {faqs.length > 0 && (
-      <section class="space-y-6 pt-2">
-        <div class="border-b border-slate-200 pb-3">
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+      <section class="space-y-3 pt-2 text-left">
+        <div class="border-b border-slate-200 pb-2 flex items-center justify-between">
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
             <span>💡</span>
-            <span>利用前・社外共有前の重要チェックポイント</span>
+            <span>利用前・社外共有前の重要チェックポイント（よくある質問）</span>
           </h2>
+          <span class="text-[11px] text-slate-500 font-mono">全{faqs.length}問</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-          {faqs.slice(0, 4).map((f) => (
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-              <h3 class="font-bold text-slate-900 flex items-start gap-1.5 leading-snug">
-                <span class="shrink-0 text-emerald-700">❓</span>
-                <span>{f.question}</span>
-              </h3>
-              <p class="text-slate-600 leading-relaxed text-xs">
-                {f.answer}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- 【FAQPage】よくある質問アコーディオン -->
-    {faqs.length > 0 && (
-      <section class="space-y-4 pt-2">
-        <div class="border-b border-slate-200 pb-2">
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>❓</span>
-            <span>よくある質問（FAQ）</span>
-          </h2>
-        </div>
-
-        <div class="space-y-3 text-xs sm:text-sm text-slate-700">
-          {faqs.map((f) => (
-            <details class="group p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs">
-              <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between">
-                <span>{f.question}</span>
-                <span class="text-emerald-700 group-open:rotate-180 transition-transform">▼</span>
+        <div class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+          {faqs.map((f, i) => (
+            <details class="group p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 shadow-2xs transition" open={i === 0}>
+              <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none select-none">
+                <span class="flex items-start gap-2">
+                  <span class="text-emerald-700 font-bold shrink-0">Q.</span>
+                  <span>{f.question}</span>
+                </span>
+                <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs shrink-0">▼</span>
               </summary>
-              <p class="mt-3 text-slate-600 leading-relaxed text-xs">
+              <div class="mt-2.5 pt-2.5 border-t border-slate-100 text-slate-600 leading-relaxed text-xs">
+                <span class="font-bold text-emerald-800 mr-1.5">A.</span>
                 {f.answer}
-              </p>
+              </div>
             </details>
           ))}
         </div>
