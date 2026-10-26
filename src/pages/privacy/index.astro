@@ -61,7 +61,7 @@ const extraSchemaGraph = [
   <div class="max-w-5xl mx-auto space-y-10">
     
     <!-- パンくずリスト -->
-    <nav aria-label="Breadcrumb" class="text-xs text-slate-500">
+    <nav aria-label="Breadcrumb" class="text-[11px] text-slate-500">
       <ol class="flex items-center gap-1.5">
         <li><a href="/" class="hover:text-slate-800 transition">ホーム</a></li>
         <li><span>/</span></li>
@@ -69,54 +69,95 @@ const extraSchemaGraph = [
       </ol>
     </nav>
 
-    <!-- ハブヘッダー -->
-    <div class="space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold">
+    <!-- ハブヘッダー：スマホでは横並びで省スペース＆マスコット大型化・PCでは2カラム -->
+    <section class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xs space-y-3">
+      <div class="flex items-center justify-between gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-[10px] sm:text-xs font-semibold">
           <span>🪪</span>
           <span>本人確認・身分証・個人情報・写真</span>
         </span>
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-xs transition cursor-pointer"
+          class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold border border-slate-200 shadow-2xs transition cursor-pointer"
         >
           <span>🏢</span>
-          <span>社内利用・情シス申請用仕様書</span>
+          <span>情シス仕様書</span>
         </button>
       </div>
 
-      <!-- ゼロリークくん見守り保証バナー -->
-      <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 shadow-2xs">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <p class="leading-relaxed">
-          <strong class="font-bold">ゼロリークくん安全保証：</strong>本カテゴリの全ツールは端末内だけで動作します。F12（開発者ツールのNetworkタブ）で外部通信が一切発生しないことを目視確認できます。
-        </p>
-      </div>
-
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-2">
-        <div class="space-y-2 max-w-2xl">
-          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+      <div class="flex flex-row items-center justify-between gap-3">
+        <div class="space-y-1.5 text-left min-w-0 flex-1">
+          <h1 class="text-base sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
             本人確認・個人情報・写真の<br class="hidden sm:inline" />
-            <span class="text-blue-700">プライバシー保護ツール一覧</span>
+            <span class="text-blue-700">安心保護ツール一覧</span>
           </h1>
-          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            運転免許証やマイナンバーカードの提出用透かし、給与明細のパスワード解除、写真の位置情報（EXIF/GPS）削除、顧客名簿の自動伏字化をブラウザ内完結で安全に実行します。
+          <p class="text-slate-600 text-[11px] sm:text-xs leading-relaxed line-clamp-2 sm:line-clamp-none">
+            身分証の提出用透かし、給与明細解除、写真EXIF/GPS削除、名簿CSV伏字化をブラウザ内完結で実行。
           </p>
         </div>
-        <Mascot name="tool-watermark" fallback="🪪" width={320} eager class="w-24 sm:w-36 lg:w-44 rounded-2xl shrink-0 self-center md:self-auto" />
+        <Mascot name="tool-watermark" fallback="🪪" width={160} eager class="w-20 sm:w-28 lg:w-36 aspect-[4/3] object-cover rounded-xl shadow-2xs border border-slate-100 shrink-0" />
       </div>
-    </div>
+
+      <!-- ゼロリークくん見守り保証バナー（コンパクト化） -->
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50/70 border border-blue-200/80 text-[11px] text-blue-950">
+        <span class="text-sm select-none shrink-0">🛡️</span>
+        <p class="leading-tight">
+          <strong class="font-bold">外部送信0バイト保証：</strong>全ツールはお使いの端末メモリ上でのみ動作します。
+        </p>
+      </div>
+    </section>
 
     <!-- よくある情報漏洩事故 vs ZeroLeakの物理遮断 -->
-    <section class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-50/50 to-slate-50 border border-blue-100 space-y-4">
+    <!-- 1. スマホ表示用：折りたたみアコーディオン（スクロール圧迫を劇的解消） -->
+    <details class="group bg-blue-50/50 border border-blue-200/70 rounded-xl p-3 text-xs md:hidden">
+      <summary class="flex items-center justify-between font-bold text-slate-800 cursor-pointer list-none select-none">
+        <span class="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
+          <span>⚠️</span>
+          <span>よくある3大情報漏洩インシデント（タップで確認）</span>
+        </span>
+        <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+      </summary>
+      <div class="mt-2.5 pt-2.5 border-t border-blue-200/60 space-y-2">
+        <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
+          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+            <span>🚨</span>
+            <span>身分証コピーの不正転用</span>
+          </span>
+          <p class="text-slate-600 text-[10px] leading-relaxed">
+            提出先の無加工免許証画像が流出し、借入れ等に悪用される事故。→「身分証透かし焼き込み」で提出目的を印字
+          </p>
+        </div>
+        <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
+          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+            <span>🚨</span>
+            <span>写真のGPSから自宅特定</span>
+          </span>
+          <p class="text-slate-600 text-[10px] leading-relaxed">
+            フリマ出品等の写真EXIFから自宅が特定される被害。→「写真EXIF一括削除」で位置情報を抹消
+          </p>
+        </div>
+        <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
+          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+            <span>🚨</span>
+            <span>年収・マイナンバーの海外送信</span>
+          </span>
+          <p class="text-slate-600 text-[10px] leading-relaxed">
+            無料PDF解除サイトで源泉徴収票が外部送信される事故。→「給与明細PDF解除」でローカル端末内解除
+          </p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 2. PC・タブレット表示用：美しい3列インシデントカード -->
+    <section class="hidden md:block p-5 rounded-2xl bg-gradient-to-br from-blue-50/50 to-slate-50 border border-blue-100 space-y-4">
       <div class="flex items-center gap-2">
         <span class="text-lg">⚠️</span>
         <h2 class="text-sm sm:text-base font-bold text-slate-900">
           本人確認・個人情報取り扱いで多発する3大インシデント
         </h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+      <div class="grid grid-cols-3 gap-4 text-xs">
         <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
           <span class="font-bold text-rose-700 flex items-center gap-1">
             <span>🚨</span>
@@ -158,17 +199,49 @@ const extraSchemaGraph = [
       </div>
     </section>
 
-    <!-- ツール一覧カードグリッド -->
-    <section class="space-y-4">
+    <!-- ツール一覧：スマホではサムネイル付き薄型リスト、PCでは2列カード -->
+    <section class="space-y-3 sm:space-y-4">
       <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+        <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
           <span>🛠️</span>
           <span>利用可能なツール（{categoryTools.length}件）</span>
         </h2>
-        <span class="text-xs text-slate-500">外部通信 0 バイト保証</span>
+        <span class="text-[11px] text-slate-500 font-mono">通信0バイト保証</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- 1. スマホ表示用：ZeroLeakくんサムネイル付き薄型リスト（縦スクロール激減） -->
+      <div class="grid grid-cols-1 gap-2 sm:hidden">
+        {categoryTools.map((t) => (
+          <a
+            href={t.href}
+            class="flex items-center justify-between p-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition-colors group"
+          >
+            <div class="flex items-center gap-2.5 min-w-0 pr-2">
+              <Mascot
+                name={t.image}
+                fallback={t.icon}
+                alt=""
+                width={96}
+                class="w-12 h-12 rounded-lg object-cover shrink-0 shadow-2xs border border-slate-200/60"
+              />
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-slate-900 truncate group-hover:text-blue-700">
+                  {t.shortName ?? t.name}
+                </div>
+                <div class="text-[11px] text-slate-500 truncate mt-0.5">
+                  {t.tagline}
+                </div>
+              </div>
+            </div>
+            <span class="text-[11px] font-bold text-white bg-blue-600 px-2.5 py-1.5 rounded-lg shadow-2xs shrink-0 group-hover:bg-blue-700 transition-colors">
+              開く ▶
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <!-- 2. PC・タブレット表示用：美しい2列カードグリッド -->
+      <div class="hidden sm:grid sm:grid-cols-2 gap-4">
         {categoryTools.map((t) => (
           <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md transition space-y-3 flex flex-col justify-between">
             <div class="space-y-2">
