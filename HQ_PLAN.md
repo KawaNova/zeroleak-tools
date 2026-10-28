@@ -1,6 +1,6 @@
 # HQ_PLAN
 
-> 配布日時: 2026-10-26 00:23 JST
+> 配布日時: 2026-10-27 22:47 JST
 > 正本: `00-hq/docs/HQ_PLAN.md`（このファイルはその部署の節だけ）
 > 
 > 【現場AIの行動ルール】
@@ -13,7 +13,7 @@
 対象: WASM完全ローカルツール工場 `web/003-zeroleak-tools`（zeroleaktools.com）
 
 > **【着手前の必須確認】**: 作業を始める前に、必ず既存のソースコード・`src/pages/`・テストコード・`git log` を確認すること。
-> **完了確認済み（二重作業禁止）**: 3層記憶基盤、全10ツール稼働中（`/id-watermark/`、`/pdf-redaction/`、`/contract-diff/`、`/exif-remover/`、`/log-masking/`、`/office-metadata-wiper/` `05c2dcf`）、**【最優先・構造破綻回避リファクタ】共通コンポーネント化（`ToolShell.astro`）＆ 3大カテゴリハブLP（`/privacy/`, `/pdf/`, `/dev/`）新設・トップ純化**、AI検索用 `public/llms.txt`、モバイル横スクロール0px保証はすべて本番完了を確認済み。
+> **完了確認済み（二重作業禁止）**: 3層記憶基盤、全10ツール稼働中（`/id-watermark/`、`/pdf-redaction/`、`/contract-diff/`、`/exif-remover/`、`/log-masking/`、**`/office-metadata-wiper/` 社外秘Office文書メタデータ一括消去 `05c2dcf`**）、AI検索用 `public/llms.txt`、モバイル横スクロール0px保証はすべて本番完了を確認済み。
 
 2026-11-05 まで:
 

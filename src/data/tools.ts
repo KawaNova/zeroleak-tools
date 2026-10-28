@@ -52,7 +52,7 @@ export const toolCategories: ToolCategory[] = [
     description: '身分証透かし、給与明細、マイナンバーCSV、写真の位置情報保護',
     hubPath: '/privacy/',
     badge: '本人確認・身分証・写真',
-    tagline: '免許証・給与明細・写真の位置情報をローカルで安全化',
+    tagline: '免許証・給与明細・写真の位置情報を端末内完結で無害化',
   },
   {
     id: 'document_legal',
@@ -109,7 +109,7 @@ export const tools: Tool[] = [
     icon: '🔓',
     image: 'tool-pdf',
     category: 'id_privacy',
-    accent: { text: 'text-teal-700', border: 'hover:border-teal-500', soft: 'bg-teal-50', ring: 'border-teal-200' },
+    accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: '給与明細を銀行・税務署に出したい',
     panels: [
       { icon: '📄', label: 'ふつうのやり方', text: '誕生日パスワード付きの給与明細PDFを、そのまま銀行やe-Taxに提出する' },
@@ -177,7 +177,7 @@ export const tools: Tool[] = [
     icon: '📍',
     image: 'tool-exif',
     category: 'id_privacy',
-    accent: { text: 'text-cyan-700', border: 'hover:border-cyan-600', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
+    accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: '写真を投稿・出品・提出したい',
     panels: [
       { icon: '📱', label: 'ふつうのやり方', text: 'スマホの写真を、ブログ・メール・Slackにそのまま載せる' },
@@ -217,7 +217,7 @@ export const tools: Tool[] = [
     icon: '🕶️',
     image: 'tool-mosaic',
     category: 'dev_security',
-    accent: { text: 'text-indigo-700', border: 'hover:border-indigo-500', soft: 'bg-indigo-50', ring: 'border-indigo-200' },
+    accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'スクショや写真を隠して共有したい',
     panels: [
       { icon: '⬛', label: 'ふつうのやり方', text: 'Word・PDF・ペイントで、文字の上に黒い四角を重ねて提出する' },
@@ -252,7 +252,7 @@ export const tools: Tool[] = [
     icon: '🤖',
     image: 'tool-ai',
     category: 'dev_security',
-    accent: { text: 'text-amber-700', border: 'hover:border-amber-500', soft: 'bg-amber-50', ring: 'border-amber-200' },
+    accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'AIに相談する前に社名・人名を隠したい',
     panels: [
       { icon: '💬', label: 'ふつうのやり方', text: '実名・金額入りのプロンプトを、Copilot／ChatGPT Enterpriseにそのまま入力' },
@@ -356,7 +356,7 @@ export const tools: Tool[] = [
     icon: '⚖️',
     image: 'tool-diff',
     category: 'document_legal',
-    accent: { text: 'text-violet-700', border: 'hover:border-violet-500', soft: 'bg-violet-50', ring: 'border-violet-200' },
+    accent: { text: 'text-slate-800', border: 'hover:border-slate-600', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: '未締結の契約書やNDAの差分を安全に比べたい',
     panels: [
       { icon: '📑', label: 'ふつうのやり方', text: '未締結の契約書やNDAを、無料のWebテキスト差分・Diffサイトに貼り付けて比較する' },
@@ -426,7 +426,7 @@ export const tools: Tool[] = [
     icon: '📑',
     image: 'tool-diff',
     category: 'document_legal',
-    accent: { text: 'text-teal-700', border: 'hover:border-teal-500', soft: 'bg-teal-50', ring: 'border-teal-200' },
+    accent: { text: 'text-slate-800', border: 'hover:border-slate-600', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: 'ExcelやWordから作成者名や会社名を消したい',
     panels: [
       { icon: '📊', label: 'ふつうのやり方', text: '社内作成したExcelやWordの見積書・提案書をそのまま社外へメール送付する' },
