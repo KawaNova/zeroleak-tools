@@ -9,7 +9,6 @@
 
 @AGENTS.md
 
-作業前に第0条〜第12条（タスク管理、0バイト保証、Lighthouse 100点、Above the Fold、スクロール予算、薄型リストUI、信頼の3系統カラー、タイポグラフィ、全10ツール構成）を踏まえて開発・保守を行ってください。
 
 ---
 
@@ -20,7 +19,7 @@
 - 調査や置換は一時スクリプトファイル（`scripts/temp_*.mjs` 等）を作成して実行し、作業完了後に削除すること。
 
 ### ② ビルド・自動検証の実行規律
-- 改修後は必ず以下を実行し、全12スイート `PASSED` を確認すること：
+- 改修後は必ず以下を実行し、全スイート `PASSED` を確認すること：
   ```bash
   npm run build
   node --experimental-strip-types scripts/verify_operations.mjs

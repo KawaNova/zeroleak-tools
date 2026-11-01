@@ -1,0 +1,33 @@
+---
+description: ZeroLeak Tools project rules (Cursor-specific; universal rules live in AGENTS.md)
+alwaysApply: true
+---
+
+# Project Rules for Cursor (Claude / GPT)
+
+You are working on ZeroLeak Tools (`web/003-zeroleak-tools`, zeroleaktools.com).
+When working in this repository with Cursor, you MUST strictly adhere to the unified constitution in **[`AGENTS.md`](AGENTS.md)** as the primary source of truth, followed by the Cursor-specific guidelines below.
+
+---
+
+## 1. Compliance with Universal Constitution (AGENTS.md)
+Before planning or executing any task, read **[`AGENTS.md`](AGENTS.md)** in full. It is the single source of truth for all universal rules (Rule 0 onward); they are intentionally not summarized here.
+
+---
+
+## 2. Cursor Specific Execution Rules
+
+### ① Build & Automated Verification
+Always verify the operational integrity and quality budget before finishing tasks:
+```bash
+npm run build
+node --experimental-strip-types scripts/verify_operations.mjs
+```
+
+### ② Task & Git Commit Protocol
+- Remove finished items from `TODO.md` immediately upon fulfilling completion criteria.
+- Use Conventional Commits (`feat(...)`, `fix(...)`, `refactor(...)`, `chore(...)`).
+- Always push changes to remote (`git push origin main`) to trigger Cloudflare Pages deployment.
+
+### ③ Single Source of Truth
+- Never duplicate universal rules across `GEMINI.md`, `CLAUDE.md`, and `.cursorrules`. Always update **`AGENTS.md`** as the sole constitutional document.
