@@ -58,8 +58,8 @@
           <span>2. データの取り扱い ＆ 通信制御 (Zero-Network Policy)</span>
         </h3>
         <ul class="list-disc list-inside space-y-1.5 text-slate-700 pl-1 text-xs">
-          <li><strong>外部送信0バイト保証:</strong> ユーザーがドラッグ＆ドロップしたファイル（CSV、PDF等）や入力テキストは、一切外部ネットワークへ送信されません。</li>
-          <li><strong>CSP（Content Security Policy）による技術遮断:</strong> <code>connect-src 'self' blob: data:;</code> を適用し、ブラウザ機能として第三者サーバーへの不正通信を遮断しています。</li>
+          <li><strong>外部送信0バイト保証:</strong> ユーザーがドラッグ＆ドロップしたファイル（CSV、PDF等）や入力テキストは、外部ネットワークへ送信されません。なお、広告配信（Google AdSense）に伴う通信のみ別に発生します。</li>
+          <li><strong>CSP（Content Security Policy）による技術遮断:</strong> <code>connect-src 'self' blob: data:;</code> を基本に、許可する外部ドメインを広告配信用のGoogle系のみに限定し、それ以外の第三者サーバーへの通信をブラウザ機能として遮断しています。</li>
           <li><strong>揮発性メモリ処理:</strong> データはブラウザのタブを閉じた時点で端末のRAMから完全に破棄されます。</li>
           <li><strong>オフライン検証可能:</strong> ネットワーク接続を切断した状態（機内モード）でも全ツールがそのまま動作します。</li>
         </ul>

@@ -74,7 +74,7 @@ const hubs = [
             機密ファイルを<span class="text-emerald-700">外部送信ゼロ</span>で直接処理
           </h1>
           <p class="text-slate-600 text-[11px] sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
-            給与明細・契約書・CSV・社外秘ログを端末のメモリ上だけで直接編集。外部通信は一切発生しません（F12で通信0検証可能）。
+            給与明細・契約書・CSV・社外秘ログを端末のメモリ上だけで直接編集。ファイル内容の外部送信は0バイト（F12で確認可能）。
           </p>
         </div>
 
@@ -227,8 +227,8 @@ const hubs = [
         </summary>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-3 mt-2.5 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed text-left">
           <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
-            <div class="font-bold text-slate-900">① 外部通信ゼロを自分で確認できる</div>
-            <p>ブラウザのCSPで通信を遮断。F12のNetworkタブで、処理中に外部通信が0件であることを目視確認できます。</p>
+            <div class="font-bold text-slate-900">① ファイルの外部送信0バイトを自分で確認できる</div>
+            <p>ブラウザのCSPで第三者への通信を制限。F12のNetworkタブで、処理中にファイルや入力内容を送る通信が無いことを目視確認できます。広告配信（Google AdSense）の通信のみ別に発生します。</p>
           </div>
           <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
             <div class="font-bold text-slate-900">② アップロード待ちがない</div>

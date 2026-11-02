@@ -4,7 +4,7 @@
 
 ## Core Security & Architecture Guarantees
 - **0 Bytes Server Transmission (Zero-Network Policy)**: All files (CSV, PDF, images, logs, HAR, .env) are processed strictly in browser memory (RAM). There are no backend APIs, no serverless functions, no analytics beacons, and no AI training on user data.
-- **Technical Enforcement via CSP**: Built with strict Content Security Policy (`connect-src 'none'` or self-only), technically preventing any outbound network requests during file operations.
+- **Technical Enforcement via CSP**: Built with a strict Content Security Policy (`connect-src` limited to self/blob/data plus Google ad-serving domains only). User files and input text are never transmitted; ad delivery (Google AdSense) generates separate network requests.
 - **F12 DevTools Verifiable**: Users and security auditors can verify that zero network traffic occurs at any time via Chrome/Edge/Firefox DevTools (F12) Network tab.
 - **100% Free & No Registration**: No account creation, no cookies, no tracking. Operates as a permanent static deployment on Cloudflare Pages.
 
