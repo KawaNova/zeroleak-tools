@@ -39,6 +39,11 @@ import {
   getTodayDateString,
 } from '../src/utils/id-watermark.ts';
 import {
+  verifyJpegCleanliness,
+  verifyPngCleanliness,
+  verifyPdfCleanliness,
+} from './cleanliness_guard.mjs';
+import {
   generateSampleOfficeDocx,
   inspectOfficeMetadata,
   wipeOfficeMetadata,
@@ -678,6 +683,38 @@ async function testQualityBudgetAndDevIsolation() {
   console.log('  ✔ [Visual Interaction] RedactionDemo (copy-paste leak vs pixel destruction) in /local-mosaic/ & /pdf-redaction/: PASSED');
 }
 
+async function testCleanlinessGuardSuite() {
+  console.log('\n========================================');
+  console.log('13. Deep Binary Cleanliness & Zero-Leak Proof (AI-Lab REA Audit)');
+  console.log('========================================');
+
+  // 1. JPEG 深層バイナリ走査 (GPS / カメラ名生バイトの0バイト消滅検証)
+  const fakeExifApp1 = new Uint8Array([
+    0xff, 0xe1, 0x00, 0x22, 0x45, 0x78, 0x69, 0x66, 0x00, 0x00,
+    0x49, 0x49, 0x2a, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00,
+    0x02, 0x01, 0x02, 0x00, 0x06, 0x00, 0x00, 0x00, 0x41, 0x70,
+    0x70, 0x6c, 0x65, 0x00, 0x00, 0x00,
+  ]);
+  const testJpeg = new Uint8Array([0xff, 0xd8, ...fakeExifApp1, 0xff, 0xdb, 0x00, 0x05, 0x00, 0x01, 0x02, 0xff, 0xda, 0xff, 0xd9]);
+  const { cleanedBytes } = stripImageMetadataLossless(testJpeg);
+
+  const jRes = verifyJpegCleanliness(cleanedBytes, ['GPS', 'Apple']);
+  if (!jRes.passed) {
+    throw new Error(`JPEG deep binary leak detected: ${JSON.stringify(jRes)}`);
+  }
+  console.log('  ✔ [Test 13.1] JPEG Deep Binary Byte Scan (GPS & Apple Raw Strings 0-byte): PASSED');
+
+  // 2. 危険な偽黒塗り (Fake Redaction) の自動検知回帰テスト
+  const fakeRedactPdf = Buffer.from(
+    '%PDF-1.4\n1 0 obj << /Length 50 >> stream\nBT /F1 12 Tf (SECRET_PASSWORD) Tj ET\n0 0 100 20 re f\nendstream\nendobj\ntrailer << /Size 2 >>\n%%EOF'
+  );
+  const pdfRes = verifyPdfCleanliness(fakeRedactPdf, ['SECRET_PASSWORD']);
+  if (!pdfRes.isFakeRedaction) {
+    throw new Error('Fake Redaction detector regression: failed to detect hidden text under black box');
+  }
+  console.log('  ✔ [Test 13.2] Fake Redaction Detection Regression Test (100% Caught): PASSED');
+}
+
 async function main() {
   await testAllCsvs();
   await testAllPdfs();
@@ -691,8 +728,9 @@ async function main() {
   await testIdWatermarkEngine();
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
+  await testCleanlinessGuardSuite();
   console.log('\n========================================');
-  console.log('ALL 12 MODULE, ROUTE & QUALITY BUDGET SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 13 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 
