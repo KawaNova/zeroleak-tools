@@ -175,6 +175,13 @@ import Mascot from '../components/Mascot.astro';
         </div>
 
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+          <h3 class="font-bold text-slate-900">オフライン動作のための端末内キャッシュについて</h3>
+          <p class="text-slate-600 text-xs">
+            当サイトは、通信を切った状態（機内モード）でもツールを動かせるよう、Service Worker を用いて当サイト自身の静的ファイル（HTML・JavaScript・画像）をお使いの端末のブラウザ内に保存します。ツールで処理するファイルや入力内容はこのキャッシュに保存されません。保存された静的ファイルは、ブラウザの「サイトデータの削除」からいつでも消去できます。
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
           <h3 class="font-bold text-slate-900">Cookie（クッキー）および広告配信について</h3>
           <p class="text-slate-600 text-xs">
             当サイトでは、サービスの改善および今後の適切な広告配信（Google AdSense等を含む第三者配信事業者）のために、Cookieを使用する場合があります。

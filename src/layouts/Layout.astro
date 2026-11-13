@@ -1,4 +1,6 @@
 ---
+import { tools } from '../data/tools';
+
 interface Props {
   title: string;
   description: string;
@@ -45,7 +47,7 @@ const schemaOrg = {
 ---
 
 <!doctype html>
-<html lang="ja" class="h-full bg-slate-900 text-slate-100">
+<html lang="ja" class="h-full bg-slate-50 text-slate-800">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,6 +55,8 @@ const schemaOrg = {
     <meta name="description" content={description} />
     <link rel="canonical" href={fullCanonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9978047733183188" crossorigin="anonymous"></script>
@@ -73,34 +77,30 @@ const schemaOrg = {
   <body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white overflow-x-hidden">
     <!-- ヘッダー（清潔感ある白基調・スライドバー完全撤去・スマホ最適化） -->
     <header class="border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-      <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-2">
-        <a href="/" class="flex items-center gap-1.5 sm:gap-2 group shrink-0">
+      <div class="max-w-6xl mx-auto px-3 sm:px-4 py-1 sm:py-1.5 flex items-center justify-between gap-2">
+        <a href="/" class="flex items-center gap-1.5 sm:gap-2 min-h-[44px] group shrink-0">
           <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-100 transition-colors shadow-xs shrink-0">
             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <div class="flex flex-col">
-            <span class="font-bold text-sm sm:text-base text-slate-900 tracking-tight flex items-center gap-1.5 leading-none">
-              <span>ZeroLeak Tools</span>
-              <span class="text-xs font-normal text-slate-400 hidden md:inline">|</span>
-              <span class="text-xs font-semibold text-emerald-800 hidden md:inline">外部送信ゼロ・端末内完結</span>
-            </span>
-            <span class="text-[9px] text-slate-500 mt-0.5 font-medium hidden sm:block">外部送信なし・完全ローカル処理</span>
-          </div>
+          <span class="font-bold text-sm sm:text-base text-slate-900 tracking-tight flex items-center gap-2 leading-none">
+            <span>ZeroLeak Tools</span>
+            <span class="text-xs font-semibold text-emerald-800 hidden md:inline">ファイル送信ゼロ・端末内で処理</span>
+          </span>
         </a>
 
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <a
             href="/"
-            class={`text-xs font-semibold px-2.5 py-1.5 rounded-lg transition ${canonicalPath === '/' ? 'text-emerald-800 bg-emerald-50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'}`}
+            class={`inline-flex items-center min-h-[44px] text-xs font-semibold px-2.5 rounded-lg transition ${canonicalPath === '/' ? 'text-emerald-800 bg-emerald-50' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'}`}
           >
             <span class="sm:hidden">ツール</span>
             <span class="hidden sm:inline">ツール一覧</span>
           </a>
           <a
             href="/legal/"
-            class={`text-xs font-semibold px-2.5 py-1.5 rounded-lg transition ${canonicalPath === '/legal/' ? 'text-emerald-800 bg-emerald-50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'}`}
+            class={`inline-flex items-center min-h-[44px] text-xs font-semibold px-2.5 rounded-lg transition ${canonicalPath === '/legal/' ? 'text-emerald-800 bg-emerald-50' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'}`}
           >
             <span class="sm:hidden">利用規約</span>
             <span class="hidden sm:inline">利用規約・プライバシー</span>
@@ -109,37 +109,73 @@ const schemaOrg = {
       </div>
     </header>
 
+    <!-- オフライン動作中の表示（通信が切れている間だけ出る） -->
+    <div id="offline-bar" hidden role="status" class="bg-slate-900 text-white text-xs font-semibold px-3 py-2 text-center">
+      ✈️ オフラインで動作中：通信できない状態のまま、この端末の中だけで処理しています。
+    </div>
+
     <!-- メインコンテンツ -->
     <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-8 overflow-x-hidden">
       <slot />
     </main>
 
     <!-- フッター（白基調・信頼感デザイン） -->
-    <footer class="border-t border-slate-200 bg-white py-8 text-xs text-slate-500 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex flex-col gap-1 text-center sm:text-left">
-          <p class="font-bold text-slate-800">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
-          <p class="text-[11px] text-slate-500">
-            すべての処理はお使いのブラウザ内部（メモリ上）でのみ実行されます。サーバーログへの保存、外部転送は技術的に一切行われません（サーバー送信0バイト保証）。
+    <footer class="border-t border-slate-200 bg-white py-6 text-xs text-slate-700 mt-auto">
+      <div class="max-w-6xl mx-auto px-4 space-y-4">
+        <div class="space-y-1 text-center sm:text-left">
+          <p class="font-bold text-slate-900">ZeroLeak Tools（ゼロリーク・ツールズ）</p>
+          <p>
+            ファイルと入力内容はお使いのブラウザのメモリ上だけで処理し、サーバーへは送信しません。
+          </p>
+          <p>
+            ✈️ オフライン対応：<span id="offline-state">準備中です</span>
           </p>
         </div>
-        <div class="flex flex-wrap items-center gap-4 text-slate-600 font-medium">
-          <a href="/csv-masking/" class="hover:text-emerald-700 transition">CSVマスキング</a>
-          <a href="/pdf-unlock/" class="hover:text-blue-700 transition">PDFパスワード解除</a>
-          <a href="/exif-remover/" class="hover:text-blue-700 transition">写真EXIF・GPS一括削除</a>
-          <a href="/local-mosaic/" class="hover:text-cyan-700 transition">画像モザイク・黒塗り</a>
-          <a href="/ai-prompt-sanitizer/" class="hover:text-cyan-700 transition">AIプロンプト匿名化＆復元</a>
-          <a href="/log-masking/" class="hover:text-cyan-700 transition">HAR・ログ・.envマスク</a>
-          <a href="/pdf-redaction/" class="hover:text-slate-900 transition">機密PDF完全黒塗り</a>
-          <a href="/contract-diff/" class="hover:text-slate-900 transition">契約書・NDA Diff比較</a>
-          <a href="/id-watermark/" class="hover:text-blue-700 transition">身分証透かし焼き込み</a>
-          <a href="/office-metadata-wiper/" class="hover:text-slate-900 transition">Officeメタデータ消去</a>
-          <a href="/legal/" class="hover:text-slate-900 transition">免責事項・プライバシー規約</a>
-        </div>
-      </div>
-      <div class="max-w-6xl mx-auto px-4 mt-6 pt-4 border-t border-slate-100 text-center text-[10px] text-slate-400">
-        &copy; 2026 ZeroLeak Tools. All rights reserved. 完全ブラウザ完結・プライバシー保護設計
+        <nav aria-label="フッター" class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 font-medium">
+          {tools.map((t) => (
+            <a href={t.href} class="inline-flex items-center min-h-[44px] hover:text-emerald-700 hover:underline transition">{t.shortName ?? t.name}</a>
+          ))}
+          <a href="/legal/" class="inline-flex items-center min-h-[44px] hover:text-emerald-700 hover:underline transition">免責事項・プライバシー規約</a>
+        </nav>
+        <p class="pt-3 border-t border-slate-100 text-center text-[11px] text-slate-600">
+          &copy; 2026 ZeroLeak Tools. All rights reserved.
+        </p>
       </div>
     </footer>
+
+    <!-- オフライン動作：Service Worker 登録と通信状態の表示。自ドメインの静的ファイルのみを端末にキャッシュする -->
+    <script is:inline>
+      (function () {
+        var bar = document.getElementById('offline-bar');
+        var state = document.getElementById('offline-state');
+        function sync() {
+          if (bar) bar.hidden = navigator.onLine;
+        }
+        window.addEventListener('online', sync);
+        window.addEventListener('offline', sync);
+        sync();
+
+        function say(text) {
+          if (state) state.textContent = text;
+        }
+        if (!('serviceWorker' in navigator)) {
+          say('このブラウザでは利用できません');
+          return;
+        }
+        window.addEventListener('load', function () {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then(function () {
+              return navigator.serviceWorker.ready;
+            })
+            .then(function () {
+              say('準備完了。機内モードでも全ツールが動きます');
+            })
+            .catch(function () {
+              say('この環境では利用できません');
+            });
+        });
+      })();
+    </script>
   </body>
 </html>

@@ -3,57 +3,53 @@ import Layout from '../layouts/Layout.astro';
 import Mascot from '../components/Mascot.astro';
 import { tools, toolCategories } from '../data/tools';
 
-// 3大カテゴリごとの代表ツール（各3件）
-const privacyTools = ['id-watermark', 'exif-remover', 'pdf-unlock']
-  .map(slug => tools.find(t => t.slug === slug)!)
-  .filter(Boolean);
-
-const pdfTools = ['pdf-redaction', 'office-metadata-wiper', 'contract-diff']
-  .map(slug => tools.find(t => t.slug === slug)!)
-  .filter(Boolean);
-
-const devTools = ['log-masking', 'ai-prompt-sanitizer', 'local-mosaic']
-  .map(slug => tools.find(t => t.slug === slug)!)
-  .filter(Boolean);
-
-const hubs = [
-  {
-    category: toolCategories.find(c => c.id === 'id_privacy')!,
-    tools: privacyTools,
-    totalCount: tools.filter(t => t.category === 'id_privacy').length,
-    theme: {
-      border: 'border-blue-200 hover:border-blue-400',
-      badge: 'bg-blue-50 text-blue-800 border-blue-200',
-      btn: 'bg-blue-600 hover:bg-blue-700 text-white',
-      accent: 'text-blue-700',
-      bgLight: 'bg-blue-50/50',
-    },
+// カテゴリ定義（タイル表示とツール行の色分けに使用）
+const categoryThemes = {
+  id_privacy: {
+    border: 'border-blue-200 hover:border-blue-400',
+    badge: 'bg-blue-50 text-blue-800 border-blue-200',
+    row: 'border-l-blue-600',
   },
-  {
-    category: toolCategories.find(c => c.id === 'document_legal')!,
-    tools: pdfTools,
-    totalCount: tools.filter(t => t.category === 'document_legal').length,
-    theme: {
-      border: 'border-slate-300 hover:border-slate-500',
-      badge: 'bg-slate-100 text-slate-800 border-slate-300',
-      btn: 'bg-slate-800 hover:bg-slate-900 text-white',
-      accent: 'text-slate-800',
-      bgLight: 'bg-slate-50/50',
-    },
+  document_legal: {
+    border: 'border-slate-300 hover:border-slate-500',
+    badge: 'bg-slate-100 text-slate-800 border-slate-300',
+    row: 'border-l-slate-700',
   },
-  {
-    category: toolCategories.find(c => c.id === 'dev_security')!,
-    tools: devTools,
-    totalCount: tools.filter(t => t.category === 'dev_security').length,
-    theme: {
-      border: 'border-cyan-200 hover:border-cyan-400',
-      badge: 'bg-cyan-50 text-cyan-800 border-cyan-200',
-      btn: 'bg-cyan-600 hover:bg-cyan-700 text-white',
-      accent: 'text-cyan-700',
-      bgLight: 'bg-cyan-50/50',
-    },
+  dev_security: {
+    border: 'border-cyan-200 hover:border-cyan-400',
+    badge: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+    row: 'border-l-cyan-600',
   },
-];
+} as const;
+
+const hubs = toolCategories
+  .filter((c) => c.id !== 'all')
+  .map((c) => ({
+    category: c,
+    totalCount: tools.filter((t) => t.category === c.id).length,
+    theme: categoryThemes[c.id as keyof typeof categoryThemes],
+  }));
+
+// 全ツールをカテゴリ順に1本のリストへ（検索用テキストは tools.ts の既存データから合成）
+const categoryOrder = hubs.map((h) => h.category.id);
+const allTools = [...tools]
+  .sort((a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category))
+  .map((t) => {
+    const category = toolCategories.find((c) => c.id === t.category)!;
+    return {
+      tool: t,
+      rowBorder: categoryThemes[t.category].row,
+      search: [
+        t.name,
+        t.shortName ?? '',
+        t.tagline,
+        t.intent,
+        t.keywords ?? '',
+        category.label,
+        ...t.situations.map((s) => `${s.who} ${s.text}`),
+      ].join(' '),
+    };
+  });
 ---
 
 <Layout
@@ -70,10 +66,10 @@ const hubs = [
           <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] sm:text-xs font-semibold">
             <span>🛡️ サーバー送信0バイト絶対保証（F12検証済み）</span>
           </div>
-          <h1 class="text-base sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+          <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
             機密ファイルを<span class="text-emerald-700">外部送信ゼロ</span>で直接処理
           </h1>
-          <p class="text-slate-600 text-[11px] sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
+          <p class="text-slate-700 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
             給与明細・契約書・CSV・社外秘ログを端末のメモリ上だけで直接編集。ファイル内容の外部送信は0バイト（F12で確認可能）。
           </p>
         </div>
@@ -85,7 +81,7 @@ const hubs = [
             alt="ゼロリークくん"
             width={320}
             eager
-            class="w-24 sm:w-36 md:w-44 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shadow-2xs border border-slate-100"
+            class="w-20 sm:w-36 md:w-44 aspect-[4/3] object-cover rounded-xl sm:rounded-2xl shadow-2xs border border-slate-100"
           />
         </div>
       </div>
@@ -94,11 +90,10 @@ const hubs = [
     <!-- 3大カテゴリへの最速ナビゲーション（スマホ: 押しやすい3連コンパクトタイル / PC: 3連カード） -->
     <section id="categories" class="max-w-5xl mx-auto px-2 sm:px-4 space-y-2.5">
       <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
+        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-1.5">
           <span>📂</span>
-          <span>カテゴリから探す（全{tools.length}ツール）</span>
+          <span>カテゴリから探す</span>
         </h2>
-        <span class="text-[11px] text-slate-500 font-mono hidden sm:inline">サーバー送信0バイト保証</span>
       </div>
 
       <!-- スマホ: 3連タイルボタン（横並びで即座に選べる） -->
@@ -106,7 +101,7 @@ const hubs = [
         {hubs.map((h) => (
           <a
             href={h.category.hubPath}
-            class={`p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white border ${h.theme.border} hover:shadow-xs transition flex flex-col justify-between text-left group`}
+            class={`p-2 sm:p-4 min-h-[64px] rounded-xl sm:rounded-2xl bg-white border ${h.theme.border} hover:shadow-xs transition flex flex-col justify-between text-left group`}
           >
             <div class="flex items-center justify-between">
               <span class="text-xl sm:text-2xl">{h.category.icon}</span>
@@ -115,11 +110,11 @@ const hubs = [
               </span>
             </div>
             <div class="mt-1.5 sm:mt-2">
-              <div class={`text-[11px] sm:text-sm font-bold text-slate-900 group-hover:${h.theme.accent} transition-colors leading-tight`}>
+              <div class="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
                 <span class="sm:hidden">{h.category.mobileLabel ?? h.category.label}</span>
                 <span class="hidden sm:inline">{h.category.label}</span>
               </div>
-              <div class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5 hidden sm:block">
+              <div class="text-xs text-slate-700 truncate mt-0.5 hidden sm:block">
                 {h.category.tagline}
               </div>
             </div>
@@ -128,104 +123,80 @@ const hubs = [
       </div>
     </section>
 
-    <!-- 各カテゴリの厳選ツール一覧（スマホ: 1行リスト型UI / PC: 3列カードグリッド） -->
-    <div class="max-w-5xl mx-auto px-2 sm:px-4 space-y-6 sm:space-y-8">
-      {hubs.map((h) => (
-        <section class="bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-5 shadow-xs space-y-3">
-          <!-- カテゴリヘッダー -->
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-lg sm:text-xl">{h.category.icon}</span>
-              <h3 class="text-sm sm:text-base font-bold text-slate-900">
-                {h.category.label}
-              </h3>
-            </div>
+    <!-- 全ツール一覧＋即時検索（1本のリストに統合。入力はこの画面内の絞り込みにのみ使用） -->
+    <section id="tools" class="max-w-5xl mx-auto px-2 sm:px-4 space-y-2.5">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-1.5">
+          <span>🔎</span>
+          <span>全{tools.length}ツールから探す</span>
+        </h2>
+        <span id="tool-search-count" aria-live="polite" class="text-xs text-slate-700 font-semibold shrink-0">{tools.length}件</span>
+      </div>
+
+      <div class="space-y-1">
+        <label for="tool-search" class="sr-only">ツールをキーワードで絞り込む</label>
+        <input
+          id="tool-search"
+          type="search"
+          autocomplete="off"
+          enterkeyhint="search"
+          placeholder="例：給与明細 / 黒塗り / 位置情報 / ChatGPT"
+          class="w-full h-11 px-3.5 rounded-xl bg-white border border-slate-300 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
+        />
+        <p class="text-xs text-slate-700">入力した文字はこの画面内の絞り込みにだけ使い、どこにも送信しません。</p>
+      </div>
+
+      <ul id="tool-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+        {allTools.map(({ tool: t, rowBorder, search }) => (
+          <li data-tool-row data-search={search}>
             <a
-              href={h.category.hubPath}
-              class={`inline-flex items-center gap-1 text-xs font-bold ${h.theme.accent} hover:underline whitespace-nowrap`}
+              href={t.href}
+              class={`flex items-center gap-2.5 p-2 min-h-[64px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 border-l-4 ${rowBorder} transition-colors group`}
             >
-              <span>一覧へ（全{h.totalCount}件）</span>
-              <span>→</span>
+              <Mascot
+                name={t.image}
+                fallback={t.icon}
+                alt=""
+                width={112}
+                class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-cover shrink-0 border border-slate-200/60"
+              />
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-bold text-slate-900 truncate group-hover:text-emerald-700">
+                  {t.shortName ?? t.name}
+                </h3>
+                <p class="text-xs text-slate-700 truncate mt-0.5">{t.tagline}</p>
+              </div>
+              <!-- スマホは行全体がリンク。説明文の表示幅を確保するため矢印のみにする -->
+              <span aria-hidden="true" class="sm:hidden text-slate-600 text-lg leading-none shrink-0 pr-1">›</span>
+              <span class="hidden sm:inline-block text-xs font-bold text-slate-800 bg-slate-50 px-2.5 py-2 rounded-lg border border-slate-200 shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                開く ▶
+              </span>
             </a>
-          </div>
+          </li>
+        ))}
+      </ul>
 
-          <!-- ツール一覧：スマホではサムネイル付きリスト型、PCでは3列カード -->
-          <!-- 1. スマホ表示用：ZeroLeakくんサムネイル付きの薄型リスト（高さ抑えて劇的ダイエット） -->
-          <div class="grid grid-cols-1 gap-2 sm:hidden">
-            {h.tools.map((t) => (
-              <a
-                href={t.href}
-                class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 transition-colors group"
-              >
-                <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                  <Mascot
-                    name={t.image}
-                    fallback={t.icon}
-                    alt=""
-                    width={96}
-                    class="w-12 h-12 rounded-lg object-cover shrink-0 shadow-2xs border border-slate-200/60"
-                  />
-                  <div class="min-w-0">
-                    <div class="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">
-                      {t.shortName ?? t.name}
-                    </div>
-                    <div class="text-[11px] text-slate-500 truncate mt-0.5">
-                      {t.tagline}
-                    </div>
-                  </div>
-                </div>
-                <span class="text-[11px] font-bold text-slate-700 bg-white px-2 py-1.5 rounded-lg border border-slate-200 shadow-2xs shrink-0 group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                  開く ▶
-                </span>
-              </a>
-            ))}
-          </div>
-
-          <!-- 2. PC・タブレット表示用：美しい3列カードグリッド -->
-          <div class="hidden sm:grid sm:grid-cols-3 gap-3.5">
-            {h.tools.map((t) => (
-              <a
-                href={t.href}
-                class={`group flex flex-col h-full rounded-xl bg-slate-50/50 hover:bg-white border border-slate-200 overflow-hidden hover:shadow-sm transition-all duration-150 ${t.accent.border}`}
-              >
-                <Mascot
-                  name={t.image}
-                  fallback={t.icon}
-                  alt=""
-                  width={420}
-                  class={`w-full shrink-0 aspect-[16/9] object-cover ${t.accent.soft} rounded-none group-hover:scale-[1.02] transition-transform`}
-                />
-                <div class="p-3 space-y-1 text-left flex-1 flex flex-col justify-between">
-                  <div>
-                    <h4 class={`text-sm font-bold text-slate-900 group-hover:${t.accent.text} transition-colors leading-snug truncate`}>
-                      {t.name}
-                    </h4>
-                    <p class="text-xs text-slate-500 leading-relaxed mt-0.5 line-clamp-1">{t.tagline}</p>
-                  </div>
-                  <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400">
-                    <span class="font-medium text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                      通信0バイト
-                    </span>
-                    <span class="font-bold text-slate-700 group-hover:text-slate-900 flex items-center gap-1">
-                      開く <span>▶</span>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+      <div id="tool-search-empty" hidden class="p-4 rounded-xl bg-white border border-slate-200 text-sm text-slate-800 space-y-2">
+        <p class="font-bold">該当するツールが見つかりませんでした。</p>
+        <p class="text-xs text-slate-700">「PDF」「CSV」「写真」「ログ」など、扱うファイルの種類で試してください。</p>
+        <button
+          id="tool-search-reset"
+          type="button"
+          class="inline-flex items-center min-h-[44px] px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer"
+        >
+          全ツールを表示する
+        </button>
+      </div>
+    </section>
 
     <!-- 【折りたたみ】安全性の根拠（詳細はここに集約。本文では繰り返さない） -->
     <section class="max-w-5xl mx-auto w-full px-2 sm:px-4">
       <details class="group bg-slate-50/70 border border-slate-200 rounded-xl sm:rounded-2xl p-3.5 sm:p-4">
-        <summary class="flex items-center justify-between cursor-pointer list-none select-none text-slate-800 font-bold text-xs sm:text-sm">
+        <summary class="flex items-center justify-between min-h-[44px] cursor-pointer list-none select-none text-slate-900 font-bold text-sm">
           <span>🛡️ なぜ「ブラウザ内で完結」すると安全なのですか？</span>
-          <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+          <span class="text-slate-600 group-open:rotate-180 transition-transform text-xs">▼</span>
         </summary>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-3 mt-2.5 border-t border-slate-200/60 text-slate-600 text-xs leading-relaxed text-left">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-3 mt-2.5 border-t border-slate-200/60 text-slate-700 text-xs leading-relaxed text-left">
           <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
             <div class="font-bold text-slate-900">① ファイルの外部送信0バイトを自分で確認できる</div>
             <p>ブラウザのCSPで第三者への通信を制限。F12のNetworkタブで、処理中にファイルや入力内容を送る通信が無いことを目視確認できます。広告配信（Google AdSense）の通信のみ別に発生します。</p>
@@ -235,7 +206,11 @@ const hubs = [
             <p>大容量のPDFやCSVでも、クラウドへの往復転送がありません。端末のメモリ上で直接処理します。</p>
           </div>
           <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
-            <div class="font-bold text-slate-900">③ 無料のまま続けられる</div>
+            <div class="font-bold text-slate-900">③ 機内モードでも動く</div>
+            <p>一度ページを開けば、Wi-Fiとモバイル通信を切った状態でも全ツールが動作します。通信できない状態で処理が終わることが、ファイルを送っていない物理的な証拠です。</p>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200/60 space-y-0.5">
+            <div class="font-bold text-slate-900">④ 無料のまま続けられる</div>
             <p>サーバー側で計算しない静的配信のため、維持費がかからず、有料化の心配もありません。</p>
           </div>
         </div>
@@ -244,3 +219,44 @@ const hubs = [
 
   </div>
 </Layout>
+
+<script>
+  // ツール一覧の即時絞り込み。入力値は DOM の表示切り替えにのみ使用し、保存も送信もしない。
+  const input = document.getElementById('tool-search') as HTMLInputElement | null;
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-tool-row]'));
+  const count = document.getElementById('tool-search-count');
+  const empty = document.getElementById('tool-search-empty');
+  const reset = document.getElementById('tool-search-reset');
+
+  // 全角/半角・大文字/小文字・カタカナ/ひらがなの揺れを吸収する
+  const normalize = (text: string) =>
+    text
+      .normalize('NFKC')
+      .toLowerCase()
+      .replace(/[\u30a1-\u30f6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+
+  const haystacks = rows.map((row) => normalize(row.dataset.search ?? ''));
+
+  function applyFilter() {
+    if (!input) return;
+    const terms = normalize(input.value).split(/\s+/).filter(Boolean);
+    let visible = 0;
+    rows.forEach((row, i) => {
+      const hit = terms.every((term) => haystacks[i].includes(term));
+      row.hidden = !hit;
+      if (hit) visible += 1;
+    });
+    if (count) count.textContent = `${visible}件`;
+    if (empty) empty.hidden = visible !== 0;
+  }
+
+  input?.addEventListener('input', applyFilter);
+  reset?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = '';
+    applyFilter();
+    input.focus();
+  });
+  // ブラウザの「戻る」で入力値が復元された場合にも表示を合わせる
+  window.addEventListener('pageshow', applyFilter);
+</script>

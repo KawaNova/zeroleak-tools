@@ -30,9 +30,10 @@
 4. **情シス申請用仕様書モーダル**: `<SecuritySpecModal />` を配置し、ヘッダー右上のボタンから呼び出せるようにする。
 5. **相互回遊デッキの統合**:
    - ページ最下部に `<RelatedTools currentPath="/<tool-slug>/" />` を配置する。
-   - `src/data/tools.ts` の `tools` 配列に新ツールを1件追加する（トップのカード・カテゴリタブ・図解パネル・関連ツール・「何をしたい？」チップはすべてここから描画される唯一の正本）。
-   - `src/layouts/Layout.astro` のフッターにリンクを追加する。
+   - `src/data/tools.ts` の `tools` 配列に新ツールを1件追加する（トップの検索付き一覧・カテゴリタイル・図解パネル・関連ツール・フッターのリンクはすべてここから描画される唯一の正本。フッターの手書き追加は不要）。
+   - トップの検索に掛かるよう、`keywords` に同義語・言い換え（ファイル形式名、ひらがな/カタカナの別表記など）を入れる。`tagline` は35文字以内（自動検証あり）。
    - イラスト `src/assets/illustrations/<image名>.jpg|png` を追加する（ゼロリークくん統一。文字なし・4:3）。未配置の間は絵文字表示になる。
    - `public/sitemap.xml` は `npm run build` 時に `scripts/update_sitemap.mjs` が自動生成する。
+   - オフライン動作用の `dist/sw.js` も `npm run build` の最後に `scripts/generate_sw.mjs` が自動生成する（`dist/` 内の静的ファイルを事前キャッシュ。新ツールのJS・サンプルは自動で対象になる）。Service Worker は自ドメインのGETのみを扱い、他ドメイン・POSTには介入しない設計を変えないこと。
 6. **自動検証スクリプトへの登録**:
    - `scripts/verify_operations.mjs` にロジック単体テストとビルド後HTML/CSP監査を追加し、`npm run build` 後に `node --experimental-strip-types scripts/verify_operations.mjs` で全スイート `PASSED` を確認する。

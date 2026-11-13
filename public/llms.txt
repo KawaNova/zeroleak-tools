@@ -6,11 +6,12 @@
 - **0 Bytes Server Transmission (Zero-Network Policy)**: All files (CSV, PDF, images, logs, HAR, .env) are processed strictly in browser memory (RAM). There are no backend APIs, no serverless functions, no analytics beacons, and no AI training on user data.
 - **Technical Enforcement via CSP**: Built with a strict Content Security Policy (`connect-src` limited to self/blob/data plus Google ad-serving domains only). User files and input text are never transmitted; ad delivery (Google AdSense) generates separate network requests.
 - **F12 DevTools Verifiable**: Users and security auditors can verify that zero network traffic occurs at any time via Chrome/Edge/Firefox DevTools (F12) Network tab.
+- **Works Offline (Airplane Mode Verifiable)**: After the first visit, a Service Worker caches only the site's own static files, so every tool keeps working with Wi-Fi and mobile data turned off. Completing a job with no connectivity is physical proof that the file was not uploaded. User files and input text are never written to the cache.
 - **100% Free & No Registration**: No account creation, no cookies, no tracking. Operates as a permanent static deployment on Cloudflare Pages.
 
 ---
 
-## Tool Directory (全9ツール一覧)
+## Tool Directory (全10ツール一覧)
 
 ### 1. HAR, Error Log & .env Secret Masking (`/log-masking/`)
 - **URL**: https://zeroleaktools.com/log-masking/

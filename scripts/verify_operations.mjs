@@ -715,6 +715,85 @@ async function testCleanlinessGuardSuite() {
   console.log('  ✔ [Test 13.2] Fake Redaction Detection Regression Test (100% Caught): PASSED');
 }
 
+async function testOfflineAndTopSearchSuite() {
+  console.log('\n========================================');
+  console.log('14. Offline Service Worker & Top Page Search Audit');
+  console.log('========================================');
+
+  const toolSlugs = [
+    'pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'ai-prompt-sanitizer',
+    'log-masking', 'pdf-redaction', 'contract-diff', 'id-watermark', 'office-metadata-wiper',
+  ];
+
+  // 1. Service Worker: 事前キャッシュ対象と Zero-Network 設計の監査
+  const swPath = path.join(root, 'dist', 'sw.js');
+  if (!fs.existsSync(swPath)) {
+    throw new Error('Missing dist/sw.js (run `npm run build`, which chains scripts/generate_sw.mjs)');
+  }
+  const sw = fs.readFileSync(swPath, 'utf-8');
+  const precacheMatch = sw.match(/const PRECACHE = (\[[\s\S]*?\]);/);
+  if (!precacheMatch) throw new Error('PRECACHE list not found in dist/sw.js');
+  const precache = JSON.parse(precacheMatch[1]);
+
+  for (const url of ['/', '/privacy/', '/pdf/', '/dev/', '/legal/', ...toolSlugs.map((slug) => `/${slug}/`)]) {
+    if (!precache.includes(url)) throw new Error(`Route ${url} is not precached for offline use`);
+  }
+  for (const url of precache) {
+    if (!url.startsWith('/') || url.startsWith('//')) throw new Error(`Non same-origin precache entry: ${url}`);
+    const rel = url.endsWith('/') ? `${url}index.html` : url;
+    if (!fs.existsSync(path.join(root, 'dist', rel))) throw new Error(`Precache entry has no built file: ${url}`);
+  }
+  // dist/_astro のJS/CSS/Worker が1つでも漏れると、オフライン時にそのツールだけ動かなくなる
+  const astroDir = path.join(root, 'dist', '_astro');
+  for (const f of fs.readdirSync(astroDir)) {
+    if (!precache.includes(`/_astro/${f}`)) throw new Error(`Asset /_astro/${f} is not precached for offline use`);
+  }
+  if (/https?:\/\//.test(sw)) throw new Error('dist/sw.js must not reference any absolute URL');
+  if (!sw.includes("request.method !== 'GET'") || !sw.includes('url.origin !== self.location.origin')) {
+    throw new Error('dist/sw.js must ignore non-GET and cross-origin requests');
+  }
+  for (const banned of ['importScripts', 'postMessage', 'pushManager', "addEventListener('sync'", "addEventListener('push'", 'XMLHttpRequest', 'sendBeacon']) {
+    if (sw.includes(banned)) throw new Error(`dist/sw.js contains a forbidden API: ${banned}`);
+  }
+  console.log(`  ✔ [Test 14.1] Service Worker precache (${precache.length} same-origin files, GET-only, no cross-origin): PASSED`);
+
+  // 2. 全ページで Service Worker 登録・オフライン表示・manifest が配備されていること
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'dist', 'manifest.webmanifest'), 'utf-8'));
+  if (manifest.start_url !== '/' || !Array.isArray(manifest.icons) || manifest.icons.length === 0) {
+    throw new Error('Invalid dist/manifest.webmanifest');
+  }
+  for (const rel of ['index.html', 'legal/index.html', ...toolSlugs.map((slug) => `${slug}/index.html`)]) {
+    const html = fs.readFileSync(path.join(root, 'dist', rel), 'utf-8');
+    for (const kw of ["register('/sw.js')", 'id="offline-bar"', 'id="offline-state"', 'rel="manifest"']) {
+      if (!html.includes(kw)) throw new Error(`Offline wiring "${kw}" missing in dist/${rel}`);
+    }
+  }
+  console.log('  ✔ [Test 14.2] Service Worker registration + offline indicator + manifest on all pages: PASSED');
+
+  // 3. トップページ: 全10ツールが1本の検索付きリストに並び、タグラインが35文字以内であること
+  const topHtml = fs.readFileSync(path.join(root, 'dist', 'index.html'), 'utf-8');
+  if (!topHtml.includes('id="tool-search"') || !topHtml.includes('id="tool-search-empty"')) {
+    throw new Error('Top page search box is missing');
+  }
+  const rowCount = (topHtml.match(/<li data-tool-row/g) || []).length;
+  if (rowCount !== toolSlugs.length) {
+    throw new Error(`Top page must list all ${toolSlugs.length} tools exactly once, got ${rowCount}`);
+  }
+  for (const slug of toolSlugs) {
+    if (!topHtml.includes(`href="/${slug}/"`)) throw new Error(`Top page does not link to /${slug}/`);
+  }
+  // 一覧の説明文は1行（35文字以内）に収める（AGENTS.md 第6条）
+  const toolsSource = fs.readFileSync(path.join(root, 'src', 'data', 'tools.ts'), 'utf-8').split('export const tools')[1] ?? '';
+  const taglines = [...toolsSource.matchAll(/^    tagline: '([^']*)',$/gm)].map((m) => m[1]);
+  if (taglines.length !== toolSlugs.length) {
+    throw new Error(`Expected ${toolSlugs.length} tool taglines in src/data/tools.ts, got ${taglines.length}`);
+  }
+  for (const tagline of taglines) {
+    if ([...tagline].length > 35) throw new Error(`Tagline over 35 chars (${[...tagline].length}): ${tagline}`);
+  }
+  console.log(`  ✔ [Test 14.3] Top page lists all ${rowCount} tools in one searchable list: PASSED`);
+}
+
 async function main() {
   await testAllCsvs();
   await testAllPdfs();
@@ -729,8 +808,9 @@ async function main() {
   await testBuiltHtmlAndCspAudit();
   await testQualityBudgetAndDevIsolation();
   await testCleanlinessGuardSuite();
+  await testOfflineAndTopSearchSuite();
   console.log('\n========================================');
-  console.log('ALL 13 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 14 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 

@@ -1,0 +1,19 @@
+{
+  "name": "ZeroLeak Tools（ゼロリーク・ツールズ）",
+  "short_name": "ZeroLeak",
+  "description": "ファイルを送信せず、端末内だけで処理する業務ツール群。オフラインでも動作します。",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

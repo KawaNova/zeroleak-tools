@@ -1,4 +1,4 @@
-// 6ツールの「唯一の正本」データ。
+// 全ツールの「唯一の正本」データ。
 // トップのカード・各ツールの図解パネル・関連ツール・シチュエーションはすべてここから描画する（重複記述を排除）。
 // 画像は src/assets/illustrations/ に置く（無い場合は絵文字プレースホルダーで表示）。
 
@@ -96,7 +96,8 @@ export interface Tool {
   blindSpots: BlindSpot[];
   situations: Situation[];
   related: string[]; // 関連ツール slug（2件）
-  intent: string; // トップの「何をしたい？」チップ文言
+  intent: string; // やりたいこと（トップの検索対象テキスト）
+  keywords?: string; // トップ検索用の同義語・言い換え（画面には表示しない）
 }
 
 
@@ -111,6 +112,7 @@ export const tools: Tool[] = [
     category: 'id_privacy',
     accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: '給与明細を銀行・税務署に出したい',
+    keywords: 'PDF パスワード 解除 ロック 暗号化 源泉徴収票 給与明細 確定申告 住宅ローン メタデータ プロパティ',
     panels: [
       { icon: '📄', label: 'ふつうのやり方', text: '誕生日パスワード付きの給与明細PDFを、そのまま銀行やe-Taxに提出する' },
       { icon: '🚨', label: '起きる事故', text: '暗号化PDFは自動審査で弾かれる。焦って無料の解除サイトへ→年収・住所が海外サーバーへ' },
@@ -145,6 +147,7 @@ export const tools: Tool[] = [
     category: 'id_privacy',
     accent: { text: 'text-emerald-700', border: 'hover:border-emerald-500', soft: 'bg-emerald-50', ring: 'border-emerald-200' },
     intent: 'CSVをベンダーやテスト環境に渡したい',
+    keywords: 'CSV Excel 名簿 マスキング 伏字 匿名化 個人情報 マイナンバー 電話番号 メール クレジットカード ダミーデータ',
     panels: [
       { icon: '📊', label: 'ふつうのやり方', text: '「テスト用だから」と本番CSVをそのまま外部ベンダーへ渡す' },
       { icon: '🚨', label: '起きる事故', text: 'マイナンバー入りの提供は番号法違反（懲役4年以下・罰金200万円以下）。無料変換サイトにも写しが残る' },
@@ -179,6 +182,7 @@ export const tools: Tool[] = [
     category: 'id_privacy',
     accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: '写真を投稿・出品・提出したい',
+    keywords: '写真 画像 JPEG EXIF GPS 位置情報 ジオタグ 撮影場所 自宅 メルカリ フリマ SNS',
     panels: [
       { icon: '📱', label: 'ふつうのやり方', text: 'スマホの写真を、ブログ・メール・Slackにそのまま載せる' },
       { icon: '🚨', label: '起きる事故', text: '写真にGPS座標が埋まったまま。右クリックで撮影場所が地図に出て、自宅が特定される' },
@@ -219,6 +223,7 @@ export const tools: Tool[] = [
     category: 'dev_security',
     accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'スクショや写真を隠して共有したい',
+    keywords: '画像 スクショ スクリーンショット モザイク ぼかし 黒塗り 顔 ナンバープレート 塗りつぶし',
     panels: [
       { icon: '⬛', label: 'ふつうのやり方', text: 'Word・PDF・ペイントで、文字の上に黒い四角を重ねて提出する' },
       { icon: '🚨', label: '起きる事故', text: '全選択コピペで下の文字が丸見えに。無料加工サイトへの画像アップロードも危険' },
@@ -254,6 +259,7 @@ export const tools: Tool[] = [
     category: 'dev_security',
     accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'AIに相談する前に社名・人名を隠したい',
+    keywords: 'ChatGPT Copilot Gemini Claude 生成AI プロンプト 仮名化 匿名化 社名 人名 復元',
     panels: [
       { icon: '💬', label: 'ふつうのやり方', text: '実名・金額入りのプロンプトを、Copilot／ChatGPT Enterpriseにそのまま入力' },
       { icon: '🚨', label: '起きる事故', text: '「学習されない」契約でも、管理者の監査ログには平文で残る。プロンプト共有で誤爆も' },
@@ -289,6 +295,7 @@ export const tools: Tool[] = [
     category: 'dev_security',
     accent: { text: 'text-cyan-700', border: 'hover:border-cyan-500', soft: 'bg-cyan-50', ring: 'border-cyan-200' },
     intent: 'ベンダーにHAR・エラーログを渡したい',
+    keywords: 'HAR ログ env 環境変数 APIキー トークン Cookie Bearer パスワード シークレット 障害調査',
     panels: [
       { icon: '📄', label: 'ふつうのやり方', text: '障害調査のため、ブラウザから書き出したHARや.envをそのまま外部ベンダーへ送信' },
       { icon: '🚨', label: '起きる事故', text: 'Cookie・Bearerトークン・DBパスワード・顧客メールが生のまま社外へ丸見えに' },
@@ -323,6 +330,7 @@ export const tools: Tool[] = [
     category: 'document_legal',
     accent: { text: 'text-slate-900', border: 'hover:border-slate-800', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: 'PDFの文字・金額を完全に墨消ししたい',
+    keywords: 'PDF 黒塗り 墨消し マスキング 塗りつぶし 個人情報 金額 開示請求 コピペ',
     panels: [
       { icon: '📄', label: 'ふつうのやり方', text: 'PDFの上に黒い四角形（図形）を重ねて「墨消し完了」として提出' },
       { icon: '🚨', label: '起きる事故', text: '相手がCtrl+Aで全選択・コピペすると、黒い枠の下から文字が丸ごと抜ける' },
@@ -358,6 +366,7 @@ export const tools: Tool[] = [
     category: 'document_legal',
     accent: { text: 'text-slate-800', border: 'hover:border-slate-600', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: '未締結の契約書やNDAの差分を安全に比べたい',
+    keywords: '契約書 NDA 差分 比較 diff 新旧対照 変更箇所 赤入れ 規約 テキスト比較',
     panels: [
       { icon: '📑', label: 'ふつうのやり方', text: '未締結の契約書やNDAを、無料のWebテキスト差分・Diffサイトに貼り付けて比較する' },
       { icon: '🚨', label: '起きる事故', text: '未公開の協業内容や損害賠償上限が海外サーバーへ送信・ログ保存され、NDA違反・情報漏洩インシデントに' },
@@ -393,6 +402,7 @@ export const tools: Tool[] = [
     category: 'id_privacy',
     accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: '身分証や免許証の画像に提出用透かしを入れたい',
+    keywords: '免許証 マイナンバーカード 保険証 パスポート 身分証 本人確認 透かし ウォーターマーク 悪用防止 コピー',
     panels: [
       { icon: '🪪', label: 'ふつうのやり方', text: 'バイトやフリマ、賃貸契約で求められた免許証・マイナンバー写真をそのまま提出する' },
       { icon: '🚨', label: '起きる事故', text: '提出先からの内部流出やハッキングで身分証画像が流出し、勝手に口座開設や借入れに悪用される' },
@@ -428,6 +438,7 @@ export const tools: Tool[] = [
     category: 'document_legal',
     accent: { text: 'text-slate-800', border: 'hover:border-slate-600', soft: 'bg-slate-100', ring: 'border-slate-300' },
     intent: 'ExcelやWordから作成者名や会社名を消したい',
+    keywords: 'Excel Word xlsx docx Office 作成者 会社名 プロパティ メタデータ 更新履歴 個人情報 削除',
     panels: [
       { icon: '📊', label: 'ふつうのやり方', text: '社内作成したExcelやWordの見積書・提案書をそのまま社外へメール送付する' },
       { icon: '🚨', label: '起きる事故', text: 'ファイルのプロパティやXML内に「作成者の実名」「会社名」「下請け外注先」「総編集時間」が残っており取引先に筒抜けになる' },
