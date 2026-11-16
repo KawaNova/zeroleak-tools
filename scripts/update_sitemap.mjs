@@ -44,7 +44,8 @@ function getAllAstroFiles(dir, base = '') {
   return results;
 }
 
-const files = getAllAstroFiles(pagesDir).sort();
+// 404 は検索結果に出さないページのためサイトマップから除外する
+const files = getAllAstroFiles(pagesDir).filter((f) => f !== '404.astro').sort();
 
 const entries = files.map((relFile) => {
   // relFile の例:
@@ -62,7 +63,7 @@ const entries = files.map((relFile) => {
   }
 
   const isHome = urlPath === '/';
-  const isLegal = urlPath === '/legal/';
+  const isLegal = urlPath === '/legal/' || urlPath === '/about/';
   const isHub = urlPath === '/privacy/' || urlPath === '/pdf/' || urlPath === '/dev/';
 
   return {

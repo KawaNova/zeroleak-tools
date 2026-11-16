@@ -573,7 +573,8 @@ async function testBuiltHtmlAndCspAudit() {
     { path: 'contract-diff/index.html', mustInclude: ['契約書・NDA', 'Diff', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'id-watermark/index.html', mustInclude: ['身分証', '透かし', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
     { path: 'office-metadata-wiper/index.html', mustInclude: ['Office文書', '作成者', '一括', 'ブラウザ', 'サーバー送信なし', 'FAQPage', 'あわせて使われるツール'] },
-    { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー'] },
+    { path: 'legal/index.html', mustInclude: ['免責事項', 'プライバシーポリシー', '/about/'] },
+    { path: 'about/index.html', mustInclude: ['運営者情報', 'お問い合わせ', 'forms.gle', 'Google AdSense'] },
   ];
 
   for (const r of routes) {
@@ -762,7 +763,7 @@ async function testOfflineAndTopSearchSuite() {
   if (manifest.start_url !== '/' || !Array.isArray(manifest.icons) || manifest.icons.length === 0) {
     throw new Error('Invalid dist/manifest.webmanifest');
   }
-  for (const rel of ['index.html', 'legal/index.html', ...toolSlugs.map((slug) => `${slug}/index.html`)]) {
+  for (const rel of ['index.html', 'legal/index.html', 'about/index.html', ...toolSlugs.map((slug) => `${slug}/index.html`)]) {
     const html = fs.readFileSync(path.join(root, 'dist', rel), 'utf-8');
     for (const kw of ["register('/sw.js')", 'id="offline-bar"', 'id="offline-state"', 'rel="manifest"']) {
       if (!html.includes(kw)) throw new Error(`Offline wiring "${kw}" missing in dist/${rel}`);
@@ -794,6 +795,56 @@ async function testOfflineAndTopSearchSuite() {
   console.log(`  ✔ [Test 14.3] Top page lists all ${rowCount} tools in one searchable list: PASSED`);
 }
 
+async function testAdsenseReadinessSuite() {
+  console.log('\n========================================');
+  console.log('15. AdSense Readiness Audit (404 / Operator & Contact / Policy Consistency)');
+  console.log('========================================');
+
+  const dist = path.join(root, 'dist');
+  const read = (rel) => fs.readFileSync(path.join(dist, rel), 'utf-8');
+
+  // 1. 404: 実在しないURLにトップページを 200 で返さない（Cloudflare Pages は dist/404.html を 404 で返す）
+  if (!fs.existsSync(path.join(dist, '404.html'))) throw new Error('Missing dist/404.html (unknown URLs would fall back to the home page with 200)');
+  const notFound = read('404.html');
+  if (!notFound.includes('<meta name="robots" content="noindex"')) throw new Error('dist/404.html must be noindex');
+  if (notFound.includes('rel="canonical"')) throw new Error('dist/404.html must not declare a canonical URL');
+  if (!notFound.includes('ページが見つかりません')) throw new Error('dist/404.html has no not-found message');
+  const sitemap = read('sitemap.xml');
+  if (sitemap.includes('/404')) throw new Error('404 page must not be listed in sitemap.xml');
+  if (read('sw.js').includes('"/404.html"')) throw new Error('404 page must not be precached by the Service Worker');
+  const redirects = fs.existsSync(path.join(dist, '_redirects')) ? read('_redirects') : '';
+  if (!/^\/favicon\.ico\s+\/favicon\.svg\s+301$/m.test(redirects)) throw new Error('/favicon.ico must redirect to /favicon.svg');
+  console.log('  ✔ [Test 15.1] 404 page (noindex, no canonical, not in sitemap/precache) + favicon.ico redirect: PASSED');
+
+  // 2. 運営者情報・問い合わせ: about が実在し、サイトマップと全ページのフッターから辿れる
+  const about = read('about/index.html');
+  const formUrl = (fs.readFileSync(path.join(root, 'src', 'data', 'site.ts'), 'utf-8').match(/CONTACT_FORM_URL = '([^']+)'/) || [])[1];
+  if (!formUrl || !/^https:\/\/(forms\.gle|docs\.google\.com\/forms)\//.test(formUrl)) throw new Error('CONTACT_FORM_URL must be a Google Forms URL');
+  for (const kw of [formUrl, '個人運営', '運営者', '外部サービス', '機密情報は記入しない']) {
+    if (!about.includes(kw)) throw new Error(`about page is missing "${kw}"`);
+  }
+  if (!sitemap.includes('https://zeroleaktools.com/about/')) throw new Error('about page is not listed in sitemap.xml');
+  const pages = fs.readdirSync(dist, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && fs.existsSync(path.join(dist, e.name, 'index.html')))
+    .map((e) => `${e.name}/index.html`)
+    .concat(['index.html', '404.html']);
+  for (const rel of pages) {
+    if (!read(rel).includes('href="/about/"')) throw new Error(`Footer link to /about/ missing in dist/${rel}`);
+  }
+  if (!read('legal/index.html').includes(formUrl)) throw new Error('legal page must link to the contact form');
+  console.log(`  ✔ [Test 15.2] Operator & contact page linked from all ${pages.length} pages + sitemap: PASSED`);
+
+  // 3. 広告を載せる以上、「Cookie なし」「外部通信ゼロ」など広告と矛盾する断言をしない
+  const llms = read('llms.txt');
+  if (/no cookies, no tracking/i.test(llms) || !/AdSense[^\n]*cookies/i.test(llms)) {
+    throw new Error('llms.txt must not claim a cookie-free site and must disclose that AdSense may use cookies');
+  }
+  for (const rel of ['index.html', 'legal/index.html', 'about/index.html']) {
+    if (read(rel).includes('ZeroLeak 開発チーム')) throw new Error(`Placeholder operator name left in dist/${rel}`);
+  }
+  console.log('  ✔ [Test 15.3] No cookie/operator claims that contradict ad serving: PASSED');
+}
+
 async function main() {
   await testAllCsvs();
   await testAllPdfs();
@@ -809,8 +860,9 @@ async function main() {
   await testQualityBudgetAndDevIsolation();
   await testCleanlinessGuardSuite();
   await testOfflineAndTopSearchSuite();
+  await testAdsenseReadinessSuite();
   console.log('\n========================================');
-  console.log('ALL 14 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 15 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 

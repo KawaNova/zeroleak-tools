@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Mascot from '../components/Mascot.astro';
+import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
 ---
 
 <Layout
@@ -36,7 +37,7 @@ import Mascot from '../components/Mascot.astro';
       </div>
       <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
         <span>制定日: 2026年10月10日</span>
-        <span>最終改定日: 2026年10月26日</span>
+        <span>最終改定日: 2026年11月16日</span>
       </div>
     </div>
 
@@ -216,9 +217,8 @@ import Mascot from '../components/Mascot.astro';
           <div class="text-[10px] text-slate-500">（ゼロリーク・ツールズ）</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-[11px] text-slate-400 font-bold mb-0.5">運営組織</div>
-          <div class="font-semibold text-slate-900">ZeroLeak 開発チーム</div>
-          <div class="text-[10px] text-slate-500">（完全ローカルOSS技術推進）</div>
+          <div class="text-[11px] text-slate-600 font-bold mb-0.5">運営者</div>
+          <div class="font-semibold text-slate-900">{OPERATOR}</div>
         </div>
         <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
           <div class="text-[11px] text-slate-400 font-bold mb-0.5">配信インフラ</div>
@@ -226,9 +226,15 @@ import Mascot from '../components/Mascot.astro';
           <div class="text-[10px] text-slate-500">（静的エッジ配信・維持費0円モデル）</div>
         </div>
       </div>
-      <p class="text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-        セキュリティに関するご質問や技術検証のご相談は、公式サイトまたは公式GitHubリポジトリ窓口までお願いいたします。
-      </p>
+      <div class="pt-2 border-t border-slate-100 text-xs text-slate-700 space-y-2">
+        <p>
+          ご質問・不具合のご報告・掲載内容の誤りのご指摘は、<a href={CONTACT_FORM_URL} target="_blank" rel="noopener" class="text-emerald-700 underline font-semibold">お問い合わせフォーム（Googleフォーム）↗</a>からお願いいたします。
+          フォームはGoogleの外部サービスのため、処理したファイルの内容やパスワードなどの機密情報は記入しないでください。
+        </p>
+        <p>
+          運営の詳細は<a href="/about/" class="text-emerald-700 underline font-semibold">運営者情報・お問い合わせ</a>をご覧ください。
+        </p>
+      </div>
     </section>
 
     <!-- トップへ戻るボタン -->

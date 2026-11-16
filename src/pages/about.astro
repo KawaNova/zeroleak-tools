@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, toolCategories } from '../data/tools';
+import { CONTACT_FORM_URL, SITE_NAME, SITE_NAME_KANA, OPERATOR, LAUNCHED } from '../data/site';
+
+const categories = toolCategories
+  .filter((c) => c.id !== 'all')
+  .map((c) => ({ ...c, tools: tools.filter((t) => t.category === c.id) }));
+
+const updated = '2026年11月16日';
+
+const extraSchemaGraph = [
+  {
+    '@type': 'AboutPage',
+    name: '運営者情報・お問い合わせ',
+    url: 'https://zeroleaktools.com/about/',
+  },
+  {
+    '@type': 'ContactPage',
+    name: 'お問い合わせ',
+    url: 'https://zeroleaktools.com/about/#contact',
+  },
+];
+---
+
+<Layout
+  title="運営者情報・お問い合わせ - ZeroLeak Tools"
+  description="ZeroLeak Tools の運営者、サイトの目的、ファイルの扱い、広告、お問い合わせ窓口（Googleフォーム）のご案内。"
+  canonicalPath="/about/"
+  extraSchemaGraph={extraSchemaGraph}
+>
+  <div class="max-w-3xl mx-auto py-2 sm:py-6 space-y-6 text-left text-sm text-slate-700 leading-relaxed">
+    <header class="space-y-2">
+      <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        運営者情報・お問い合わせ
+      </h1>
+      <p>{SITE_NAME} の運営者、サイトの目的、ファイルの扱い方、お問い合わせ窓口をまとめています。</p>
+    </header>
+
+    <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-3">
+      <h2 class="text-lg font-bold text-slate-900">運営者</h2>
+      <dl class="grid grid-cols-[6.5rem_1fr] gap-x-3 gap-y-2">
+        <dt class="font-semibold text-slate-900">サイト名</dt>
+        <dd>{SITE_NAME}（{SITE_NAME_KANA}／zeroleaktools.com）</dd>
+        <dt class="font-semibold text-slate-900">運営</dt>
+        <dd>{OPERATOR}</dd>
+        <dt class="font-semibold text-slate-900">開設</dt>
+        <dd>{LAUNCHED}</dd>
+        <dt class="font-semibold text-slate-900">連絡先</dt>
+        <dd>
+          <a href={CONTACT_FORM_URL} target="_blank" rel="noopener" class="text-emerald-700 underline font-semibold">
+            お問い合わせフォーム（Googleフォーム）↗
+          </a>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-lg font-bold text-slate-900">サイトの目的</h2>
+      <p>
+        給与明細のPDF、社員名簿のCSV、障害調査のログ、身分証の画像など、外部のWebサービスへ預けたくないファイルを、
+        お使いのブラウザの中だけで加工するためのツール集です。
+        「無料の変換サイトにアップロードした時点で、ファイルが第三者のサーバーに残る」という問題を避けるために作りました。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-lg font-bold text-slate-900">ファイルと入力内容の扱い</h2>
+      <ul class="list-disc pl-5 space-y-1.5">
+        <li>ファイルの読み込みと加工は、ブラウザのJavaScript・WebAssemblyで行います。処理のためにファイルや入力内容をサーバーへ送信する仕組みはありません。</li>
+        <li>ブラウザの開発者ツール（F12）の Network タブで、処理中にファイルを送る通信が発生しないことを確認できます。</li>
+        <li>一度ページを開いた後は、Wi-Fiとモバイル通信を切った状態（機内モード）でも動作します。</li>
+        <li>広告配信（Google AdSense）に伴う通信は、ツールの処理とは別に発生します。</li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-lg font-bold text-slate-900">掲載しているツール（{tools.length}件）</h2>
+      <div class="space-y-3">
+        {categories.map((c) => (
+          <div>
+            <h3 class="text-base font-bold text-slate-900">
+              <a href={c.hubPath} class="hover:underline">{c.label}</a>
+            </h3>
+            <ul class="list-disc pl-5 space-y-0.5">
+              {c.tools.map((t) => (
+                <li><a href={t.href} class="text-emerald-700 hover:underline">{t.name}</a>：{t.tagline}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-lg font-bold text-slate-900">広告について</h2>
+      <p>
+        当サイトは運営費をまかなうため、Google AdSense による広告を掲載しています。
+        Google は広告配信に Cookie を使用する場合があります。Cookie の扱いとパーソナライズ広告を止める方法は、
+        <a href="/legal/" class="text-emerald-700 underline font-semibold">利用規約・プライバシーポリシー</a>に記載しています。
+      </p>
+    </section>
+
+    <section id="contact" class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-3 scroll-mt-20">
+      <h2 class="text-lg font-bold text-slate-900">お問い合わせ</h2>
+      <p>
+        ご質問、不具合のご報告、掲載内容の誤りのご指摘は、下のフォームからお送りください。
+        フォームの「対象サイト」では <strong class="text-slate-900">ZeroLeak Tools</strong> を選んでください。
+      </p>
+      <a
+        href={CONTACT_FORM_URL}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold transition"
+      >
+        お問い合わせフォームを開く ↗
+      </a>
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+        <p class="font-bold text-slate-900">送信前にご確認ください</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>フォームは Google が提供する外部サービスで、入力内容は Google のサーバーへ送信されます。</li>
+          <li>処理したファイルの中身、パスワード、氏名・マイナンバーなどの機密情報は記入しないでください。</li>
+          <li>不具合のご報告は、ツール名、お使いのブラウザと端末、操作の手順を書いていただくと調査が早くなります。</li>
+          <li>すべてのお問い合わせへの個別の返信はお約束できません。いただいた内容はツールの修正と改善に使います。</li>
+        </ul>
+      </div>
+    </section>
+
+    <p class="text-xs text-slate-600">最終更新：{updated}</p>
+  </div>
+</Layout>

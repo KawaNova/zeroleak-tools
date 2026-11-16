@@ -6,9 +6,10 @@ interface Props {
   description: string;
   canonicalPath?: string;
   extraSchemaGraph?: any[];
+  noindex?: boolean; // 404 など検索結果に出さないページ
 }
 
-const { title, description, canonicalPath = '/', extraSchemaGraph = [] } = Astro.props;
+const { title, description, canonicalPath = '/', extraSchemaGraph = [], noindex = false } = Astro.props;
 const siteUrl = 'https://zeroleaktools.com';
 const fullCanonical = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
 
@@ -53,7 +54,7 @@ const schemaOrg = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={fullCanonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={fullCanonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
@@ -67,7 +68,7 @@ const schemaOrg = {
     <!-- OGP -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={fullCanonical} />
+    {!noindex && <meta property="og:url" content={fullCanonical} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ZeroLeak Tools" />
 
@@ -135,6 +136,7 @@ const schemaOrg = {
           {tools.map((t) => (
             <a href={t.href} class="inline-flex items-center min-h-[44px] hover:text-emerald-700 hover:underline transition">{t.shortName ?? t.name}</a>
           ))}
+          <a href="/about/" class="inline-flex items-center min-h-[44px] hover:text-emerald-700 hover:underline transition">運営者情報・お問い合わせ</a>
           <a href="/legal/" class="inline-flex items-center min-h-[44px] hover:text-emerald-700 hover:underline transition">免責事項・プライバシー規約</a>
         </nav>
         <p class="pt-3 border-t border-slate-100 text-center text-[11px] text-slate-600">

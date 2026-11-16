@@ -14,7 +14,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(root, 'dist');
 
 // 事前キャッシュに含めないファイル（配信設定・クローラー向け・SW自身）
-const EXCLUDE = new Set(['sw.js', '_headers', '_redirects', 'ads.txt', 'robots.txt', 'sitemap.xml', 'llms.txt']);
+const EXCLUDE = new Set(['sw.js', '_headers', '_redirects', 'ads.txt', 'robots.txt', 'sitemap.xml', 'llms.txt', '404.html']);
 
 function walk(dir, base = '') {
   const out = [];
