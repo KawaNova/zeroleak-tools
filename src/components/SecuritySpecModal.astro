@@ -2,29 +2,71 @@
 // src/components/SecuritySpecModal.astro
 ---
 
-<div id="securityModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center">
-  <div class="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+<div
+  id="securityModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="securityModalTitle"
+  class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm p-3 sm:p-6 flex items-center justify-center"
+>
+  <div id="securityModalCard" class="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden text-left">
     
     <!-- モーダルヘッダー -->
-    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-      <div class="flex items-center gap-2">
-        <span class="text-xl">🛡️</span>
-        <div>
-          <h2 class="text-base sm:text-lg font-bold text-slate-900">セキュリティ仕様確認書（社内稟議・情シス提出用）</h2>
-          <p class="text-xs text-slate-500">ZeroLeak Tools 技術アーキテクチャ ＆ データ非保持証明</p>
+    <div class="px-5 sm:px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50 gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-xl shrink-0" aria-hidden="true">🛡️</span>
+        <div class="min-w-0">
+          <h2 id="securityModalTitle" class="text-sm sm:text-lg font-bold text-slate-900 leading-snug">
+            セキュリティ仕様確認書（社内稟議・情シス提出用）
+          </h2>
+          <p class="text-xs text-slate-600">ZeroLeak Tools 技術アーキテクチャ ＆ データ非保持証明</p>
         </div>
       </div>
-      <button id="closeSecurityModalBtn" type="button" class="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-200/60 text-xl cursor-pointer">
+      <button
+        id="closeSecurityModalBtn"
+        type="button"
+        aria-label="閉じる"
+        class="text-slate-600 hover:text-slate-900 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-slate-200/70 text-xl cursor-pointer shrink-0 transition"
+      >
         ✕
       </button>
     </div>
 
     <!-- モーダル本文（印刷・閲覧用） -->
-    <div id="securitySpecContent" class="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+    <div id="securitySpecContent" class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
       
-      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs space-y-1">
-        <p class="font-bold">【判定サマリー】業務利用における情報漏洩リスク：極小（0%）</p>
-        <p class="text-slate-700">本ツールは外部サーバーへのデータ送信処理を持たず、ブラウザ内のメモリ上（RAM）のみで完結して動作します。社外サーバーへの機密漏洩・ログ蓄積は技術的に発生しません。</p>
+      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs space-y-1.5">
+        <p class="font-bold text-sm text-emerald-950">【判定サマリー】業務利用におけるファイル外部漏洩リスク：0%（技術的に送信処理なし）</p>
+        <p class="text-slate-800">
+          本ツールは外部サーバーへのデータ送信処理を持たず、ブラウザ内のメモリ上（RAM）のみで完結して動作します。ツール実行ページでは広告スクリプトも読み込まないため、外部サーバーへの機密漏洩・アクセスログ蓄積は技術的に発生しません。
+        </p>
+      </div>
+
+      <!-- リアルタイム自己診断ボックス -->
+      <div id="liveNetworkAuditBox" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <span class="font-bold text-slate-900 flex items-center gap-1.5">
+            <span aria-hidden="true">📡</span>
+            <span>現在のブラウザ実測監査ステータス</span>
+          </span>
+          <span id="liveAuditBadge" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200 font-bold text-[11px]">
+            計測中...
+          </span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-700">
+          <div class="p-2 rounded-lg bg-white border border-slate-200">
+            <div class="text-slate-600 font-semibold">他ドメイン通信実績</div>
+            <div id="liveAuditExtCount" class="font-mono font-bold text-slate-900 mt-0.5">-</div>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-slate-200">
+            <div class="text-slate-600 font-semibold">CSP接続制限</div>
+            <div id="liveAuditCsp" class="font-mono font-bold text-slate-900 mt-0.5">-</div>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-slate-200">
+            <div class="text-slate-600 font-semibold">端末通信状態</div>
+            <div id="liveAuditOnline" class="font-mono font-bold text-slate-900 mt-0.5">-</div>
+          </div>
+        </div>
       </div>
 
       <section class="space-y-2">
@@ -34,20 +76,20 @@
         <table class="w-full text-xs text-left border-collapse border border-slate-200">
           <tbody class="divide-y divide-slate-200">
             <tr>
-              <th class="p-2.5 bg-slate-50 text-slate-700 font-semibold w-1/3 border-r border-slate-200">アーキテクチャ</th>
-              <td class="p-2.5 text-slate-800">完全静的JAMstack（Astro 静的HTML生成）</td>
+              <th class="p-2.5 bg-slate-50 text-slate-800 font-semibold w-1/3 border-r border-slate-200">アーキテクチャ</th>
+              <td class="p-2.5 text-slate-800">完全静的JAMstack（Astro 静的HTML生成 / Cloudflare Pages配信）</td>
             </tr>
             <tr>
-              <th class="p-2.5 bg-slate-50 text-slate-700 font-semibold border-r border-slate-200">バックエンドAPI</th>
+              <th class="p-2.5 bg-slate-50 text-slate-800 font-semibold border-r border-slate-200">バックエンドAPI</th>
               <td class="p-2.5 text-slate-800 font-bold text-emerald-700">なし（サーバーサイド処理・APIエンドポイントゼロ）</td>
             </tr>
             <tr>
-              <th class="p-2.5 bg-slate-50 text-slate-700 font-semibold border-r border-slate-200">データベース</th>
+              <th class="p-2.5 bg-slate-50 text-slate-800 font-semibold border-r border-slate-200">データベース</th>
               <td class="p-2.5 text-slate-800 font-bold text-emerald-700">なし（サーバー側ストレージなし）</td>
             </tr>
             <tr>
-              <th class="p-2.5 bg-slate-50 text-slate-700 font-semibold border-r border-slate-200">ファイル処理基盤</th>
-              <td class="p-2.5 text-slate-800">クライアント端末のWebブラウザ（WebAssembly / JavaScript / Canvas）</td>
+              <th class="p-2.5 bg-slate-50 text-slate-800 font-semibold border-r border-slate-200">ファイル処理基盤</th>
+              <td class="p-2.5 text-slate-800">クライアント端末のWebブラウザ（WebAssembly / TypeScript / HTML5 Canvas）</td>
             </tr>
           </tbody>
         </table>
@@ -58,8 +100,8 @@
           <span>2. データの取り扱い ＆ 通信制御 (Zero-Network Policy)</span>
         </h3>
         <ul class="list-disc list-inside space-y-1.5 text-slate-700 pl-1 text-xs">
-          <li><strong>外部送信0バイト保証:</strong> ユーザーがドラッグ＆ドロップしたファイル（CSV、PDF等）や入力テキストは、外部ネットワークへ送信されません。なお、広告配信（Google AdSense）に伴う通信のみ別に発生します。</li>
-          <li><strong>CSP（Content Security Policy）による技術遮断:</strong> <code>connect-src 'self' blob: data:;</code> を基本に、許可する外部ドメインを広告配信用のGoogle系のみに限定し、それ以外の第三者サーバーへの通信をブラウザ機能として遮断しています。</li>
+          <li><strong>外部送信0バイト保証:</strong> ユーザーがドロップ・入力したファイルやテキストは端末内メモリだけで処理します。ツール実行ページでは広告スクリプトも読み込まないため、他ドメインへの通信は完全に0件です（広告配信はトップページおよび一覧ページ等のみに掲載）。</li>
+          <li><strong>CSP（Content Security Policy）による技術遮断:</strong> ツール実行ページでは <code>connect-src 'self' blob: data:; frame-src 'none';</code> を設定し、第三者サーバーへの通信・埋込をブラウザ機能として遮断しています。</li>
           <li><strong>揮発性メモリ処理:</strong> データはブラウザのタブを閉じた時点で端末のRAMから完全に破棄されます。</li>
           <li><strong>オフライン検証可能:</strong> 一度ページを開いた後は、ネットワーク接続を切断した状態（機内モード）でも全ツールがそのまま動作します。Service Worker が端末に保存するのは当サイト自身の静的ファイル（HTML・JS・画像）のみで、処理対象のファイルや入力内容は保存しません。</li>
         </ul>
@@ -72,7 +114,7 @@
         <ol class="list-decimal list-inside space-y-1 text-slate-700 pl-1 text-xs">
           <li>ブラウザでツールを開き、<code>F12</code> キー（開発者ツール）を起動。</li>
           <li>「Network」タブを選択し、フィルターを「Fetch/XHR」または「All」に指定。</li>
-          <li>ファイルをドロップしてマスキングまたはパスワード解除を実行。</li>
+          <li>ファイルをドロップしてマスキングや解除、メタデータ消去を実行。</li>
           <li>処理実行中、外部HTTPリクエストが1件も発生しないこと（送信0バイト）を確認可能。</li>
         </ol>
       </section>
@@ -80,13 +122,13 @@
     </div>
 
     <!-- モーダルフッター -->
-    <div class="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
-      <span class="text-[11px] text-slate-500">作成元: ZeroLeak Tools セキュリティ監査チーム</span>
+    <div class="px-5 sm:px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
+      <span class="text-xs text-slate-600">発行元: ZeroLeak Tools（zeroleaktools.com / 個人運営）</span>
       <div class="flex items-center gap-2">
-        <button id="copySpecMdBtn" type="button" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-300 transition cursor-pointer shadow-xs">
+        <button id="copySpecMdBtn" type="button" class="px-3.5 py-2 min-h-[40px] rounded-lg bg-white hover:bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-300 transition cursor-pointer shadow-sm">
           📋 テキストをコピー
         </button>
-        <button id="printSpecBtn" type="button" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition cursor-pointer shadow-xs">
+        <button id="printSpecBtn" type="button" class="px-4 py-2 min-h-[40px] rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition cursor-pointer shadow-sm">
           🖨️ 仕様書を印刷 / PDF保存
         </button>
       </div>
@@ -95,41 +137,129 @@
   </div>
 </div>
 
+<style is:global>
+  @media print {
+    body.printing-security-spec * {
+      visibility: hidden !important;
+    }
+    body.printing-security-spec #securityModal,
+    body.printing-security-spec #securityModal * {
+      visibility: visible !important;
+    }
+    body.printing-security-spec #securityModal {
+      position: static !important;
+      display: block !important;
+      background: #ffffff !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+    body.printing-security-spec #securityModalCard {
+      max-width: 100% !important;
+      max-height: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      overflow: visible !important;
+    }
+    body.printing-security-spec #securitySpecContent {
+      overflow: visible !important;
+      padding: 12px 0 !important;
+    }
+    body.printing-security-spec #closeSecurityModalBtn,
+    body.printing-security-spec #copySpecMdBtn,
+    body.printing-security-spec #printSpecBtn {
+      display: none !important;
+    }
+  }
+</style>
+
 <script>
   const modal = document.getElementById('securityModal');
   const closeBtn = document.getElementById('closeSecurityModalBtn');
   const copyBtn = document.getElementById('copySpecMdBtn');
   const printBtn = document.getElementById('printSpecBtn');
 
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.add('hidden');
-    });
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
+  function updateLiveAudit() {
+    const extEl = document.getElementById('liveAuditExtCount');
+    const cspEl = document.getElementById('liveAuditCsp');
+    const onlineEl = document.getElementById('liveAuditOnline');
+    const badgeEl = document.getElementById('liveAuditBadge');
+
+    let extCount = 0;
+    if ('performance' in window && performance.getEntriesByType) {
+      for (const entry of performance.getEntriesByType('resource')) {
+        try {
+          const u = new URL(entry.name, location.href);
+          if ((u.protocol === 'http:' || u.protocol === 'https:') && u.origin !== location.origin) {
+            extCount++;
+          }
+        } catch {}
       }
+    }
+
+    const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content') || '';
+    const isStrictSelf = /connect-src\s+'self'\s+blob:\s+data:;/.test(cspMeta);
+
+    if (extEl) extEl.textContent = `${extCount} 件（現在ページ読み込み時点）`;
+    if (cspEl) cspEl.textContent = isStrictSelf ? "Strict ('self' only)" : "Standard (Ad-domain only)";
+    if (onlineEl) onlineEl.textContent = navigator.onLine ? 'オンライン（機内モードでも動作）' : 'オフライン（機内モード中）';
+    if (badgeEl) {
+      if (extCount === 0 && isStrictSelf) {
+        badgeEl.textContent = '✔ 外部通信 0件 確認済';
+        badgeEl.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-[11px]';
+      } else if (extCount === 0) {
+        badgeEl.textContent = '✔ 外部通信 0件';
+        badgeEl.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-[11px]';
+      } else {
+        badgeEl.textContent = `ℹ 広告通信等 ${extCount}件（一覧ページ）`;
+        badgeEl.className = 'px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300 font-bold text-[11px]';
+      }
+    }
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
     });
   }
 
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
   if (printBtn) {
+    const cleanupPrint = () => {
+      document.body.classList.remove('printing-security-spec');
+    };
+    window.addEventListener('afterprint', cleanupPrint);
     printBtn.addEventListener('click', () => {
+      updateLiveAudit();
+      document.body.classList.add('printing-security-spec');
       window.print();
+      setTimeout(cleanupPrint, 1500);
     });
   }
 
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
+      updateLiveAudit();
       const text = document.getElementById('securitySpecContent')?.innerText || '';
       navigator.clipboard.writeText(text).then(() => {
         copyBtn.textContent = '✔ コピーしました！';
-        setTimeout(() => copyBtn.textContent = '📋 テキストをコピー', 2000);
+        setTimeout(() => (copyBtn.textContent = '📋 テキストをコピー'), 2000);
       });
     });
   }
 
   // グローバルに開く関数を提供
   (window as any).openSecurityModal = () => {
+    updateLiveAudit();
     modal?.classList.remove('hidden');
   };
 </script>

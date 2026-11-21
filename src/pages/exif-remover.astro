@@ -42,22 +42,34 @@ const faqs = [
 
 <ToolShell
   slug="exif-remover"
-  title="写真の位置情報（EXIF・GPS）一括削除｜画質劣化なし"
-  description="写真のEXIF・GPS位置情報・撮影日時・カメラ機種名をブラウザ内で一括削除。画質劣化ゼロで100枚規模のJPEG/PNG/WebPを安全にクリーンアップ＆ZIP出力。"
+  title="写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし"
+  description="写真のEXIF・GPS位置情報・撮影日時・カメラ機種名をブラウザ内で一括削除。画質劣化ゼロで100枚規模のJPEG/PNG/WebPをクリーンアップ＆ZIP出力。サーバー送信なし。"
   canonicalPath="/exif-remover/"
-  h1="写真 位置情報（EXIF・GPS）削除｜一括・ブラウザ完結・サーバー送信なし"
-  subtitle="スマホやデジカメで撮影した写真に潜むGPS座標（自宅・現場の住所）、撮影日時、端末機種名、編集ソフト情報を検出して一括抹消。ブラウザ内だけで高速処理し、そのままZIPで一括保存できます。"
+  h1="写真 位置情報・EXIF一括削除"
+  subtitle="GPS座標・端末機種名・撮影日時をブラウザ内で100枚まで一括消去＆ZIP保存（サーバー送信なし）。"
   whyTitle="「位置情報を消すために写真をネットに送る」という最大の矛盾"
   howToSteps={howToSteps}
   faqs={faqs}
 >
+  <!-- ワンクリック検証用サンプルボタン -->
+  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+    <button
+      id="loadSampleExifBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>GPS付サンプル写真3枚で試す</span>
+    </button>
+  </div>
+
   <!-- メイン操作パネル -->
-  <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+  <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
 
     <!-- 複数ファイル対応ドラッグ＆ドロップゾーン（最優先ワークベンチ） -->
     <div
       id="dropZoneExif"
-      class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-8 sm:p-10 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group"
+      class="border-2 border-dashed border-slate-300 hover:border-blue-600 rounded-2xl p-5 sm:p-9 text-center transition bg-slate-50/70 hover:bg-blue-50/20 cursor-pointer group"
     >
       <input
         type="file"
@@ -66,94 +78,71 @@ const faqs = [
         multiple
         class="hidden"
       />
-      <div class="flex flex-col items-center gap-3 pointer-events-none">
-        <div class="w-16 h-16 rounded-2xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform shadow-xs">
+      <div class="flex flex-col items-center gap-2.5 pointer-events-none">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-2xl sm:text-3xl group-hover:scale-105 transition-transform shadow-sm">
           📍
         </div>
         <div>
-          <p class="font-bold text-slate-800 text-base sm:text-lg">
-            写真・画像ファイルをここにまとめてドロップ（複数・100枚一括対応）
+          <p class="font-bold text-slate-900 text-sm sm:text-lg">
+            写真をまとめてドロップ（複数・100枚一括対応）
           </p>
-          <p class="text-xs text-slate-500 mt-1">
+          <p class="text-xs text-slate-600 mt-1">
             またはクリックしてファイルを選択（対応形式: JPEG / PNG / WebP）
           </p>
         </div>
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-cyan-800 shadow-xs font-medium">
-            🔒 サーバー送信0バイト（ドロップと同時にブラウザ内でEXIF削除）
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-0.5">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-blue-900 shadow-sm font-semibold">
+            🔒 サーバー送信0バイト（ドロップと同時にEXIF削除）
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] text-slate-600 shadow-xs">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-700 shadow-sm">
             📦 ZIP一括保存対応
           </span>
         </div>
       </div>
     </div>
 
-    <!-- 操作サブバー：ワンクリックテスト ＆ 消去モード選択 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-      <!-- ワンクリック検証用：GPS位置情報入りサンプル写真3枚投入バー -->
-      <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-        <div class="space-y-0.5">
-          <span class="font-bold text-slate-800 flex items-center gap-1.5">
-            <span>🧪</span>
-            <span>手元に位置情報付き写真がない場合：</span>
-          </span>
-          <p class="text-[11px] text-slate-500">
-            東京・渋谷・大阪のGPS座標と端末名を含むテスト画像3枚を自動生成
-          </p>
-        </div>
-        <button
-          id="loadSampleExifBtn"
-          type="button"
-          class="px-3.5 py-2 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
-        >
-          <span>サンプル3枚投入</span>
-        </button>
+    <!-- 消去モード選択バー（スリム1行） -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+      <div class="space-y-0.5">
+        <span class="font-bold text-slate-900 flex items-center gap-1.5">
+          <span aria-hidden="true">⚙️</span>
+          <span>消去処理モード：</span>
+        </span>
+        <p class="text-xs text-slate-600">
+          通常は画質劣化0%の「高速ロスレス」が推奨です
+        </p>
       </div>
-
-      <!-- 消去モード選択バー -->
-      <div class="flex items-center justify-between gap-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-        <div class="space-y-0.5">
-          <span class="font-bold text-slate-800 flex items-center gap-1.5">
-            <span>⚙️</span>
-            <span>消去処理モード：</span>
-          </span>
-          <p class="text-[11px] text-slate-500">
-            通常は画質無劣化の「高速ロスレス」推奨
-          </p>
-        </div>
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-          <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-cyan-300 text-slate-800 cursor-pointer hover:border-cyan-500 shadow-xs transition">
-            <input
-              type="radio"
-              name="stripMode"
-              value="lossless"
-              checked
-              class="accent-cyan-600 text-xs"
-            />
-            <span class="font-bold">⚡ 高速ロスレス</span>
-          </label>
-          <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer hover:border-slate-300 shadow-xs transition">
-            <input
-              type="radio"
-              name="stripMode"
-              value="canvas"
-              class="accent-cyan-600 text-xs"
-            />
-            <span>🛡️ Canvas再描画</span>
-          </label>
-        </div>
+      <div class="flex items-center gap-1.5 bg-slate-200/70 p-1 rounded-xl shrink-0">
+        <label class="flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-white border border-blue-300 text-slate-900 cursor-pointer hover:border-blue-500 shadow-sm transition">
+          <input
+            type="radio"
+            name="stripMode"
+            value="lossless"
+            checked
+            class="accent-blue-600 text-xs"
+          />
+          <span class="font-bold">⚡ 高速ロスレス</span>
+        </label>
+        <label class="flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 cursor-pointer hover:border-slate-300 shadow-sm transition">
+          <input
+            type="radio"
+            name="stripMode"
+            value="canvas"
+            class="accent-blue-600 text-xs"
+          />
+          <span class="font-semibold">🛡️ Canvas再描画</span>
+        </label>
       </div>
     </div>
 
     <!-- 処理中プログレス表示 -->
     <div id="exifProgressArea" class="hidden space-y-2 p-5 rounded-xl bg-slate-50 border border-slate-200">
-      <div class="flex items-center justify-between text-xs font-semibold text-cyan-800">
+      <div class="flex items-center justify-between text-xs font-semibold text-blue-900">
         <span id="exifProgressLabel">ブラウザ内でEXIF・GPS解析＆消去中...</span>
         <span id="exifProgressCount" class="font-mono">0 / 0</span>
       </div>
       <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
-        <div id="exifProgressBar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-600 transition-all duration-150" style="width: 0%"></div>
+        <div id="exifProgressBar" class="h-full bg-blue-600 transition-all duration-150" style="width: 0%"></div>
       </div>
     </div>
 
@@ -161,25 +150,25 @@ const faqs = [
     <div id="exifResultArea" class="hidden space-y-5 pt-2">
       
       <!-- サマリー＆一括アクションバー -->
-      <div class="p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div class="p-4 sm:p-5 rounded-2xl bg-blue-50/70 border border-blue-200 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div class="space-y-1.5">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-sm">
               ✔ 一括クリーンアップ完了
             </span>
-            <span id="exifStatTime" class="text-xs font-mono text-slate-600">
+            <span id="exifStatTime" class="text-xs font-mono text-slate-700">
               ⚡ 処理時間: 0.05秒 (通信0バイト)
             </span>
           </div>
           <p id="exifSummaryText" class="text-sm font-bold text-slate-900">
             3枚の画像から計 1.2 KB のEXIF・GPS位置情報を完全抹消しました
           </p>
-          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-800">
             <span id="exifGpsCountBadge" class="inline-flex items-center gap-1 text-rose-800 font-bold">
               📍 GPS座標検出・抹消: 0枚
             </span>
             <span>•</span>
-            <span id="exifMetaCountBadge" class="text-cyan-800 font-bold">
+            <span id="exifMetaCountBadge" class="text-blue-900 font-bold">
               🏷️ カメラ/EXIF検出・抹消: 0枚
             </span>
           </div>
@@ -189,9 +178,9 @@ const faqs = [
           <button
             id="downloadAllZipBtn"
             type="button"
-            class="flex-1 lg:flex-none px-6 py-3 rounded-xl font-bold text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+            class="flex-1 lg:flex-none px-5 py-3 min-h-[44px] rounded-xl font-bold text-sm text-white bg-blue-700 hover:bg-blue-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             <span id="downloadZipBtnLabel">全ファイルをZIPで一括保存</span>
@@ -199,7 +188,7 @@ const faqs = [
           <button
             id="clearExifListBtn"
             type="button"
-            class="px-4 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold shadow-xs transition cursor-pointer"
+            class="px-4 py-3 min-h-[44px] rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold shadow-sm transition cursor-pointer"
           >
             クリア
           </button>
@@ -207,16 +196,16 @@ const faqs = [
       </div>
 
       <!-- ゼロリークくん完了メッセージ -->
-      <div class="flex items-center gap-2 p-3 rounded-xl bg-cyan-100/70 border border-cyan-200 text-xs text-cyan-950 font-medium">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <span><strong>ゼロリークくん：</strong>位置情報の消去が完了しました！写真はお使いの端末内だけで安全に処理されています。</span>
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-blue-100/60 border border-blue-200 text-xs text-slate-900 font-medium">
+        <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
+        <span><strong>ゼロリークくん：</strong>位置情報の消去が完了しました！写真はお使いの端末内だけで処理されています。</span>
       </div>
 
       <!-- ファイル別 検出＆消去レポート一覧 -->
       <div class="space-y-2.5">
-        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-          <span class="font-bold text-slate-700">個別ファイル一覧＆メタデータ抹消レポート</span>
-          <span id="exifListCountNotice">表示中: 0件</span>
+        <div class="flex items-center justify-between text-xs text-slate-700 px-1">
+          <span class="font-bold text-slate-900">個別ファイル一覧＆メタデータ抹消レポート</span>
+          <span id="exifListCountNotice" class="font-mono text-slate-600">表示中: 0件</span>
         </div>
         <div id="exifFileList" class="space-y-2 max-h-[500px] overflow-y-auto pr-1">
           <!-- JSで動的挿入 -->
@@ -269,6 +258,15 @@ const faqs = [
     const clearExifListBtn = document.getElementById('clearExifListBtn')!;
     const fileListContainer = document.getElementById('exifFileList')!;
 
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function getSelectedMode(): 'lossless' | 'canvas' {
       const checked = document.querySelector(
         'input[name="stripMode"]:checked'
@@ -276,7 +274,6 @@ const faqs = [
       return checked && checked.value === 'canvas' ? 'canvas' : 'lossless';
     }
 
-    // 単一ファイル処理
     async function processSingleFile(
       fileData: Uint8Array,
       fileName: string,
@@ -311,7 +308,6 @@ const faqs = [
       };
     }
 
-    // 複数ファイル一括処理フロー
     async function handleFiles(files: (File | { name: string; data: Uint8Array })[]) {
       if (files.length === 0) return;
 
@@ -353,7 +349,6 @@ const faqs = [
       renderResults(elapsed);
     }
 
-    // 結果レンダリング
     function renderResults(elapsedSec: string) {
       if (processedItems.length === 0) {
         resultArea.classList.add('hidden');
@@ -367,7 +362,7 @@ const faqs = [
       const totalGpsCount = processedItems.filter((it) => it.beforeReport.hasGps).length;
       const totalMetaCount = processedItems.filter((it) => it.beforeReport.hasExif).length;
 
-      statTime.textContent = `⚡ 処理時間: ${elapsedSec}秒 (通信0バイト)`;
+      statTime.textContent = `⚡ 処理時間: ${elapsedSec}秒 (外部通信 0件)`;
       summaryText.textContent = `${totalFiles}枚の画像から計 ${(totalRemovedBytes / 1024).toFixed(1)} KB のEXIF・GPS位置情報を完全抹消しました`;
       gpsCountBadge.textContent = `📍 GPS座標検出・抹消: ${totalGpsCount}枚`;
       metaCountBadge.textContent = `🏷️ カメラ/EXIF検出・抹消: ${totalMetaCount}枚`;
@@ -382,7 +377,7 @@ const faqs = [
       processedItems.forEach((item, index) => {
         const card = document.createElement('div');
         card.className =
-          'p-3.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
+          'p-3.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
 
         const beforeTagsStr =
           item.beforeReport.detectedTags.length > 0
@@ -391,29 +386,29 @@ const faqs = [
 
         card.innerHTML = `
           <div class="space-y-1 min-w-0 flex-1">
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-slate-900 truncate max-w-[240px] sm:max-w-md">${item.originalName}</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-100 text-slate-700">${item.beforeReport.format}</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold text-slate-900 truncate max-w-[240px] sm:max-w-md">${escapeHtml(item.originalName)}</span>
+              <span class="px-1.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase bg-slate-100 text-slate-800">${escapeHtml(item.beforeReport.format)}</span>
               ${
                 item.beforeReport.hasGps
-                  ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800">GPS座標あり</span>'
+                  ? '<span class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800">GPS座標あり</span>'
                   : ''
               }
             </div>
-            <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-500">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-700">
               <span>元: ${(item.originalSize / 1024).toFixed(1)} KB</span>
               <span>→</span>
-              <span class="text-teal-700 font-semibold">後: ${(item.cleanedSize / 1024).toFixed(1)} KB (-${item.removedBytes}B)</span>
+              <span class="text-emerald-800 font-bold">後: ${(item.cleanedSize / 1024).toFixed(1)} KB (-${item.removedBytes}B)</span>
               <span>•</span>
-              <span class="text-slate-600">消去項目: ${beforeTagsStr}</span>
+              <span class="text-slate-700">消去項目: ${escapeHtml(beforeTagsStr)}</span>
             </div>
           </div>
           <button
             type="button"
             data-download-idx="${index}"
-            class="px-3.5 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+            class="px-3.5 py-2 min-h-[40px] rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-900 border border-slate-300 font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
           >
-            <span>📥</span>
+            <span aria-hidden="true">📥</span>
             <span>保存</span>
           </button>
         `;
@@ -440,7 +435,6 @@ const faqs = [
       });
     }
 
-    // ZIPダウンロード実行
     downloadAllZipBtn.addEventListener('click', () => {
       if (processedItems.length === 0) return;
       const zipFiles = processedItems.map((item) => ({
@@ -459,31 +453,28 @@ const faqs = [
       URL.revokeObjectURL(url);
     });
 
-    // クリア
     clearExifListBtn.addEventListener('click', () => {
       processedItems = [];
       resultArea.classList.add('hidden');
       fileInput.value = '';
     });
 
-    // サンプル投入
     loadSampleBtn.addEventListener('click', async () => {
       const sampleFiles = generateSampleExifJpegs();
       await handleFiles(sampleFiles);
     });
 
-    // ドラッグ＆ドロップイベント
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropZone.classList.add('border-cyan-500', 'bg-cyan-50/30');
+      dropZone.classList.add('border-blue-600', 'bg-blue-50/40');
     });
     dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/30');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/40');
     });
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/30');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/40');
       if (e.dataTransfer && e.dataTransfer.files.length > 0) {
         handleFiles(Array.from(e.dataTransfer.files));
       }

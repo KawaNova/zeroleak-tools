@@ -7,11 +7,26 @@ interface Props {
   canonicalPath?: string;
   extraSchemaGraph?: any[];
   noindex?: boolean; // 404 など検索結果に出さないページ
+  allowAds?: boolean; // ツール実行ページでは false（外部通信完全0件）
+  ogImage?: string;
 }
 
-const { title, description, canonicalPath = '/', extraSchemaGraph = [], noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  canonicalPath = '/',
+  extraSchemaGraph = [],
+  noindex = false,
+  allowAds = true,
+  ogImage = '/ogp.png',
+} = Astro.props;
 const siteUrl = 'https://zeroleaktools.com';
 const fullCanonical = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
+const fullOgImage = `${siteUrl}${ogImage.startsWith('/') ? ogImage : `/${ogImage}`}`;
+
+const cspContent = allowAds
+  ? "default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data: https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; connect-src 'self' blob: data: https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; img-src 'self' data: blob: https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; frame-src 'self' https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://*.googlesyndication.com https://*.google.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; worker-src 'self' blob:; object-src 'none'; base-uri 'self';"
+  : "default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; connect-src 'self' blob: data:; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; frame-src 'none'; object-src 'none'; base-uri 'self';";
 
 const fullTitle = canonicalPath === '/' || title.includes('ZeroLeak')
   ? title
@@ -58,29 +73,40 @@ const schemaOrg = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
-    
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9978047733183188" crossorigin="anonymous"></script>
+    <meta name="color-scheme" content="light" />
 
-    <!-- CSP: AdSense表示およびローカル処理の整合性維持 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data: https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; connect-src 'self' blob: data: https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; img-src 'self' data: blob: https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; frame-src 'self' https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://*.googlesyndication.com https://*.google.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; worker-src 'self' blob:;" />
+    {allowAds && (
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9978047733183188" crossorigin="anonymous"></script>
+    )}
 
-    <!-- OGP -->
+    <!-- CSP: ツール実行ページは外部通信を完全遮断、一覧・案内ページはAdSenseのみ許可 -->
+    <meta http-equiv="Content-Security-Policy" content={cspContent} />
+
+    <!-- OGP / SNS Card -->
+    <meta property="og:locale" content="ja_JP" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={fullCanonical} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ZeroLeak Tools" />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImage} />
 
     <!-- JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
   </head>
   <body class="flex flex-col min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white overflow-x-hidden">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-slate-900 focus:text-white focus:text-xs focus:font-bold">メインコンテンツへ移動</a>
     <!-- ヘッダー（清潔感ある白基調・スライドバー完全撤去・スマホ最適化） -->
     <header class="border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
       <div class="max-w-6xl mx-auto px-3 sm:px-4 py-1 sm:py-1.5 flex items-center justify-between gap-2">
         <a href="/" class="flex items-center gap-1.5 sm:gap-2 min-h-[44px] group shrink-0">
-          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-100 transition-colors shadow-xs shrink-0">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-100 transition-colors shadow-sm shrink-0">
             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
@@ -116,7 +142,7 @@ const schemaOrg = {
     </div>
 
     <!-- メインコンテンツ -->
-    <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-8 overflow-x-hidden">
+    <main id="main-content" class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-8 overflow-x-hidden">
       <slot />
     </main>
 

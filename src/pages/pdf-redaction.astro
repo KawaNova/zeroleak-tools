@@ -32,55 +32,55 @@ const faqs = [
   },
   {
     question: 'マイナンバーや電話番号などの個人情報は自動で検出できますか？',
-    answer: 'はい。『個人情報を自動検出』ボタンを押すと、PDF内のテキストレイヤーを走査してマイナンバー（12桁）、電話番号、メールアドレスの該当箇所を自動検出し、ワンクリックで黒塗り枠を配置できます。',
+    answer: 'はい。『個人情報を自動検出して枠配置』ボタンを押すと、PDF内のテキストレイヤーを走査してマイナンバー（12桁）、電話番号、メールアドレスの該当箇所を自動検出し、ワンクリックで黒塗り枠を配置できます。',
   },
 ];
 ---
 
 <ToolShell
   slug="pdf-redaction"
-  title="機密PDF 完全黒塗り・不可逆墨消し | コピペ復元不可・ブラウザ完結・サーバー送信なし"
-  description="PDFの氏名・金額・マイナンバーを不可逆黒塗り。コピペで文字が抜ける事故を完全防止（Canvasラスタライズ・テキスト層物理消滅）。ブラウザ内完結・外部送信0バイト。"
+  title="機密PDF 完全黒塗り・不可逆墨消し | コピペ復元不可・一括・ブラウザ・サーバー送信なし"
+  description="PDFの氏名・金額・マイナンバーを一括で不可逆黒塗り。コピペで文字が抜ける事故を物理防止（Canvasラスタライズ・テキスト層消滅）。ブラウザ完結・外部送信0バイト。"
   canonicalPath="/pdf-redaction/"
-  h1="機密PDF 完全黒塗り・不可逆墨消し（コピペ復元不可）"
-  subtitle="「黒枠を重ねただけ」で下の文字が抜ける事故を防止。Canvasラスタライズでテキスト層そのものを物理消滅させて再構築します。"
+  h1="機密PDF 完全黒塗り・不可逆墨消し"
+  subtitle="「黒枠を重ねただけ」で下の文字が抜ける事故を物理防止。テキスト層を消滅させて再構築します。"
   mascotName="tool-pdf-redaction"
   mascotFallback="⬛"
   whyTitle="「PDFの上に黒い四角を置いただけ」は、1秒で文字が抜ける"
   howToSteps={howToSteps}
   faqs={faqs}
 >
-  <div class="space-y-6">
-    <!-- テスト用サンプル投入ボタン -->
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        id="loadSamplePdfRedactBtn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-      >
-        <span>🧪</span>
-        <span>サンプル機密PDFで試す（偽黒塗り体験付き）</span>
-      </button>
-    </div>
+  <!-- ワンクリック検証用サンプルボタン -->
+  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+    <button
+      id="loadSamplePdfRedactBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>サンプル機密PDFで試す（偽黒塗り比較付）</span>
+    </button>
+  </div>
 
+  <div class="space-y-6">
     <!-- メイン操作カード -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
       <!-- ファイルドロップゾーン -->
-      <div id="dropZonePdfRedact" class="border-2 border-dashed border-slate-300 hover:border-slate-800 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-slate-100/50 cursor-pointer group">
+      <div id="dropZonePdfRedact" class="border-2 border-dashed border-slate-300 hover:border-slate-800 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-slate-100/60 cursor-pointer group">
         <input type="file" id="fileInputPdfRedact" accept=".pdf,application/pdf" class="hidden" />
         <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-          <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs text-xl font-bold">
+          <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm text-xl font-bold">
             ⬛
           </div>
           <div>
-            <p class="font-bold text-slate-800 text-sm sm:text-base">黒塗り・墨消ししたいPDFをドロップ</p>
-            <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.pdf) • 複数ページ対応</p>
+            <p class="font-bold text-slate-900 text-sm sm:text-base">黒塗り・墨消ししたいPDFをドロップ</p>
+            <p class="text-xs text-slate-600 mt-0.5">またはクリックしてファイルを選択 (.pdf) • 複数ページ一括処理対応</p>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-900 shadow-xs font-bold">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-900 shadow-sm font-bold">
               🔒 サーバー送信なし（0バイト保証）
             </span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-rose-700 shadow-xs font-semibold">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-rose-700 shadow-sm font-semibold">
               🚫 テキスト層完全消滅（コピペ不可）
             </span>
           </div>
@@ -91,39 +91,53 @@ const faqs = [
       <div id="redactWorkspace" class="hidden space-y-4">
         <!-- コントロールバー -->
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div class="flex items-center gap-3">
-            <span class="font-bold text-slate-900" id="pdfFileNameText">document.pdf</span>
-            <span class="text-slate-500 font-mono" id="pdfPageInfoText">ページ: 1 / 1</span>
+          <div class="flex flex-wrap items-center gap-2 min-w-0">
+            <span class="font-bold text-slate-900 truncate max-w-[180px] sm:max-w-xs" id="pdfFileNameText">document.pdf</span>
+            <span class="text-slate-600 font-mono" id="pdfPageInfoText">ページ: 1 / 1</span>
+            <button
+              id="changePdfRedactBtn"
+              type="button"
+              class="text-xs text-slate-700 hover:text-slate-950 underline font-semibold cursor-pointer"
+            >
+              別のPDFを選択
+            </button>
           </div>
 
-          <!-- ページナビゲーション＆自動検出 -->
-          <div class="flex flex-wrap items-center gap-2">
+          <!-- ページナビゲーション＆自動検出＆操作 -->
+          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <button
               id="prevPageBtn"
               type="button"
-              class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 font-bold hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
+              class="px-2.5 py-1.5 min-h-[38px] rounded-lg bg-white border border-slate-300 text-slate-800 font-bold hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
             >
-              ◀ 前ページ
+              ◀ 前
             </button>
             <button
               id="nextPageBtn"
               type="button"
-              class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 font-bold hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
+              class="px-2.5 py-1.5 min-h-[38px] rounded-lg bg-white border border-slate-300 text-slate-800 font-bold hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
             >
-              次ページ ▶
+              次 ▶
             </button>
             <button
               id="autoDetectRisksBtn"
               type="button"
-              class="px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-bold hover:bg-rose-100 flex items-center gap-1 cursor-pointer"
+              class="px-3 py-1.5 min-h-[38px] rounded-lg bg-rose-50 border border-rose-200 text-rose-800 font-bold hover:bg-rose-100 flex items-center gap-1 cursor-pointer"
             >
-              <span>🔍</span>
+              <span aria-hidden="true">🔍</span>
               <span>個人情報を自動検出して枠配置</span>
+            </button>
+            <button
+              id="undoRedactionBtn"
+              type="button"
+              class="px-2.5 py-1.5 min-h-[38px] rounded-lg bg-white border border-slate-300 text-slate-800 hover:bg-slate-100 font-semibold cursor-pointer"
+            >
+              ↩ 1つ戻す
             </button>
             <button
               id="clearRedactionsBtn"
               type="button"
-              class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-600 hover:text-rose-600 font-medium cursor-pointer"
+              class="px-2.5 py-1.5 min-h-[38px] rounded-lg bg-white border border-slate-300 text-slate-700 hover:text-rose-700 font-semibold cursor-pointer"
             >
               枠を全消去
             </button>
@@ -131,55 +145,80 @@ const faqs = [
         </div>
 
         <!-- 検出リスク警告バー -->
-        <div id="detectedRisksBanner" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-2">
-          <span id="detectedRisksCountText" class="font-semibold">⚠️ 機密テキストを検出しました</span>
-          <span class="text-[11px] text-amber-700">枠の位置を微調整して「完全黒塗り実行」を押してください</span>
+        <div id="detectedRisksBanner" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex flex-wrap items-center justify-between gap-2">
+          <span id="detectedRisksCountText" class="font-bold">⚠️ 機密テキストを検出しました</span>
+          <span class="text-xs text-rose-800">位置をドラッグで調整し「完全黒塗りを実行」を押してください</span>
         </div>
+
+        <!-- インライン通知バナー -->
+        <div id="redactStatusBanner" hidden role="status" class="p-3 rounded-xl border text-xs font-semibold"></div>
 
         <!-- PDFプレビュー＆ドラッグ黒塗りCanvasエリア -->
         <div class="flex flex-col items-center">
-          <div class="relative inline-block border-2 border-slate-300 rounded-xl overflow-hidden shadow-sm bg-slate-200 select-none">
+          <div class="relative inline-block border-2 border-slate-300 rounded-xl overflow-hidden shadow-sm bg-slate-200 select-none touch-none max-w-full">
             <!-- PDF表示Canvas -->
             <canvas id="pdfRenderCanvas" class="block max-w-full h-auto cursor-crosshair"></canvas>
             <!-- 黒塗り矩形描画用オーバーレイCanvas -->
             <canvas id="pdfOverlayCanvas" class="absolute top-0 left-0 w-full h-full cursor-crosshair pointer-events-auto"></canvas>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">
-            💡 マウスで隠したい箇所をドラッグすると黒塗り枠が追加されます（複数箇所指定可）。
+          <p class="text-xs text-slate-700 mt-2">
+            💡 マウスや指で隠したい箇所をドラッグすると黒塗り枠が追加されます（複数箇所指定可）。
           </p>
         </div>
 
         <!-- 実行・ダウンロードセクション -->
         <div class="pt-4 border-t border-slate-200 space-y-3">
+          <!-- 枠0件時のインライン確認パネル -->
+          <div id="zeroBoxConfirmPanel" class="hidden p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900 space-y-2.5">
+            <p class="font-bold">⚠️ 黒塗り枠が1つも指定されていません</p>
+            <p class="text-slate-700">このまま全ページを画像ラスタライズし、コピー可能なテキスト層のみを完全消滅させたPDFを出力しますか？</p>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                id="confirmZeroBoxBtn"
+                type="button"
+                class="px-4 py-2 min-h-[40px] rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold cursor-pointer"
+              >
+                はい、テキスト層を消滅して保存
+              </button>
+              <button
+                id="cancelZeroBoxBtn"
+                type="button"
+                class="px-4 py-2 min-h-[40px] rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold cursor-pointer"
+              >
+                キャンセル（黒枠を指定する）
+              </button>
+            </div>
+          </div>
+
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div>
               <p class="font-bold text-xs sm:text-sm text-slate-900">
                 不可逆ラスタライズ変換でテキスト層を完全消滅
               </p>
-              <p class="text-[11px] text-slate-500">
-                黒塗り枠部分をピクセル破壊し、テキストデータを1バイトも含まない安全な画像PDFとして再結合します。
+              <p class="text-xs text-slate-600">
+                黒塗り枠部分をピクセル破壊し、テキストデータを1バイトも含まないクリーンな画像PDFとして再結合します。
               </p>
             </div>
             <button
               id="executeRedactionBtn"
               type="button"
-              class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-slate-900 hover:bg-slate-800 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer shrink-0"
+              class="w-full sm:w-auto px-6 py-3 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-slate-900 hover:bg-slate-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer shrink-0 disabled:opacity-50"
             >
-              <span>⬛</span>
+              <span aria-hidden="true">⬛</span>
               <span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>
             </button>
           </div>
 
           <!-- ゼロリークくん完了メッセージ -->
           <div class="flex items-center gap-2 p-3 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900 font-medium">
-            <span class="text-base select-none shrink-0">🛡️</span>
+            <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
             <span><strong>ゼロリークくん：</strong>墨消し処理はブラウザのCanvas上で不可逆にピクセル破壊されます。コピペで裏の文字が漏れる心配はありません。</span>
           </div>
 
           <!-- 法務防衛・完全免責事項（最重要常設バナー） -->
-          <div class="p-3 rounded-xl bg-slate-100/80 border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
-            <div class="font-bold text-slate-800 flex items-center gap-1 mb-0.5">
-              <span>⚠️</span>
+          <div class="p-3 rounded-xl bg-slate-100/80 border border-slate-200 text-xs text-slate-700 leading-relaxed">
+            <div class="font-bold text-slate-900 flex items-center gap-1 mb-0.5">
+              <span aria-hidden="true">⚠️</span>
               <span>提出前の目視確認必須 ＆ 完全免責事項</span>
             </div>
             <p>
@@ -204,7 +243,10 @@ const faqs = [
     type RedactionBox,
   } from '../utils/pdf-redaction';
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/_astro/pdf.worker.min.yatZIOMy.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
+    import.meta.url
+  ).toString();
 
   let currentPdfBytes: Uint8Array | null = null;
   let currentFileName = 'document.pdf';
@@ -225,15 +267,37 @@ const faqs = [
   const workspace = document.getElementById('redactWorkspace')!;
   const fileNameText = document.getElementById('pdfFileNameText')!;
   const pageInfoText = document.getElementById('pdfPageInfoText')!;
+  const changePdfBtn = document.getElementById('changePdfRedactBtn')!;
   const prevPageBtn = document.getElementById('prevPageBtn') as HTMLButtonElement;
   const nextPageBtn = document.getElementById('nextPageBtn') as HTMLButtonElement;
   const autoDetectBtn = document.getElementById('autoDetectRisksBtn')!;
+  const undoBtn = document.getElementById('undoRedactionBtn')!;
   const clearBtn = document.getElementById('clearRedactionsBtn')!;
   const executeBtn = document.getElementById('executeRedactionBtn') as HTMLButtonElement;
   const renderCanvas = document.getElementById('pdfRenderCanvas') as HTMLCanvasElement;
   const overlayCanvas = document.getElementById('pdfOverlayCanvas') as HTMLCanvasElement;
   const risksBanner = document.getElementById('detectedRisksBanner')!;
   const risksCountText = document.getElementById('detectedRisksCountText')!;
+  const statusBanner = document.getElementById('redactStatusBanner')!;
+  const zeroBoxConfirmPanel = document.getElementById('zeroBoxConfirmPanel')!;
+  const confirmZeroBoxBtn = document.getElementById('confirmZeroBoxBtn')!;
+  const cancelZeroBoxBtn = document.getElementById('cancelZeroBoxBtn')!;
+
+  function showStatus(msg: string, tone: 'success' | 'info' | 'error' = 'info') {
+    const toneClass =
+      tone === 'success'
+        ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+        : tone === 'error'
+        ? 'bg-rose-50 border-rose-200 text-rose-900'
+        : 'bg-slate-100 border-slate-300 text-slate-900';
+    statusBanner.className = `p-3 rounded-xl border text-xs font-semibold ${toneClass}`;
+    statusBanner.textContent = msg;
+    statusBanner.hidden = false;
+  }
+
+  function hideStatus() {
+    statusBanner.hidden = true;
+  }
 
   // ファイルドロップ
   dropZone.addEventListener('click', () => fileInput.click());
@@ -257,11 +321,26 @@ const faqs = [
     }
   });
 
+  changePdfBtn.addEventListener('click', () => {
+    currentPdfBytes = null;
+    currentPdfDoc = null;
+    redactions = [];
+    fileInput.value = '';
+    risksBanner.classList.add('hidden');
+    zeroBoxConfirmPanel.classList.add('hidden');
+    hideStatus();
+    workspace.classList.add('hidden');
+    dropZone.classList.remove('hidden');
+  });
+
   async function loadPdfFile(file: File) {
     currentFileName = file.name;
     const arrayBuffer = await file.arrayBuffer();
     currentPdfBytes = new Uint8Array(arrayBuffer);
     redactions = [];
+    risksBanner.classList.add('hidden');
+    zeroBoxConfirmPanel.classList.add('hidden');
+    hideStatus();
     await initializePdfViewer();
   }
 
@@ -270,15 +349,16 @@ const faqs = [
     currentFileName = 'sample_confidential_report.pdf';
     currentPdfBytes = await generateSampleConfidentialPdf();
     redactions = [];
+    zeroBoxConfirmPanel.classList.add('hidden');
+    hideStatus();
     await initializePdfViewer();
-    // サンプルの場合は自動検出も即座に実行
     await runAutoDetect();
   });
 
   async function initializePdfViewer() {
     if (!currentPdfBytes) return;
     currentPdfDoc = await pdfjsLib.getDocument({
-      data: currentPdfBytes,
+      data: currentPdfBytes.slice(0),
       useSystemFonts: true,
     }).promise;
     totalPages = currentPdfDoc.numPages;
@@ -331,7 +411,7 @@ const faqs = [
       ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
       ctx.fillRect(x, y, w, h);
 
-      ctx.strokeStyle = '#ef4444';
+      ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 1.5;
       ctx.strokeRect(x, y, w, h);
     }
@@ -365,7 +445,7 @@ const faqs = [
 
       ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
       ctx.fillRect(x, y, w, h);
-      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeStyle = '#0284c7';
       ctx.lineWidth = 2;
       ctx.strokeRect(x, y, w, h);
     }
@@ -393,6 +473,7 @@ const faqs = [
         width: pw / overlayCanvas.width,
         height: ph / overlayCanvas.height,
       });
+      zeroBoxConfirmPanel.classList.add('hidden');
     }
     drawOverlayRedactions();
   });
@@ -428,7 +509,7 @@ const faqs = [
 
       ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
       ctx.fillRect(x, y, w, h);
-      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeStyle = '#0284c7';
       ctx.lineWidth = 2;
       ctx.strokeRect(x, y, w, h);
     }
@@ -458,6 +539,7 @@ const faqs = [
         width: pw / overlayCanvas.width,
         height: ph / overlayCanvas.height,
       });
+      zeroBoxConfirmPanel.classList.add('hidden');
     }
     drawOverlayRedactions();
   });
@@ -475,8 +557,19 @@ const faqs = [
     }
   });
 
+  undoBtn.addEventListener('click', () => {
+    for (let i = redactions.length - 1; i >= 0; i--) {
+      if (redactions[i].pageNumber === currentPageNum) {
+        redactions.splice(i, 1);
+        drawOverlayRedactions();
+        break;
+      }
+    }
+  });
+
   clearBtn.addEventListener('click', () => {
     redactions = redactions.filter((r) => r.pageNumber !== currentPageNum);
+    risksBanner.classList.add('hidden');
     drawOverlayRedactions();
   });
 
@@ -484,10 +577,12 @@ const faqs = [
 
   async function runAutoDetect() {
     if (!currentPdfBytes) return;
-    const analysis = await analyzePdfRisks(currentPdfBytes);
+    hideStatus();
+    const analysis = await analyzePdfRisks(currentPdfBytes.slice(0));
     if (analysis.detectedRisks.length > 0) {
-      risksCountText.textContent = `⚠️ 個人情報・機密テキストを ${analysis.detectedRisks.length} 箇所検出しました（自動で黒塗り枠を配置）`;
+      risksCountText.textContent = `⚠️ 個人情報・機密テキストを ${analysis.detectedRisks.length} 箇所検出しました（黒塗り枠を自動配置）`;
       risksBanner.classList.remove('hidden');
+      zeroBoxConfirmPanel.classList.add('hidden');
 
       for (const risk of analysis.detectedRisks) {
         redactions.push({
@@ -501,45 +596,55 @@ const faqs = [
       }
       drawOverlayRedactions();
     } else {
-      alert('マイナンバー・電話・メール等の既知パターンは検出されませんでした。マウスドラッグで隠したい箇所を指定してください。');
+      showStatus('ℹ️ マイナンバー・電話・メール等の自動パターンは見つかりませんでした。プレビュー上で直接ドラッグして黒塗り枠を追加してください。', 'info');
+    }
+  }
+
+  async function performRedaction() {
+    if (!currentPdfBytes) return;
+    zeroBoxConfirmPanel.classList.add('hidden');
+    hideStatus();
+    executeBtn.disabled = true;
+    executeBtn.innerHTML = `<span>⏳</span><span>高精細ラスタライズ処理中...</span>`;
+
+    try {
+      const { pdfBytes, totalRedactionsApplied } = await renderRedactedPdf(currentPdfBytes.slice(0), redactions);
+
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const dotIdx = currentFileName.lastIndexOf('.');
+      a.download = dotIdx !== -1 ? `${currentFileName.slice(0, dotIdx)}_redacted.pdf` : `${currentFileName}_redacted.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showStatus(
+        `✔ 不可逆黒塗り完了！${totalRedactionsApplied} 箇所の画素を破壊し、テキスト層を含まないPDFを保存しました。提出前にダウンロード結果を必ず目視確認してください。`,
+        'success'
+      );
+    } catch (err: any) {
+      showStatus(`❌ 処理中にエラーが発生しました: ${err?.message || 'PDFの変換に失敗しました'}`, 'error');
+    } finally {
+      executeBtn.disabled = false;
+      executeBtn.innerHTML = `<span aria-hidden="true">⬛</span><span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>`;
     }
   }
 
   executeBtn.addEventListener('click', async () => {
     if (!currentPdfBytes) return;
     if (redactions.length === 0) {
-      if (!confirm('黒塗り枠が指定されていません。このまま全ページをラスタライズ（画像化）してテキスト層を消滅させますか？')) {
-        return;
-      }
+      zeroBoxConfirmPanel.classList.remove('hidden');
+      zeroBoxConfirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
     }
+    await performRedaction();
+  });
 
-    executeBtn.disabled = true;
-    executeBtn.innerHTML = `<span>⏳</span><span>高精細ラスタライズ処理中...</span>`;
-
-    try {
-      const { pdfBytes, totalRedactionsApplied } = await renderRedactedPdf(currentPdfBytes, redactions);
-      
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      const dotIdx = currentFileName.lastIndexOf('.');
-      if (dotIdx !== -1) {
-        a.download = `${currentFileName.slice(0, dotIdx)}_redacted.pdf`;
-      } else {
-        a.download = `${currentFileName}_redacted.pdf`;
-      }
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      alert(`不可逆黒塗り完了！\n${totalRedactionsApplied} 箇所のピクセルを物理破壊し、テキスト層を含まないクリーンなPDFを出力しました。\n※提出前に必ずご自身でダウンロード結果を目視確認してください。`);
-    } catch (err) {
-      alert('処理中にエラーが発生しました: ' + (err as any)?.message);
-    } finally {
-      executeBtn.disabled = false;
-      executeBtn.innerHTML = `<span>⬛</span><span>完全黒塗りを実行してPDFを保存 (通信0バイト)</span>`;
-    }
+  confirmZeroBoxBtn.addEventListener('click', performRedaction);
+  cancelZeroBoxBtn.addEventListener('click', () => {
+    zeroBoxConfirmPanel.classList.add('hidden');
   });
 </script>

@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     question: '入力した社内メールや対照表（変換辞書）が外部サーバーへ送信されることはありませんか？',
-    answer: '一切ありません。テキストの解析・置換・実名復元の処理はすべてお使いのブラウザ内部（RAM）のJavaScriptのみで実行されます。処理中にテキストを外部へ送る通信は発生せず、F12キーの開発者ツール（Networkタブ）でいつでも確認できます（広告配信用のGoogle AdSense通信を除く）。',
+    answer: '一切ありません。テキストの解析・置換・実名復元の処理はすべてお使いのブラウザ内部（RAM）のJavaScriptのみで実行されます。処理中にテキストを外部へ送る通信は発生せず、F12キーの開発者ツール（Networkタブ）でいつでも確認できます。',
   },
   {
     question: 'ChatGPT等の外部AIに送信するなら、なぜZeroLeak（漏洩ゼロ）なのですか？',
@@ -38,80 +38,80 @@ const faqs = [
 
 <ToolShell
   slug="ai-prompt-sanitizer"
-  title="ChatGPT・AIプロンプト 機密仮名化＆実名復元ツール"
-  description="ChatGPT・Claudeへ社外秘メールや議事録を送る前に、取引先社名・担当者名・APIキーを『{{COMPANY_A}}』等の記号へ一括仮名化し、AI回答を1クリックで実名へ自動復元。外部AIへの漏洩をゼロにします。"
+  title="ChatGPT・AIプロンプト 機密仮名化＆実名復元ツール | 一括・ブラウザ完結・サーバー送信なし"
+  description="ChatGPT・Claudeへ社外秘メールや議事録を送る前に、取引先社名・担当者名・APIキーを一括で『{{COMPANY_A}}』等の記号へ仮名化し、AI回答を1クリックで実名復元。ブラウザ完結・サーバー送信なし。"
   canonicalPath="/ai-prompt-sanitizer/"
-  h1="AIプロンプト 機密サニタイザー｜ブラウザ完結・サーバー送信なし"
-  subtitle="固有名詞を文脈が壊れない記号（{{COMPANY_A}}等）に仮名化し、AIの回答をワンクリックで実名復元します。"
+  h1="AIプロンプト 機密仮名化＆実名復元"
+  subtitle="固有名詞を文脈が壊れない記号（{{COMPANY_A}}等）へ一括仮名化し、AI回答を実名復元（サーバー送信なし）。"
   mascotName="tool-ai"
   mascotFallback="🤖"
   whyTitle="「Copilot契約があるから安心」という最大の盲点"
   howToSteps={howToSteps}
   faqs={faqs}
 >
-  <div class="space-y-6">
-    <!-- ワンクリック検証ボタン -->
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        id="loadSamplePromptBtn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-      >
-        <span>🧪</span>
-        <span>3秒往復デモ（サンプル投入）</span>
-      </button>
-    </div>
+  <!-- ワンクリック検証ボタン -->
+  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+    <button
+      id="loadSamplePromptBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-950 border border-cyan-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>3秒往復デモ（サンプル投入）</span>
+    </button>
+  </div>
 
+  <div class="space-y-6">
     <!-- メインワークベンチ -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
-      <!-- 設定バー -->
-      <details class="group bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 text-xs" open>
-        <summary class="flex items-center justify-between cursor-pointer select-none font-bold text-slate-700 list-none">
-          <span class="flex items-center gap-1.5">
-            <span>⚙️</span>
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
+      <!-- 設定バー（初期折りたたみで入力欄をファーストビュー内に配置） -->
+      <details class="group bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs">
+        <summary class="flex items-center justify-between gap-2 min-h-[40px] cursor-pointer select-none font-bold text-slate-900 list-none">
+          <span class="flex items-center gap-1.5 min-w-0 flex-wrap">
+            <span aria-hidden="true">⚙️</span>
             <span>自動検出カテゴリ ＆ 隠したい固有名詞</span>
-            <span class="text-[10px] text-emerald-700 font-normal font-mono ml-2">※ブラウザメモリ内完結（外部送信0バイト）</span>
+            <span id="optSummaryBadge" class="text-[11px] text-cyan-800 font-semibold font-mono">（全6種ON・タップで変更）</span>
           </span>
-          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+          <span class="text-slate-600 group-open:rotate-180 transition-transform shrink-0">▼</span>
         </summary>
         
-        <div class="pt-3 space-y-3">
-          <div class="flex flex-wrap items-center gap-3 text-slate-700">
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optCompany" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+        <div class="pt-3 pb-1.5 space-y-3 border-t border-slate-200 mt-1.5">
+          <div class="flex flex-wrap items-center gap-3 text-slate-800">
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optCompany" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>法人格（株式会社等）</span>
             </label>
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optEmail" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optEmail" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>メールアドレス</span>
             </label>
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optPhone" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optPhone" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>電話番号</span>
             </label>
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optSecret" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optSecret" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>APIキー・パスワード</span>
             </label>
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optUrlIp" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optUrlIp" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>URL / IPアドレス</span>
             </label>
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="optAmount" checked class="rounded text-emerald-600 focus:ring-emerald-500" />
+            <label class="flex items-center gap-1.5 cursor-pointer py-0.5">
+              <input type="checkbox" id="optAmount" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
               <span>金額（円・ドル等）</span>
             </label>
           </div>
 
           <div class="space-y-1">
-            <label for="customWordsInput" class="block font-bold text-slate-700 text-[11px]">
+            <label for="customWordsInput" class="block font-bold text-slate-800 text-xs">
               追加で仮名化したい人名・案件名・製品名（カンマまたは改行で区切る）：
             </label>
             <input
               type="text"
               id="customWordsInput"
               placeholder="例: 佐藤部長, プロジェクトTitan, 新規買収案, 〇〇病院"
-              class="w-full bg-white border border-slate-300 focus:border-emerald-500 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:outline-none"
+              class="w-full bg-white border border-slate-300 focus:border-cyan-600 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none"
             />
           </div>
         </div>
@@ -121,98 +121,98 @@ const faqs = [
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- 左ペイン：生プロンプト入力 -->
         <div class="flex flex-col space-y-2">
-          <div class="flex items-center justify-between">
-            <label for="rawPromptTextarea" class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-mono text-xs font-bold">STEP 1</span>
-              <span>AIに投げたい元の文章（社内メール・議事録・コード）</span>
+          <div class="flex items-center justify-between gap-2">
+            <label for="rawPromptTextarea" class="font-bold text-slate-900 text-xs sm:text-sm flex items-center gap-1.5 min-w-0">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-300 font-mono text-xs font-bold shrink-0">STEP 1</span>
+              <span class="truncate">元の文章（社内メール・議事録等）</span>
             </label>
             <button
               type="button"
               id="clearPromptBtn"
-              class="text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer"
+              class="text-xs text-slate-700 hover:text-slate-950 font-semibold cursor-pointer px-2 py-1 shrink-0"
             >
               クリア
             </button>
           </div>
           <textarea
             id="rawPromptTextarea"
-            rows="10"
-            placeholder="AIに要約・推敲させたい社外秘メールや議事録をここに貼り付けてください...&#10;（例：株式会社テックラボの佐藤部長より、プロジェクトTitanの概算見積500万円を受領しました。次週月曜までにメール返信案を作成してください。）"
-            class="w-full flex-1 bg-slate-50/50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl p-3 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none resize-y transition leading-relaxed"
+            rows="8"
+            placeholder="AIに要約・推敲させたい社外秘メールや議事録をここに貼り付けてください...&#10;（例：株式会社テックラボの佐藤部長より、プロジェクトTitanの概算見積500万円を受領しました。）"
+            class="w-full flex-1 bg-slate-50/50 border border-slate-300 focus:border-cyan-600 focus:bg-white rounded-xl p-3 text-xs sm:text-sm text-slate-900 font-mono focus:outline-none resize-y transition leading-relaxed"
           ></textarea>
         </div>
 
         <!-- 右ペイン：仮名化（サニタイズ済み）出力 -->
         <div class="flex flex-col space-y-2">
-          <div class="flex items-center justify-between">
-            <label for="sanitizedPromptTextarea" class="font-bold text-emerald-800 text-xs sm:text-sm flex items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono text-xs font-bold">STEP 2</span>
-              <span>安全化済みプロンプト（ChatGPT / Claude送信専用）</span>
+          <div class="flex items-center justify-between gap-2">
+            <label for="sanitizedPromptTextarea" class="font-bold text-cyan-900 text-xs sm:text-sm flex items-center gap-1.5 min-w-0">
+              <span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-900 border border-cyan-300 font-mono text-xs font-bold shrink-0">STEP 2</span>
+              <span class="truncate">安全化済み（ChatGPT等へ送信）</span>
             </label>
-            <span id="replacedStatBadge" class="text-xs font-mono text-emerald-800 font-bold">
+            <span id="replacedStatBadge" class="text-xs font-mono text-cyan-900 font-bold shrink-0">
               0 箇所をトークン化
             </span>
           </div>
           <textarea
             id="sanitizedPromptTextarea"
             readonly
-            rows="10"
+            rows="8"
             placeholder="ここに自動で仮名化（{{COMPANY_A}}、{{CUSTOM_A}}等）された安全なプロンプトが出力されます..."
-            class="w-full flex-1 bg-emerald-50/20 border border-emerald-300 rounded-xl p-3 text-xs sm:text-sm text-slate-800 font-mono focus:outline-none resize-y transition leading-relaxed select-all"
+            class="w-full flex-1 bg-cyan-50/30 border border-cyan-300 rounded-xl p-3 text-xs sm:text-sm text-slate-900 font-mono focus:outline-none resize-y transition leading-relaxed select-all"
           ></textarea>
           <button
             type="button"
             id="copySanitizedBtn"
-            class="w-full py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full py-2.5 px-4 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る</span>
+            <span>📋 安全化プロンプトをコピーしてAIへ貼る</span>
           </button>
         </div>
       </div>
 
       <!-- トークン対照辞書（ブラウザRAM内保持） -->
       <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-slate-700">🔐 ブラウザ内部メモリに保持された対照辞書（端末内のみ）</span>
-          <span class="text-[10px] text-slate-400">※タブを閉じると完全消去されます</span>
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span class="font-bold text-slate-900">🔐 ブラウザ内部メモリに保持された対照辞書（端末内のみ）</span>
+          <span class="text-xs text-slate-600">※タブを閉じると完全消去されます</span>
         </div>
         <div id="tokenMapContainer" class="flex flex-wrap gap-2 text-xs">
-          <span class="text-slate-400 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>
+          <span class="text-slate-600 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>
         </div>
       </div>
 
       <!-- STEP 3: AIからの回答を貼り付けてワンクリック実名復元 -->
-      <div class="p-4 sm:p-5 rounded-2xl bg-indigo-50/40 border border-indigo-200 space-y-3.5">
+      <div class="p-4 sm:p-5 rounded-2xl bg-cyan-50/50 border border-cyan-200 space-y-3.5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <div class="space-y-0.5">
-            <span class="font-bold text-indigo-900 text-sm flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono text-xs font-bold">STEP 3</span>
+            <span class="font-bold text-slate-900 text-sm flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-900 border border-cyan-300 font-mono text-xs font-bold">STEP 3</span>
               <span>🔄 AI（ChatGPT / Claude）の回答をワンクリックで実名へ復元</span>
             </span>
-            <p class="text-xs text-slate-600">
-              AIが <code class="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded font-mono">&#123;&#123;COMPANY_A&#125;&#125;</code> 入りで返してきた文章を左に貼ると、右側に実名へ戻した完成文が出力されます。
+            <p class="text-xs text-slate-700">
+              AIが <code class="text-cyan-900 bg-cyan-50 border border-cyan-200 px-1 py-0.5 rounded font-mono">&#123;&#123;COMPANY_A&#125;&#125;</code> 入りで返してきた文章を左に貼ると、右側に実名へ戻した完成文が出力されます。
             </p>
           </div>
-          <span id="restoredStatBadge" class="text-xs font-mono text-indigo-800 font-bold shrink-0">
+          <span id="restoredStatBadge" class="text-xs font-mono text-cyan-900 font-bold shrink-0">
             復元済み: 0 箇所
           </span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div class="space-y-1.5">
-            <label for="aiResponseInput" class="block text-xs font-bold text-slate-700">
+            <label for="aiResponseInput" class="block text-xs font-bold text-slate-800">
               📥 AIが出力した回答（記号入り）をここに貼り付け：
             </label>
             <textarea
               id="aiResponseInput"
               rows="6"
-              placeholder="例: &#123;&#123;COMPANY_A&#125;&#125; の &#123;&#123;CUSTOM_A&#125;&#125; 様、いつも大変お世話になっております。&#123;&#123;CUSTOM_C&#125;&#125; のお見積り（&#123;&#123;AMOUNT_A&#125;&#125;）について..."
-              class="w-full bg-white border border-slate-300 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
+              placeholder="例: &#123;&#123;COMPANY_A&#125;&#125; の &#123;&#123;CUSTOM_A&#125;&#125; 様、いつも大変お世話になっております。"
+              class="w-full bg-white border border-slate-300 focus:border-cyan-600 rounded-xl p-3 text-xs text-slate-900 font-mono focus:outline-none leading-relaxed"
             ></textarea>
           </div>
 
           <div class="space-y-1.5 flex flex-col">
-            <label for="restoredOutputTextarea" class="block text-xs font-bold text-emerald-800">
+            <label for="restoredOutputTextarea" class="block text-xs font-bold text-emerald-900">
               ✨ 実名に完全復元された完成テキスト（そのまま業務利用可能）：
             </label>
             <textarea
@@ -220,12 +220,12 @@ const faqs = [
               readonly
               rows="6"
               placeholder="ここに実名（株式会社〇〇、佐藤様 等）へ復元された最終文章が出力されます..."
-              class="w-full flex-1 bg-white border border-emerald-300 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none leading-relaxed"
+              class="w-full flex-1 bg-white border border-emerald-300 rounded-xl p-3 text-xs text-slate-900 font-mono focus:outline-none leading-relaxed"
             ></textarea>
             <button
               type="button"
               id="copyRestoredBtn"
-              class="w-full py-2.5 px-4 rounded-xl font-bold text-xs text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full py-2.5 px-4 min-h-[44px] rounded-xl font-bold text-xs text-white bg-slate-900 hover:bg-slate-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>📋 実名復元された完成文をコピー</span>
             </button>
@@ -234,8 +234,8 @@ const faqs = [
       </div>
 
       <!-- ゼロリークくん完了メッセージ -->
-      <div class="flex items-center gap-2 p-3 rounded-xl bg-amber-100/70 border border-amber-200 text-xs text-amber-950 font-medium">
-        <span class="text-base select-none shrink-0">🛡️</span>
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-cyan-50/70 border border-cyan-200 text-xs text-slate-900 font-medium">
+        <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
         <span><strong>ゼロリークくん：</strong>固有名詞の仮名化と実名復元はお使いのブラウザメモリ内だけで行われます。対照辞書が外部に漏れることはありません。</span>
       </div>
     </div>
@@ -266,6 +266,7 @@ const faqs = [
     'restoredOutputTextarea'
   ) as HTMLTextAreaElement;
   const restoredStatBadge = document.getElementById('restoredStatBadge')!;
+  const optSummaryBadge = document.getElementById('optSummaryBadge')!;
 
   const loadSampleBtn = document.getElementById('loadSamplePromptBtn')!;
   const clearPromptBtn = document.getElementById('clearPromptBtn')!;
@@ -285,6 +286,11 @@ const faqs = [
       .map((s) => s.trim())
       .filter(Boolean);
 
+    const activeCatCount = [optCompany, optEmail, optPhone, optSecret, optUrlIp, optAmount].filter((c) => c.checked).length;
+    optSummaryBadge.textContent = rawCustom.length > 0
+      ? `（${activeCatCount}種＋カスタム${rawCustom.length}語 ON）`
+      : `（${activeCatCount}種 ON・タップで変更）`;
+
     return {
       maskCompany: optCompany.checked,
       maskEmail: optEmail.checked,
@@ -302,37 +308,39 @@ const faqs = [
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function runSanitizeAndRestore() {
+    const opts = getOptions();
     const raw = rawPromptTextarea.value;
     if (!raw.trim()) {
       sanitizedPromptTextarea.value = '';
       currentEntries = [];
       replacedStatBadge.textContent = '0 箇所をトークン化';
       tokenMapContainer.innerHTML =
-        '<span class="text-slate-500 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>';
+        '<span class="text-slate-600 text-xs">テキストを入力すると、ここに『トークン ⇄ 元の固有名詞』の対応表が表示されます。</span>';
       runRestoreOnly();
       return;
     }
 
-    const res = sanitizePromptText(raw, getOptions());
+    const res = sanitizePromptText(raw, opts);
     sanitizedPromptTextarea.value = res.sanitizedText;
     currentEntries = res.entries;
     replacedStatBadge.textContent = `🛡️ ${res.entries.length}種・計${res.totalReplacedCount}箇所をトークン化済`;
 
     if (res.entries.length === 0) {
       tokenMapContainer.innerHTML =
-        '<span class="text-slate-500 text-xs">検出された機密項目はありません。</span>';
+        '<span class="text-slate-600 text-xs">検出された機密項目はありません。</span>';
     } else {
       tokenMapContainer.innerHTML = res.entries
         .map(
           (e) => `
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] shadow-xs">
-            <code class="text-amber-800 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 font-bold font-mono">${escapeHtml(e.token)}</code>
-            <span class="text-slate-400">⇄</span>
-            <span class="text-slate-700 font-medium">${escapeHtml(e.original)}</span>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs shadow-sm">
+            <code class="text-cyan-900 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 font-bold font-mono">${escapeHtml(e.token)}</code>
+            <span class="text-slate-600">⇄</span>
+            <span class="text-slate-800 font-medium">${escapeHtml(e.original)}</span>
           </span>
         `
         )
@@ -394,7 +402,7 @@ const faqs = [
     navigator.clipboard.writeText(sanitizedPromptTextarea.value).then(() => {
       copySanitizedBtn.textContent = '✔ コピーしました！そのままChatGPTやClaudeへ貼り付けてください';
       setTimeout(() => {
-        copySanitizedBtn.textContent = '📋 安全化プロンプトをコピーしてAI（ChatGPT等）へ貼る';
+        copySanitizedBtn.textContent = '📋 安全化プロンプトをコピーしてAIへ貼る';
       }, 2500);
     });
   });

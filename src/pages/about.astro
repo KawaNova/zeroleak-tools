@@ -7,7 +7,7 @@ const categories = toolCategories
   .filter((c) => c.id !== 'all')
   .map((c) => ({ ...c, tools: tools.filter((t) => t.category === c.id) }));
 
-const updated = '2026年11月16日';
+const updated = '2026年11月21日';
 
 const extraSchemaGraph = [
   {
@@ -70,7 +70,7 @@ const extraSchemaGraph = [
         <li>ファイルの読み込みと加工は、ブラウザのJavaScript・WebAssemblyで行います。処理のためにファイルや入力内容をサーバーへ送信する仕組みはありません。</li>
         <li>ブラウザの開発者ツール（F12）の Network タブで、処理中にファイルを送る通信が発生しないことを確認できます。</li>
         <li>一度ページを開いた後は、Wi-Fiとモバイル通信を切った状態（機内モード）でも動作します。</li>
-        <li>広告配信（Google AdSense）に伴う通信は、ツールの処理とは別に発生します。</li>
+        <li>個別ツール実行ページには広告スクリプトも読み込まず外部通信は0件です。広告配信（Google AdSense）はトップページ・カテゴリ一覧・解説ページにのみ掲載しています。</li>
       </ul>
     </section>
 
@@ -95,9 +95,9 @@ const extraSchemaGraph = [
     <section class="space-y-2">
       <h2 class="text-lg font-bold text-slate-900">広告について</h2>
       <p>
-        当サイトは運営費をまかなうため、Google AdSense による広告を掲載しています。
+        当サイトは運営費をまかなうため、トップページ・カテゴリ一覧・案内ページに Google AdSense による広告を掲載しています（個別ツール実行ページには広告スクリプトを一切配置していません）。
         Google は広告配信に Cookie を使用する場合があります。Cookie の扱いとパーソナライズ広告を止める方法は、
-        <a href="/legal/" class="text-emerald-700 underline font-semibold">利用規約・プライバシーポリシー</a>に記載しています。
+        <a href="/legal/" class="text-emerald-800 underline font-semibold">利用規約・プライバシーポリシー</a>に記載しています。
       </p>
     </section>
 

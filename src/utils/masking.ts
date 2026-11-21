@@ -108,3 +108,35 @@ export function isPersonalInfoColumn(headerName: string): boolean {
   ];
   return keywords.some(k => clean.includes(k));
 }
+
+/**
+ * CSVバイト列の文字コード（UTF-8 / BOM付UTF-8 / Shift-JIS）を自動判別してデコード
+ */
+export function decodeCsvBytes(bytes: Uint8Array): {
+  text: string;
+  encoding: 'UTF-8' | 'Shift-JIS';
+} {
+  // UTF-8 BOM (EF BB BF) を検出したら先頭3バイトを除去してUTF-8確定
+  if (bytes.length >= 3 && bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf) {
+    return {
+      text: new TextDecoder('utf-8').decode(bytes.subarray(3)),
+      encoding: 'UTF-8',
+    };
+  }
+
+  try {
+    const utf8Text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    return { text: utf8Text, encoding: 'UTF-8' };
+  } catch {
+    try {
+      const sjisText = new TextDecoder('shift-jis').decode(bytes);
+      return { text: sjisText, encoding: 'Shift-JIS' };
+    } catch {
+      return {
+        text: new TextDecoder('utf-8').decode(bytes),
+        encoding: 'UTF-8',
+      };
+    }
+  }
+}
+

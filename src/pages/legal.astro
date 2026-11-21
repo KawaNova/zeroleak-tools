@@ -12,16 +12,16 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
   <div class="max-w-4xl mx-auto py-3 sm:py-6 space-y-6 sm:space-y-8 text-left">
 
     <!-- ページヘッダー：親しみやすく安心感のあるトーン -->
-    <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-xs">
+    <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-sm">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-2">
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-semibold">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold">
             <span>🛡️ セキュリティ方針 ＆ 免責条項</span>
           </div>
           <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             ご利用規約 ＆ プライバシーポリシー
           </h1>
-          <p class="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-2xl">
+          <p class="text-slate-700 text-xs sm:text-sm leading-relaxed max-w-2xl">
             ZeroLeak Tools（ゼロリーク・ツールズ）の技術方針、利用条件、および免責事項を明確に定めています。
           </p>
         </div>
@@ -31,48 +31,48 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
             fallback="🛡️"
             alt="ゼロリークくん"
             width={160}
-            class="w-24 sm:w-28 aspect-[4/3] object-cover rounded-xl border border-slate-100 shadow-2xs"
+            class="w-24 sm:w-28 aspect-[4/3] object-cover rounded-xl border border-slate-100 shadow-sm"
           />
         </div>
       </div>
-      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-mono">
         <span>制定日: 2026年10月10日</span>
-        <span>最終改定日: 2026年11月16日</span>
+        <span>最終改定日: 2026年11月21日</span>
       </div>
     </div>
 
-    <!-- 【ひと目でわかる】3大サマリーカード（ファーストビューで要点把握） -->
+    <!-- 【ひと目でわかる】3大サマリーカード -->
     <section class="space-y-2.5">
-      <h2 class="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider px-1">
+      <h2 class="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider px-1">
         30秒でわかる技術保証と利用上の重要要点
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+        <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-sm">
           <div class="flex items-center gap-2">
-            <span class="text-xl">🛡️</span>
+            <span class="text-xl" aria-hidden="true">🛡️</span>
             <div class="text-xs sm:text-sm font-bold text-emerald-950">外部送信ゼロ保証</div>
           </div>
-          <p class="text-[11px] sm:text-xs text-emerald-900/80 leading-relaxed">
+          <p class="text-xs text-emerald-950 leading-relaxed">
             ファイルや文字はブラウザのメモリ上だけで処理。サーバーへ1バイトも送信・保存されません。
           </p>
         </div>
 
-        <div class="bg-blue-50/70 border border-blue-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+        <div class="bg-blue-50/70 border border-blue-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-sm">
           <div class="flex items-center gap-2">
-            <span class="text-xl">💾</span>
+            <span class="text-xl" aria-hidden="true">💾</span>
             <div class="text-xs sm:text-sm font-bold text-blue-950">原本のバックアップ推奨</div>
           </div>
-          <p class="text-[11px] sm:text-xs text-blue-900/80 leading-relaxed">
+          <p class="text-xs text-blue-950 leading-relaxed">
             マスキングや墨消しを行う前に、お手元のPCに大切な元ファイルの控えを残してご利用ください。
           </p>
         </div>
 
-        <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-2xs">
+        <div class="bg-slate-100 border border-slate-300 rounded-xl sm:rounded-2xl p-4 space-y-1.5 shadow-sm">
           <div class="flex items-center gap-2">
-            <span class="text-xl">🔑</span>
-            <div class="text-xs sm:text-sm font-bold text-amber-950">正規保有ファイル限定</div>
+            <span class="text-xl" aria-hidden="true">🔑</span>
+            <div class="text-xs sm:text-sm font-bold text-slate-950">正規保有ファイル限定</div>
           </div>
-          <p class="text-[11px] sm:text-xs text-amber-900/80 leading-relaxed">
+          <p class="text-xs text-slate-800 leading-relaxed">
             パスワード解除等は、ご自身が閲覧権限とパスワードをお持ちの正規書類にのみお使いください。
           </p>
         </div>
@@ -80,9 +80,9 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
     </section>
 
     <!-- 0バイト保証・セキュリティ原則 -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
       <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-        <span class="text-lg">🛡️</span>
+        <span class="text-lg" aria-hidden="true">🛡️</span>
         <h2 class="text-base sm:text-lg font-bold text-slate-900">
           外部送信0バイトの技術原則
         </h2>
@@ -92,31 +92,31 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
         <strong>ご利用者の端末（ブラウザ内部のJavaScript / WebAssembly / メモリ上）のみで完結して実行</strong>されます。
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <div class="text-xs font-bold text-slate-900">① サーバー送信ゼロ</div>
-          <p class="text-[11px] text-slate-600 leading-normal">
+          <p class="text-xs text-slate-700 leading-normal">
             アップロードされたファイルや入力テキストが、当サイトや第三者のサーバーへ送信されることは一切ありません。
           </p>
         </div>
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <div class="text-xs font-bold text-slate-900">② ログ蓄積ゼロ</div>
-          <p class="text-[11px] text-slate-600 leading-normal">
+          <p class="text-xs text-slate-700 leading-normal">
             サーバー側で計算を行わない静的配信のため、入力データがアクセスログ等に記録されることは技術的に不可能です。
           </p>
         </div>
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-          <div class="text-xs font-bold text-slate-900">③ F12でいつでも検証可能</div>
-          <p class="text-[11px] text-slate-600 leading-normal">
-            ブラウザのF12開発者ツール（Networkタブ）で、ツール操作中にファイルや入力内容を送信する通信が発生しないことを目視確認できます（広告配信用のGoogle AdSense通信を除く）。
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+          <div class="text-xs font-bold text-slate-900">③ ツールページは外部通信完全0件</div>
+          <p class="text-xs text-slate-700 leading-normal">
+            各ツールの実行ページには広告スクリプトも一切配置せず、厳格なCSPで外部通信を遮断しています。F12（Networkタブ）で外部通信0件を確認可能です（広告配信用スクリプトはトップ・一覧・案内ページのみに配置）。
           </p>
         </div>
       </div>
     </section>
 
     <!-- 1. 免責事項 -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
       <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-        <span class="text-lg">⚖️</span>
+        <span class="text-lg" aria-hidden="true">⚖️</span>
         <h2 class="text-base sm:text-lg font-bold text-slate-900">
           1. 免責事項（ご利用にあたってのご留意点）
         </h2>
@@ -129,8 +129,8 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
           当ツールの利用により生じた、直接的・間接的・派生的損害（ファイルの破損・消失、マスキング漏れによる損害、業務の中断、利益の損失等）について、当サイト運営者は一切の法的責任を負いかねます。
         </p>
       </div>
-      <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-xs leading-relaxed flex items-start gap-2">
-        <span class="text-base shrink-0">💡</span>
+      <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 text-xs leading-relaxed flex items-start gap-2">
+        <span class="text-base shrink-0" aria-hidden="true">💡</span>
         <div>
           <strong>【ご利用前のお願い】</strong><br />
           重要な業務データや官公庁・取引先への提出書類を取り扱う際は、必ず事前に元ファイルのバックアップ（控え）をお手元に保存した上でご利用ください。また、マスキングや墨消しの結果は提出前に必ず目視で再確認してください。
@@ -139,9 +139,9 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
     </section>
 
     <!-- 2. パスワード解除ツールの適法利用規約 -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
       <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-        <span class="text-lg">🔓</span>
+        <span class="text-lg" aria-hidden="true">🔓</span>
         <h2 class="text-base sm:text-lg font-bold text-slate-900">
           2. PDFパスワード解除ツールの利用規約（正当なファイルのみ）
         </h2>
@@ -150,7 +150,7 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
         当サイトの「PDFパスワード解除ツール」は、<strong>ご利用者ご自身が正規にパスワードを知っており、かつ閲覧・編集・保存の正当な権限を有しているファイル（ご自身の給与明細、源泉徴収票、自身宛ての請求書等）</strong>から、提出便宜（住宅ローン審査や確定申告提出等）のために既知のパスワードを除去することを目的としています。
       </p>
       <div class="p-3.5 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900 text-xs leading-relaxed flex items-start gap-2">
-        <span class="text-base shrink-0">🚫</span>
+        <span class="text-base shrink-0" aria-hidden="true">🚫</span>
         <div>
           <strong>【禁止事項】</strong><br />
           第三者の不正なファイル、不正アクセス行為、クラッキング、著作権侵害、その他法令に反する目的での利用を固く禁じます。本ツールは総当たり攻撃（ブルートフォース）等を行うツールではありません。
@@ -159,43 +159,43 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
     </section>
 
     <!-- 3. プライバシーポリシー -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
       <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-        <span class="text-lg">🔒</span>
+        <span class="text-lg" aria-hidden="true">🔒</span>
         <h2 class="text-base sm:text-lg font-bold text-slate-900">
           3. プライバシーポリシー（個人情報の取り扱い）
         </h2>
       </div>
 
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <h3 class="font-bold text-slate-900">個人情報の不保持・非送信</h3>
-          <p class="text-slate-600 text-xs">
+          <p class="text-slate-700 text-xs">
             当サイトは、ツールに入力された氏名、電話番号、マイナンバー、給与情報、社内機密等のデータを一切収集・蓄積・外部送信いたしません。
           </p>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <h3 class="font-bold text-slate-900">オフライン動作のための端末内キャッシュについて</h3>
-          <p class="text-slate-600 text-xs">
+          <p class="text-slate-700 text-xs">
             当サイトは、通信を切った状態（機内モード）でもツールを動かせるよう、Service Worker を用いて当サイト自身の静的ファイル（HTML・JavaScript・画像）をお使いの端末のブラウザ内に保存します。ツールで処理するファイルや入力内容はこのキャッシュに保存されません。保存された静的ファイルは、ブラウザの「サイトデータの削除」からいつでも消去できます。
           </p>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <h3 class="font-bold text-slate-900">Cookie（クッキー）および広告配信について</h3>
-          <p class="text-slate-600 text-xs">
-            当サイトでは、サービスの改善および今後の適切な広告配信（Google AdSense等を含む第三者配信事業者）のために、Cookieを使用する場合があります。
+          <p class="text-slate-700 text-xs">
+            当サイトでは、トップページ・カテゴリ一覧ページ・解説ページにおいて、適切な広告配信（Google AdSense 等を含む第三者配信事業者）のために Cookie を使用する場合があります（個別ツール実行ページには広告スクリプトを一切配置しておりません）。
             Googleなどの第三者配信事業者は、Cookieを使用して、ユーザーが当サイトや他のウェブサイトに過去にアクセスした際の情報に基づいて広告を配信します。
           </p>
-          <p class="text-[11px] text-slate-500 pt-1">
-            ユーザーは、Googleの広告設定（<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline font-medium">https://adssettings.google.com/</a>）でパーソナライズ広告を無効にできます。また、お使いのブラウザの設定によりCookieの受け入れを拒否することも可能です。
+          <p class="text-xs text-slate-600 pt-1">
+            ユーザーは、Googleの広告設定（<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-800 underline font-semibold">https://adssettings.google.com/</a>）でパーソナライズ広告を無効にできます。また、お使いのブラウザの設定によりCookieの受け入れを拒否することも可能です。
           </p>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
           <h3 class="font-bold text-slate-900">アクセス解析について</h3>
-          <p class="text-slate-600 text-xs">
+          <p class="text-slate-700 text-xs">
             当サイトは利用者のプライバシー保護を最優先とし、個人を特定できる外部トラッキングは行いません。将来的にサイトパフォーマンス測定を行う場合でも、個人と紐付かない匿名化された集計データのみを取り扱います。
           </p>
         </div>
@@ -203,36 +203,36 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
     </section>
 
     <!-- 4. 運営者情報 -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
       <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-        <span class="text-lg">🏢</span>
+        <span class="text-lg" aria-hidden="true">🏢</span>
         <h2 class="text-base sm:text-lg font-bold text-slate-900">
           4. 運営者情報 ＆ お問い合わせ
         </h2>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-700 pt-1">
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-[11px] text-slate-400 font-bold mb-0.5">サイト名</div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-600 font-bold mb-0.5">サイト名</div>
           <div class="font-semibold text-slate-900">ZeroLeak Tools</div>
-          <div class="text-[10px] text-slate-500">（ゼロリーク・ツールズ）</div>
+          <div class="text-xs text-slate-600">（ゼロリーク・ツールズ）</div>
         </div>
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-[11px] text-slate-600 font-bold mb-0.5">運営者</div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-600 font-bold mb-0.5">運営者</div>
           <div class="font-semibold text-slate-900">{OPERATOR}</div>
         </div>
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-[11px] text-slate-400 font-bold mb-0.5">配信インフラ</div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-xs text-slate-600 font-bold mb-0.5">配信インフラ</div>
           <div class="font-semibold text-slate-900">Cloudflare Pages</div>
-          <div class="text-[10px] text-slate-500">（静的エッジ配信・維持費0円モデル）</div>
+          <div class="text-xs text-slate-600">（静的エッジ配信・維持費0円モデル）</div>
         </div>
       </div>
       <div class="pt-2 border-t border-slate-100 text-xs text-slate-700 space-y-2">
         <p>
-          ご質問・不具合のご報告・掲載内容の誤りのご指摘は、<a href={CONTACT_FORM_URL} target="_blank" rel="noopener" class="text-emerald-700 underline font-semibold">お問い合わせフォーム（Googleフォーム）↗</a>からお願いいたします。
+          ご質問・不具合のご報告・掲載内容の誤りのご指摘は、<a href={CONTACT_FORM_URL} target="_blank" rel="noopener" class="text-emerald-800 underline font-semibold">お問い合わせフォーム（Googleフォーム）↗</a>からお願いいたします。
           フォームはGoogleの外部サービスのため、処理したファイルの内容やパスワードなどの機密情報は記入しないでください。
         </p>
         <p>
-          運営の詳細は<a href="/about/" class="text-emerald-700 underline font-semibold">運営者情報・お問い合わせ</a>をご覧ください。
+          運営の詳細は<a href="/about/" class="text-emerald-800 underline font-semibold">運営者情報・お問い合わせ</a>をご覧ください。
         </p>
       </div>
     </section>
@@ -241,7 +241,7 @@ import { CONTACT_FORM_URL, OPERATOR } from '../data/site';
     <div class="text-center pt-2 pb-6">
       <a
         href="/"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs sm:text-sm hover:bg-slate-800 transition shadow-xs"
+        class="inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-slate-900 text-white font-bold text-xs sm:text-sm hover:bg-slate-800 transition shadow-sm"
       >
         <span>←</span>
         <span>ツール一覧に戻る</span>

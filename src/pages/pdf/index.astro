@@ -4,14 +4,13 @@ import Mascot from '../../components/Mascot.astro';
 import SecuritySpecModal from '../../components/SecuritySpecModal.astro';
 import { tools, toolCategories } from '../../data/tools';
 
-// PDF・Office・契約書・法務カテゴリのツール一覧
-const targetSlugs = ['pdf-redaction', 'office-metadata-wiper', 'pdf-unlock', 'contract-diff'];
-const categoryTools = targetSlugs.map(slug => tools.find(t => t.slug === slug)!).filter(Boolean);
+// PDF・Office・契約書・法務カテゴリのツール一覧（tools.ts と完全一致）
+const categoryTools = tools.filter((t) => t.category === 'document_legal');
 
-const otherCategories = toolCategories.filter(c => c.id !== 'all' && c.id !== 'document_legal');
+const otherCategories = toolCategories.filter((c) => c.id !== 'all' && c.id !== 'document_legal');
 
 const title = 'PDF・Office・契約書・法務セキュリティツール一覧 | サーバー送信なし・ブラウザ完結';
-const description = '社外秘PDFの不可逆墨消し、Word/Excelメタデータ完全消去、給与明細パスワード解除、契約書Diff比較を完全ローカルで安全実行。外部送信0バイト保証。';
+const description = '社外秘PDFの不可逆墨消し、Word/Excelメタデータ完全消去、契約書Diff比較をブラウザ内で安全実行。外部送信0バイト保証。';
 const canonicalPath = '/pdf/';
 
 const extraSchemaGraph = [
@@ -36,7 +35,7 @@ const extraSchemaGraph = [
         name: 'PDF上に黒い四角形を置いただけの黒塗りはコピペで復元できますか？',
         acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'はい、復元できます。一般的なPDFエディタで黒い図形を乗せただけの場合、下のテキスト情報はそのまま残っているため、Ctrl+A全選択やコピペで簡単に機密情報が抜き出せます。本ツールの不可逆墨消しはテキストレイヤーを画像ラスタライズして文字を物理破壊するため、100%復元不可能です。',
+          text: 'はい、復元できます。一般的なPDFエディタで黒い図形を乗せただけの場合、下のテキスト情報はそのまま残っているため、Ctrl+A全選択やコピペで簡単に機密情報が抜き出せます。本ツールの不可逆墨消しはテキストレイヤーを画像ラスタライズして文字を物理破壊するため、100%復元不可能です。',
         },
       },
       {
@@ -44,7 +43,7 @@ const extraSchemaGraph = [
         name: 'WordやExcelのプロパティに残る社内情報とは何ですか？',
         acceptedAnswer: {
           '@type': 'Answer',
-          'text': 'Officeファイルの内部XML（docProps）には、作成者のフルネーム、所属会社、最終保存者、総編集時間、テンプレート名が記録されています。下請け企業や外部パートナーが作成した資料を社外へ送る際、下請けの実名が取引先に筒抜けになる事故を防ぐため、事前のメタデータ消去が推奨されます。',
+          text: 'Officeファイルの内部XML（docProps）には、作成者のフルネーム、所属会社、最終保存者、総編集時間、テンプレート名が記録されています。下請け企業や外部パートナーが作成した資料を社外へ送る際、下請けの実名が取引先に筒抜けになる事故を防ぐため、事前のメタデータ消去が推奨されます。',
         },
       },
     ],
@@ -58,163 +57,160 @@ const extraSchemaGraph = [
   canonicalPath={canonicalPath}
   extraSchemaGraph={extraSchemaGraph}
 >
-  <div class="max-w-5xl mx-auto space-y-10">
+  <div class="max-w-5xl mx-auto space-y-6 sm:space-y-8">
     
     <!-- パンくずリスト -->
-    <nav aria-label="Breadcrumb" class="text-[11px] text-slate-500">
+    <nav aria-label="Breadcrumb" class="text-xs text-slate-600">
       <ol class="flex items-center gap-1.5">
-        <li><a href="/" class="hover:text-slate-800 transition">ホーム</a></li>
-        <li><span>/</span></li>
-        <li class="font-semibold text-slate-800">PDF・Office・契約書・法務</li>
+        <li><a href="/" class="hover:text-slate-900 font-medium transition">ホーム</a></li>
+        <li aria-hidden="true">/</li>
+        <li class="font-bold text-slate-900">PDF・Office・契約書・法務</li>
       </ol>
     </nav>
 
-    <!-- ハブヘッダー：スマホでは横並びで省スペース＆マスコット大型化・PCでは2カラム -->
-    <section class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xs space-y-3">
+    <!-- ハブヘッダー -->
+    <section class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm space-y-3 text-left">
       <div class="flex items-center justify-between gap-2">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-[10px] sm:text-xs font-semibold">
-          <span>📑</span>
-          <span>PDF・Word・Excel・契約書・法務</span>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-900 text-xs font-semibold">
+          <span aria-hidden="true">📑</span>
+          <span>PDF・Word・Excel・契約書</span>
         </span>
         <button
           type="button"
           onclick="window.openSecurityModal && window.openSecurityModal()"
-          class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold border border-slate-200 shadow-2xs transition cursor-pointer"
+          class="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[38px] rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200 shadow-sm transition cursor-pointer shrink-0"
         >
-          <span>🏢</span>
+          <span aria-hidden="true">🏢</span>
           <span>情シス仕様書</span>
         </button>
       </div>
 
       <div class="flex flex-row items-center justify-between gap-3">
         <div class="space-y-1.5 text-left min-w-0 flex-1">
-          <h1 class="text-base sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
-            PDF・Office・契約書の<br class="hidden sm:inline" />
-            <span class="text-slate-800">社外秘・メタデータ消去ツール一覧</span>
+          <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            PDF・Office・契約書<span class="whitespace-nowrap">保護ツール</span>
           </h1>
-          <p class="text-slate-600 text-[11px] sm:text-xs leading-relaxed line-clamp-2 sm:line-clamp-none">
+          <p class="text-slate-700 text-xs sm:text-sm leading-snug line-clamp-2 sm:line-clamp-none">
             PDF不可逆墨消し、Excel/Wordメタデータ消去、契約書Diffを端末のメモリ内だけで直接処理。
           </p>
         </div>
-        <Mascot name="tool-pdf-redaction" fallback="📑" width={160} eager class="w-20 sm:w-28 lg:w-36 aspect-[4/3] object-cover rounded-xl shadow-2xs border border-slate-100 shrink-0" />
+        <Mascot name="tool-pdf-redaction" fallback="📑" width={160} eager class="w-16 sm:w-28 lg:w-36 aspect-[4/3] object-cover rounded-xl shadow-sm border border-slate-100 shrink-0" />
       </div>
 
-      <!-- ゼロリークくん見守り保証バナー（コンパクト化） -->
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-300 text-[11px] text-slate-800">
-        <span class="text-sm select-none shrink-0">🛡️</span>
+      <!-- 保証バナー -->
+      <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 border border-slate-300 text-xs text-slate-900">
+        <span class="text-sm select-none shrink-0" aria-hidden="true">🛡️</span>
         <p class="leading-tight">
-          <strong class="font-bold">外部送信0バイト保証：</strong>全ツールはお使いの端末メモリ上でのみ動作します。
+          <strong class="font-bold">外部送信0バイト保証：</strong>ツール実行ページは広告スクリプトも読まず端末内だけで動作します。
         </p>
       </div>
     </section>
 
-    <!-- よくある情報漏洩事故 vs ZeroLeakの物理遮断 -->
-    <!-- 1. スマホ表示用：折りたたみアコーディオン（スクロール圧迫を劇的解消） -->
-    <details class="group bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs md:hidden">
-      <summary class="flex items-center justify-between font-bold text-slate-800 cursor-pointer list-none select-none">
-        <span class="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
-          <span>⚠️</span>
+    <!-- よくある情報漏洩事故 vs ZeroLeak -->
+    <details class="group bg-slate-100/70 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs md:hidden text-left">
+      <summary class="flex items-center justify-between min-h-[44px] font-bold text-slate-900 cursor-pointer list-none select-none">
+        <span class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+          <span aria-hidden="true">⚠️</span>
           <span>文書実務で多発する3大インシデント（タップで確認）</span>
         </span>
-        <span class="text-slate-400 group-open:rotate-180 transition-transform text-xs">▼</span>
+        <span class="text-slate-600 group-open:rotate-180 transition-transform text-xs shrink-0">▼</span>
       </summary>
-      <div class="mt-2.5 pt-2.5 border-t border-slate-200 space-y-2">
+      <div class="mt-2 pt-2.5 pb-2 border-t border-slate-200 space-y-2">
         <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
-          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+          <span class="font-bold text-rose-700 text-xs flex items-center gap-1">
             <span>🚨</span>
             <span>「コピペで剥がれる」PDF墨消し事故</span>
           </span>
-          <p class="text-slate-600 text-[10px] leading-relaxed">
+          <p class="text-slate-700 text-xs leading-relaxed">
             黒い図形を乗せただけで安心し、テキスト選択で社外秘が流出。→「機密PDF墨消し」で文字レイヤーを物理破壊
           </p>
         </div>
         <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
-          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+          <span class="font-bold text-rose-700 text-xs flex items-center gap-1">
             <span>🚨</span>
             <span>Excelプロパティに残る下請け名</span>
           </span>
-          <p class="text-slate-600 text-[10px] leading-relaxed">
+          <p class="text-slate-700 text-xs leading-relaxed">
             見積書のプロパティに外注先の作成者名が残り取引先に筒抜けに。→「Officeメタデータ消去」で作成者を抹消
           </p>
         </div>
         <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
-          <span class="font-bold text-rose-700 text-[11px] flex items-center gap-1">
+          <span class="font-bold text-rose-700 text-xs flex items-center gap-1">
             <span>🚨</span>
             <span>未締結NDAの外部Diffサイト貼付</span>
           </span>
-          <p class="text-slate-600 text-[10px] leading-relaxed">
+          <p class="text-slate-700 text-xs leading-relaxed">
             無料Diffサイトに契約書を貼り付けて重大な守秘義務違反に。→「契約書Diff比較」で完全ローカル差分抽出
           </p>
         </div>
       </div>
     </details>
 
-    <!-- 2. PC・タブレット表示用：美しい3列インシデントカード -->
-    <section class="hidden md:block p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-4">
+    <section class="hidden md:block p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-4 text-left">
       <div class="flex items-center gap-2">
-        <span class="text-lg">⚠️</span>
-        <h2 class="text-sm sm:text-base font-bold text-slate-900">
+        <span class="text-lg" aria-hidden="true">⚠️</span>
+        <h2 class="text-base font-bold text-slate-900">
           文書提出・法務実務で多発する3大インシデント
         </h2>
       </div>
       <div class="grid grid-cols-3 gap-4 text-xs">
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-sm">
           <span class="font-bold text-rose-700 flex items-center gap-1">
             <span>🚨</span>
             <span>「コピペで剥がれる」PDF墨消し事故</span>
           </span>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
+          <p class="text-slate-700 leading-relaxed text-xs">
             PDF上に黒い図形を乗せただけで安心し、相手方にテキスト選択・コピーされて社外秘金額や氏名が流出。
           </p>
-          <div class="pt-1 text-[10px] text-teal-700 font-semibold">
+          <div class="pt-1 text-xs text-slate-900 font-bold">
             👉 「機密PDF完全墨消し」で文字レイヤーを物理破壊
           </div>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-sm">
           <span class="font-bold text-rose-700 flex items-center gap-1">
             <span>🚨</span>
             <span>Excelプロパティに残る下請け名</span>
           </span>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
+          <p class="text-slate-700 leading-relaxed text-xs">
             見積書や提案書のプロパティに、外部外注先の作成者名や会社名が残ったまま提出され下請け構造が筒抜けに。
           </p>
-          <div class="pt-1 text-[10px] text-teal-700 font-semibold">
+          <div class="pt-1 text-xs text-slate-900 font-bold">
             👉 「Officeメタデータ消去」で作成者・会社名を抹消
           </div>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-2xs">
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-sm">
           <span class="font-bold text-rose-700 flex items-center gap-1">
             <span>🚨</span>
             <span>未締結NDAの外部Diffサイト貼付</span>
           </span>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
+          <p class="text-slate-700 leading-relaxed text-xs">
             条文の変更箇所を調べるため、無料Web差分チェックサイトに契約書を貼り付けて重大な守秘義務違反に。
           </p>
-          <div class="pt-1 text-[10px] text-teal-700 font-semibold">
+          <div class="pt-1 text-xs text-slate-900 font-bold">
             👉 「契約書Diff比較」で完全ローカル差分抽出
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ツール一覧：スマホではサムネイル付き薄型リスト、PCでは2列カード -->
-    <section class="space-y-3 sm:space-y-4">
+    <!-- ツール一覧 -->
+    <section class="space-y-3 sm:space-y-4 text-left">
       <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-        <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-          <span>🛠️</span>
+        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span aria-hidden="true">🛠️</span>
           <span>利用可能なツール（{categoryTools.length}件）</span>
         </h2>
-        <span class="text-[11px] text-slate-500 font-mono">通信0バイト保証</span>
+        <span class="text-xs text-slate-600 font-mono">通信0バイト保証</span>
       </div>
 
-      <!-- 1. スマホ表示用：ZeroLeakくんサムネイル付き薄型リスト（縦スクロール激減） -->
+      <!-- 1. スマホ表示用：薄型リスト -->
       <div class="grid grid-cols-1 gap-2 sm:hidden">
         {categoryTools.map((t) => (
           <a
             href={t.href}
-            class="flex items-center justify-between p-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition-colors group"
+            class="flex items-center justify-between p-2 min-h-[64px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 border-l-4 border-l-slate-800 shadow-sm transition-colors group"
           >
             <div class="flex items-center gap-2.5 min-w-0 pr-2">
               <Mascot
@@ -222,59 +218,57 @@ const extraSchemaGraph = [
                 fallback={t.icon}
                 alt=""
                 width={96}
-                class="w-12 h-12 rounded-lg object-cover shrink-0 shadow-2xs border border-slate-200/60"
+                class="w-12 h-12 rounded-lg object-cover shrink-0 shadow-sm border border-slate-200/60"
               />
               <div class="min-w-0">
-                <div class="text-xs font-bold text-slate-900 truncate group-hover:text-teal-700">
+                <div class="text-sm font-bold text-slate-900 truncate group-hover:text-slate-700">
                   {t.shortName ?? t.name}
                 </div>
-                <div class="text-[11px] text-slate-500 truncate mt-0.5">
+                <div class="text-xs text-slate-700 truncate mt-0.5">
                   {t.tagline}
                 </div>
               </div>
             </div>
-            <span class="text-[11px] font-bold text-white bg-teal-600 px-2.5 py-1.5 rounded-lg shadow-2xs shrink-0 group-hover:bg-teal-700 transition-colors">
+            <span class="text-xs font-bold text-white bg-slate-900 px-3 py-2 rounded-lg shadow-sm shrink-0 group-hover:bg-slate-800 transition-colors">
               開く ▶
             </span>
           </a>
         ))}
       </div>
 
-      <!-- 2. PC・タブレット表示用：美しい2列カードグリッド -->
+      <!-- 2. PC・タブレット表示用：2列カードグリッド -->
       <div class="hidden sm:grid sm:grid-cols-2 gap-4">
         {categoryTools.map((t) => (
-          <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-teal-400 hover:shadow-md transition space-y-3 flex flex-col justify-between">
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-slate-500 hover:shadow-md transition space-y-3 flex flex-col justify-between">
             <div class="space-y-2">
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-xl shrink-0">
-                    {t.icon}
-                  </div>
-                  <div>
-                    <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                      <a href={t.href} class="hover:text-teal-700 transition">
-                        {t.name}
-                      </a>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 font-mono mt-0.5">{t.tagline}</p>
-                  </div>
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-xl shrink-0">
+                  {t.icon}
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base leading-snug">
+                    <a href={t.href} class="hover:text-slate-700 transition">
+                      {t.name}
+                    </a>
+                  </h3>
+                  <p class="text-xs text-slate-600 font-mono mt-0.5">{t.tagline}</p>
                 </div>
               </div>
-              <p class="text-xs text-slate-600 leading-relaxed">
+              <p class="text-xs text-slate-700 leading-relaxed">
                 {t.panels[2].text}
               </p>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <span class="text-[11px] font-semibold text-emerald-900 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
                 ✔ 通信0バイト
               </span>
               <a
                 href={t.href}
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs cursor-pointer"
+                class="inline-flex items-center gap-1.5 px-4 py-2 min-h-[40px] rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition shadow-sm cursor-pointer"
               >
                 <span>ツールを開く</span>
-                <span>▶</span>
+                <span aria-hidden="true">▶</span>
               </a>
             </div>
           </div>
@@ -283,22 +277,22 @@ const extraSchemaGraph = [
     </section>
 
     <!-- 他カテゴリハブへの相互案内 -->
-    <section class="space-y-4 pt-4 border-t border-slate-200">
-      <h2 class="text-sm font-bold text-slate-800">他のカテゴリハブを見る：</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <section class="space-y-3 pt-4 border-t border-slate-200 text-left">
+      <h2 class="text-sm font-bold text-slate-900">他のカテゴリハブを見る：</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {otherCategories.map((c) => (
           <a
             href={c.hubPath}
-            class="p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-400 hover:shadow-xs transition flex items-center justify-between group"
+            class="p-4 min-h-[64px] rounded-xl bg-white border border-slate-200 hover:border-slate-400 hover:shadow-sm transition flex items-center justify-between group"
           >
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">{c.icon}</span>
-              <div>
-                <p class="font-bold text-slate-900 text-xs sm:text-sm group-hover:text-teal-700 transition">{c.label}</p>
-                <p class="text-[11px] text-slate-500 mt-0.5">{c.tagline}</p>
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="text-2xl shrink-0" aria-hidden="true">{c.icon}</span>
+              <div class="min-w-0">
+                <p class="font-bold text-slate-900 text-xs sm:text-sm group-hover:text-slate-700 transition truncate">{c.label}</p>
+                <p class="text-xs text-slate-600 mt-0.5 truncate">{c.tagline}</p>
               </div>
             </div>
-            <span class="text-slate-400 group-hover:translate-x-1 transition-transform text-sm">▶</span>
+            <span class="text-slate-600 group-hover:translate-x-1 transition-transform text-sm shrink-0" aria-hidden="true">▶</span>
           </a>
         ))}
       </div>

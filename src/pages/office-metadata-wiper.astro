@@ -11,8 +11,8 @@ const howToSteps = [
     text: 'ファイル内部のdocProps/core.xmlおよびapp.xmlから検出された作成者名、最終更新者、会社名、編集時間などの隠しメタデータを確認します。',
   },
   {
-    name: 'メタデータ消去済みOfficeファイルをダウンロード',
-    text: '文書の本文・数式・レイアウトをそのまま保持し、個人情報・社内情報のみが物理抹消されたファイルをワンクリックで再保存します。',
+    name: 'メタデータ消去済みOfficeファイルを保存（ZIP一括対応）',
+    text: '文書の本文・数式・レイアウトをそのまま保持し、個人情報・社内情報のみが物理抹消されたファイルを個別保存またはZIPで一括保存します。',
   },
 ];
 
@@ -35,33 +35,34 @@ const faqs = [
   {
     question: '複数のOfficeファイルを一度にまとめて消去できますか？',
     answer:
-      'はい。複数の.xlsxや.docxファイルを同時にドラッグ＆ドロップして、一括でメタデータを消去できます。消去後は個別ダウンロードまたはZIP一括ダウンロードが可能です。',
+      'はい。複数の.xlsxや.docx、.pptxファイルを同時にドラッグ＆ドロップして一括でメタデータを消去し、個別保存または1つのZIPファイルとしてまとめてダウンロードできます。',
   },
 ];
 ---
 
 <ToolShell
   slug="office-metadata-wiper"
-  title="Excel・Word 作成者・隠しメタデータ一括消去ツール | サーバー送信なし・ブラウザ完結"
-  description="社外へ送る.xlsxや.docxから、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ内完結・外部送信0バイトで情報漏洩をブロック。"
+  title="Office文書（Excel・Word）作成者・隠しメタデータ一括消去 | ブラウザ完結・サーバー送信なし"
+  description="社外へ送るOffice文書（.xlsx / .docx / .pptx）から、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ完結・サーバー送信なし（0バイト保証）。"
   canonicalPath="/office-metadata-wiper/"
-  h1="Office文書（Excel・Word）作成者・隠しメタデータ一括消去"
-  subtitle="社外へ送る.xlsxや.docxから、作成者名・最終保存者・会社名・編集履歴を一括抹消。ブラウザ内完結でファイル内容の外部送信ゼロ。"
+  h1="Office文書・作成者メタ消去"
+  subtitle="社外へ送るOffice文書の作成者名・最終保存者・会社名・履歴をブラウザ内で一括抹消（サーバー送信なし）。"
   whyTitle="「プロパティを消したつもり」で、下請け企業名が残る事故"
   howToSteps={howToSteps}
   faqs={faqs}
   maxWidthClass="max-w-4xl"
 >
   <!-- ワンクリック検証用サンプルボタン -->
-  <button
-    slot="sample-button"
-    id="loadSampleOfficeBtn"
-    type="button"
-    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-  >
-    <span>🧪</span>
-    <span>模擬Office文書（機密メタデータ入り）で試す</span>
-  </button>
+  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+    <button
+      id="loadSampleOfficeBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>模擬Office文書（機密メタ入）で試す</span>
+    </button>
+  </div>
 
   <!-- メイン操作カード -->
   <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
@@ -69,7 +70,7 @@ const faqs = [
     <!-- ファイルドロップゾーン -->
     <div
       id="dropZoneOffice"
-      class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-teal-50/20 cursor-pointer group"
+      class="border-2 border-dashed border-slate-300 hover:border-slate-800 rounded-2xl p-5 sm:p-8 text-center transition bg-slate-50/70 hover:bg-slate-100/60 cursor-pointer group"
     >
       <input
         type="file"
@@ -79,81 +80,97 @@ const faqs = [
         class="hidden"
       />
       <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-        <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 group-hover:scale-105 transition-transform shadow-xs text-xl">
+        <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-800 group-hover:scale-105 transition-transform shadow-sm text-xl">
           📑
         </div>
         <div>
-          <p class="font-bold text-slate-800 text-sm sm:text-base">
+          <p class="font-bold text-slate-900 text-sm sm:text-base">
             Excel (.xlsx) / Word (.docx) / PowerPoint (.pptx) をドロップ
           </p>
-          <p class="text-xs text-slate-500 mt-0.5">
-            またはクリックしてファイル選択（複数ファイルの一括投入に対応）
+          <p class="text-xs text-slate-600 mt-0.5">
+            またはクリックしてファイル選択（複数ファイルの一括投入・ZIP保存対応）
           </p>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-2">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-teal-800 shadow-xs font-medium">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-900 shadow-sm font-semibold">
             🔒 外部送信なし（ファイルは端末外に出ません）
           </span>
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-700 shadow-sm">
             👤 作成者・最終保存者・会社名を完全初期化
           </span>
         </div>
       </div>
     </div>
 
+    <!-- インラインエラー通知 -->
+    <div id="officeErrorBanner" hidden role="alert" class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold"></div>
+
     <!-- 処理中プログレス表示 -->
     <div id="officeProgressArea" class="hidden text-center py-6 space-y-3">
-      <div class="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-xs text-teal-800 font-semibold">ブラウザ内でOffice内部XMLを展開 ＆ 機密メタデータ消去中...</p>
+      <div class="inline-block w-8 h-8 border-4 border-slate-800 border-t-transparent rounded-full animate-spin"></div>
+      <p id="officeProgressLabel" class="text-xs text-slate-900 font-semibold">ブラウザ内でOffice内部XMLを展開 ＆ 機密メタデータ消去中...</p>
     </div>
 
     <!-- 処理結果＆ダウンロードエリア -->
     <div id="officeResultArea" class="hidden space-y-4">
       
       <!-- 完了サマリーバー -->
-      <div class="p-4 sm:p-5 rounded-xl bg-teal-50/80 border border-teal-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="p-4 sm:p-5 rounded-xl bg-slate-100/90 border border-slate-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xl shrink-0">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0">
             🎉
           </div>
           <div>
-            <h2 class="text-sm sm:text-base font-bold text-teal-950">
+            <h2 id="resultHeadingText" class="text-sm sm:text-base font-bold text-slate-900">
               作成者・会社名・編集履歴の消去が完了しました！
             </h2>
-            <p id="resultTimeText" class="text-xs text-slate-600 font-mono mt-0.5">
-              処理時間: 0.05秒 (通信0バイト)
+            <p id="resultTimeText" class="text-xs text-slate-700 font-mono mt-0.5">
+              処理時間: 0.05秒 (通信ゼロ)
             </p>
           </div>
         </div>
-        <button
-          id="downloadCleanFileBtn"
-          type="button"
-          class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
-        >
-          <span>📥</span>
-          <span id="downloadBtnLabel">消去済みファイルを保存</span>
-        </button>
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <button
+            id="downloadCleanFileBtn"
+            type="button"
+            class="w-full sm:w-auto px-5 py-2.5 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-slate-900 hover:bg-slate-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+          >
+            <span aria-hidden="true">📥</span>
+            <span id="downloadBtnLabel">消去済みファイルを保存</span>
+          </button>
+        </div>
       </div>
 
       <!-- ゼロリークくん完了メッセージ -->
-      <div class="flex items-center gap-2 p-3 rounded-xl bg-teal-100/70 border border-teal-200 text-xs text-teal-950 font-medium">
-        <span class="text-base select-none shrink-0">🛡️</span>
-        <span><strong>ゼロリークくん：</strong>Office文書のメタデータを消去しました！ファイルはこの端末内だけで再構築され、外部には一切送信されていません。</span>
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 font-medium">
+        <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
+        <span><strong>ゼロリークくん：</strong>Office文書のメタデータを消去しました！ファイルはこの端末内だけで再構築され、外部には送信されていません。</span>
       </div>
 
-      <!-- 検出・抹消されたメタデータ監査レポート -->
-      <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-xs">
-        <div class="font-bold text-xs text-slate-900 flex items-center justify-between border-b border-slate-100 pb-2">
+      <!-- 複数ファイル一覧（2件以上のとき表示） -->
+      <div id="multiFileSection" class="hidden space-y-2.5">
+        <div class="flex items-center justify-between text-xs text-slate-700 px-1">
+          <span class="font-bold text-slate-900">ファイル別 検査＆消去結果</span>
+          <span id="multiFileCountLabel" class="font-mono text-slate-600">0件</span>
+        </div>
+        <div id="multiFileList" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+          <!-- JSで動的挿入 -->
+        </div>
+      </div>
+
+      <!-- 検出・抹消されたメタデータ監査レポート（単一ファイルまたは代表ファイル） -->
+      <div id="singleReportSection" class="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-sm">
+        <div class="font-bold text-xs text-slate-900 flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2">
           <span class="flex items-center gap-1.5">
-            <span>🔍</span>
-            <span>消去された内部プロパティ・メタデータ一覧（Before / After）</span>
+            <span aria-hidden="true">🔍</span>
+            <span id="reportSectionTitle">消去された内部プロパティ・メタデータ一覧（Before / After）</span>
           </span>
-          <span id="removedCountBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+          <span id="removedCountBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">
             残存メタデータ 0件
           </span>
         </div>
 
-        <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-700">
+        <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
           <!-- JSで動的挿入 -->
         </div>
       </div>
@@ -162,9 +179,9 @@ const faqs = [
         <button
           id="resetOfficeBtn"
           type="button"
-          class="text-xs text-slate-500 hover:text-slate-800 underline transition cursor-pointer"
+          class="text-xs text-slate-700 hover:text-slate-950 underline transition cursor-pointer font-semibold min-h-[36px]"
         >
-          別のファイルを消去する
+          結果をクリアして別のファイルを消去する
         </button>
       </div>
 
@@ -179,66 +196,116 @@ const faqs = [
       generateSampleOfficeDocx,
       type OfficeWipeResult,
     } from '../utils/office-metadata';
+    import { createZipArchive } from '../utils/exif';
 
     const dropZone = document.getElementById('dropZoneOffice') as HTMLDivElement;
     const fileInput = document.getElementById('fileInputOffice') as HTMLInputElement;
     const sampleBtn = document.getElementById('loadSampleOfficeBtn') as HTMLButtonElement;
+    const errorBanner = document.getElementById('officeErrorBanner') as HTMLDivElement;
     const progressArea = document.getElementById('officeProgressArea') as HTMLDivElement;
+    const progressLabel = document.getElementById('officeProgressLabel') as HTMLParagraphElement;
     const resultArea = document.getElementById('officeResultArea') as HTMLDivElement;
+    const resultHeadingText = document.getElementById('resultHeadingText') as HTMLHeadingElement;
     const downloadBtn = document.getElementById('downloadCleanFileBtn') as HTMLButtonElement;
     const downloadBtnLabel = document.getElementById('downloadBtnLabel') as HTMLSpanElement;
     const resetBtn = document.getElementById('resetOfficeBtn') as HTMLButtonElement;
+    const reportSection = document.getElementById('singleReportSection') as HTMLDivElement;
+    const reportSectionTitle = document.getElementById('reportSectionTitle') as HTMLSpanElement;
     const reportList = document.getElementById('metadataReportList') as HTMLDivElement;
     const resultTimeText = document.getElementById('resultTimeText') as HTMLParagraphElement;
     const removedCountBadge = document.getElementById('removedCountBadge') as HTMLSpanElement;
+    const multiFileSection = document.getElementById('multiFileSection') as HTMLDivElement;
+    const multiFileCountLabel = document.getElementById('multiFileCountLabel') as HTMLSpanElement;
+    const multiFileList = document.getElementById('multiFileList') as HTMLDivElement;
 
-    let lastResult: OfficeWipeResult | null = null;
-    let cleanFileBlobUrl: string | null = null;
+    let processedResults: OfficeWipeResult[] = [];
 
-    // ファイル処理
-    async function handleFile(file: File | { name: string; buffer: Uint8Array }) {
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function buildCleanFilename(filename: string): string {
+      const extMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
+      const ext = extMatch ? extMatch[1] : 'docx';
+      const baseName = filename.replace(/\.[a-zA-Z0-9]+$/, '');
+      return `${baseName}_clean.${ext}`;
+    }
+
+    function triggerDownload(bytes: Uint8Array, filename: string, mime = 'application/octet-stream') {
+      const buf = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+      const blob = new Blob([buf], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function showError(msg: string) {
+      errorBanner.textContent = msg;
+      errorBanner.hidden = false;
+    }
+
+    function hideError() {
+      errorBanner.hidden = true;
+    }
+
+    async function handleFiles(inputs: (File | { name: string; buffer: Uint8Array })[]) {
+      if (inputs.length === 0) return;
+      hideError();
       progressArea.classList.remove('hidden');
       resultArea.classList.add('hidden');
 
       const startTime = performance.now();
+      const batch: OfficeWipeResult[] = [];
+      const failedNames: string[] = [];
 
-      try {
-        let buffer: Uint8Array;
-        let filename: string;
-
-        if (file instanceof File) {
-          filename = file.name;
-          const arrayBuffer = await file.arrayBuffer();
-          buffer = new Uint8Array(arrayBuffer);
-        } else {
-          filename = file.name;
-          buffer = file.buffer;
+      for (let i = 0; i < inputs.length; i++) {
+        const item = inputs[i];
+        progressLabel.textContent = `ブラウザ内でOffice内部XMLを展開 ＆ メタデータ消去中 (${i + 1} / ${inputs.length})...`;
+        try {
+          let buffer: Uint8Array;
+          let filename: string;
+          if (item instanceof File) {
+            filename = item.name;
+            buffer = new Uint8Array(await item.arrayBuffer());
+          } else {
+            filename = item.name;
+            buffer = item.buffer;
+          }
+          const res = await wipeOfficeMetadata(buffer, filename);
+          batch.push(res);
+        } catch (err) {
+          console.error('Office metadata wipe error:', err);
+          failedNames.push(item instanceof File ? item.name : item.name);
         }
+      }
 
-        const res = await wipeOfficeMetadata(buffer, filename);
-        lastResult = res;
+      progressArea.classList.add('hidden');
 
+      if (failedNames.length > 0) {
+        showError(
+          `❌ 一部または全てのOffice文書の解析に失敗しました（${failedNames.join(', ')}）。暗号化ファイルまたは旧形式(.xls/.doc等)でないかご確認ください。`
+        );
+      }
+
+      if (batch.length > 0) {
+        processedResults = batch;
         const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-        renderResult(res, elapsed);
-      } catch (err) {
-        console.error('Office metadata wipe error:', err);
-        alert('Office文書の解析・消去に失敗しました。暗号化されたファイルでないか、破損していないかご確認ください。');
-      } finally {
-        progressArea.classList.add('hidden');
+        renderResults(elapsed);
       }
     }
 
-    function renderResult(res: OfficeWipeResult, elapsedSec: string) {
-      if (cleanFileBlobUrl) {
-        URL.revokeObjectURL(cleanFileBlobUrl);
-      }
-      const blob = new Blob([res.cleanedBytes], { type: 'application/octet-stream' });
-      cleanFileBlobUrl = URL.createObjectURL(blob);
-
-      resultTimeText.textContent = `処理時間: ${elapsedSec}秒 (通信0バイト) • 元サイズ: ${(res.originalFileSize / 1024).toFixed(1)} KB → 消去後: ${(res.cleanedFileSize / 1024).toFixed(1)} KB`;
+    function renderSingleReport(res: OfficeWipeResult) {
       removedCountBadge.textContent = `消去完了: ${res.removedPropertiesCount}項目 (残存メタデータ 0件)`;
-
-      // レポート描画
       const meta = res.detectedMetadata;
       const items: { label: string; val?: string; icon: string }[] = [
         { label: '作成者名 (Creator)', val: meta.creator, icon: '👤' },
@@ -256,19 +323,19 @@ const faqs = [
           const isDetected = !!item.val;
           return `
             <div class="p-2.5 rounded-lg border ${
-              isDetected ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-50 border-slate-200'
+              isDetected ? 'bg-rose-50/60 border-rose-200' : 'bg-slate-50 border-slate-200'
             } flex items-start justify-between gap-2">
-              <div class="space-y-0.5">
-                <span class="font-bold text-slate-800 flex items-center gap-1">
-                  <span>${item.icon}</span>
-                  <span>${item.label}</span>
+              <div class="space-y-0.5 min-w-0">
+                <span class="font-bold text-slate-900 flex items-center gap-1">
+                  <span aria-hidden="true">${item.icon}</span>
+                  <span>${escapeHtml(item.label)}</span>
                 </span>
-                <p class="font-mono text-slate-500 text-[10px] break-all">
-                  ${isDetected ? `元データ: "${item.val}"` : '元データ: (未設定)'}
+                <p class="font-mono text-slate-700 text-[11px] break-all">
+                  ${isDetected ? `元データ: "${escapeHtml(item.val!)}"` : '元データ: (未設定)'}
                 </p>
               </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${
-                isDetected ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-slate-100 text-slate-500'
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold shrink-0 ${
+                isDetected ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-slate-200 text-slate-700'
               }">
                 ${isDetected ? '✔ 消去済' : 'なし'}
               </span>
@@ -276,69 +343,156 @@ const faqs = [
           `;
         })
         .join('');
+    }
 
-      downloadBtnLabel.textContent = `消去済み「${res.filename}」を保存`;
+    function renderResults(elapsedSec: string) {
+      if (processedResults.length === 0) return;
+
+      const totalProps = processedResults.reduce((acc, r) => acc + r.removedPropertiesCount, 0);
+      const totalOrigKb = (processedResults.reduce((acc, r) => acc + r.originalFileSize, 0) / 1024).toFixed(1);
+      const totalCleanKb = (processedResults.reduce((acc, r) => acc + r.cleanedFileSize, 0) / 1024).toFixed(1);
+
+      resultTimeText.textContent = `処理時間: ${elapsedSec}秒 (外部通信 0件) • 合計 ${totalOrigKb} KB → ${totalCleanKb} KB`;
+
+      if (processedResults.length === 1) {
+        const res = processedResults[0];
+        resultHeadingText.textContent = '作成者・会社名・編集履歴の消去が完了しました！';
+        downloadBtnLabel.textContent = `消去済み「${res.filename}」を保存`;
+        multiFileSection.classList.add('hidden');
+        reportSection.classList.remove('hidden');
+        reportSectionTitle.textContent = '消去された内部プロパティ・メタデータ一覧（Before / After）';
+        renderSingleReport(res);
+      } else {
+        resultHeadingText.textContent = `${processedResults.length}件のOffice文書から計${totalProps}項目のメタデータを一括消去しました！`;
+        downloadBtnLabel.textContent = `📦 全${processedResults.length}件をZIPで一括保存`;
+        multiFileSection.classList.remove('hidden');
+        multiFileCountLabel.textContent = `${processedResults.length}件完了`;
+        reportSection.classList.remove('hidden');
+        reportSectionTitle.textContent = `詳細検査ビュー（${processedResults[0].filename}）`;
+        renderSingleReport(processedResults[0]);
+
+        multiFileList.innerHTML = processedResults
+          .map((res, idx) => {
+            const meta = res.detectedMetadata;
+            const summaryBits = [
+              meta.creator ? `作成者: ${meta.creator}` : null,
+              meta.company ? `会社: ${meta.company}` : null,
+              meta.lastModifiedBy ? `更新者: ${meta.lastModifiedBy}` : null,
+            ].filter(Boolean) as string[];
+            return `
+              <div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+                <div class="min-w-0 space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-bold text-slate-900 truncate max-w-[220px] sm:max-w-sm">${escapeHtml(res.filename)}</span>
+                    <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200 font-mono text-[10px] font-bold uppercase">${escapeHtml(res.format)}</span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">消去: ${res.removedPropertiesCount}件</span>
+                  </div>
+                  <p class="text-[11px] text-slate-700 truncate">
+                    ${summaryBits.length > 0 ? escapeHtml(summaryBits.join(' / ')) : '日時・プロパティを初期化済'}
+                  </p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    data-inspect-idx="${idx}"
+                    class="px-3 py-2 min-h-[38px] rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 font-semibold cursor-pointer"
+                  >
+                    詳細
+                  </button>
+                  <button
+                    type="button"
+                    data-download-idx="${idx}"
+                    class="px-3.5 py-2 min-h-[38px] rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold cursor-pointer"
+                  >
+                    📥 個別保存
+                  </button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
+        multiFileList.querySelectorAll('button[data-inspect-idx]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-inspect-idx') || '0', 10);
+            const target = processedResults[idx];
+            if (target) {
+              reportSectionTitle.textContent = `詳細検査ビュー（${target.filename}）`;
+              renderSingleReport(target);
+            }
+          });
+        });
+
+        multiFileList.querySelectorAll('button[data-download-idx]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-download-idx') || '0', 10);
+            const target = processedResults[idx];
+            if (target) {
+              triggerDownload(target.cleanedBytes, buildCleanFilename(target.filename));
+            }
+          });
+        });
+      }
+
       resultArea.classList.remove('hidden');
     }
 
-    // ダウンロード実行
+    // ダウンロード実行（1件なら直接保存、2件以上ならZIP一括生成＆保存）
     downloadBtn?.addEventListener('click', () => {
-      if (!lastResult || !cleanFileBlobUrl) return;
-      const a = document.createElement('a');
-      a.href = cleanFileBlobUrl;
-      const extMatch = lastResult.filename.match(/\.([a-zA-Z0-9]+)$/);
-      const ext = extMatch ? extMatch[1] : 'docx';
-      const baseName = lastResult.filename.replace(/\.[a-zA-Z0-9]+$/, '');
-      a.download = `${baseName}_clean.${ext}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      if (processedResults.length === 0) return;
+      if (processedResults.length === 1) {
+        const target = processedResults[0];
+        triggerDownload(target.cleanedBytes, buildCleanFilename(target.filename));
+      } else {
+        const zipBuffer = createZipArchive(
+          processedResults.map((r) => ({
+            name: buildCleanFilename(r.filename),
+            data: r.cleanedBytes,
+          }))
+        );
+        triggerDownload(zipBuffer, `zeroleak_office_clean_${Date.now()}.zip`, 'application/zip');
+      }
     });
 
     // サンプル投入
     sampleBtn?.addEventListener('click', async () => {
-      progressArea.classList.remove('hidden');
-      try {
-        const sampleBuffer = await generateSampleOfficeDocx();
-        await handleFile({
+      const sampleBuffer = await generateSampleOfficeDocx();
+      await handleFiles([
+        {
           name: '極秘_新規事業計画書_Chronos.docx',
           buffer: sampleBuffer,
-        });
-      } finally {
-        progressArea.classList.add('hidden');
-      }
+        },
+      ]);
     });
 
     // リセット
     resetBtn?.addEventListener('click', () => {
       resultArea.classList.add('hidden');
-      if (cleanFileBlobUrl) {
-        URL.revokeObjectURL(cleanFileBlobUrl);
-        cleanFileBlobUrl = null;
-      }
-      lastResult = null;
+      hideError();
+      processedResults = [];
+      fileInput.value = '';
     });
 
     // ドラッグ＆ドロップ
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropZone.classList.add('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.add('border-slate-800', 'bg-slate-100');
     });
     dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.remove('border-slate-800', 'bg-slate-100');
     });
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.remove('border-slate-800', 'bg-slate-100');
       if (e.dataTransfer && e.dataTransfer.files.length > 0) {
-        handleFile(e.dataTransfer.files[0]);
+        handleFiles(Array.from(e.dataTransfer.files));
       }
     });
 
     fileInput.addEventListener('change', () => {
       if (fileInput.files && fileInput.files.length > 0) {
-        handleFile(fileInput.files[0]);
+        handleFiles(Array.from(fileInput.files));
       }
     });
   </script>

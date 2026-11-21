@@ -38,38 +38,38 @@ const faqs = [
 
 <ToolShell
   slug="log-masking"
-  title="HARファイル・JSONログ・.env 機密トークン一括マスキング | ブラウザ完結・サーバー送信なし"
-  description="障害調査用HARファイル、.env、エラーログからCookie・Bearerトークン・APIキー・パスワード・メールを一括無害化。ブラウザ内完結・外部サーバー送信0バイト。"
+  title="HARファイル・JSONログ・.env 機密情報・トークン一括マスキング | ブラウザ完結・サーバー送信なし"
+  description="障害調査用HARファイル、.env、エラーログの機密情報（Cookie・Bearerトークン・APIキー・パスワード・メール）を一括無害化。ブラウザ内完結・サーバー送信なし。"
   canonicalPath="/log-masking/"
-  h1="HARファイル・JSONログ・.env 機密情報・APIキー一括マスキング"
-  subtitle="障害調査でベンダーへ渡すHARや.envから、Cookie・Bearerトークン・DBパスワード・APIキーを一括無害化。ブラウザ内処理・外部送信0バイト。"
+  h1="HAR・ログ・.env 機密トークン一括マスク"
+  subtitle="障害調査のHAR・.envからCookieやBearerトークン・APIキーを一括無害化（ブラウザ完結・サーバー送信なし）。"
   mascotName="tool-log"
   mascotFallback="🛡️"
   whyTitle="「障害調査のため」と渡したHARファイルに、あなたのCookieが残っている"
   howToSteps={howToSteps}
   faqs={faqs}
 >
-  <div class="space-y-6">
-    <!-- テスト用サンプル投入ボタン -->
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        id="loadSampleHarBtn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-      >
-        <span>🧪</span>
-        <span>サンプルHARを投入して試す</span>
-      </button>
-      <button
-        id="loadSampleEnvBtn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-      >
-        <span>🧪</span>
-        <span>サンプル.envを投入して試す</span>
-      </button>
-    </div>
+  <!-- テスト用サンプル投入ボタン -->
+  <div slot="sample-button" class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+    <button
+      id="loadSampleHarBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-950 border border-cyan-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>サンプルHARで試す</span>
+    </button>
+    <button
+      id="loadSampleEnvBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>サンプル.envで試す</span>
+    </button>
+  </div>
 
+  <div class="space-y-6">
     <!-- メイン操作カード -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
       <!-- 入力モード切り替えタブ -->
@@ -77,55 +77,55 @@ const faqs = [
         <button
           id="tabFileBtn"
           type="button"
-          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs"
+          class="px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-bold bg-cyan-50 text-cyan-900 border border-cyan-200 cursor-pointer shadow-sm"
         >
-          📁 ファイルをドラッグ＆ドロップ (.har / .env / .log / .json)
+          📁 ファイル (.har / .env / .log)
         </button>
         <button
           id="tabTextBtn"
           type="button"
-          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+          class="px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
         >
-          📝 テキストを直接貼り付け
+          📝 テキスト貼付
         </button>
       </div>
 
       <!-- モード1: ファイルドロップゾーン -->
       <div id="fileModeSection" class="space-y-3">
-        <div id="dropZoneLog" class="border-2 border-dashed border-slate-300 hover:border-cyan-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group">
+        <div id="dropZoneLog" class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-5 sm:p-8 text-center transition bg-slate-50/70 hover:bg-cyan-50/20 cursor-pointer group">
           <input type="file" id="fileInputLog" accept=".har,.json,.log,.env,.txt" class="hidden" />
           <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-            <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs text-xl font-bold">
+            <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm text-xl font-bold">
               🛡️
             </div>
             <div>
-              <p class="font-bold text-slate-800 text-sm sm:text-base">調査用HAR / ログ / .env ファイルをドロップ</p>
-              <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.har, .json, .log, .env, .txt)</p>
+              <p class="font-bold text-slate-900 text-sm sm:text-base">調査用HAR / ログ / .env ファイルをドロップ</p>
+              <p class="text-xs text-slate-600 mt-0.5">またはクリックしてファイルを選択 (.har, .json, .log, .env, .txt)</p>
             </div>
             <div class="flex flex-wrap items-center justify-center gap-2">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-cyan-900 shadow-xs font-bold">
-                🔒 サーバー送信なし（0バイト保証）
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-cyan-900 shadow-sm font-bold">
+                🔒 サーバー送信なし（外部通信 0件）
               </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs font-semibold">
-                ⚡ 10MB超の大容量ログも即座にパース
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-700 shadow-sm font-semibold">
+                ⚡ 大容量ログもJSON構造を壊さず即パース
               </span>
             </div>
           </div>
         </div>
 
         <!-- 選択中ファイルインフォバー -->
-        <div id="fileInfoLog" class="hidden p-3.5 rounded-xl bg-cyan-50/50 border border-cyan-200 flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2.5">
-            <span class="text-base">📄</span>
-            <div>
-              <div class="font-bold text-slate-900" id="fileNameLog">filename.har</div>
-              <div class="text-slate-500 font-mono text-[11px]" id="fileMetaLog">サイズ: 0 KB</div>
+        <div id="fileInfoLog" class="hidden p-3.5 rounded-xl bg-cyan-50/50 border border-cyan-200 flex items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="text-base shrink-0" aria-hidden="true">📄</span>
+            <div class="min-w-0">
+              <div class="font-bold text-slate-900 truncate" id="fileNameLog">filename.har</div>
+              <div class="text-slate-700 font-mono text-xs" id="fileMetaLog">サイズ: 0 KB</div>
             </div>
-            <span id="fileTypeBadge" class="ml-2 px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 font-mono font-bold text-[10px]">
+            <span id="fileTypeBadge" class="ml-1 px-2 py-0.5 rounded bg-cyan-100 text-cyan-900 font-mono font-bold text-[11px] shrink-0">
               HAR
             </span>
           </div>
-          <button id="resetLogBtn" type="button" class="text-slate-500 hover:text-rose-600 text-xs font-semibold cursor-pointer">
+          <button id="resetLogBtn" type="button" class="text-cyan-800 hover:text-rose-700 text-xs font-semibold cursor-pointer min-h-[36px] shrink-0 underline">
             ファイルを変更
           </button>
         </div>
@@ -133,72 +133,75 @@ const faqs = [
 
       <!-- モード2: テキスト直接貼り付けエリア -->
       <div id="textModeSection" class="hidden space-y-2">
-        <label for="rawLogInput" class="block text-xs font-bold text-slate-700">
+        <label for="rawLogInput" class="block text-xs font-bold text-slate-800">
           マスクしたいログ・HAR・.envのテキストを貼り付け:
         </label>
         <textarea
           id="rawLogInput"
           rows="8"
           placeholder="Authorization: Bearer eyJhbGciOi...&#10;Cookie: sessionid=abc12345; secure&#10;OPENAI_API_KEY=sk-proj-xxxx...&#10;DATABASE_URL=postgres://user:password@db.example.com:5432/main"
-          class="w-full text-xs font-mono p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 leading-relaxed"
+          class="w-full text-xs font-mono p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600 leading-relaxed"
         ></textarea>
       </div>
 
       <!-- マスキング詳細設定アコーディオン -->
       <details class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-3">
-        <summary class="font-bold text-slate-800 cursor-pointer flex items-center justify-between">
+        <summary class="font-bold text-slate-900 cursor-pointer flex items-center justify-between min-h-[38px] list-none select-none">
           <span>⚙️ マスキング対象の詳細設定（クリックで展開）</span>
-          <span class="text-cyan-700">▼</span>
+          <span class="text-cyan-800">▼</span>
         </summary>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2">
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optCookies" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">Cookie / Set-Cookie (セッションID)</span>
+            <input type="checkbox" id="optCookies" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">Cookie / Set-Cookie (セッションID)</span>
           </label>
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optAuth" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">Authorization (Bearer / Basic / JWT)</span>
+            <input type="checkbox" id="optAuth" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">Authorization (Bearer / Basic / JWT)</span>
           </label>
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optApiKey" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">APIキー (OpenAI, AWS, Stripe等)</span>
+            <input type="checkbox" id="optApiKey" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">APIキー (OpenAI, AWS, Stripe等)</span>
           </label>
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optEnvSecrets" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">.env 機密変数 (SECRET, PASSWORD等)</span>
+            <input type="checkbox" id="optEnvSecrets" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">.env 機密変数 (SECRET, PASSWORD等)</span>
           </label>
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optEmails" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">メールアドレス (user@example.com)</span>
+            <input type="checkbox" id="optEmails" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">メールアドレス (user@example.com)</span>
           </label>
           <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 hover:bg-cyan-50/30 cursor-pointer">
-            <input type="checkbox" id="optIp" checked class="rounded text-cyan-600 focus:ring-cyan-500" />
-            <span class="font-medium text-slate-700">IPアドレス (IPv4 / IPv6)</span>
+            <input type="checkbox" id="optIp" checked class="rounded text-cyan-600 focus:ring-cyan-600" />
+            <span class="font-medium text-slate-800">IPアドレス (IPv4 / IPv6)</span>
           </label>
         </div>
 
         <!-- カスタム伏字キーワード -->
         <div class="pt-2 border-t border-slate-200 space-y-1">
-          <label for="customKeywordsInput" class="font-semibold text-slate-700 block">
+          <label for="customKeywordsInput" class="font-semibold text-slate-800 block">
             追加の伏字対象キーワード（カンマ区切りで社名・自社ドメイン・テナントID等を指定）:
           </label>
           <input
             type="text"
             id="customKeywordsInput"
             placeholder="例: 株式会社ネクスト, internal-corp.local, secret_tenant_01"
-            class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-cyan-600 focus:border-cyan-600"
           />
         </div>
       </details>
+
+      <!-- インラインエラーバナー -->
+      <div id="logErrorBanner" hidden role="alert" class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold"></div>
 
       <!-- 実行ボタン -->
       <div>
         <button
           id="processLogBtn"
           type="button"
-          class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
+          class="w-full sm:w-auto px-6 py-3 min-h-[44px] rounded-xl font-bold text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-sm flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
         >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
           <span>機密トークンの一括マスキングを実行 (ブラウザ内処理)</span>
@@ -209,39 +212,40 @@ const faqs = [
       <div id="resultArea" class="hidden p-4 sm:p-6 rounded-xl bg-cyan-50/70 border border-cyan-200 space-y-4">
         <div class="flex items-center justify-between flex-wrap gap-2">
           <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center text-lg">
+            <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-lg shrink-0">
               🎉
             </div>
             <div>
-              <h2 class="text-sm sm:text-base font-bold text-cyan-950">機密情報の無害化が完了しました！</h2>
-              <p id="resultTimeText" class="text-xs text-slate-600 font-mono">処理時間: 0.1秒 (通信0バイト)</p>
+              <h2 class="text-sm sm:text-base font-bold text-slate-900">機密情報の無害化が完了しました！</h2>
+              <p id="resultTimeText" class="text-xs text-slate-700 font-mono">処理時間: 0.1秒 (外部通信 0件)</p>
             </div>
           </div>
 
-          <!-- ゼロリークくん完了メッセージ -->
-          <div class="w-full flex items-center gap-2 p-3 rounded-xl bg-cyan-100/70 border border-cyan-200 text-xs text-cyan-950 font-medium">
-            <span class="text-base select-none shrink-0">🛡️</span>
-            <span><strong>ゼロリークくん：</strong>ログの機密マスクが完了しました！CookieやAPIキーはブラウザ内だけで安全に無害化されています。</span>
-          </div>
           <button
             id="downloadLogBtn"
             type="button"
-            class="px-5 py-2 rounded-xl font-bold text-xs sm:text-sm text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-xs flex items-center gap-2 cursor-pointer"
+            class="px-5 py-2.5 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-sm flex items-center gap-2 cursor-pointer"
           >
-            <span>📥</span>
+            <span aria-hidden="true">📥</span>
             <span>マスク済みファイルを保存</span>
           </button>
         </div>
 
+        <!-- ゼロリークくん完了メッセージ -->
+        <div class="w-full flex items-center gap-2 p-3 rounded-xl bg-white border border-cyan-200 text-xs text-slate-900 font-medium">
+          <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
+          <span><strong>ゼロリークくん：</strong>ログの機密マスクが完了しました！CookieやAPIキーはブラウザ内だけで無害化されています。</span>
+        </div>
+
         <!-- 検出監査サマリーバッジ -->
-        <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-xs">
-          <div class="font-bold text-cyan-900 flex items-center justify-between">
+        <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-sm">
+          <div class="font-bold text-slate-900 flex items-center justify-between flex-wrap gap-2">
             <span>🔍 無害化された機密項目レポート</span>
-            <span id="totalRedactedBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+            <span id="totalRedactedBadge" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">
               合計 0 箇所を無害化
             </span>
           </div>
-          <div id="detectionDetailsList" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-700 pt-1">
+          <div id="detectionDetailsList" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-700 pt-1">
             <!-- 動的挿入 -->
           </div>
         </div>
@@ -249,9 +253,9 @@ const faqs = [
         <!-- プレビュー表示 -->
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-800">マスク結果プレビュー（抜粋）:</span>
-            <button id="copyResultTextBtn" type="button" class="text-xs text-cyan-700 hover:text-cyan-900 underline cursor-pointer">
-              テキストを全コピー
+            <span class="text-xs font-bold text-slate-900">マスク結果プレビュー（抜粋）:</span>
+            <button id="copyResultTextBtn" type="button" class="text-xs font-bold text-cyan-800 hover:text-cyan-950 underline cursor-pointer py-1 px-2">
+              📋 テキストを全コピー
             </button>
           </div>
           <pre id="previewLogContent" class="p-3.5 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs max-h-64 overflow-y-auto leading-relaxed select-all"></pre>
@@ -276,7 +280,6 @@ const faqs = [
   let loadedContent = '';
   let lastMaskResult: MaskResult | null = null;
 
-  // DOM要素
   const tabFileBtn = document.getElementById('tabFileBtn')!;
   const tabTextBtn = document.getElementById('tabTextBtn')!;
   const fileModeSection = document.getElementById('fileModeSection')!;
@@ -289,11 +292,11 @@ const faqs = [
   const fileTypeBadge = document.getElementById('fileTypeBadge')!;
   const resetLogBtn = document.getElementById('resetLogBtn')!;
   const rawLogInput = document.getElementById('rawLogInput') as HTMLTextAreaElement;
+  const errorBanner = document.getElementById('logErrorBanner')!;
   const processLogBtn = document.getElementById('processLogBtn')!;
   const loadSampleHarBtn = document.getElementById('loadSampleHarBtn')!;
   const loadSampleEnvBtn = document.getElementById('loadSampleEnvBtn')!;
 
-  // オプション要素
   const optCookies = document.getElementById('optCookies') as HTMLInputElement;
   const optAuth = document.getElementById('optAuth') as HTMLInputElement;
   const optApiKey = document.getElementById('optApiKey') as HTMLInputElement;
@@ -302,7 +305,6 @@ const faqs = [
   const optIp = document.getElementById('optIp') as HTMLInputElement;
   const customKeywordsInput = document.getElementById('customKeywordsInput') as HTMLInputElement;
 
-  // 結果要素
   const resultArea = document.getElementById('resultArea')!;
   const resultTimeText = document.getElementById('resultTimeText')!;
   const totalRedactedBadge = document.getElementById('totalRedactedBadge')!;
@@ -311,24 +313,35 @@ const faqs = [
   const downloadLogBtn = document.getElementById('downloadLogBtn')!;
   const copyResultTextBtn = document.getElementById('copyResultTextBtn')!;
 
-  // タブ切り替え
+  function showError(msg: string) {
+    errorBanner.textContent = msg;
+    errorBanner.hidden = false;
+  }
+
+  function hideError() {
+    errorBanner.hidden = true;
+  }
+
   tabFileBtn.addEventListener('click', () => {
     currentInputMode = 'file';
-    tabFileBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs';
-    tabTextBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+    tabFileBtn.className = 'px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-bold bg-cyan-50 text-cyan-900 border border-cyan-200 cursor-pointer shadow-sm';
+    tabTextBtn.className = 'px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
     fileModeSection.classList.remove('hidden');
     textModeSection.classList.add('hidden');
+    hideError();
   });
 
   tabTextBtn.addEventListener('click', () => {
     currentInputMode = 'text';
-    tabTextBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200 cursor-pointer shadow-xs';
-    tabFileBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+    tabTextBtn.className = 'px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-bold bg-cyan-50 text-cyan-900 border border-cyan-200 cursor-pointer shadow-sm';
+    tabFileBtn.className = 'px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
     textModeSection.classList.remove('hidden');
     fileModeSection.classList.add('hidden');
+    hideError();
   });
 
   function handleFile(file: File) {
+    hideError();
     loadedFileName = file.name;
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -350,14 +363,14 @@ const faqs = [
   dropZone.addEventListener('click', () => fileInput.click());
   dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropZone.classList.add('border-cyan-500', 'bg-cyan-50/40');
+    dropZone.classList.add('border-cyan-600', 'bg-cyan-50/40');
   });
   dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/40');
+    dropZone.classList.remove('border-cyan-600', 'bg-cyan-50/40');
   });
   dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropZone.classList.remove('border-cyan-500', 'bg-cyan-50/40');
+    dropZone.classList.remove('border-cyan-600', 'bg-cyan-50/40');
     if (e.dataTransfer?.files.length) {
       handleFile(e.dataTransfer.files[0]);
     }
@@ -374,9 +387,11 @@ const faqs = [
     fileInfoLog.classList.add('hidden');
     dropZone.classList.remove('hidden');
     resultArea.classList.add('hidden');
+    hideError();
   });
 
   loadSampleHarBtn.addEventListener('click', () => {
+    hideError();
     const sample = generateSampleHar();
     loadedFileName = 'sample_network_capture.har';
     loadedContent = sample;
@@ -386,6 +401,7 @@ const faqs = [
   });
 
   loadSampleEnvBtn.addEventListener('click', () => {
+    hideError();
     const sample = generateSampleEnv();
     loadedFileName = '.env.production';
     loadedContent = sample;
@@ -397,9 +413,10 @@ const faqs = [
   processLogBtn.addEventListener('click', runMasking);
 
   function runMasking() {
+    hideError();
     const content = currentInputMode === 'text' ? rawLogInput.value : loadedContent;
     if (!content || !content.trim()) {
-      alert('ファイルをドロップするか、テキストを入力してください。');
+      showError('⚠️ ファイルをドロップするか、「テキスト貼付」タブからログを入力してください（上のサンプルボタンで即体験できます）。');
       return;
     }
 
@@ -424,39 +441,39 @@ const faqs = [
     const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
     lastMaskResult = res;
 
-    resultTimeText.textContent = `処理時間: ${elapsed}秒 (外部通信0バイト・端末内RAM処理)`;
+    resultTimeText.textContent = `処理時間: ${elapsed}秒 (外部通信 0件・端末内RAM処理)`;
     totalRedactedBadge.textContent = `合計 ${res.detectedCounts.total} 箇所を無害化`;
 
     detectionDetailsList.innerHTML = `
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">Cookie / Set-Cookie:</span>
+        <span class="text-slate-600">Cookie / Set-Cookie:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.cookies}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">Authorization / Auth:</span>
+        <span class="text-slate-600">Authorization / Auth:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.authHeaders}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">APIキー (OpenAI/AWS等):</span>
+        <span class="text-slate-600">APIキー (OpenAI/AWS等):</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.apiKeys}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">.env 機密環境変数:</span>
+        <span class="text-slate-600">.env 機密環境変数:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.envSecrets}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">メールアドレス:</span>
+        <span class="text-slate-600">メールアドレス:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.emails}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">IPアドレス:</span>
+        <span class="text-slate-600">IPアドレス:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.ips}件</span>
       </div>
       <div class="p-2 rounded bg-slate-50 border border-slate-200">
-        <span class="text-slate-500">カスタム指定語句:</span>
+        <span class="text-slate-600">カスタム指定語句:</span>
         <span class="font-bold text-slate-900 ml-1">${res.detectedCounts.customKeywords}件</span>
       </div>
-      <div class="p-2 rounded bg-emerald-50 border border-emerald-200 font-bold text-emerald-800 flex items-center justify-between">
+      <div class="p-2 rounded bg-emerald-50 border border-emerald-200 font-bold text-emerald-900 flex items-center justify-between">
         <span>残存リスク:</span>
         <span>0%</span>
       </div>
@@ -489,9 +506,12 @@ const faqs = [
     if (!lastMaskResult) return;
     try {
       await navigator.clipboard.writeText(lastMaskResult.maskedContent);
-      alert('マスク結果のテキストをクリップボードにコピーしました！');
-    } catch (err) {
-      alert('クリップボードのコピーに失敗しました。プレビュー枠内を直接選択してコピーしてください。');
+      copyResultTextBtn.textContent = '✔ コピーしました！';
+      setTimeout(() => {
+        copyResultTextBtn.textContent = '📋 テキストを全コピー';
+      }, 2000);
+    } catch {
+      showError('⚠️ クリップボードへのコピーに失敗しました。下の黒い枠内を選択してコピーしてください。');
     }
   });
 </script>

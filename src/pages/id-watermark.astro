@@ -45,8 +45,8 @@ const faqs = [
   title="身分証・マイナンバー 悪用防止透かし焼き込み | ブラウザ完結・サーバー送信なし"
   description="運転免許証やマイナンバーカード提出時の不正利用・使い回し防止。「〇〇提出用 悪用禁止」の透かしをブラウザ内だけで斜め全面に焼き込み。外部サーバー送信0バイト。"
   canonicalPath="/id-watermark/"
-  h1="身分証・マイナンバー 悪用防止透かし焼き込み"
-  subtitle="バイト応募、賃貸契約、フリマ本人確認で送る免許証・マイナンバー・保険証に、「〇〇提出用 転載・悪用禁止」をブラウザ内で不可逆焼き込み。通信0バイトで安全に出力。"
+  h1="身分証・免許証 悪用防止透かし焼き込み"
+  subtitle="免許証・マイナンバー・保険証に「〇〇提出用 悪用禁止」をブラウザ内で焼き込み（サーバー送信なし）。"
   whyTitle="提出した身分証画像は「そのまま別の契約」に使い回されるリスクがある"
   howToSteps={howToSteps}
   faqs={faqs}
@@ -56,9 +56,9 @@ const faqs = [
     slot="sample-button"
     id="loadSampleIdBtn"
     type="button"
-    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
   >
-    <span>🧪</span>
+    <span aria-hidden="true">🧪</span>
     <span>見本運転免許証で試す</span>
   </button>
 
@@ -66,16 +66,25 @@ const faqs = [
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
     <!-- 左カラム：透かし設定コントロール (5カラム) -->
-    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-5">
+    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-5">
       
       <!-- ファイル選択 ＆ ドロップエリア -->
       <div class="space-y-2">
-        <label class="block text-xs font-bold text-slate-800">
-          1. 身分証画像を選択（免許証・マイナンバー等）
-        </label>
+        <div class="flex items-center justify-between gap-2">
+          <label class="block text-xs font-bold text-slate-900">
+            1. 身分証画像を選択（免許証・マイナンバー等）
+          </label>
+          <button
+            type="button"
+            id="resetIdImageBtn"
+            class="hidden text-xs text-blue-800 hover:text-rose-700 font-semibold underline cursor-pointer shrink-0"
+          >
+            画像をクリア
+          </button>
+        </div>
         <div
           id="dropZone"
-          class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-4 text-center transition bg-slate-50/70 hover:bg-blue-50/20 cursor-pointer group"
+          class="border-2 border-dashed border-slate-300 hover:border-blue-600 rounded-xl p-4 text-center transition bg-slate-50/70 hover:bg-blue-50/20 cursor-pointer group"
         >
           <input
             type="file"
@@ -84,9 +93,9 @@ const faqs = [
             class="hidden"
           />
           <div class="flex flex-col items-center gap-1.5 pointer-events-none">
-            <span class="text-2xl group-hover:scale-110 transition-transform">📷</span>
-            <p class="font-bold text-slate-700 text-xs sm:text-sm">画像をドロップ または クリックして選択</p>
-            <p class="text-[11px] text-slate-600">JPEG, PNG, WebP対応 • スマホ撮影写真OK</p>
+            <span class="text-2xl group-hover:scale-110 transition-transform" aria-hidden="true">📷</span>
+            <p class="font-bold text-slate-900 text-xs sm:text-sm">画像をドロップ または クリックして選択</p>
+            <p class="text-xs text-slate-600">JPEG, PNG, WebP対応 • スマホ撮影写真OK</p>
           </div>
         </div>
       </div>
@@ -94,13 +103,13 @@ const faqs = [
       <!-- 透かしテキスト入力 -->
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label for="watermarkText" class="block text-xs font-bold text-slate-800">
+          <label for="watermarkText" class="block text-xs font-bold text-slate-900">
             2. 焼き込む透かし文字列
           </label>
           <button
             type="button"
             id="insertDateBtn"
-            class="text-[11px] text-blue-700 hover:underline font-semibold cursor-pointer"
+            class="text-xs text-blue-700 hover:underline font-semibold cursor-pointer py-1"
           >
             + 今日の日付を挿入
           </button>
@@ -108,19 +117,19 @@ const faqs = [
         <textarea
           id="watermarkText"
           rows="2"
-          class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+          class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 font-mono"
           placeholder="〇〇社 提出用 悪用禁止"
         >〇〇提出用 悪用禁止</textarea>
 
         <!-- クイック挿入プリセット -->
         <div class="flex flex-wrap gap-1.5 pt-1">
-          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+          <button type="button" class="preset-btn px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-800 border border-slate-200 transition cursor-pointer">
             〇〇社 提出用 悪用禁止
           </button>
-          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+          <button type="button" class="preset-btn px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-800 border border-slate-200 transition cursor-pointer">
             本人確認用 転載禁止
           </button>
-          <button type="button" class="preset-btn px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[11px] text-slate-700 border border-slate-200 transition">
+          <button type="button" class="preset-btn px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-800 border border-slate-200 transition cursor-pointer">
             賃貸契約用 他目的使用不可
           </button>
         </div>
@@ -157,8 +166,8 @@ const faqs = [
       <div class="space-y-3.5 pt-1 border-t border-slate-100">
         <div>
           <div class="flex justify-between text-xs mb-1">
-            <span class="font-bold text-slate-700">文字の濃さ（不透明度）：</span>
-            <span id="opacityVal" class="font-mono text-blue-600 font-bold">25%</span>
+            <span class="font-bold text-slate-800">文字の濃さ（不透明度）：</span>
+            <span id="opacityVal" class="font-mono text-blue-700 font-bold">25%</span>
           </div>
           <input
             type="range"
@@ -168,7 +177,7 @@ const faqs = [
             value="25"
             class="w-full accent-blue-600 cursor-pointer"
           />
-          <div class="flex justify-between text-[10px] text-slate-600">
+          <div class="flex justify-between text-[11px] text-slate-600">
             <span>薄め (10%)</span>
             <span>推奨 (20〜30%)</span>
             <span>濃いめ (60%)</span>
@@ -177,8 +186,8 @@ const faqs = [
 
         <div>
           <div class="flex justify-between text-xs mb-1">
-            <span class="font-bold text-slate-700">文字サイズ：</span>
-            <span id="fontSizeVal" class="font-mono text-blue-600 font-bold">小</span>
+            <span class="font-bold text-slate-800">文字サイズ：</span>
+            <span id="fontSizeVal" class="font-mono text-blue-700 font-bold">中</span>
           </div>
           <input
             type="range"
@@ -192,8 +201,8 @@ const faqs = [
 
         <div>
           <div class="flex justify-between text-xs mb-1">
-            <span class="font-bold text-slate-700">文字の傾き（角度）：</span>
-            <span id="angleVal" class="font-mono text-blue-600 font-bold">-25°</span>
+            <span class="font-bold text-slate-800">文字の傾き（角度）：</span>
+            <span id="angleVal" class="font-mono text-blue-700 font-bold">-25°</span>
           </div>
           <input
             type="range"
@@ -207,21 +216,21 @@ const faqs = [
 
         <!-- 文字色選択 -->
         <div>
-          <span class="block text-xs font-bold text-slate-700 mb-1.5">文字の色：</span>
-          <div class="flex items-center gap-3">
-            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+          <span class="block text-xs font-bold text-slate-800 mb-1.5">文字の色：</span>
+          <div class="flex flex-wrap items-center gap-3">
+            <label class="flex items-center gap-1.5 text-xs text-slate-800 cursor-pointer py-0.5">
               <input type="radio" name="colorMode" value="red" checked class="accent-rose-600" />
               <span class="w-3.5 h-3.5 rounded-full bg-rose-600 inline-block"></span>
               <span>赤色 (警戒・目立つ)</span>
             </label>
-            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+            <label class="flex items-center gap-1.5 text-xs text-slate-800 cursor-pointer py-0.5">
               <input type="radio" name="colorMode" value="dark" class="accent-slate-800" />
               <span class="w-3.5 h-3.5 rounded-full bg-slate-800 inline-block"></span>
               <span>黒色 (シック)</span>
             </label>
-            <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
-              <input type="radio" name="colorMode" value="white" class="accent-slate-400" />
-              <span class="w-3.5 h-3.5 rounded-full bg-white border border-slate-300 inline-block"></span>
+            <label class="flex items-center gap-1.5 text-xs text-slate-800 cursor-pointer py-0.5">
+              <input type="radio" name="colorMode" value="white" class="accent-slate-600" />
+              <span class="w-3.5 h-3.5 rounded-full bg-white border border-slate-400 inline-block"></span>
               <span>白色 (反転)</span>
             </label>
           </div>
@@ -234,13 +243,13 @@ const faqs = [
           type="button"
           id="downloadBtn"
           disabled
-          class="w-full py-3 px-4 rounded-xl font-bold text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+          class="w-full py-3 px-4 min-h-[44px] rounded-xl font-bold text-sm text-white bg-blue-700 hover:bg-blue-800 disabled:bg-slate-400 disabled:cursor-not-allowed transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>📥</span>
-          <span>透かし入り画像を保存（PNG）</span>
+          <span aria-hidden="true">📥</span>
+          <span id="downloadBtnText">透かし入り画像を保存（PNG）</span>
         </button>
         <div class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 font-medium">
-          <span class="text-base select-none shrink-0">🛡️</span>
+          <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
           <span><strong>ゼロリークくん：</strong>透かし処理はCanvas上で直接描画されています。画像が外部へ送られる心配はありません。</span>
         </div>
       </div>
@@ -248,15 +257,15 @@ const faqs = [
     </div>
 
     <!-- 右カラム：リアルタイムプレビュー (7カラム) -->
-    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-4">
       
       <!-- プレビューヘッダー -->
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100 flex-wrap">
         <div class="flex items-center gap-2">
           <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
             <span>🖼️ リアルタイム完成プレビュー</span>
           </h2>
-          <span id="imageResolutionBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+          <span id="imageResolutionBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
             画像未選択
           </span>
         </div>
@@ -264,23 +273,23 @@ const faqs = [
       </div>
 
       <!-- Canvas表示コンテナ -->
-      <div class="relative bg-slate-100/70 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center min-h-[360px] p-2">
-        <div id="emptyNotice" class="text-center text-slate-600 space-y-2 p-8">
-          <span class="text-4xl block">🪪</span>
-          <p class="text-sm font-bold text-slate-700">身分証画像が選択されていません</p>
+      <div class="relative bg-slate-100/70 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center min-h-[300px] sm:min-h-[360px] p-2">
+        <div id="emptyNotice" class="text-center text-slate-700 space-y-2 p-6 sm:p-8">
+          <span class="text-4xl block" aria-hidden="true">🪪</span>
+          <p class="text-sm font-bold text-slate-800">身分証画像が選択されていません</p>
           <p class="text-xs text-slate-600 max-w-sm mx-auto">
             左の「身分証を選択」から免許証等の写真を読み込むか、上の「🧪 見本運転免許証で試す」ボタンを押してください。
           </p>
         </div>
-        <canvas id="previewCanvas" class="max-w-full max-h-[500px] object-contain rounded shadow-xs hidden"></canvas>
+        <canvas id="previewCanvas" class="max-w-full max-h-[500px] object-contain rounded shadow-sm hidden"></canvas>
       </div>
 
       <!-- 目視確認チェックボックス ＆ アラート -->
-      <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 space-y-1.5">
+      <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-3 text-xs text-blue-950 space-y-1.5">
         <div class="font-bold flex items-center gap-1 text-blue-950">
           <span>⚠️ 提出前のチェックリスト</span>
         </div>
-        <ul class="list-disc list-inside space-y-0.5 text-blue-800 text-[11px]">
+        <ul class="list-disc list-inside space-y-0.5 text-blue-900 text-xs">
           <li>氏名・生年月日・住所・有効期限・写真が透かし文字で隠れて潰れていませんか？</li>
           <li>濃すぎる場合は、左のスライダーで不透明度（20〜25%）を下げてください。</li>
           <li>「〇〇提出用」と指定した提出先企業名・日付が正しく入っていますか？</li>
@@ -297,13 +306,13 @@ const faqs = [
       applyWatermarkToCanvas,
       getTodayDateString,
       generateDummyIdSvgUri,
-      DEFAULT_WATERMARK_OPTIONS,
       type WatermarkOptions,
       type WatermarkPattern
     } from '../utils/id-watermark';
 
     const imageFileInput = document.getElementById('imageFileInput') as HTMLInputElement;
     const dropZone = document.getElementById('dropZone') as HTMLElement;
+    const resetIdImageBtn = document.getElementById('resetIdImageBtn') as HTMLButtonElement;
     const loadSampleIdBtn = document.getElementById('loadSampleIdBtn') as HTMLButtonElement;
     const insertDateBtn = document.getElementById('insertDateBtn') as HTMLButtonElement;
     const watermarkText = document.getElementById('watermarkText') as HTMLTextAreaElement;
@@ -316,6 +325,7 @@ const faqs = [
     const previewCanvas = document.getElementById('previewCanvas') as HTMLCanvasElement;
     const emptyNotice = document.getElementById('emptyNotice') as HTMLElement;
     const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
+    const downloadBtnText = document.getElementById('downloadBtnText') as HTMLSpanElement;
     const imageResolutionBadge = document.getElementById('imageResolutionBadge') as HTMLElement;
     const presetButtons = document.querySelectorAll('.preset-btn');
     const patternLabels = document.querySelectorAll('.pattern-label');
@@ -365,6 +375,7 @@ const faqs = [
 
       emptyNotice.classList.add('hidden');
       previewCanvas.classList.remove('hidden');
+      resetIdImageBtn.classList.remove('hidden');
       downloadBtn.removeAttribute('disabled');
       imageResolutionBadge.textContent = `${width} × ${height} px`;
     }
@@ -379,7 +390,16 @@ const faqs = [
       img.src = src;
     }
 
-    // ファイル選択
+    resetIdImageBtn.addEventListener('click', () => {
+      currentLoadedImage = null;
+      imageFileInput.value = '';
+      previewCanvas.classList.add('hidden');
+      emptyNotice.classList.remove('hidden');
+      resetIdImageBtn.classList.add('hidden');
+      downloadBtn.setAttribute('disabled', 'true');
+      imageResolutionBadge.textContent = '画像未選択';
+    });
+
     imageFileInput.addEventListener('change', (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -391,18 +411,17 @@ const faqs = [
       }
     });
 
-    // ドラッグ＆ドロップ
     dropZone.addEventListener('click', () => imageFileInput.click());
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropZone.classList.add('border-blue-500', 'bg-blue-50/40');
+      dropZone.classList.add('border-blue-600', 'bg-blue-50/40');
     });
     dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-blue-500', 'bg-blue-50/40');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/40');
     });
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-blue-500', 'bg-blue-50/40');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/40');
       const file = e.dataTransfer?.files[0];
       if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
@@ -413,7 +432,6 @@ const faqs = [
       }
     });
 
-    // スライダー連動
     opacitySlider.addEventListener('input', () => {
       opacityVal.textContent = `${opacitySlider.value}%`;
       renderWatermark();
@@ -450,7 +468,6 @@ const faqs = [
       el.addEventListener('change', renderWatermark);
     });
 
-    // プリセットボタン
     presetButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         watermarkText.value = btn.textContent?.trim() || '';
@@ -458,7 +475,6 @@ const faqs = [
       });
     });
 
-    // 日付挿入
     insertDateBtn.addEventListener('click', () => {
       const today = getTodayDateString();
       if (!watermarkText.value.includes(today)) {
@@ -467,13 +483,11 @@ const faqs = [
       }
     });
 
-    // サンプル投入
     loadSampleIdBtn?.addEventListener('click', () => {
       const sampleUri = generateDummyIdSvgUri();
       loadImageFromSrc(sampleUri, '見本_運転免許証.png');
     });
 
-    // ダウンロード
     downloadBtn.addEventListener('click', () => {
       if (!currentLoadedImage) return;
       const dataUrl = previewCanvas.toDataURL('image/png');
@@ -484,6 +498,10 @@ const faqs = [
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      downloadBtnText.textContent = '✔ 透かし入り画像を保存しました！';
+      setTimeout(() => {
+        downloadBtnText.textContent = '透かし入り画像を保存（PNG）';
+      }, 2200);
     });
   </script>
 </ToolShell>

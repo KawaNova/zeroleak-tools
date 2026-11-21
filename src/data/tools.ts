@@ -145,7 +145,7 @@ export const tools: Tool[] = [
     icon: '📊',
     image: 'tool-csv',
     category: 'id_privacy',
-    accent: { text: 'text-emerald-700', border: 'hover:border-emerald-500', soft: 'bg-emerald-50', ring: 'border-emerald-200' },
+    accent: { text: 'text-blue-700', border: 'hover:border-blue-500', soft: 'bg-blue-50', ring: 'border-blue-200' },
     intent: 'CSVをベンダーやテスト環境に渡したい',
     keywords: 'CSV Excel 名簿 マスキング 伏字 匿名化 個人情報 マイナンバー 電話番号 メール クレジットカード ダミーデータ',
     panels: [

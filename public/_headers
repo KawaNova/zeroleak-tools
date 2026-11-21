@@ -3,4 +3,34 @@
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: microphone=(self)
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/pdf-unlock/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/csv-masking/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/exif-remover/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/local-mosaic/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/ai-prompt-sanitizer/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/log-masking/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/pdf-redaction/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/contract-diff/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/id-watermark/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';
+
+/office-metadata-wiper/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' blob: data:; frame-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self';

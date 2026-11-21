@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import Papa from 'papaparse';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { PDFDocument } from 'pdf-lib';
-import { maskTextContent, isPersonalInfoColumn } from '../src/utils/masking.ts';
+import { maskTextContent, isPersonalInfoColumn, decodeCsvBytes } from '../src/utils/masking.ts';
 import {
   inspectImageMetadata,
   stripImageMetadataLossless,
@@ -101,6 +101,22 @@ async function testAllCsvs() {
     throw new Error('Free text personal info leaked');
   }
   console.log('  ✔ [Test 1.3] Free Text Regex Masking: PASSED');
+
+  // テスト4: Shift-JIS & UTF-8 BOM CSV バイト列自動判別
+  const sjisBytes = new Uint8Array([
+    0x8e, 0x81, 0x96, 0xbc, 0x2c, // "氏名,"
+    0x83, 0x7d, 0x83, 0x43, 0x83, 0x69, 0x83, 0x93, 0x83, 0x6f, 0x81, 0x5b, // "マイナンバー"
+  ]);
+  const sjisDecoded = decodeCsvBytes(sjisBytes);
+  if (sjisDecoded.encoding !== 'Shift-JIS' || sjisDecoded.text !== '氏名,マイナンバー') {
+    throw new Error(`Shift-JIS decode failed: ${JSON.stringify(sjisDecoded)}`);
+  }
+  const utf8BomBytes = new Uint8Array([0xef, 0xbb, 0xbf, ...Buffer.from('氏名,マイナンバー', 'utf-8')]);
+  const utf8Decoded = decodeCsvBytes(utf8BomBytes);
+  if (utf8Decoded.encoding !== 'UTF-8' || utf8Decoded.text !== '氏名,マイナンバー') {
+    throw new Error(`UTF-8 BOM decode failed: ${JSON.stringify(utf8Decoded)}`);
+  }
+  console.log('  ✔ [Test 1.4] Shift-JIS & UTF-8 BOM Auto-Detection Decode: PASSED');
 }
 
 async function testPdf(filename, password) {
@@ -845,6 +861,111 @@ async function testAdsenseReadinessSuite() {
   console.log('  ✔ [Test 15.3] No cookie/operator claims that contradict ad serving: PASSED');
 }
 
+function walkSourceFiles(dir, exts) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walkSourceFiles(full, exts));
+    else if (entry.isFile() && exts.some((ext) => entry.name.endsWith(ext))) out.push(full);
+  }
+  return out;
+}
+
+async function testStrictZeroNetworkAndDesignSystemAudit() {
+  console.log('\n========================================');
+  console.log('16. Strict Tool Zero-Network, _headers, OGP & Design System Audit');
+  console.log('========================================');
+
+  const dist = path.join(root, 'dist');
+  const toolSlugs = [
+    'pdf-unlock', 'csv-masking', 'exif-remover', 'local-mosaic', 'ai-prompt-sanitizer',
+    'log-masking', 'pdf-redaction', 'contract-diff', 'id-watermark', 'office-metadata-wiper',
+  ];
+  const nonToolRoutes = [
+    'index.html',
+    'privacy/index.html',
+    'pdf/index.html',
+    'dev/index.html',
+    'legal/index.html',
+    'about/index.html',
+  ];
+
+  const bannedAdStrings = [
+    'adsbygoogle.js',
+    'googlesyndication.com',
+    'doubleclick.net',
+    'adtrafficquality.google',
+  ];
+
+  // 1. 全10ツール実行ページに広告スクリプト・第三者ドメインが1文字も無いこと + 厳格CSP
+  for (const slug of toolSlugs) {
+    const html = fs.readFileSync(path.join(dist, slug, 'index.html'), 'utf-8');
+    for (const banned of bannedAdStrings) {
+      if (html.includes(banned)) {
+        throw new Error(`External/Ad domain "${banned}" leaked into tool page dist/${slug}/index.html`);
+      }
+    }
+    if (!html.includes("frame-src 'none'")) {
+      throw new Error(`Strict CSP (frame-src 'none') missing in tool page dist/${slug}/index.html`);
+    }
+  }
+  console.log(`  ✔ [Test 16.1] All ${toolSlugs.length} tool pages load ZERO ad scripts & enforce strict self-only CSP: PASSED`);
+
+  // 2. 非ツールページに AdSense スクリプトが維持されていること
+  for (const rel of nonToolRoutes) {
+    const html = fs.readFileSync(path.join(dist, rel), 'utf-8');
+    if (!html.includes('adsbygoogle.js')) {
+      throw new Error(`AdSense script missing in non-tool page dist/${rel}`);
+    }
+  }
+  console.log(`  ✔ [Test 16.2] Non-tool pages (${nonToolRoutes.length} routes) retain AdSense script: PASSED`);
+
+  // 3. dist/_headers に Permissions-Policy と全10ツールの厳格 CSP ルールが存在すること
+  const headersContent = fs.readFileSync(path.join(dist, '_headers'), 'utf-8');
+  if (!headersContent.includes('Permissions-Policy: camera=(), microphone=(), geolocation=()')) {
+    throw new Error('dist/_headers missing strict Permissions-Policy');
+  }
+  for (const slug of toolSlugs) {
+    if (!headersContent.includes(`/${slug}/*`)) {
+      throw new Error(`dist/_headers missing route CSP override for /${slug}/*`);
+    }
+  }
+  console.log('  ✔ [Test 16.3] dist/_headers strict Permissions-Policy & 10 tool CSP rules: PASSED');
+
+  // 4. OGP 画像 & メタタグ検証
+  const ogpFile = path.join(dist, 'ogp.png');
+  if (!fs.existsSync(ogpFile) || fs.statSync(ogpFile).size < 10000) {
+    throw new Error('dist/ogp.png is missing or unexpectedly small');
+  }
+  const homeHtml = fs.readFileSync(path.join(dist, 'index.html'), 'utf-8');
+  for (const kw of ['https://zeroleaktools.com/ogp.png', 'twitter:card', 'summary_large_image']) {
+    if (!homeHtml.includes(kw)) {
+      throw new Error(`OGP / Twitter metadata "${kw}" missing in dist/index.html`);
+    }
+  }
+  console.log(`  ✔ [Test 16.4] OGP image (dist/ogp.png, ${(fs.statSync(ogpFile).size / 1024).toFixed(1)} KB) & Twitter Card metadata: PASSED`);
+
+  // 5. デザインシステム & コード衛生チェック（src/ 配下）
+  const srcFiles = walkSourceFiles(path.join(root, 'src'), ['.astro', '.ts']);
+  const checks = [
+    { name: 'Tailwind v4 invalid classes', regex: /\b(shadow-2xs|shadow-xs|rounded-xs|border-3|h-18)\b/ },
+    { name: 'Off-brand colors (violet/indigo/amber/teal)', regex: /\b(violet|indigo|amber|teal)-\d+/ },
+    { name: 'Blocking alert/confirm/prompt dialogs', regex: /\b(alert|confirm|prompt)\(/ },
+    { name: 'Hardcoded hashed pdf.worker filename', regex: /\/_astro\/pdf\.worker/ },
+  ];
+  for (const f of srcFiles) {
+    const content = fs.readFileSync(f, 'utf-8');
+    const rel = path.relative(root, f);
+    for (const c of checks) {
+      const m = content.match(c.regex);
+      if (m) {
+        throw new Error(`Design/Code hygiene violation [${c.name}] in ${rel}: matched "${m[0]}"`);
+      }
+    }
+  }
+  console.log(`  ✔ [Test 16.5] Design system & hygiene audit across ${srcFiles.length} src files (0 violations): PASSED`);
+}
+
 async function main() {
   await testAllCsvs();
   await testAllPdfs();
@@ -861,8 +982,9 @@ async function main() {
   await testCleanlinessGuardSuite();
   await testOfflineAndTopSearchSuite();
   await testAdsenseReadinessSuite();
+  await testStrictZeroNetworkAndDesignSystemAudit();
   console.log('\n========================================');
-  console.log('ALL 15 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
+  console.log('ALL 16 MODULE, ROUTE, QUALITY BUDGET & CLEANLINESS SUITES PASSED SUCCESSFULLY!');
   console.log('========================================');
 }
 

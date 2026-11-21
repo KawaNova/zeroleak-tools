@@ -12,10 +12,10 @@ const current = tools.find((t) => t.href === currentPath);
 const related = (current?.related ?? []).map(toolBySlug);
 ---
 
-<section aria-label="関連ツール" class="pt-8 mt-8 border-t border-slate-200 space-y-4 text-left">
+<section aria-label="関連ツール" class="pt-6 mt-6 border-t border-slate-200 space-y-4 text-left">
   <div class="flex items-center justify-between gap-2">
     <h2 class="text-base sm:text-lg font-bold text-slate-900">あわせて使われるツール</h2>
-    <a href="/" class="text-xs text-emerald-700 hover:text-emerald-800 font-semibold hover:underline shrink-0">
+    <a href="/" class="inline-flex items-center min-h-[40px] px-2 text-xs text-emerald-800 hover:text-emerald-950 font-bold hover:underline shrink-0">
       全ツール一覧 →
     </a>
   </div>
@@ -25,12 +25,12 @@ const related = (current?.related ?? []).map(toolBySlug);
       related.map((tool) => (
         <a
           href={tool.href}
-          class={`group flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-sm ${tool.accent.border}`}
+          class={`group flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${tool.accent.border}`}
         >
-          <Mascot name={tool.image} fallback={tool.icon} width={160} class="w-24 h-18 sm:w-28 rounded-xl shrink-0 object-cover" />
+          <Mascot name={tool.image} fallback={tool.icon} width={160} class="w-24 aspect-[4/3] sm:w-28 rounded-xl shrink-0 object-cover" />
           <div class="min-w-0">
-            <h3 class={`text-sm font-bold text-slate-900 group-hover:${tool.accent.text} transition leading-snug`}>{tool.name}</h3>
-            <p class="text-[11px] text-slate-500 leading-relaxed mt-0.5">{tool.tagline}</p>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-emerald-800 transition leading-snug">{tool.name}</h3>
+            <p class="text-xs text-slate-700 leading-relaxed mt-0.5">{tool.tagline}</p>
           </div>
         </a>
       ))

@@ -4,10 +4,10 @@
 
 ## Core Security & Architecture Guarantees
 - **0 Bytes Server Transmission (Zero-Network Policy)**: All files (CSV, PDF, images, logs, HAR, .env) are processed strictly in browser memory (RAM). There are no backend APIs, no serverless functions, no analytics beacons, and no AI training on user data.
-- **Technical Enforcement via CSP**: Built with a strict Content Security Policy (`connect-src` limited to self/blob/data plus Google ad-serving domains only). User files and input text are never transmitted; ad delivery (Google AdSense) generates separate network requests.
-- **F12 DevTools Verifiable**: Users and security auditors can verify that zero network traffic occurs at any time via Chrome/Edge/Firefox DevTools (F12) Network tab.
+- **Technical Enforcement via CSP**: Tool execution pages enforce a strict Content Security Policy (`connect-src 'self' blob: data:; frame-src 'none';`) and load zero advertising scripts (zero external network requests). Directory/hub/overview pages load Google AdSense ads separately under restricted Google ad-serving CSP rules.
+- **F12 DevTools Verifiable**: Users and security auditors can verify that zero external network traffic occurs on tool execution pages at any time via Chrome/Edge/Firefox DevTools (F12) Network tab.
 - **Works Offline (Airplane Mode Verifiable)**: After the first visit, a Service Worker caches only the site's own static files, so every tool keeps working with Wi-Fi and mobile data turned off. Completing a job with no connectivity is physical proof that the file was not uploaded. User files and input text are never written to the cache.
-- **100% Free & No Registration**: No account creation. The tools themselves set no cookies and run no analytics. The site displays Google AdSense ads, and Google may use cookies for ad delivery (see /legal/). Operates as a static deployment on Cloudflare Pages.
+- **100% Free & No Registration**: No account creation. The tools themselves set no cookies, load no ad scripts, and run no analytics. Directory and overview pages display Google AdSense ads, and Google may use cookies for ad delivery (see /legal/). Operates as a static deployment on Cloudflare Pages.
 - **Operator & Contact**: Run by an individual operator. Contact via the form linked from /about/ (Google Forms, an external service; do not include confidential file contents).
 
 ---

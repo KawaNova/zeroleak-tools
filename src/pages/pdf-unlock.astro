@@ -12,7 +12,7 @@ const howToSteps = [
   },
   {
     name: 'パスワード＆メタデータ完全抹消PDFをダウンロード',
-    text: 'ブラウザ内で300DPI高精細再構築され、パスワードおよびAuthor/Creator/Producer等の全メタデータが初期化されたクリーンなPDFを保存します。',
+    text: 'ブラウザ内で高精細再構築され、パスワードおよびAuthor/Creator/Producer等の全メタデータが初期化されたクリーンなPDFを保存します。',
   },
 ];
 
@@ -42,33 +42,33 @@ const faqs = [
 
 <ToolShell
   slug="pdf-unlock"
-  title="給与明細・源泉徴収票 PDFパスワード解除＆メタデータ削除"
+  title="給与明細・源泉徴収票 PDFパスワード解除＆メタデータ削除｜一括・ブラウザ・サーバー送信なし"
   description="住宅ローン審査や確定申告(e-Tax)提出用のPDFパスワード解除と、作成者名・タイトル等のPDFメタデータ削除をブラウザ内で一括実行。サーバー送信なし（0バイト保証）。"
   canonicalPath="/pdf-unlock/"
-  h1="給与明細・源泉徴収票 PDFパスワード解除＆メタデータ削除"
-  subtitle="住宅ローン事前審査や確定申告（e-Tax）で求められる「パスワードなしPDF」をブラウザ内で安全生成。作成者名や作成ソフト名などの内部メタデータも同時に完全消去します。"
+  h1="給与明細PDF パスワード解除＆メタデータ削除"
+  subtitle="住宅ローンやe-Tax向けのパスワード解除と作成者メタデータ消去をブラウザ内で一括実行（サーバー送信なし）。"
   whyTitle="「パスワード付きの給与明細」は、そのままでは提出できない"
   howToSteps={howToSteps}
   faqs={faqs}
   maxWidthClass="max-w-4xl"
 >
   <!-- ワンクリック検証用サンプルボタン -->
-  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+  <div slot="sample-button" class="flex flex-wrap items-center gap-1.5 sm:gap-2">
     <button
       id="loadSamplePayslipBtn"
       type="button"
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
     >
-      <span>🧪</span>
-      <span>模擬給与明細（パスワード: test2026）を投入</span>
+      <span aria-hidden="true">🧪</span>
+      <span>模擬給与明細（pass: test2026）</span>
     </button>
     <button
       id="loadSamplePlainBtn"
       type="button"
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
     >
-      <span>📄</span>
-      <span>パスワードなしPDF（メタデータ消去テスト）</span>
+      <span aria-hidden="true">📄</span>
+      <span>パスワードなしPDF（メタ消去）</span>
     </button>
   </div>
 
@@ -78,22 +78,22 @@ const faqs = [
     <!-- ファイルドロップゾーン -->
     <div
       id="dropZonePdf"
-      class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-2xl p-6 sm:p-8 text-center transition bg-slate-50/70 hover:bg-teal-50/20 cursor-pointer group"
+      class="border-2 border-dashed border-slate-300 hover:border-blue-600 rounded-2xl p-5 sm:p-8 text-center transition bg-slate-50/70 hover:bg-blue-50/30 cursor-pointer group"
     >
       <input type="file" id="fileInputPdf" accept=".pdf,application/pdf" class="hidden" />
       <div class="flex flex-col items-center gap-2.5 pointer-events-none">
-        <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 group-hover:scale-105 transition-transform shadow-xs text-xl">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:scale-105 transition-transform shadow-sm text-xl">
           📄
         </div>
         <div>
-          <p class="font-bold text-slate-800 text-sm sm:text-base">給与明細・源泉徴収票PDFをドロップ</p>
-          <p class="text-xs text-slate-500 mt-0.5">またはクリックしてファイルを選択 (.pdf)</p>
+          <p class="font-bold text-slate-900 text-sm sm:text-base">給与明細・源泉徴収票PDFをドロップ</p>
+          <p class="text-xs text-slate-600 mt-0.5">またはクリックしてファイルを選択 (.pdf)</p>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-2">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-teal-800 shadow-xs font-medium">
-            🔒 サーバー送信なし（0バイト保証）
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-blue-900 shadow-sm font-semibold">
+            🔒 サーバー送信なし（外部通信0件）
           </span>
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-600 shadow-xs">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-700 shadow-sm">
             ✨ メタデータ（作成者・タイトル）自動抹消
           </span>
         </div>
@@ -102,18 +102,18 @@ const faqs = [
 
     <!-- 選択されたファイル表示＆操作エリア -->
     <div id="fileInfoArea" class="hidden space-y-4">
-      <div class="p-3.5 rounded-xl bg-teal-50/60 border border-teal-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5">
-          <span class="text-2xl">📄</span>
-          <div>
-            <p id="fileNameText" class="text-xs sm:text-sm font-semibold text-slate-900">sample.pdf</p>
-            <p id="fileMetaText" class="text-[11px] text-slate-500">サイズ: 0 KB • ページ数: 1</p>
+      <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="text-2xl shrink-0" aria-hidden="true">📄</span>
+          <div class="min-w-0">
+            <p id="fileNameText" class="text-xs sm:text-sm font-semibold text-slate-900 truncate">sample.pdf</p>
+            <p id="fileMetaText" class="text-xs text-slate-600">サイズ: 0 KB</p>
           </div>
         </div>
         <button
           id="changeFileBtn"
           type="button"
-          class="text-xs text-slate-500 hover:text-slate-800 underline transition cursor-pointer font-medium"
+          class="text-xs text-blue-800 hover:text-slate-900 underline transition cursor-pointer font-semibold min-h-[36px] shrink-0"
         >
           別のファイルを選択
         </button>
@@ -121,7 +121,7 @@ const faqs = [
 
       <!-- パスワード入力フォーム -->
       <div id="passwordSection" class="space-y-2">
-        <label for="pdfPassword" class="block text-xs font-bold text-slate-700">
+        <label for="pdfPassword" class="block text-xs font-bold text-slate-800">
           PDFのパスワード（既知のパスワードを入力）：
         </label>
         <div class="flex flex-col sm:flex-row gap-2">
@@ -129,85 +129,87 @@ const faqs = [
             <input
               type="password"
               id="pdfPassword"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              class="w-full pl-3.5 pr-16 py-2.5 rounded-xl border border-slate-300 font-mono text-xs sm:text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
               placeholder="例: 誕生日4桁、会社指定の解除コード"
             />
             <button
               id="togglePasswordBtn"
               type="button"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer"
+              class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-xs text-slate-700 hover:text-slate-900 font-semibold cursor-pointer"
             >
               表示
             </button>
           </div>
         </div>
-        <p class="text-[11px] text-slate-500">
-          ※パスワードがかかっていないPDFの場合は、空欄のままでメタデータ消去を実行できます。
+        <p class="text-xs text-slate-600">
+          ※パスワードがかかっていないPDFの場合は、空欄のまま実行できます（Enterキーでも実行）。
         </p>
       </div>
 
-      <div id="errorMessage" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+      <div id="errorMessage" role="alert" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
         <!-- エラー内容 -->
       </div>
 
       <button
         id="unlockBtn"
         type="button"
-        class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
+        class="w-full sm:w-auto px-6 py-3 min-h-[44px] rounded-xl font-bold text-white bg-blue-700 hover:bg-blue-800 transition shadow-sm flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer disabled:opacity-50"
       >
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
         </svg>
-        <span>パスワード解除 ＆ メタデータ一括抹消を実行 (ブラウザ内処理)</span>
+        <span>パスワード解除 ＆ メタデータ一括抹消を実行 (端末内処理)</span>
       </button>
     </div>
 
     <!-- 処理中インジケータ -->
     <div id="processingIndicator" class="hidden text-center py-6 space-y-3">
-      <div class="inline-block w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-xs text-teal-800 font-semibold">ブラウザ内で高画質再生成 ＆ メタデータ完全消去中... (ファイル送信0バイト)</p>
+      <div class="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <p id="processingProgressText" class="text-xs text-blue-900 font-semibold">
+        ブラウザ内で高画質再生成 ＆ メタデータ完全消去中... (ファイル送信0バイト)
+      </p>
     </div>
 
     <!-- 解除＆メタデータ削除完了 ＆ ダウンロードカード -->
-    <div id="successArea" class="hidden p-4 sm:p-6 rounded-xl bg-teal-50/70 border border-teal-200 space-y-4">
+    <div id="successArea" class="hidden p-4 sm:p-6 rounded-xl bg-blue-50/70 border border-blue-200 space-y-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xl">
+        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl shrink-0">
           🎉
         </div>
         <div>
-          <h2 class="text-base font-bold text-teal-950">パスワード解除 ＆ メタデータの完全抹消が完了しました！</h2>
-          <p id="successTimeText" class="text-xs text-slate-600 font-mono mt-0.5">処理完了: 0.8秒 (通信0バイト)</p>
+          <h2 class="text-base font-bold text-slate-900">パスワード解除 ＆ メタデータの完全抹消が完了しました！</h2>
+          <p id="successTimeText" class="text-xs text-slate-700 font-mono mt-0.5">処理完了: 0.8秒 (通信0バイト)</p>
         </div>
       </div>
 
       <!-- ゼロリークくん完了メッセージ -->
-      <div class="flex items-center gap-2 p-3 rounded-xl bg-teal-100/70 border border-teal-200 text-xs text-teal-950 font-medium">
-        <span class="text-base select-none shrink-0">🛡️</span>
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-white border border-blue-200 text-xs text-slate-800 font-medium">
+        <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
         <span><strong>ゼロリークくん：</strong>パスワード解除とメタデータ消去が完了しました！ファイルはこの端末内だけで安全に再構築されています。</span>
       </div>
 
       <!-- 検出・抹消されたメタデータ監査レポート -->
-      <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-xs">
-        <div class="font-bold text-teal-900 flex items-center justify-between">
+      <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2 text-xs shadow-sm">
+        <div class="font-bold text-slate-900 flex items-center justify-between gap-2 flex-wrap">
           <span>🔍 PDF内部メタデータ（プロパティ）検査＆抹消レポート</span>
-          <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">残存メタデータ 0件</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold">残存メタデータ 0件</span>
         </div>
-        <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-700 pt-1">
+        <div id="metadataReportList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
           <!-- JSでBefore/Afterを表示 -->
         </div>
       </div>
 
-      <p class="text-xs text-slate-600 leading-relaxed">
-        パスワード保護および内部プロパティ（作成者・タイトル・履歴）がすべて除去されたクリーンなPDFが生成されました。住宅ローン審査や確定申告（e-Tax）、社外取引先へそのまま安全に提出可能です。
+      <p class="text-xs text-slate-700 leading-relaxed">
+        パスワード保護および内部プロパティ（作成者・タイトル・履歴）がすべて除去されたクリーンなPDFが生成されました。住宅ローン審査や確定申告（e-Tax）、社外取引先へそのまま提出可能です。
       </p>
 
       <div class="pt-1">
         <button
           id="downloadUnlockedPdfBtn"
           type="button"
-          class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-teal-600 hover:bg-teal-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+          class="w-full sm:w-auto px-6 py-3 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-blue-700 hover:bg-blue-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
           <span>パスワード解除＆メタデータ削除済みPDFを保存</span>
@@ -219,11 +221,11 @@ const faqs = [
 
   <!-- クライアントサイドスクリプト -->
   <script>
-    import * as pdfjsLib from 'pdfjs-dist';
+    import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
     import { PDFDocument } from 'pdf-lib';
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.min.mjs',
+      'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
       import.meta.url
     ).toString();
 
@@ -243,12 +245,31 @@ const faqs = [
     const unlockBtn = document.getElementById('unlockBtn') as HTMLButtonElement;
     const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
     const processingIndicator = document.getElementById('processingIndicator') as HTMLDivElement;
+    const processingProgressText = document.getElementById('processingProgressText') as HTMLParagraphElement;
     const successArea = document.getElementById('successArea') as HTMLDivElement;
     const successTimeText = document.getElementById('successTimeText') as HTMLParagraphElement;
     const downloadBtn = document.getElementById('downloadUnlockedPdfBtn') as HTMLButtonElement;
     const metadataReportList = document.getElementById('metadataReportList') as HTMLDivElement;
 
-    // ファイル選択処理
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function dataUrlToBytes(dataUrl: string): Uint8Array {
+      const base64 = dataUrl.split(',')[1] || '';
+      const bin = atob(base64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) {
+        bytes[i] = bin.charCodeAt(i);
+      }
+      return bytes;
+    }
+
     async function handleFile(file: File) {
       errorMessage.classList.add('hidden');
       successArea.classList.add('hidden');
@@ -258,7 +279,6 @@ const faqs = [
       fileNameText.textContent = file.name;
       fileMetaText.textContent = `サイズ: ${(file.size / 1024).toFixed(1)} KB`;
 
-      // 初期メタデータ検査
       try {
         const doc = await PDFDocument.load(currentFileBuffer.slice(0), { ignoreEncryption: true });
         detectedMetadata = {
@@ -268,7 +288,7 @@ const faqs = [
           creator: doc.getCreator() || null,
           producer: doc.getProducer() || null,
         };
-      } catch (e) {
+      } catch {
         detectedMetadata = {};
       }
 
@@ -278,13 +298,14 @@ const faqs = [
       passwordInput.focus();
     }
 
-    // パスワード解除・メタデータ完全消去実行
     async function executeUnlock() {
       if (!currentFileBuffer) return;
 
       const password = passwordInput.value;
       errorMessage.classList.add('hidden');
+      successArea.classList.add('hidden');
       processingIndicator.classList.remove('hidden');
+      processingProgressText.textContent = 'ブラウザ内でPDFを読み込み・復号中...';
       unlockBtn.setAttribute('disabled', 'true');
 
       const startTime = performance.now();
@@ -292,16 +313,13 @@ const faqs = [
       try {
         const loadingTask = pdfjsLib.getDocument({
           data: currentFileBuffer.slice(0),
-          password: password,
+          password,
         });
 
         const pdf = await loadingTask.promise;
         const numPages = pdf.numPages;
 
-        // 高画質ラスタライズ再生成パイプライン (300 DPI)
         const newPdfDoc = await PDFDocument.create();
-
-        // 内部プロパティ・メタデータを完全に空文字/安全値へ初期化
         newPdfDoc.setTitle('');
         newPdfDoc.setAuthor('');
         newPdfDoc.setSubject('');
@@ -310,26 +328,30 @@ const faqs = [
         newPdfDoc.setCreator('');
 
         for (let i = 1; i <= numPages; i++) {
+          processingProgressText.textContent = `ブラウザ内で高画質再生成中 (${i} / ${numPages} ページ)...`;
           const page = await pdf.getPage(i);
-          const viewport = page.getViewport({ scale: 2.0 }); // 144 DPI相当で高精細キャプチャ
+          const viewport = page.getViewport({ scale: 2.5 });
 
           const canvas = document.createElement('canvas');
           const context = canvas.getContext('2d');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
+          canvas.width = Math.floor(viewport.width);
+          canvas.height = Math.floor(viewport.height);
 
           if (!context) throw new Error('Canvas context failure');
 
+          // 透明背景PDFの黒化を防止するため白背景で初期化
+          context.fillStyle = '#ffffff';
+          context.fillRect(0, 0, canvas.width, canvas.height);
+
           await page.render({
             canvasContext: context,
-            viewport: viewport,
+            viewport,
           }).promise;
 
-          const imgDataUrl = canvas.toDataURL('image/jpeg', 0.95);
-          const imgBytes = await fetch(imgDataUrl).then((res) => res.arrayBuffer());
+          const imgDataUrl = canvas.toDataURL('image/jpeg', 0.94);
+          const imgBytes = dataUrlToBytes(imgDataUrl);
           const embeddedImage = await newPdfDoc.embedJpg(imgBytes);
 
-          // 元のページサイズ（ポイント単位）で白紙ページを追加
           const originalViewport = page.getViewport({ scale: 1.0 });
           const newPage = newPdfDoc.addPage([originalViewport.width, originalViewport.height]);
 
@@ -346,7 +368,6 @@ const faqs = [
         const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
         successTimeText.textContent = `処理完了: ${elapsed}秒 (通信0バイト) • 生成ページ数: ${numPages}ページ`;
 
-        // メタデータ消去レポートの描画
         renderMetadataReport();
 
         processingIndicator.classList.add('hidden');
@@ -355,7 +376,7 @@ const faqs = [
         processingIndicator.classList.add('hidden');
         errorMessage.classList.remove('hidden');
 
-        if (err.name === 'PasswordException' || err.message?.includes('password')) {
+        if (err?.name === 'PasswordException' || err?.message?.includes('password')) {
           errorMessage.textContent = '❌ パスワードが一致しません。正しいパスワードを入力してください。';
         } else {
           errorMessage.textContent = '❌ PDFの読み込みまたは再生成に失敗しました。ファイルが破損していないかご確認ください。';
@@ -370,19 +391,19 @@ const faqs = [
         { label: '作成者名 (Author)', before: detectedMetadata.author },
         { label: 'タイトル (Title)', before: detectedMetadata.title },
         { label: '作成ソフト (Producer)', before: detectedMetadata.producer },
-        { label: '更新履歴・しおり', before: detectedMetadata.subject ? '記録あり' : null },
+        { label: '更新履歴・件名', before: detectedMetadata.subject || null },
       ];
 
       metadataReportList.innerHTML = items
         .map((it) => {
           const isDetected = !!it.before;
           return `
-            <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-              <div>
-                <span class="font-bold text-slate-800">${it.label}:</span>
-                <span class="text-slate-500 font-mono ml-1">${isDetected ? `"${it.before}"` : '(未設定)'}</span>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <span class="font-bold text-slate-900">${escapeHtml(it.label)}:</span>
+                <span class="text-slate-700 font-mono ml-1 break-all">${isDetected ? `"${escapeHtml(it.before!)}"` : '(未設定)'}</span>
               </div>
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${isDetected ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold shrink-0 ${isDetected ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-200 text-slate-700'}">
                 ${isDetected ? '消去完了' : '安全'}
               </span>
             </div>
@@ -391,7 +412,6 @@ const faqs = [
         .join('');
     }
 
-    // ダウンロード
     downloadBtn.addEventListener('click', () => {
       if (!decryptedPdfBytes) return;
       const blob = new Blob([decryptedPdfBytes], { type: 'application/pdf' });
@@ -405,7 +425,6 @@ const faqs = [
       URL.revokeObjectURL(url);
     });
 
-    // パスワード表示トグル
     togglePasswordBtn.addEventListener('click', () => {
       if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -416,16 +435,23 @@ const faqs = [
       }
     });
 
-    // ファイル再選択
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        executeUnlock();
+      }
+    });
+
     changeFileBtn.addEventListener('click', () => {
       fileInfoArea.classList.add('hidden');
+      successArea.classList.add('hidden');
+      errorMessage.classList.add('hidden');
       dropZone.classList.remove('hidden');
       fileInput.value = '';
       currentFileBuffer = null;
       decryptedPdfBytes = null;
     });
 
-    // サンプル投入
     const samplePayslipBtn = document.getElementById('loadSamplePayslipBtn');
     samplePayslipBtn?.addEventListener('click', async () => {
       const res = await fetch('/sample_payslip_protected.pdf');
@@ -443,18 +469,17 @@ const faqs = [
       await handleFile(file);
     });
 
-    // ドラッグ＆ドロップイベント
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropZone.classList.add('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.add('border-blue-600', 'bg-blue-50/50');
     });
     dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/50');
     });
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-teal-500', 'bg-teal-50/30');
+      dropZone.classList.remove('border-blue-600', 'bg-blue-50/50');
       if (e.dataTransfer && e.dataTransfer.files.length > 0) {
         handleFile(e.dataTransfer.files[0]);
       }

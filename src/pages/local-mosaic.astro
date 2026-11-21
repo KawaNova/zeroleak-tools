@@ -5,10 +5,10 @@ import RedactionDemo from '../components/RedactionDemo.astro';
 const howToSteps = [
   {
     name: '画像・スクリーンショットをドラッグ＆ドロップ（複数枚対応）',
-    text: 'モザイクや黒塗りをかけたい写真・画面キャプチャ（JPEG/PNG/WebP）をまとめてドロップします。',
+    text: 'モザイクや黒塗りをかけたい写真・画面キャプチャ（JPEG/PNG/WebP）をまとめてドロップまたはCtrl+Vで貼り付けます。',
   },
   {
-    name: 'マウスまたはタッチで隠したい箇所をドラッグ指定',
+    name: 'マウスまたは指で隠したい箇所をドラッグ指定',
     text: '「モザイク」「すりガラスぼかし」「完全黒塗り」「白抜き」から効果を選び、顔やナンバープレート、顧客名、URLバーをドラッグで囲みます。同じ座標を全画像へ一括適用することも可能です。',
   },
   {
@@ -39,36 +39,36 @@ const faqs = [
 
 <ToolShell
   slug="local-mosaic"
-  title="画像・写真のモザイク＆完全黒塗り一括加工"
-  description="社外秘の画面キャプチャ、顧客名、顔写真、車のナンバープレートをブラウザ内で即座にモザイク・黒塗り加工。外部送信なし・複数枚一括適用＆ZIP保存に対応。"
+  title="画像・写真のモザイク＆黒塗り一括加工 | ブラウザ完結・サーバー送信なし"
+  description="社外秘の画面キャプチャ、顧客名、顔写真、車のナンバープレートをブラウザ内で一括モザイク・黒塗り加工。サーバー送信なし・複数枚一括適用＆ZIP保存に対応。"
   canonicalPath="/local-mosaic/"
-  h1="画像 顔・ナンバー・機密箇所モザイク＆黒塗り"
-  subtitle="管理画面スクショや顔・ナンバーをドラッグで不可逆加工。Ctrl+V貼り付け＆複数枚一括適用に対応。"
+  h1="画像 顔・スクショ モザイク＆黒塗り"
+  subtitle="スクショや顔・ナンバーを不可逆ピクセル破壊。Ctrl+V貼付・複数画像への一括適用＆ZIP保存（サーバー送信なし）。"
   mascotName="tool-mosaic"
   mascotFallback="🕶️"
   whyTitle="「黒く塗ったから安全」では、コピペで剥がれる"
   howToSteps={howToSteps}
   faqs={faqs}
 >
-  <div class="space-y-6">
-    <!-- ワンクリック検証用サンプルボタン -->
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        id="loadSampleMosaicBtn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-bold transition shadow-xs cursor-pointer shrink-0"
-      >
-        <span>🧪</span>
-        <span>模擬キャプチャ2枚で試す</span>
-      </button>
-    </div>
+  <!-- ワンクリック検証用サンプルボタン -->
+  <div slot="sample-button" class="flex flex-wrap items-center gap-2">
+    <button
+      id="loadSampleMosaicBtn"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-950 border border-cyan-300 text-xs font-bold transition shadow-sm cursor-pointer shrink-0"
+    >
+      <span aria-hidden="true">🧪</span>
+      <span>模擬キャプチャ2枚で試す</span>
+    </button>
+  </div>
 
+  <div class="space-y-6">
     <!-- メイン操作パネル -->
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
       <!-- ファイルドロップゾーン -->
       <div
         id="dropZoneMosaic"
-        class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-6 sm:p-7 text-center transition bg-slate-50/70 hover:bg-indigo-50/20 cursor-pointer group"
+        class="border-2 border-dashed border-slate-300 hover:border-cyan-600 rounded-2xl p-5 sm:p-7 text-center transition bg-slate-50/70 hover:bg-cyan-50/30 cursor-pointer group"
       >
         <input
           type="file"
@@ -78,27 +78,30 @@ const faqs = [
           class="hidden"
         />
         <div class="flex flex-col items-center gap-2 pointer-events-none">
-          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs text-xl font-bold">
+          <div class="w-12 h-12 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm text-xl font-bold">
             🕶️
           </div>
           <div>
-            <p class="font-bold text-slate-800 text-sm sm:text-base">
+            <p class="font-bold text-slate-900 text-sm sm:text-base">
               モザイク・黒塗りしたい画像をドロップ
             </p>
-            <p class="text-xs text-slate-500 mt-0.5">
+            <p class="text-xs text-slate-600 mt-0.5">
               またはクリックして選択 • 複数枚まとめて選択・Ctrl+V貼り付け対応
             </p>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
-            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-slate-700 shadow-2xs font-semibold">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-slate-800 shadow-sm font-semibold">
               🔒 サーバー送信0バイト保証
             </span>
-            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] sm:text-[11px] text-emerald-800 shadow-2xs font-bold">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] text-emerald-800 shadow-sm font-bold">
               🚫 EXIF位置情報も自動消去
             </span>
           </div>
         </div>
       </div>
+
+      <!-- インライン通知バナー -->
+      <div id="mosaicNoticeBanner" hidden role="status" class="p-3 rounded-xl border text-xs font-semibold"></div>
 
       <!-- 作業ワークスペース（画像読み込み後に表示） -->
       <div id="mosaicWorkspace" class="hidden space-y-5">
@@ -107,32 +110,32 @@ const faqs = [
           <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
             <!-- 加工モード選択 -->
             <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-slate-400 font-semibold mr-1">加工タイプ:</span>
+              <span class="text-slate-300 font-semibold mr-1">加工タイプ:</span>
               <button
                 type="button"
                 data-effect="pixelate"
-                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
+                class="effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
               >
                 ⬛ モザイク
               </button>
               <button
                 type="button"
                 data-effect="blur"
-                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                class="effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500"
               >
                 💧 ぼかし
               </button>
               <button
                 type="button"
                 data-effect="blackout"
-                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                class="effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500"
               >
                 ■ 完全黒塗り
               </button>
               <button
                 type="button"
                 data-effect="whiteout"
-                class="effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500"
+                class="effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500"
               >
                 □ 白塗り
               </button>
@@ -143,14 +146,14 @@ const faqs = [
               <button
                 type="button"
                 id="undoRegionBtn"
-                class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer font-medium"
+                class="px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition cursor-pointer font-semibold"
               >
                 ↩ 直前を取り消す
               </button>
               <button
                 type="button"
                 id="clearRegionsBtn"
-                class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 text-rose-300 border border-slate-700 transition cursor-pointer font-medium"
+                class="px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-rose-950 text-rose-200 border border-slate-700 transition cursor-pointer font-semibold"
               >
                 🗑️ この画像の枠を全消去
               </button>
@@ -158,27 +161,27 @@ const faqs = [
           </div>
 
           <!-- 強度スライダー -->
-          <div class="pt-2 border-t border-slate-800 flex items-center gap-4 text-xs">
-            <span class="text-slate-400 font-semibold shrink-0">モザイク・ぼかし強度:</span>
+          <div class="pt-2 border-t border-slate-700 flex flex-wrap items-center gap-3 text-xs">
+            <span class="text-slate-200 font-semibold shrink-0">モザイク・ぼかし強度:</span>
             <input
               type="range"
               id="strengthSlider"
               min="6"
               max="40"
               value="18"
-              class="w-48 sm:w-64 accent-emerald-500 cursor-pointer"
+              class="w-40 sm:w-64 accent-cyan-400 cursor-pointer"
             />
-            <span id="strengthValLabel" class="font-mono text-emerald-400 font-bold">18</span>
-            <span class="text-slate-400 text-[11px] hidden sm:inline">（数字が大きいほど強く隠れます）</span>
+            <span id="strengthValLabel" class="font-mono text-emerald-300 font-bold">18</span>
+            <span class="text-slate-300 text-xs hidden sm:inline">（数字が大きいほど強く隠れます）</span>
           </div>
 
           <!-- 複数画像一括同期ボタン -->
-          <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2 text-slate-700">
-              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold text-[11px]">
+          <div class="pt-3 border-t border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2 text-slate-200 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-bold text-[11px]">
                 一括機能
               </span>
-              <span id="activeRegionCountText" class="text-slate-600">
+              <span id="activeRegionCountText" class="text-slate-200">
                 現在の画像に 0 箇所のマスク領域が設定されています
               </span>
             </div>
@@ -186,9 +189,10 @@ const faqs = [
             <button
               type="button"
               id="applyRegionsToAllBtn"
-              class="px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+              class="px-4 py-2 min-h-[40px] rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white border border-cyan-500 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm shrink-0"
             >
-              <span>📐 現在のマスク位置を全画像に一括コピー適用</span>
+              <span aria-hidden="true">📐</span>
+              <span>現在のマスク位置を全画像に一括コピー適用</span>
             </button>
           </div>
         </div>
@@ -197,12 +201,12 @@ const faqs = [
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
           <!-- 左：読み込み済み画像リスト -->
           <div class="lg:col-span-1 space-y-2">
-            <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-              <span class="font-bold text-slate-800">📂 画像一覧 (<span id="imageTotalCount">0</span>枚)</span>
+            <div class="flex items-center justify-between text-xs text-slate-700 px-1">
+              <span class="font-bold text-slate-900">📂 画像一覧 (<span id="imageTotalCount">0</span>枚)</span>
               <button
                 type="button"
                 id="addMoreFilesBtn"
-                class="text-indigo-700 hover:underline font-bold cursor-pointer"
+                class="text-cyan-700 hover:underline font-bold cursor-pointer min-h-[36px]"
               >
                 + 画像追加
               </button>
@@ -217,14 +221,14 @@ const faqs = [
 
           <!-- 右：インタラクティブCanvasエディタ -->
           <div class="lg:col-span-3 space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700 bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200">
               <span>
                 💡 <strong>操作方法：</strong> キャンバス上をマウス（または指）でドラッグすると、その矩形範囲に即座にモザイク・黒塗りが適用されます。
               </span>
-              <span id="canvasDimensionLabel" class="font-mono text-slate-500">800 × 500 px</span>
+              <span id="canvasDimensionLabel" class="font-mono text-slate-700">800 × 500 px</span>
             </div>
 
-            <div class="relative rounded-2xl bg-slate-100 border border-slate-200 p-3 flex items-center justify-center overflow-auto min-h-[340px] max-h-[600px]">
+            <div class="relative rounded-2xl bg-slate-100 border border-slate-200 p-3 flex items-center justify-center overflow-auto min-h-[300px] sm:min-h-[340px] max-h-[600px]">
               <canvas
                 id="mosaicEditorCanvas"
                 class="max-w-full h-auto rounded-lg shadow-md cursor-crosshair select-none touch-none border border-slate-300 bg-white"
@@ -234,17 +238,17 @@ const faqs = [
         </div>
 
         <!-- 保存＆一括ZIP出力フッターバー -->
-        <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="p-4 sm:p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="space-y-1 text-center sm:text-left">
             <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-sm">
                 🛡️ 不可逆ピクセル書き換え ＆ EXIF自動消去済
               </span>
-              <span id="mosaicProcessStatus" class="text-xs font-mono text-slate-600">
+              <span id="mosaicProcessStatus" class="text-xs font-mono text-slate-700">
                 外部通信 0 バイト
               </span>
             </div>
-            <p class="text-xs text-slate-600">
+            <p class="text-xs text-slate-700">
               出力画像はレイヤーを持たない1枚の画像として再生成されるため、後からモザイクを剥がすことは不可能です。
             </p>
           </div>
@@ -253,24 +257,25 @@ const faqs = [
             <button
               type="button"
               id="downloadCurrentMaskedBtn"
-              class="flex-1 sm:flex-none px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-indigo-900 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition cursor-pointer whitespace-nowrap"
+              class="flex-1 sm:flex-none px-4 py-3 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-cyan-950 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm transition cursor-pointer whitespace-nowrap"
             >
               📥 表示中の1枚を保存
             </button>
             <button
               type="button"
               id="downloadAllMaskedZipBtn"
-              class="flex-1 sm:flex-none px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-xs flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+              class="flex-1 sm:flex-none px-5 py-3 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm text-white bg-cyan-700 hover:bg-cyan-800 transition shadow-sm flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
             >
-              <span>📦 全画像をZIPで一括保存</span>
+              <span aria-hidden="true">📦</span>
+              <span>全画像をZIPで一括保存</span>
             </button>
           </div>
         </div>
 
         <!-- ゼロリークくん完了メッセージ -->
-        <div class="flex items-center gap-2 p-3 rounded-xl bg-indigo-100/70 border border-indigo-200 text-xs text-indigo-950 font-medium">
-          <span class="text-base select-none shrink-0">🛡️</span>
-          <span><strong>ゼロリークくん：</strong>モザイク・黒塗りの加工が完了しました！ピクセルが不可逆消去され、端末内だけで安全に保存できます。</span>
+        <div class="flex items-center gap-2 p-3 rounded-xl bg-cyan-100/70 border border-cyan-200 text-xs text-cyan-950 font-medium">
+          <span class="text-base select-none shrink-0" aria-hidden="true">🛡️</span>
+          <span><strong>ゼロリークくん：</strong>モザイク・黒塗りの加工が完了しました！ピクセルが不可逆消去され、端末内だけで保存できます。</span>
         </div>
       </div>
     </div>
@@ -305,17 +310,16 @@ const faqs = [
   let currentEffect: MaskEffectType = 'pixelate';
   let currentStrength = 18;
 
-  // ドラッグ描画状態
   let isDragging = false;
   let dragStartX = 0;
   let dragStartY = 0;
   let dragCurrentX = 0;
   let dragCurrentY = 0;
 
-  // DOM要素
   const dropZone = document.getElementById('dropZoneMosaic')!;
   const fileInput = document.getElementById('fileInputMosaic') as HTMLInputElement;
   const loadSampleBtn = document.getElementById('loadSampleMosaicBtn')!;
+  const noticeBanner = document.getElementById('mosaicNoticeBanner')!;
   const workspace = document.getElementById('mosaicWorkspace')!;
   const strengthSlider = document.getElementById('strengthSlider') as HTMLInputElement;
   const strengthValLabel = document.getElementById('strengthValLabel')!;
@@ -333,7 +337,18 @@ const faqs = [
   const downloadCurrentBtn = document.getElementById('downloadCurrentMaskedBtn')!;
   const downloadAllZipBtn = document.getElementById('downloadAllMaskedZipBtn')!;
 
-  // エフェクトモード切替
+  function showNotice(msg: string, isError = false) {
+    noticeBanner.className = isError
+      ? 'p-3 rounded-xl border text-xs font-semibold bg-rose-50 border-rose-200 text-rose-900'
+      : 'p-3 rounded-xl border text-xs font-semibold bg-cyan-50 border-cyan-200 text-cyan-950';
+    noticeBanner.textContent = msg;
+    noticeBanner.hidden = false;
+  }
+
+  function hideNotice() {
+    noticeBanner.hidden = true;
+  }
+
   document.querySelectorAll('.effect-mode-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const target = e.currentTarget as HTMLElement;
@@ -343,33 +358,31 @@ const faqs = [
 
       document.querySelectorAll('.effect-mode-btn').forEach((b) => {
         b.className =
-          'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500';
+          'effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-500';
       });
       target.className =
-        'effect-mode-btn px-3.5 py-2 rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50';
+        'effect-mode-btn px-3 py-2 min-h-[38px] rounded-lg font-bold border transition cursor-pointer bg-emerald-500/20 text-emerald-300 border-emerald-500/50';
     });
   });
 
-  // 強度スライダー
   strengthSlider.addEventListener('input', () => {
     currentStrength = Number(strengthSlider.value);
     strengthValLabel.textContent = String(currentStrength);
   });
 
-  // ファイルドロップ＆選択
   dropZone.addEventListener('click', () => fileInput.click());
   addMoreFilesBtn.addEventListener('click', () => fileInput.click());
 
   dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropZone.classList.add('border-emerald-500');
+    dropZone.classList.add('border-cyan-600', 'bg-cyan-50/40');
   });
   dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-emerald-500');
+    dropZone.classList.remove('border-cyan-600', 'bg-cyan-50/40');
   });
   dropZone.addEventListener('drop', async (e) => {
     e.preventDefault();
-    dropZone.classList.remove('border-emerald-500');
+    dropZone.classList.remove('border-cyan-600', 'bg-cyan-50/40');
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       await addFiles(Array.from(e.dataTransfer.files));
     }
@@ -382,7 +395,6 @@ const faqs = [
     }
   });
 
-  // Ctrl+V クリップボード画像貼り付け対応
   window.addEventListener('paste', async (e) => {
     const items = e.clipboardData?.items;
     if (!items) return;
@@ -398,8 +410,8 @@ const faqs = [
     }
   });
 
-  // サンプル画像2枚読み込み
   loadSampleBtn.addEventListener('click', async () => {
+    hideNotice();
     loadSampleBtn.setAttribute('disabled', 'true');
     try {
       const samples = await generateSampleMosaicImages();
@@ -433,13 +445,14 @@ const faqs = [
   });
 
   async function addFiles(files: File[]) {
+    hideNotice();
     const valid = files.filter(
       (f) =>
         /\.(jpe?g|png|webp)$/i.test(f.name) ||
         ['image/jpeg', 'image/png', 'image/webp'].includes(f.type)
     );
     if (valid.length === 0) {
-      alert('JPEG / PNG / WebP 形式の画像を選択してください。');
+      showNotice('❌ JPEG / PNG / WebP 形式の画像ファイルを選択してください。', true);
       return;
     }
 
@@ -473,7 +486,8 @@ const faqs = [
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function renderSidebarList() {
@@ -482,8 +496,8 @@ const faqs = [
       .map((entry, idx) => {
         const isActive = idx === activeIndex;
         const borderClass = isActive
-          ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold ring-1 ring-emerald-500/30'
-          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50';
+          ? 'border-cyan-600 bg-cyan-50 text-cyan-950 font-semibold ring-1 ring-cyan-600/30'
+          : 'border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50';
         return `
           <div
             data-entry-idx="${idx}"
@@ -491,14 +505,14 @@ const faqs = [
           >
             <div class="min-w-0">
               <p class="text-xs font-bold truncate">${escapeHtml(entry.name)}</p>
-              <p class="text-[11px] text-slate-500 font-mono">
+              <p class="text-[11px] text-slate-600 font-mono">
                 ${entry.width}×${entry.height} • マスク ${entry.regions.length}箇所
               </p>
             </div>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold shrink-0 ${
               entry.regions.length > 0
                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                : 'bg-slate-100 text-slate-500'
+                : 'bg-slate-100 text-slate-700'
             }">
               ${entry.regions.length}枠
             </span>
@@ -526,16 +540,13 @@ const faqs = [
     canvasDimensionLabel.textContent = `${entry.width} × ${entry.height} px`;
     activeRegionCountText.textContent = `現在の画像（${entry.name}）に ${entry.regions.length} 箇所のマスク領域が設定されています`;
 
-    // 元画像を描画
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(entry.bitmap, 0, 0);
 
-    // 各マスク領域を適用
     for (const reg of entry.regions) {
       applyRegionEffect(ctx, canvas.width, canvas.height, reg);
     }
 
-    // 編集中の枠ガイド線（プレビュー用点線）を描画
     for (const reg of entry.regions) {
       const rx = reg.nx * canvas.width;
       const ry = reg.ny * canvas.height;
@@ -549,7 +560,6 @@ const faqs = [
       ctx.restore();
     }
 
-    // ドラッグ中の矩形プレビュー
     if (isDragging) {
       const x = Math.min(dragStartX, dragCurrentX);
       const y = Math.min(dragStartY, dragCurrentY);
@@ -569,7 +579,7 @@ const faqs = [
         applyRegionEffect(ctx, canvas.width, canvas.height, previewReg);
 
         ctx.save();
-        ctx.strokeStyle = '#38bdf8';
+        ctx.strokeStyle = '#06b6d4';
         ctx.lineWidth = Math.max(2, Math.round(canvas.width / 350));
         ctx.strokeRect(x, y, w, h);
         ctx.restore();
@@ -587,7 +597,6 @@ const faqs = [
     };
   }
 
-  // マウスドラッグ操作
   canvas.addEventListener('mousedown', (e) => {
     if (!entries[activeIndex]) return;
     isDragging = true;
@@ -612,7 +621,6 @@ const faqs = [
     commitDraggedRegion();
   });
 
-  // タッチ操作（スマホ・タブレット対応）
   canvas.addEventListener(
     'touchstart',
     (e) => {
@@ -666,12 +674,12 @@ const faqs = [
         effect: currentEffect,
         strength: currentStrength,
       });
+      hideNotice();
     }
     renderSidebarList();
     renderActiveCanvas();
   }
 
-  // Undo / Clear
   undoRegionBtn.addEventListener('click', () => {
     const entry = entries[activeIndex];
     if (!entry || entry.regions.length === 0) return;
@@ -688,12 +696,11 @@ const faqs = [
     renderActiveCanvas();
   });
 
-  // 現在のマスク座標を全画像に一括コピー
   applyRegionsToAllBtn.addEventListener('click', () => {
     const current = entries[activeIndex];
     if (!current) return;
     if (current.regions.length === 0) {
-      alert('まず現在の画像上でモザイク・黒塗り領域をドラッグして作成してください。');
+      showNotice('ℹ️ まず現在の画像上でモザイク・黒塗り領域をドラッグして1箇所以上作成してください。', false);
       return;
     }
 
@@ -707,10 +714,11 @@ const faqs = [
 
     renderSidebarList();
     renderActiveCanvas();
-    mosaicProcessStatus.textContent = `✔ 全${entries.length}枚に${current.regions.length}箇所のマスクを一括適用しました（外部通信0バイト）`;
+    const msg = `✔ 全${entries.length}枚に${current.regions.length}箇所のマスクを一括適用しました（外部通信 0件）`;
+    mosaicProcessStatus.textContent = msg;
+    showNotice(msg, false);
   });
 
-  // 表示中の1枚を保存
   downloadCurrentBtn.addEventListener('click', async () => {
     const entry = entries[activeIndex];
     if (!entry) return;
@@ -729,7 +737,6 @@ const faqs = [
     triggerDownload(bytes, outName, entry.mimeType);
   });
 
-  // 全画像をZIPで一括保存
   downloadAllZipBtn.addEventListener('click', async () => {
     if (entries.length === 0) return;
     const startTime = performance.now();

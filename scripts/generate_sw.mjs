@@ -13,8 +13,8 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(root, 'dist');
 
-// 事前キャッシュに含めないファイル（配信設定・クローラー向け・SW自身）
-const EXCLUDE = new Set(['sw.js', '_headers', '_redirects', 'ads.txt', 'robots.txt', 'sitemap.xml', 'llms.txt', '404.html']);
+// 事前キャッシュに含めないファイル（配信設定・クローラー向け・SNS用大画像・SW自身）
+const EXCLUDE = new Set(['sw.js', '_headers', '_redirects', 'ads.txt', 'robots.txt', 'sitemap.xml', 'llms.txt', 'ogp.png', '404.html']);
 
 function walk(dir, base = '') {
   const out = [];
